@@ -4,8 +4,6 @@ import java.util.Collection;
 
 import org.springframework.stereotype.Service;
 
-
-
 import com.sinosoft.stringcomparison.MetricsException;
 import com.sinosoft.stringcomparison.config.StringComparisionConfig;
 import com.sinosoft.stringcomparison.model.DistanceMetricType;
@@ -15,7 +13,6 @@ public class StringComparisonService implements IStringComparisonService {
 
 	@Override
 	public Collection<DistanceMetricType> getDistanceMetricTypes() {
-
 		return StringComparisionConfig.getInstanse().getDistanceMetricTypes().values();
 	}
 
@@ -26,8 +23,8 @@ public class StringComparisonService implements IStringComparisonService {
 
 	@Override
 	public DistanceMetricType getDistanceMetricType(String name) {
-		DistanceMetricType type=StringComparisionConfig.getInstanse().getDistanceMetricTypes().get(name);
-		if(type==null){
+		DistanceMetricType type = StringComparisionConfig.getInstanse().getDistanceMetricTypes().get(name);
+		if (type == null) {
 			throw new MetricsException("该匹配计算函数不存在");
 		}
 		return type;
@@ -35,8 +32,7 @@ public class StringComparisonService implements IStringComparisonService {
 
 	@Override
 	public double score(String metricType, String value1, String value2) {
-		
-		return 	this.getDistanceMetricType(metricType).getDistanceMetric().score(value1, value2);
+		return this.getDistanceMetricType(metricType).getDistanceMetric().score(value1, value2);
 	}
 
 }

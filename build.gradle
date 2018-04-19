@@ -77,7 +77,7 @@ dependencies {
 	providedRuntime('javax.servlet:javax.servlet-api')
 	
 	// cxf web service 服务
-	compile('org.apache.cxf:cxf-spring-boot-starter-jaxws:3.2.4')
+	compile('org.apache.cxf:cxf-spring-boot-starter-jaxws:3.1.15')
 	
 	// 3rd jar
 	compile files('src/main/lib/batik-all-1.7.jar')

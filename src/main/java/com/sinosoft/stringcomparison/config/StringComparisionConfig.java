@@ -9,19 +9,19 @@ import com.sinosoft.stringcomparison.model.DistanceMetricType;
 import com.sinosoft.stringcomparison.util.ClassUtil;
 
 public class StringComparisionConfig {
-	private static StringComparisionConfig stringComparisionConfig=new StringComparisionConfig();
+	private static StringComparisionConfig stringComparisionConfig = new StringComparisionConfig();
 
-	private Map<String,DistanceMetricType> metrices=new HashMap<String,DistanceMetricType>();
-	
-	private void init(){
-		Set<Class<?>> clazzes=ClassUtil.getClasses("com.sinosoft.stringcomparison.metrics");
-		for(Class<?> clazz:clazzes){
-			if(clazz.isInterface()){
+	private Map<String, DistanceMetricType> metrices = new HashMap<String, DistanceMetricType>();
+
+	private void init() {
+		Set<Class<?>> clazzes = ClassUtil.getClasses("com.sinosoft.stringcomparison.metrics");
+		for (Class<?> clazz : clazzes) {
+			if (clazz.isInterface()) {
 				continue;
-			}else if(clazz.getName().indexOf("Test")>0){
+			} else if (clazz.getName().indexOf("Test") > 0) {
 				continue;
-			}else{
-				IDistanceMetric metric=null;
+			} else {
+				IDistanceMetric metric = null;
 				try {
 					metric = IDistanceMetric.class.cast(clazz.newInstance());
 				} catch (InstantiationException e) {
@@ -29,21 +29,23 @@ public class StringComparisionConfig {
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				}
-				if(metric!=null){
-					DistanceMetricType type=new DistanceMetricType(metric.getName(),metric.getNameCn(),metric);
+				if (metric != null) {
+					DistanceMetricType type = new DistanceMetricType(metric.getName(), metric.getNameCn(), metric);
 					metrices.put(type.getName(), type);
 				}
 			}
 		}
 	}
-	private   StringComparisionConfig(){
+
+	private StringComparisionConfig() {
 		init();
 	}
-	public    static StringComparisionConfig getInstanse(){
-		 return stringComparisionConfig;
+
+	public static StringComparisionConfig getInstanse() {
+		return stringComparisionConfig;
 	}
-	
-	public Map<String,DistanceMetricType> getDistanceMetricTypes(){
+
+	public Map<String, DistanceMetricType> getDistanceMetricTypes() {
 		return this.metrices;
 	}
 }

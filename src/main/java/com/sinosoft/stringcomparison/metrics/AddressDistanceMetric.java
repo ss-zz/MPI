@@ -2,8 +2,9 @@ package com.sinosoft.stringcomparison.metrics;
 
 public class AddressDistanceMetric implements IDistanceMetric {
 
-	private String name="address";
+	private String name = "address";
 	private String nameCn = "地址";
+
 	@Override
 	public double score(String left, String right) {
 		return 0;
@@ -17,7 +18,5 @@ public class AddressDistanceMetric implements IDistanceMetric {
 	public String getNameCn() {
 		return nameCn;
 	}
-
-	
 
 }
