@@ -4,7 +4,7 @@
 spring:
   datasource:
     url: jdbc:oracle:thin:@192.168.1.254:1521:ORCL
-    username: dbehr_pds
+    username: mpi
     password: embed
     driver-class-name: oracle.jdbc.driver.OracleDriver
 

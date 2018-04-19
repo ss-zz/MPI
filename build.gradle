@@ -69,6 +69,9 @@ dependencies {
 	// web依赖(spring boot)
 	compile('org.springframework.boot:spring-boot-starter-web')
 	
+	// security
+	compile('org.springframework.boot:spring-boot-starter-security')
+	
 	// jsp
 	compile('javax.servlet:jstl')
 	providedRuntime('javax.servlet:javax.servlet-api')
@@ -76,15 +79,10 @@ dependencies {
 	// cxf web service 服务
 	compile('org.apache.cxf:cxf-spring-boot-starter-jaxws:3.2.4')
 	
-	// security
-	compile('org.springframework.security:spring-security-cas')
-	
 	// 3rd jar
 	compile files('src/main/lib/batik-all-1.7.jar')
 	compile files('src/main/lib/pinyin4j-2.5.0.jar')
 	compile files('src/main/lib/di-laf.jar')
-	compile files('src/main/lib/smp-logon-1.7.jar')
-	compile files('src/main/lib/uaams_client1.4-cache.jar')
 	compile files('src/main/lib/xml-apis-ext.jar')
 	
 	runtime('org.springframework.boot:spring-boot-devtools')

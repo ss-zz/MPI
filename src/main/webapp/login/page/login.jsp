@@ -210,7 +210,7 @@ function MD5(sMessage) {
 			</span>
 			<span id="center" style="position:absolute;top:82px;left:174px;">
 				<span class="input-area">
-					<form id='loginForm' name="loginForm" action="${pageContext.request.contextPath}/login/login.ac" method="post">
+					<form id='loginForm' name="loginForm" action="${pageContext.request.contextPath}/login" method="post">
 						<div id="login-form-div">
 							<div class="font-div">
 								<font color="#969696">
@@ -218,7 +218,7 @@ function MD5(sMessage) {
 								</font>
 							</div>
 							<div class="" >
-								<input name ="userName"
+								<input name ="username"
 									type="text" class="text" tabindex="1" value="" />
 							</div>
 							<div class="font-div">
@@ -247,7 +247,7 @@ function MD5(sMessage) {
 								<table>
 									<tr>
 										<td align="left" style="width:187px;">
-											<span class="errorMsgArea">${error}</span>
+											<span class="errorMsgArea">${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}</span>
 											<input name="tryLogin" type="hidden" value="true"/>
 										</td>
 										<td align="right">
