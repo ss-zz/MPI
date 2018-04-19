@@ -1,7 +1,7 @@
 $(function() {
 	$('#centerTab').tabs({
 		tools:[{
-			iconCls:'icon-back',
+			iconCls:'icon-undo',
 			handler: function(){
 				$.messager.confirm('注销提示', '你确定注销吗?', function(r){
 					if(r){
@@ -24,7 +24,7 @@ function addTab(tabId,title,url){
 	if($("#"+tabId).html()==null){
 		var name = 'iframe_'+tabId;
 		$('#centerTab').tabs('add',{
-			title: title,         
+			title: title,
 			closable:true,
 			cache : false,
 			//注：使用iframe即可防止同一个页面出现js和css冲突的问题

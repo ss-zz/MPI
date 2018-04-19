@@ -3,6 +3,13 @@
     pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<style>
+	body{
+		margin: 0px;
+	}
+</style>
+
 <script type="text/javascript">
  var root = "${pageContext.request.contextPath}"; //js中存放当前页面的root路径方便调用
 

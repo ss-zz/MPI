@@ -7,15 +7,11 @@ $(function() {
         singleSelect:false,//单选
         pagination:true,//分页
 		loadMsg:'数据加载中,请稍后...',
-		iconCls:"icon-edit",
-		width:"98%",
 		idField:"ROW_ID",
 		treeField:"NAME",
 		remoteSort:false, 
 		showFooter:false,
 		striped:true,
-		//queryParams : args,
-		//url: root + "/query/query.ac",	
 		columns:[[  
 			{field:'ck',checkbox:true},  
             {field:'NAME_CN',title:'姓名',width:150,formatter:buildViewLink},

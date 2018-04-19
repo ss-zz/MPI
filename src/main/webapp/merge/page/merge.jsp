@@ -48,7 +48,7 @@
 </table>
 <hr />
 </div>
-<div id="table_accordion" class="easyui-accordion" style="width:900px;height:auto;">   
+<div id="table_accordion" class="easyui-accordion" style="width:auto;height:auto;">
 	<div id="survivePanel" selected="true" style="overflow:auto;padding:0px;" title="选择目标居民" iconCls="icon-save" >
 		<!-- 表格 -->
 		<table 	id="surviveTable"
@@ -68,7 +68,7 @@
 					<th field="ck" width="20" checkbox="true" width="20"></th>
 					<th field="NAME_CN" width="100" formatter="buildPersonView">居民姓名</th>
 					<th field="ID_NO" width="150">身份证号</th>
-					<th field="DOMAIN_DESC" width="80">数据来源</th>
+					<th field="DOMAIN_DESC" width="200">数据来源</th>
 				</tr>
 			</thead>
 		</table>

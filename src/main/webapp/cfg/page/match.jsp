@@ -19,8 +19,6 @@
 		border="0"
 		cellspacing="0"
 		cellpadding="0"
-		iconCls="icon-edit" 
-		width="98%" 
 		idField="configId" 
 		remoteSort="false" 
 		singleSelect="false" 

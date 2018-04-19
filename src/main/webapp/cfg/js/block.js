@@ -3,28 +3,28 @@ var INUSED_FIELDS={};
 $(function() {
 	// 加载表格数据
 	ajaxTable();
-    
-    var p = $('#listTable').datagrid('getPager');
-    $(p).pagination({
-        beforePageText: '第',
-        afterPageText: '页    共 {pages} 页',    
-        displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',   
-        pageSize:10,
-        showPageList:false
-        
-    });
+	
+	var p = $('#listTable').datagrid('getPager');
+	$(p).pagination({
+		beforePageText: '第',
+		afterPageText: '页	共 {pages} 页',	
+		displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',   
+		pageSize:10,
+		showPageList:false
+		
+	});
 });
 
 //锁定按钮
 function lockBtn(btn){
-    $(btn).unbind('click').removeAttr('onclick');
-    $(btn).attr("disabled",true);  
+	$(btn).unbind('click').removeAttr('onclick');
+	$(btn).attr("disabled",true);  
 }
 
 // 解锁按钮
 function unlockBtn(btn,handler){
-    $(btn).bind("click",handler);
-    $(btn).attr("disabled",false);      
+	$(btn).bind("click",handler);
+	$(btn).attr("disabled",false);	  
 }
 
 /** --------------table------------------* */
@@ -35,22 +35,22 @@ function ajaxTable() {
 	// 加载表格
 	$('#listTable').datagrid({
 		toolbar:[
-		/*{
-			text : '添加初筛配置',
+		{
+			text : '添加',
 			iconCls : 'icon-add',
 			handler : function(){
 				openAddPage();	
 			}
-		},*/
+		},
 		{
 			text : '查看当前初筛配置',
-			iconCls : 'icon-add',
+			iconCls : 'icon-search',
 			handler : function(){
 				openCurrentPage();	
 			}
 		}],
-        singleSelect:true,//单选
-        pagination:true,//分页
+		singleSelect:true,//单选
+		pagination:true,//分页
 		loadMsg : '数据加载中,请稍后...',
 		onLoadError : function() {
 			alert('数据加载失败!');
@@ -115,7 +115,7 @@ function openTab(tabId,title,url,name){
 	//如果当前id的tab不存在则创建一个tab
 	if(parent.$("#"+tabId).html()==null){		
 		parent.$('#centerTab').tabs('add',{
-			title: title,         
+			title: title,		 
 			closable:true,
 			cache : false,
 			//注：使用iframe即可防止同一个页面出现js和css冲突的问题
@@ -180,7 +180,7 @@ function openAddPage(){
 	//如果当前id的tab不存在则创建一个tab
 	if(parent.$("#tabId_blockCfgAdd").html()==null){
 		parent.$('#centerTab').tabs('add',{
-			title: '添加初筛配置',         
+			title: '添加初筛配置',	
 			closable:true,
 			cache : false,
 			//注：使用iframe即可防止同一个页面出现js和css冲突的问题

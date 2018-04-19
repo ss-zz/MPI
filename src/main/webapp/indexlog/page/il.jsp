@@ -32,19 +32,18 @@
 </head>
 <body>
 <!-- 表格 -->
-<table 	id="listTable"
-		title="主索引处理日志"  
-		border="0"
-		cellspacing="0"
-		cellpadding="0"
-		iconCls="icon-edit" 
-		width="98%" 
-		idField="PERSON_IDX_LOG_ID" 
-		remoteSort="false" 
-		singleSelect="false" 
-		showFooter="false"
-		striped="true"
-		>
+<table id="listTable"
+	title="主索引处理日志"
+	border="0"
+	cellspacing="0"
+	cellpadding="0"
+	idField="PERSON_IDX_LOG_ID" 
+	remoteSort="false" 
+	singleSelect="false" 
+	showFooter="false"
+	fitColumns="true"
+	striped="true"
+	>
 	<thead>
 		<tr align="center">
 			<th field="OP_TIME" width="120">处理时间</th>
@@ -85,49 +84,47 @@ $(function(){
 <div id="listTable_tb" style="height: auto;text-align: center;">
 	<table class="formeTable" align="center" >
 		<tr>
-		<td>处理类型:</td>
-		<td><select id="search_optype" >
-		<!-- 	<option value="">--请选择--</option> -->
-			<option value="1">匹配</option>
-			<option value="2">修订</option>
-		</select></td>
-		<td>处理方式:</td>
-		<td><select id="search_opstyle" >
-		<!-- 	<option value="">--请选择--</option> -->
-			<option value="1">自动合并</option>
-			<option value="2">自动新建</option>
-			<option value="3">自动拆分</option>
-			<option value="4">人工合并</option>
-			<option value="5">人工新建</option>
-			<option value="6">人工拆分</option>
-		</select></td>
+			<td>处理类型:</td>
+			<td><select id="search_optype" >
+			<!-- 	<option value="">--请选择--</option> -->
+				<option value="1">匹配</option>
+				<option value="2">修订</option>
+			</select></td>
+			<td>处理方式:</td>
+			<td><select id="search_opstyle" >
+			<!-- 	<option value="">--请选择--</option> -->
+				<option value="1">自动合并</option>
+				<option value="2">自动新建</option>
+				<option value="3">自动拆分</option>
+				<option value="4">人工合并</option>
+				<option value="5">人工新建</option>
+				<option value="6">人工拆分</option>
+			</select></td>
 		</tr>
 		<tr>
-		<td>处理日期起:</td>
-	   <td><input class="easyui-datetimebox" id="search_optime_begin"  readonly="true"   style="width:150px"></td>  		
-		<td>处理日期止:</td>
-		<td><input class="easyui-datetimebox" id="search_optime_end" readonly="true"   style="width:150px"></td>
+			<td>处理日期起:</td>
+			<td><input class="easyui-datetimebox" id="search_optime_begin"  readonly="true"   style="width:150px"></td>  		
+			<td>处理日期止:</td>
+			<td><input class="easyui-datetimebox" id="search_optime_end" readonly="true"   style="width:150px"></td>
 		</tr>
 		<tr>
-		<td>操作人:</td>
-		<td><input type="text" class="combo-text" id="search_opuser" style="width:150px"></td>
-		<td>数据来源:</td>
-		<td><input class="easyui-combobox" style="width:150px;" panelHeight="400" id="search_domain" url="${pageContext.request.contextPath}/indexlog/il.ac?method=listDomain" valueField="DOMAIN_ID" textField="DOMAIN_DESC" panelHeight="auto" /></td>
+			<td>操作人:</td>
+			<td><input type="text" class="combo-text" id="search_opuser" style="width:150px"></td>
+			<td>数据来源:</td>
+			<td><input class="easyui-combobox" style="width:150px;" panelHeight="400" id="search_domain" url="${pageContext.request.contextPath}/indexlog/il.ac?method=listDomain" valueField="DOMAIN_ID" textField="DOMAIN_DESC" panelHeight="auto" /></td>
 		</tr>
 		<tr>
-		<td>姓名:</td>
-		<td><input type="text" class="combo-text" id="search_personName" style="width:150px"></td>
-		<td>身份证号:</td>
-		<td><input type="text" class="combo-text" id="search_personIdcard" style="width:150px"></td>
-		</tr>		
+			<td>姓名:</td>
+			<td><input type="text" class="combo-text" id="search_personName" style="width:150px"></td>
+			<td>身份证号:</td>
+			<td><input type="text" class="combo-text" id="search_personIdcard" style="width:150px"></td>
+		</tr>
 
 	</table>
 	<div>
 		<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchListTable();">搜索</a>
 		<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchReset();">重置</a>
 	</div>
-	
-	
 
 </div>
 

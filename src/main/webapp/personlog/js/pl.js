@@ -34,9 +34,8 @@ function ajaxTable() {
 		toolbar:"#listTable_tb",
         singleSelect:true,//单选
         pagination:true,//分页
+		fitColumns:"true",
 		loadMsg:'数据加载中,请稍后...',
-		iconCls:"icon-edit",
-		width:"98%",
 		idField:"ROW_ID",
 		treeField:"DOMAIN_DESC",
 		remoteSort:false, 

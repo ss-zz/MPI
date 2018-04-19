@@ -16,26 +16,26 @@ function ajaxTable() {
 	// 加载表格
 	$('#listTable').datagrid({
 		toolbar : [{// 正上方工具栏
-			text : '添加系统用户',
+			text : '添加',
 			iconCls : 'icon-add',
 			handler : function() {
 				// 点击工具栏运行的js方法
 				openDialog_add();
 			}
 		}, '-', {
-			text : '编辑系统用户',
+			text : '编辑',
 			iconCls : 'icon-edit',
 			handler : function() {
 				openDialog_edit();
 			}
 		}, '-', {
-            text : '删除系统用户',
-            iconCls : 'icon-remove',
-            handler : function() {
-                removeData();
-            }
-        }],
-        singleSelect:true,//单选
+			text : '删除',
+			iconCls : 'icon-remove',
+			handler : function() {
+				removeData();
+			}
+		}],
+		singleSelect:true,//单选
 		loadMsg : '数据加载中,请稍后...',
 		onLoadError : function() {
 			alert('数据加载失败!');
@@ -111,12 +111,12 @@ function addData() {
 		type : 'POST',
 		dataType : "json",
 		data : {
-	       "name":$("#add_name").val(),
-           "userName":$("#add_userName").val(),
-           "password":$("#add_password").val(),
-           "email":$("#add_email").val(),
-           "sysRoleId":$("#add_role").val()
-	    },
+		   "name":$("#add_name").val(),
+		   "userName":$("#add_userName").val(),
+		   "password":$("#add_password").val(),
+		   "email":$("#add_email").val(),
+		   "sysRoleId":$("#add_role").val()
+		},
 		url : root + '/sysuser/su.ac?method=add',// 请求的action路径
 		error : function() {// 请求失败处理函数
 			alert('请求失败');
@@ -147,40 +147,40 @@ function setDialog_edit() {
 }
 // 打开对话框
 function openDialog_edit() {
-    editReset();
-    
+	editReset();
+	
 	var row = $('#listTable').datagrid('getSelected');
-    if(row==undefined || row==null){
-        alert("请选择要修改的用户!");
-        return;
-    }       
-    var userId = row.USER_ID; 
-    $.ajax({
-        async : false,
-        cache : false,
-        type : 'POST',
-        dataType : "json",
-        data : {
-            "userId":userId
-        },
-        url : root + '/sysuser/su.ac?method=load',// 请求的action路径
-        error : function() {// 请求失败处理函数
-            alert('请求失败');
-        },
-        success : function(data) {
-            if (data == null) {// 未返回任何消息表示添加成功
-                alert('请求失败');
-            }else{
-			    $("#edit_name").val(data.name);
-			    $("#edit_userName").val(data.userName);
-			    $("#edit_email").val(data.email);
-			    $("#edit_role").val(data.sysRoleId);
-                $("#edit_userName_show").html(data.userName);
-                $("#edit_userId").val(data.userId);
-            }
-        }
-    });
-    $('#edit').dialog('open');
+	if(row==undefined || row==null){
+		alert("请选择要修改的用户!");
+		return;
+	}	   
+	var userId = row.USER_ID; 
+	$.ajax({
+		async : false,
+		cache : false,
+		type : 'POST',
+		dataType : "json",
+		data : {
+			"userId":userId
+		},
+		url : root + '/sysuser/su.ac?method=load',// 请求的action路径
+		error : function() {// 请求失败处理函数
+			alert('请求失败');
+		},
+		success : function(data) {
+			if (data == null) {// 未返回任何消息表示添加成功
+				alert('请求失败');
+			}else{
+				$("#edit_name").val(data.name);
+				$("#edit_userName").val(data.userName);
+				$("#edit_email").val(data.email);
+				$("#edit_role").val(data.sysRoleId);
+				$("#edit_userName_show").html(data.userName);
+				$("#edit_userId").val(data.userId);
+			}
+		}
+	});
+	$('#edit').dialog('open');
 }
 // 关闭对话框
 function closeDialog_edit() {
@@ -190,7 +190,7 @@ function closeDialog_edit() {
 function editReset() {
 	$("#edit_name").val("");
 	$("#edit_userName").val("");
-    $("#edit_userName_show").html("");
+	$("#edit_userName_show").html("");
 	$("#edit_email").val("");
 	$("#edit_role").val("");
 }
@@ -220,7 +220,7 @@ function editData() {
 			"userId":$("#edit_userId").val(),
 			"name":$("#edit_name").val(),
 			"email":$("#edit_email").val(),
-			"sysRoleId":$("#edit_role").val()            
+			"sysRoleId":$("#edit_role").val()			
 		},
 		url : root + '/sysuser/su.ac?method=edit',// 请求的action路径
 		error : function() {// 请求失败处理函数
@@ -243,37 +243,37 @@ function editData() {
 /** --------------编辑操作弹出框------------------* */
 //删除用户方法
 function removeData(){
-    var row = $('#listTable').datagrid('getSelected');
-    if(row==undefined || row==null){
-        alert("请选择要删除的用户!");
-        return;
-    }     
-    var userId = row.USER_ID;
-    if(confirm("确认要删除用户:"+row.USER_NAME+"么?")){
-	    $.ajax({
-	        async : false,
-	        cache : false,
-	        type : 'POST',
-	        dataType : "json",
-	        data : {
-	            "userId":userId            
-	        },
-	        url : root + '/sysuser/su.ac?method=del',// 请求的action路径
-	        error : function() {// 请求失败处理函数
-	            alert('请求失败');
-	        },
-	        success : function(data) {
-	            var messgage = "删除成功!";
-	            if (data == null) {// 未返回任何消息表示添加成功
-	                // 刷新列表
-	                reloadTable();
-	            } else if (data.errorMsg != null) {// 返回异常信息
-	                messgage = data.errorMsg;
-	            }
-	            alert(messgage);
-	        }
-	    });        
-    }
+	var row = $('#listTable').datagrid('getSelected');
+	if(row==undefined || row==null){
+		alert("请选择要删除的用户!");
+		return;
+	}	 
+	var userId = row.USER_ID;
+	if(confirm("确认要删除用户:"+row.USER_NAME+"么?")){
+		$.ajax({
+			async : false,
+			cache : false,
+			type : 'POST',
+			dataType : "json",
+			data : {
+				"userId":userId			
+			},
+			url : root + '/sysuser/su.ac?method=del',// 请求的action路径
+			error : function() {// 请求失败处理函数
+				alert('请求失败');
+			},
+			success : function(data) {
+				var messgage = "删除成功!";
+				if (data == null) {// 未返回任何消息表示添加成功
+					// 刷新列表
+					reloadTable();
+				} else if (data.errorMsg != null) {// 返回异常信息
+					messgage = data.errorMsg;
+				}
+				alert(messgage);
+			}
+		});		
+	}
 }
 
 $.extend($.fn.validatebox.defaults.rules, {
@@ -293,15 +293,15 @@ $.extend($.fn.validatebox.defaults.rules, {
 				return false;
 			}
 			var result = $.ajax({
-						url : param[0],
-						data : {
-                            "userName":value
-                        },
-						type : 'post',
-						dataType : 'json',
-						async : false,
-						cache : false
-					}).responseText;
+				url : param[0],
+				data : {
+					"userName":value
+				},
+				type : 'post',
+				dataType : 'json',
+				async : false,
+				cache : false
+			}).responseText;
 			if (result == 'false') {
 				return false;
 			} else {

@@ -35,22 +35,22 @@ function ajaxTable() {
 	// 加载表格
 	$('#listTable').datagrid({
 		toolbar:[
-		/*{
-			text : '添加匹配配置',
+		{
+			text : '添加',
 			iconCls : 'icon-add',
 			handler : function(){
 				openAddPage();	
 			}
-		},*/
+		},
 		{
 			text : '查看当前匹配配置',
-			iconCls : 'icon-add',
+			iconCls : 'icon-search',
 			handler : function(){
 				openCurrentPage();	
 			}
 		}],
-        singleSelect:true,//单选
-        pagination:true,//分页
+		singleSelect:true,//单选
+		pagination:true,//分页
 		loadMsg : '数据加载中,请稍后...',
 		onLoadError : function() {
 			alert('数据加载失败!');

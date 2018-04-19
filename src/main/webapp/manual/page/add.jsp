@@ -19,11 +19,10 @@
 		border="0"
 		cellspacing="0"
 		cellpadding="0"
-		iconCls="icon-edit" 
-		width="98%" 
 		idField="MAN_OP_ID" 
 		remoteSort="false" 
-		singleSelect="false" 
+		singleSelect="false"
+		fitColumns="true"
 		showFooter="false"
 		striped="true"
 		url="${pageContext.request.contextPath}/manual/manual.ac?method=query" >

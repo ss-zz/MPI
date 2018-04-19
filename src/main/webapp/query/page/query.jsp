@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@include file="/common/page/master.jsp"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -34,11 +34,12 @@
 </head>
 <body>
 <!-- 表格 -->
-<table 	class="easyui-treegrid"
-		id="listTable" 		
+<table class="easyui-treegrid"
+		id="listTable"
 		border="0"
+		fitColumns="true"
 		cellspacing="0"
-		cellpadding="0"		
+		cellpadding="0"
 		></table>
 
 <!-- 搜索工具条 -->
@@ -53,15 +54,14 @@
 	 <tr>
 	 <td>出生日期:</td>
 		<td><input class="easyui-datebox" id="search_personBirthdate" readonly="true"   style="width:150px"></td>
-	 
 		</tr>
 	<tr>
 	 <td>合并状态:</td>
-		<td>    <select id="search_mergeStatus" class="easyui-combobox" name="dept" style="width:166px;" editable="false">
+		<td>	<select id="search_mergeStatus" class="easyui-combobox" name="dept" style="width:166px;" editable="false">
 					<option value="-1">请选择</option>
-			        <option value="0">未合并</option>
-			        <option value="1">已合并</option>
-			    </select>
+					<option value="0">未合并</option>
+					<option value="1">已合并</option>
+				</select>
 		</td>
 	 
 		</tr>
@@ -73,7 +73,7 @@
 						
 			</div>
 </div>
-    <div id="dialog" class="easyui-dialog" closed="true"></div>
-    <div id="dialog_split" class="easyui-dialog" closed="true"></div>
+	<div id="dialog" class="easyui-dialog" closed="true"></div>
+	<div id="dialog_split" class="easyui-dialog" closed="true"></div>
 </body>
 </html>

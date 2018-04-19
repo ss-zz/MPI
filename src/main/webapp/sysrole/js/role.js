@@ -25,14 +25,14 @@ function ajaxTable() {
 	// 加载表格
 	$('#listTable').datagrid({
 		toolbar:[{
-			text : '添加系统角色',
+			text : '添加',
 			iconCls : 'icon-add',
 			handler : function() {
 				// 点击工具栏运行的js方法
 				openDialog_add();
 			}			
 		},"-",{
-			text : '修改系统角色',
+			text : '编辑',
 			iconCls : 'icon-edit',
 			handler : function() {
 				// 点击工具栏运行的js方法

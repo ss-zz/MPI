@@ -14,17 +14,15 @@
 </head>
 <body>
 <!-- 表格 -->
-<table 	id="listTable"
-		title="系统用户列表"  
+<table id="listTable"
+		title="系统用户列表"
 		border="0"
 		cellspacing="0"
 		cellpadding="0"
-		iconCls="icon-edit" 
-		width="98%" 
-		idField="USER_ID" 
-		remoteSort="false" 
-		singleSelect="false" 
-		showFooter="false"
+		idField="USER_ID"
+		remoteSort="false"
+		singleSelect="false"
+		showFooter="true"
 		striped="true"
 		url="${pageContext.request.contextPath}/sysuser/su.ac?method=query" >
 	<thead>
@@ -32,7 +30,7 @@
 			<th field="ck" width="20" checkbox="true" width="20"></th>
 			<th field="NAME"  width="100">姓名</th>
 			<th field="USER_NAME"  width="100">用户名</th>
-			<th field="EMAIL"  width="100">电子邮件</th>
+			<th field="EMAIL"  width="200">电子邮件</th>
 			<th field="ROLE_NAME"  width="100">系统角色</th>
 		</tr>
 	</thead>

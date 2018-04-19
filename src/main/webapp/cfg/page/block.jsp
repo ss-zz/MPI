@@ -15,12 +15,10 @@
 <body>
 <!-- 表格 -->
 <table 	id="listTable"
-		title="初筛规则配置列表"  
+		title="初筛规则配置列表"
 		border="0"
 		cellspacing="0"
 		cellpadding="0"
-		iconCls="icon-edit" 
-		width="98%" 
 		idField="bolckId" 
 		remoteSort="false" 
 		singleSelect="false" 

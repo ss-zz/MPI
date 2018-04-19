@@ -141,11 +141,6 @@ $(document).ready(function(){
 	<!-- 正中间panel -->
 	<div region="center" title="功能区">
 		<div class="easyui-tabs" id="centerTab" fit="true" border="false">
-			<!-- <div title="欢迎页" style="padding: 20px; overflow: hidden;">
-				<div style="margin-top: 20px;">
-					<h3>你好，欢迎来到MPI</h3>
-				</div>
-			</div> -->
 		</div>
 	</div>
 </body>

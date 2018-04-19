@@ -15,12 +15,10 @@
 <body>
 <!-- 表格 -->
 <table 	id="listTable"
-		title="系统角色列表"  
+		title="系统角色列表"
 		border="0"
 		cellspacing="0"
 		cellpadding="0"
-		iconCls="icon-edit" 
-		width="98%" 
 		idField="sysRoleId" 
 		remoteSort="false" 
 		singleSelect="false" 
@@ -30,8 +28,8 @@
 	<thead>
 		<tr align="center">
 			<th field="ck" width="20" checkbox="true" width="20"></th>
-			<th field="roleName" width="100">姓名</th>
-			<th field="sysRoleId" width="100" formatter="buildViewUserLink">用户管理</th>
+			<th field="roleName" width="200">姓名</th>
+			<th field="sysRoleId" width="200" formatter="buildViewUserLink">用户管理</th>
 		</tr>
 	</thead>
 </table>
