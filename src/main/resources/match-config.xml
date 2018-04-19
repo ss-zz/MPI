@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<match-fields xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="matching.xsd"
+	agreement-weight-threshold="1.0" match-weight-threshold="0.8">
+	<match-field field-name="ID_NO" agreement-probability="0.9"
+		disagreement-probability="0.2" comparator-function="id"
+		match-threshold="0.8" weight="1" desc="居民身份证号" />
+
+	<match-field field-name="CARD_NO" agreement-probability="0.9"
+		disagreement-probability="0.2" comparator-function="exact"
+		match-threshold="0.8" weight="1" desc="居民健康卡号" />
+
+	<match-field field-name="NH_CARD" agreement-probability="0.9"
+		disagreement-probability="0.2" comparator-function="exact"
+		match-threshold="0.8" weight="1" desc="新农合证(卡)号" />
+
+	<match-field field-name="HR_ID" agreement-probability="0.9"
+		disagreement-probability="0.2" comparator-function="exact"
+		match-threshold="0.8" weight="1" desc="健康档案编号" />
+
+	<match-field field-name="SSCID" agreement-probability="0.9"
+		disagreement-probability="0.2" comparator-function="exact"
+		match-threshold="0.8" weight="1" desc="社会保障卡号" />
+
+</match-fields>

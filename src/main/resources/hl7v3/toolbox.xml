@@ -1,0 +1,8 @@
+<toolbox>
+  <tool>
+    <key>date</key>
+    <scope>application</scope>
+    <class>org.apache.velocity.tools.generic.DateTool</class>
+    <parameter name="format" value="yyyyMMdd"/>
+  </tool>
+</toolbox>

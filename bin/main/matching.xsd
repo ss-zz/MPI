@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="match-fields">
+		<xs:complexType>
+			<xs:sequence minOccurs="1" maxOccurs="unbounded">
+				<xs:element name="match-field" type="match-field" />
+			</xs:sequence>
+			<xs:attribute name="agreement-weight-threshold" type="xs:float" />
+			<xs:attribute name="match-weight-threshold" type="xs:float" />
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="match-field">
+		<xs:attribute name="field-name" type="xs:string" />
+		<xs:attribute name="agreement-probability" type="xs:float" />
+		<xs:attribute name="disagreement-probability" type="xs:float" />
+		<!-- 匹配函数名 -->
+		<xs:attribute name="comparator-function" type="xs:string" />
+		<!-- 匹配筏值 -->
+		<xs:attribute name="match-threshold" type="xs:float" />
+		<!-- 权重 -->
+		<xs:attribute name="weight" type="xs:float" />
+		<!-- 字段描述 -->
+		<xs:attribute name="desc" type="xs:string"/>
+	</xs:complexType>
+</xs:schema>

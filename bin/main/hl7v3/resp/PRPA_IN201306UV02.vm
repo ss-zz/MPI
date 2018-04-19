@@ -1,0 +1,517 @@
+<PRPA_IN201306UV02 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="urn:hl7-org:v3" ITSVersion="XML_1.0">
+<id root="1.2.840.114350.1.13.999.238" extension="55789"/>
+<creationTime value="20070428150302"/>
+<interactionId root="2.16.840.1.113883.1.6" extension="PRPA_IN201306UV02"/>
+<processingCode code="T"/>
+<processingModeCode code="I"/>
+<acceptAckCode code="NE"/>
+<receiver typeCode="RCV">
+  <device classCode="DEV" determinerCode="INSTANCE">
+    <id root="1.2.840.114350.1.13.999.567"/>
+  </device>
+</receiver>
+<sender typeCode="SND">
+  <device classCode="DEV" determinerCode="INSTANCE">
+    <id root="1.2.840.114350.1.13.999.234"/>
+    <telecom value="http://servicelocation/PDQuery"/>
+  </device>
+</sender>
+<acknowledgement>
+  <typeCode code="AA"/>
+  <targetMessage>
+    <id root="1.2.840.114350.1.13.0.1.7.1.1" extension="35423"/>
+  </targetMessage>
+</acknowledgement>
+<controlActProcess classCode="CACT" moodCode="EVN">
+<code code="PRPA_TE201306UV02" codeSystem="2.16.840.1.113883.1.6"/>
+    #if ($pl && $pl.size()>0)
+        #foreach($person in $pl)
+            #if($velocityCount<=10)
+            <subject typeCode="SUBJ">
+            <registrationEvent>
+            <id nullFlavor="NA"></id>
+            <statusCode code="active"></statusCode>
+            <subject1>
+            <ClinicalDocument>
+            <!--地域代码 "CN" 代表中国-->
+            <realmCode code="CN"/>
+            <!--文档信息模型类别-->
+            <!--root="2.16.840.1.113883.1.3" 表示HL7 注册模型的编码系统OID ，extension="POCD_HD000040" 表示相应编码系统下的CDA R2 采用的临床文档架构信息模型是POCD_HD0000400-->
+            <typeId root="2.16.840.1.113883.1.3" extension="POCD_MT000040"/>
+            <!--文档模板-->
+            <!--extension="DT2011001"意思文档的编号-->
+            <templateId xsi:type="II" root="SD.10.1" assigningAuthorityName="个人基本健康信息登记" extension="DT20120001V1"/>
+            <!--文档编号 [1..1] -->
+            <!--extension表示健康档案标识号-->
+            <id root="SD.4.1" extension="${person.FIELD_PK}" displayable="true" xsi:type="II"/>
+            <!--文档类别代码-->
+            <code code="A010401" codeSystem="SD.6.3" codeSystemName="卫生信息共享文档分类编码系统" displayName="个人基本健康信息登记"/>
+            <title>个人基本健康信息登记</title>
+            <!--文档生效时间 [1..1]-->
+            <effectiveTime xsi:type="TS" value="${person.CREATETIME}"/>
+            <!--文档密级 默认值 [1..1] -->
+            <confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25" codeSystemName="Confidentiality"
+                                 displayName="一般保密级别"/>
+            <!--文档语言 [1..1] 默认值 code="zh-cn" 含义：中文字符编码-->
+            <languageCode code="zh-cn"/>
+            <!--文档版本号-->
+            <versionNumber value="${person.VERSION_NUM}" xsi:type="INT"/>
+            <!--文档记录对象-->
+            <recordTarget typeCode="RCT" contextControlCode="OP">
+            <patientRole classCode="PAT">
+            <!--健康档案标识号-->
+            <id root="DE01.00.009.00" extension="${person.HR_ID}"/>
+            <!-- 新农合卡号 -->
+            <id root="DE01.99.099.00" extension="${person.NH_CARD}"/>
+            <!-- 社会保障卡号 -->
+            <id root="DE01.99.100.00" extension="${person.SSCID}"/>
+            <!--患者住址 通过use属性区别住址类型，如use="H"表示家庭住址，use="WP"表示工作地址-->
+            <asAddr>
+              <!--患者地址 -->
+              <addr use="H">
+                <houseNumber partType="DE02.01.009.06" literal="${person.HOUSE_NO}"/>
+                <streetName partType="DE02.01.009.05" literal="${person.VILLAGE_NAME}"/>
+                <country partType="DE02.01.009.04" literal="${person.STREET_ID}"/>
+                <county partType="DE02.01.009.03" literal="${person.AREA_NAME}"/>
+                <city partType="DE02.01.009.02" literal="${person.CITY_NAME}"/>
+                <state partType="DE02.01.009.01" literal="${person.PROVINCE_NAME}"/>
+                <postalCode partType="DE02.01.047.00" literal="${person.POST_CD}"/>
+              </addr>
+              <!--居住地址-->
+              <asLivingaddr code="${person.LIVING_ADDR}"/>
+              <!--地址类别-->
+              <asAdcd code="${person.AD_CD}" displayName="${person.AD_DN}" codeSystem="${person.AD_CS}"
+                      codeSystemName="${person.AD_CSN}" codeSystemVersion="${person.AD_CSV}"/>
+            </asAddr>
+            <!--户口信息-->
+            <asRPR>
+              <!--户口地址-->
+              <asRpraddr code="${person.RPR_ADDR}"/>
+              <!-- 户口地址邮编 -->
+              <asRprpost code="${person.RPR_POST}"/>
+              <!-- 户口电话 -->
+              <asRprphone code="${person.RPR_PHONE}"/>
+            </asRPR>
+            <!--患者通信地址 包括邮箱和电话-->
+            <asTele>
+              <telecom>
+                <code code="DE02.01.010.00" displayName="电话号码"/>
+                <value value="${person.PERSON_TEL_NO}"/>
+              </telecom>
+              <asMphonenum>
+                <code code="DE02.01.010.00" displayName="手机号码"/>
+                <value value="${person.M_PHONE_NUM}"/>
+              </asMphonenum>
+              <!-- 电话类别 -->
+              <asTelecomType code="${person.TEL_TYPE_CD}" displayName="${person.TEL_TYPE_DN}"
+                             codeSystem="${person.TEL_TYPE_CS}"
+                             codeSystemName="${person.TEL_TYPE_CSN}" codeSystemVersion="${person.TEL_TYPE_CSV}"/>
+
+              <telecom code="${person.EMAIL_AD}" displayName="邮箱"/>
+            </asTele>
+            <!--患者详细信息 包括身份证，姓名，性别，出生日期，婚姻状况等-->
+            <patient classCode="PSN" determinerCode="INSTANCE">
+              <asPatient>
+                <asPatienttype code="${person.PATIENT_TYPE}" displayName="${person.PATIENT_TYPE_VALUE}"
+                               codeSystem="${person.PATIENT_TYPE_CS}" codeSystemName="${person.PATIENT_TYPE_CSN}"
+                               codeSystemVersion="${person.PATIENT_TYPE_CSV}"/>
+                <asPatientDescr>
+                  <code code="DE06.99.001.00" displayName="患者就诊类别描述"/>
+                  <value value="${person.PATIENT_TYPE_DESCR}"/>
+                </asPatientDescr>
+              </asPatient>
+              <!--患者标识号，可以是身份证，护照，军官证等-->
+              <asId>
+                <!-- 证件号 -->
+                <id root="DE02.01.030.00" extension="${person.ID_NO}"/>
+                <!-- 证件类别 -->
+                <asIdType code="${person.ID_NO_CD}" displayName="${person.ID_NO_DN}" codeSystem="${person.ID_NO_CS}"
+                          codeSystemName="${person.ID_NO_CSN}" codeSystemVersion="${person.ID_NO_CSV}"/>
+              </asId>
+              <!-- 患者姓名 -->
+              <name literal="${person.NAME_CN}"/>
+              <!-- 英文姓名 -->
+              <asEnName>
+                <code code="DE01.99.001.00" displayName="英文姓名"/>
+                <value value="${person.NAME_EN}"/>
+              </asEnName>
+              <!--患者性别-->
+              <administrativeGenderCode code="${person.GENDER_CD}" displayName="${person.GENDER_DN}"
+                                        codeSystem="${person.GENDER_CS}" codeSystemName="${person.GENDER_CSN}"
+                                        codeSystemVersion="${person.GENDER_CSV}"/>
+              <!--患者出生日期-->
+              <birthTime xsi:type="TS" value="${person.BIRTH_DATE}"/>
+              <!--患者婚姻状况-->
+              <maritalStatusCode code="${person.CARD_MARITAL_ST_CD}" displayName="${person.CARD_MARITAL_ST_DN}"
+                                 codeSystem="${person.CARD_MARITAL_ST_CS}"
+                                 codeSystemName="${person.CARD_MARITAL_ST_CSN}"
+                                 codeSystemVersion="${person.CARD_MARITAL_ST_CSV}"/>
+
+              <!--患者民族类别-->
+              <ethnicGroupCode code="${person.CARD_NATION_CD}" displayName="${person.CARD_NATION_DN}"
+                               codeSystem="${person.CARD_NATION_CS}" codeSystemName="${person.CARD_NATION_CSN}"
+                               codeSystemVersion="${person.CARD_NATION_CSV}"/>
+
+              <!--籍贯省-->
+              <asNativeprovince code="${person.NATIVE_PROVINCE}" displayName="${person.NATIVE_PROVINCE_DN}"
+                                codeSystem="${person.NATIVE_PROVINCE_CS}"
+                                codeSystemName="${person.NATIVE_PROVINCE_CSN}"
+                                codeSystemVersion="${person.NATIVE_PROVINCE_CSV}"/>
+
+              <!--籍贯市-->
+              <asNativec code="${person.NATIVE_CITY}" displayName="${person.NATIVE_CITY_DN}"
+                         codeSystem="${person.NATIVE_CITY_CS}" codeSystemName="${person.NATIVE_CITY_CSN}"
+                         codeSystemVersion="${person.NATIVE_CITY_CSV}"/>
+
+              <!--患者出生地址-->
+              <birthplace>
+                <code code="DE02.01.004.00" codeSystem="行政区划代码GB/T2260-2007"/>
+                <value value="${person.BIRTH_PLACE}" displayName="${person.BIRTH_PLACE_DN}"
+                       codeSystem="${person.BIRTH_PLACE_CS}" codeSystemName="${person.BIRTH_PLACE_CSN}"
+                       codeSystemVersion="${person.BIRTH_PLACE_CSV}"/>
+              </birthplace>
+
+              <!--患者学历-->
+              <asEducationLevelCode code="${person.CARD_ED_BG_CD}" displayName="${person.CARD_ED_BG_DN}"
+                                    codeSystem="${person.CARD_ED_BG_CS}" codeSystemName="${person.CARD_ED_BG_CSN}"
+                                    codeSystemVersion="${person.CARD_ED_BG_CSV}"/>
+
+              <!--医疗保险类别-->
+              <asMedical>
+                <asMedicarecd code="${person.MEDICARE_CD}" displayName="${person.MEDICARE_DN}"
+                              codeSystem="${person.MEDICARE_CS}" codeSystemName="${person.MEDICARE_CSN}"
+                              codeSystemVersion="${person.MEDICARE_CSV}"/>
+                <!--患者医疗保险号-->
+                <asMedicalInsuranceCode>
+                  <code code="DE02.99.002.00" displayName="医保卡号标识"/>
+                  <value value="${person.MEDICAL_INSURANCE_NO}"/>
+                </asMedicalInsuranceCode>
+              </asMedical>
+              <!--医疗待遇-->
+              <asMedicaltreatment code="${person.MEDICAL_TREATMENT_CD}"
+                                  displayName="${person.MEDICAL_TREATMENT_NAME}"
+                                  codeSystem="${person.MEDICAL_TREATMENT_CS}"
+                                  codeSystemName="${person.MEDICAL_TREATMENT_CSN}"
+                                  codeSystemVersion="${person.MEDICAL_TREATMENT_CSV}"/>
+
+              <!--患者国籍-->
+              <asNationalitycode code="${person.NATIONALITY_CD}" displayName="${person.NATIONALITY_DN}"
+                                 codeSystem="${person.NATIONALITY_CS}" codeSystemName="${person.NATIONALITY_CSN}"
+                                 codeSystemVersion="${person.NATIONALITY_CSV}"/>
+              <!--患者职业-->
+              <occupationCode code="${person.CARD_OCCU_TYPE_CD}" displayName="${person.CARD_OCCU_TYPE_DN}"
+                              codeSystem="${person.CARD_OCCU_TYPE_CS}" codeSystemName="${person.CARD_OCCU_TYPE_CSN}"
+                              codeSystemVersion="${person.CARD_OCCU_TYPE_CSV}"/>
+              <!--工作单位信息-->
+              <asWokingunit>
+                <asWokingunitname>
+                  <code code="DE08.10.007.00" displayName="工作单位名称"/>
+                  <value value="${person.WORKING_UNIT_NAME}"/>
+                </asWokingunitname>
+                <asWokingunitpost>
+                  <code code="DE02.01.047.00" displayName="邮编"/>
+                  <value value="${person.WORKING_UNIT_POST}"/>
+                </asWokingunitpost>
+                <asWokingunitaddr>
+                  <code code="DE02.01.009.01" displayName="工作单位地址"/>
+                  <value value="${person.WORKING_UNIT_ADDR}"/>
+                </asWokingunitaddr>
+                <asWokingunitTel>
+                  <code code="DE02.01.010.00" displayName="工作电话号码"/>
+                  <value value="${person.WORKING_TEL_NO}"/>
+                </asWokingunitTel>
+              </asWokingunit>
+              <!--患者所在地行政区划-->
+              <asServiceDeliveryLocation classCode="SDLOC">
+                <location classCode="PLC" determinerCode="INSTANCE">
+                  <code code="DE02.01.038.00" displayName="行政区划"/>
+                  <value code="${person.AR_CD}" displayName="${person.AR_DN}" codeSystem="${person.AR_CS}"
+                         codeSystemName="${person.AR_CSN}" codeSystemVersion="${person.AR_CSV}"/>
+                </location>
+              </asServiceDeliveryLocation>
+              <!--退伍军人标志 -->
+              <asVeteransmilitary code="${person.VETERANS_MILITARY_MARK}"
+                                  displayName="${person.VETERANS_MILITARY_VALUE}"
+                                  codeSystem="${person.VETERANS_MILITARY_MARK_CS}"
+                                  codeSystemName="${person.VETERANS_MILITARY_MARK_CSN}"
+                                  codeSystemVersion="${person.VETERANS_MILITARY_MARK_CSV}"/>
+              <!-- 卡片信息 -->
+              <asCard>
+                <asCardno>
+                  <code code="DE02.99.003.00" displayName="卡号"/>
+                  <value value="${person.CARD_NO}"/>
+                </asCardno>
+                <asCardType code="${person.CARD_CD}" displayName="${person.CARD_DN}" codeSystem="${person.CARD_CS}"
+                            codeSystemName="${person.CARD_CSN}" codeSystemVersion="${person.CARD_CSV}"/>
+              </asCard>
+              <!-- 发卡地址 -->
+              <asCardAre code="${person.CARD_AREA}" displayName="${person.CARD_AREA_DN}"
+                         codeSystem="${person.CARD_AREA_CS}"
+                         codeSystemName="${person.CARD_AREA_CSN}" codeSystemVersion="${person.CARD_AREA_CSV}"/>
+            </patient>
+            <!-- 联系人信息 -->
+            <asLinkman>
+              <!--联系人姓名 -->
+              <asLinkmanname>
+                <code code="DE02.99.003.00" displayName="联系人姓名"/>
+                <value value="${person.LINKMAN_NAME}"/>
+              </asLinkmanname>
+              <!--联系人关系代码 -->
+              <asLinkmanrel code="${person.LINKMAN_REL_CD}" displayName="${person.LINKMAN_REL_DN}"
+                            codeSystem="${person.LINKMAN_REL_CS}" codeSystemName="${person.LINKMAN_REL_CSN}"
+                            codeSystemVersion="${person.LINKMAN_REL_CSV}"/>
+              <!--联系人证件类别代码 -->
+              <asLmidno code="${person.LM_ID_NO_CD}" displayName="${person.LM_ID_NO_DN}"
+                        codeSystem="${person.LM_ID_NO_CS}"
+                        codeSystemName="${person.LM_ID_NO_CSN}" codeSystemVersion="${person.LM_ID_NO_CSV}"/>
+              <!--联系人证件 -->
+              <asLmidno>
+                <id root="SD.4.2" extension="${person.LM_ID_NO}"/>
+              </asLmidno>
+              <asLinkmanaddr>
+                <code code="DE02.99.004.00" displayName="联系人地址"/>
+                <value value="${person.LINKMAN_ADDR}"/>
+              </asLinkmanaddr>
+              <asLinkmanpost>
+                <code code="DE02.99.005.00" displayName="联系人邮编"/>
+                <value value="${person.LINKMAN_POST}"/>
+              </asLinkmanpost>
+              <asLinkmanphone>
+                <code code="DE02.01.010.00" displayName="联系人电话"/>
+                <value value="${person.LINKMAN_PHONE}"/>
+              </asLinkmanphone>
+            </asLinkman>
+            <!-- 备注 -->
+            <asRemark>
+              <code code="DE02.99.006.00" displayName="备注"/>
+              <value value="${person.REMARK}"/>
+            </asRemark>
+            <!-- 保险类型 -->
+            <asInsureType>
+              <code code="DE02.99.007.00" displayName="保险类型"/>
+              <value value="${person.INSURE_TYPE}"/>
+            </asInsureType>
+
+            <!-- 常住地址户籍标志 -->
+            <asUsualTypeMark>
+              <code code="DE02.01.003.00" displayName="常住地址户籍标志"/>
+              <value value="${person.USUAL_TYPE_MARK}"/>
+            </asUsualTypeMark>
+
+            </patientRole>
+            </recordTarget>
+            <!--文档作者 -->
+            <author typeCode="AUT" contextControlCode="OP">
+              <time xsi:type="TS" value="${person.REGISTER_DATE}"/>
+              <assignedAuthor classCode="ASSIGNED">
+                <id root="DE08.99.001.00" extension="建档人员代码"/>
+                <code code="${person.REGISTER_PERSON_CODE}" displayName="服务者代码"/>
+                <assignedPerson>
+                  <name>${person.RECORDER_NAME}</name>
+                </assignedPerson>
+                <representedOrganization>
+                  <id root="SD.4.4" extension="建档机构名称"/>
+                  <name>${person.REGISTER_ORG_NAME}</name>
+                  <asOrganizationPartOf>
+                    <id root="DE08.10.052.00" extension="建档机构代码"/>
+                    <code code="${person.REGISTER_ORG_CODE}" displayName="医疗卫生服务机构代码"/>
+                  </asOrganizationPartOf>
+                </representedOrganization>
+              </assignedAuthor>
+            </author>
+            <!-- 系统开发商 -->
+            <author typeCode="AUT" contextControlCode="OP">
+              <time/>
+              <assignedAuthor classCode="ASSIGNED">
+                <id/>
+                <representedOrganization>
+                  <name>${person.PROVIDER_NAME}</name>
+                  <asOrganizationPartOf>
+                    <id root="SD.4.4" extension="系统开发商代码"/>
+                    <code code="${person.PROVIDER_ORG_CODE}" displayName="系统开发商代码"/>
+                  </asOrganizationPartOf>
+                </representedOrganization>
+              </assignedAuthor>
+            </author>
+            <!--文档管理机构 -->
+            <author typeCode="AUT" contextControlCode="OP">
+              <!--文档上传时间-->
+              <time xsi:type="TS" value="${person.SEND_TIME}"/>
+              <assignedAuthor classCode="ASSIGNED">
+                <id/>
+                <representedOrganization>
+                  <id root="DE08.99.002.00" extension="文档管理机构名称"/>
+                  <name>${person.SEND_SYSTEM}</name>
+                  <asOrganizationPartOf>
+                    <id root="SD.4.5" extension="文档管理机构代码"/>
+                    <code code="${person.SEND_ORG_CODE}" displayName="文档管理机构代码"/>
+                  </asOrganizationPartOf>
+                </representedOrganization>
+              </assignedAuthor>
+            </author>
+            <!--文档头关联文档-->
+            <relatedDocument typeCode="APND">
+              <parentDocument classCode="DOCCLIN" moodCode="EVN">
+                <id root="SD.1.2" extension="DT20120001V1"/>
+                <setId xsi:type="II" root="1.2.345.6789.33" extension="${person.RELATION_PK}"/>
+                <versionNumber value="1"/>
+              </parentDocument>
+            </relatedDocument>
+            <!--文档体 -->
+            <component typeCode="COMP">
+              <structuredBody classCode="DOCBODY" moodCode="EVN">
+                <component>
+                  <section>
+                    <!-- 责任医师 -->
+                    <author typeCode="AUT" contextControlCode="OP">
+                      <time/>
+                      <assignedAuthor classCode="ASSIGNED">
+                        <id root="DE02.01.039.00" extension="责任医师数据源标识"/>
+                        <code code="${person.RESPONS_DOC_CODE}" displayName="责任医师代码"/>
+                        <assignedPerson>
+                          <name>${person.RESPONS_DOC_NAME}</name>
+                        </assignedPerson>
+                      </assignedAuthor>
+                    </author>
+                    <!-- 医疗服务编号 -->
+                    <entry>
+                      <observation classCode="OBS" moodCode="EVN">
+                        <code code="DE02.99.008.00" displayName="医疗服务编号"/>
+                        <value xsi:type="SC" code="${person.MEDICALSERVICE_NO}"/>
+                      </observation>
+                    </entry>
+                    <!-- 其他职业描述 -->
+                    <entry>
+                      <observation classCode="OBS" moodCode="EVN">
+                        <code code="DE02.99.009.00" displayName="其他职业描述"/>
+                        <text>${person.OTHER_OCCC_DESCR}</text>
+                      </observation>
+                    </entry>
+                    <entry typeCode="COMP" contextConductionInd="true">
+                      <!--血型 BATTERY属性指定了一组Observation集合，这组集合在逻辑上和使用上都是有联系的，是有临床或功能目的的-->
+                      <organizer classCode="BATTERY" moodCode="EVN">
+                        <!--活动组合 用于创建共享一个语言环境的其他文档条目的任意组合-->
+                        <statusCode nullFlavor="UNK"/>
+                        <component typeCode="COMP" contextConductionInd="true">
+                          <!-- ABO血型 -->
+                          <observation classCode="OBS" moodCode="EVN">
+                            <code code="DE04.50.001.00" displayName="ABO血型代码"/>
+                            <value xsi:type="CD" code="${person.ABO_CD}" codeSystem="${person.ABO_CS}"
+                                   codeSystemName="${person.ABO_CSN}" codeSystemVersion="${person.ABO_CSV}"
+                                   displayName="${person.ABO_DN}"/>
+                          </observation>
+                        </component>
+                        <component typeCode="COMP" contextConductionInd="true">
+                          <!-- Rh血型 -->
+                          <observation classCode="OBS" moodCode="EVN">
+                            <code code="DE04.50.010.00" displayName="Rh血型代码"/>
+                            <value xsi:type="CD" code="${person.RH_CD}" codeSystem="${person.RH_CS}"
+                                   codeSystemName="${person.RH_CSN}" codeSystemVersion="${person.RH_CSV}"
+                                   displayName="${person.RH_DN}"/>
+                          </observation>
+                        </component>
+                        <component typeCode="COMP" contextConductionInd="true">
+                          <!-- RH阴性代码 1否2是3不详 -->
+                          <observation classCode="OBS" moodCode="EVN">
+                            <code code="DE04.99.001.00" displayName="RH阴性代码"/>
+                            <value xsi:type="SC" code="${person.RH_NEG_CD}"/>
+                          </observation>
+                        </component>
+                      </organizer>
+                    </entry>
+                    <!-- 源数据级别 -->
+                    <entry>
+                      <observation classCode="OBS" moodCode="EVN">
+                        <code code="DE01.99.001.00" displayName="源数据级别"/>
+                        <value xsi:type="SC" code="${person.SRC_LEVEL}"/>
+                      </observation>
+                    </entry>
+                    <!-- 最终修改日期 -->
+                    <entry>
+                      <observation classCode="OBS" moodCode="EVN">
+                        <code code="DE01.99.002.00" displayName="最终修改日期"/>
+                        <value xsi:type="TS" value="${person.LASTUPTIME}"/>
+                      </observation>
+                    </entry>
+                    <!-- 上传状态 -->
+                    <entry>
+                      <observation classCode="OBS" moodCode="EVN">
+                        <code code="DE01.99.003.00" displayName="上传状态"/>
+                        <value xsi:type="SC" code="${person.STATE}"/>
+                      </observation>
+                    </entry>
+                  </section>
+                </component>
+              </structuredBody>
+            </component>
+            </ClinicalDocument>
+            </subject1>
+            <custodian>
+              <assignedEntity>
+                <id nullFlavor="NA"></id>
+              </assignedEntity>
+            </custodian>
+            </registrationEvent>
+            </subject>
+            #else
+                #break
+            #end
+        #end
+    <queryAck>
+      <queryId root="1.2.840.114350.1.13.28.1.18.5.999" extension="18204"/>
+      <queryResponseCode code="OK"/>
+      <resultTotalQuantity value="${pl.size()}"/>
+    </queryAck>
+    #elseif(!$err)
+    <queryAck>
+      <queryId root="1.2.840.114350.1.13.28.1.18.5.999" extension="18204"/>
+      <queryResponseCode code="NF"/>
+    </queryAck>
+    #else
+    <queryAck>
+      <queryId root="1.2.840.114350.1.13.28.1.18.5.999" extension="18204"/>
+      <queryResponseCode code="QE"/>
+    </queryAck>
+    #end
+<queryByParameter>
+  <queryId root="1.2.840.114350.1.13.28.1.18.5.999" extension="18204"/>
+  <statusCode code="new"/>
+  <initialQuantity value="2"/>
+  <parameterList>
+#if(!$err)
+  <livingSubjectAdministrativeGender>
+    <value code="${ps.GENDER_CD}"/>
+    <semanticsText>GENDER_CD</semanticsText>
+  </livingSubjectAdministrativeGender>
+  <livingSubjectBirthTime>
+    <value value="$date.format('yyyyMMdd',$ps.BIRTH_DATE)"/>
+    <semanticsText>BIRTH_DATE</semanticsText>
+  </livingSubjectBirthTime>
+  <livingSubjectId>
+    <value extension="${ps.ID_NO}"/>
+    <semanticsText>ID_NO</semanticsText>
+  </livingSubjectId>
+  <livingSubjectName>
+    <value>
+      <given>${ps.NAME_CN}</given>
+    </value>
+    <semanticsText>NAME_CN</semanticsText>
+  </livingSubjectName>
+  <otherIDsScopingOrganization>
+    <value extension="${ps.UNIQUE_SIGN}" root="1.2.840.114350.1.13.99997.2.3412"/>
+    <semanticsText>UNIQUE_SIGN</semanticsText>
+  </otherIDsScopingOrganization>
+  <patientAddress>
+    <value>${ps.LIVING_ADDR}</value>
+    <semanticsText>LIVING_ADDR</semanticsText>
+  </patientAddress>
+  <patientTelecom>
+    <value value="${ps.PERSON_TEL_NO}"/>
+    <semanticsText>PERSON_TEL_NO</semanticsText>
+  </patientTelecom>
+#end
+  </parameterList>
+</queryByParameter>
+</controlActProcess>
+</PRPA_IN201306UV02>

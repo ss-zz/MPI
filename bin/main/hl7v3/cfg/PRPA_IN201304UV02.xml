@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table id="PRPA_IN201304UV02" clazz="com.sinosoft.pixpdqv3.dto.MergeDto" basepath="/n1:PRPA_IN201304UV02/n1:controlActProcess/n1:subject/n1:registrationEvent">
+  <column attribute="survivingId" attributeCode="" attributePath="/n1:subject1/n1:patient/n1:id/@extension" />
+  <column attribute="retiredId" attributeCode="" attributePath="/n1:replacementOf/n1:priorRegistration/n1:subject1/n1:priorRegisteredRole/n1:id/@extension" />
+  <column attribute="domainUniqueSign" attributeCode="" attributePath="/n1:replacementOf/n1:priorRegistration/n1:subject1/n1:priorRegisteredRole/n1:id/@assigningAuthorityName" />
+</table>

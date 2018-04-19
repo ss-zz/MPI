@@ -1,0 +1,64 @@
+package com.sinosoft.stringcomparison.metrics;
+
+import com.sinosoft.mpi.util.IdcardUtils;
+
+/**
+ * 
+*    
+* @Description  身份证匹配
+* 
+* 
+*
+* 
+* @Package com.sinosoft.stringcomparison.metrics 
+* @author <a href="mailto:qinshouxin@sinosoft.com.cn">Qin Shouxin </a> 
+* @version v1.0,2012-3-27
+* @see	
+* @since	（可选）	
+*
+ */
+public class IDDistanceMetric implements IDistanceMetric {
+
+	private String name="id";
+	@Override
+	public double score(String left, String right) {
+		double result=0;
+		if(left==null||right==null){
+			return result;
+		}
+		int length=left.length();
+		
+		if(left.length()==right.length()){
+			if(left.equals(right)){
+				result=1;
+			}
+		}else{
+			if(length-18==0){
+				if(IdcardUtils.conver18CardTo15(left).equals(right)){
+					result=1;
+				}
+			}else if(length-15==0){
+			   System.out.print("left="+left+",right="+right);
+				if(IdcardUtils.conver15CardTo18(left).equals(right)){
+					result=1;
+				}
+			}else{
+				result=0;
+			}
+		}
+		
+		return result;
+		
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String getNameCn() {
+		return "身份证";
+	}
+
+}

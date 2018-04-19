@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table id="PRPA_IN201305UV02"
+       clazz="com.sinosoft.mpi.model.PersonInfo"
+       basepath="/n1:PRPA_IN201305UV02/n1:controlActProcess/n1:queryByParameter/n1:parameterList">
+  <column attribute="GENDER_CD" attributeCode="" attributePath="/n1:livingSubjectAdministrativeGender/n1:value/@code" />
+  <column attribute="BIRTH_DATE" attributeCode="" attributePath="/n1:livingSubjectBirthTime/n1:value/@value" class="java.util.Date"  />
+  <column attribute="ID_NO" attributeCode="" attributePath="/n1:livingSubjectId/n1:value/@extension" />
+  <column attribute="NAME_CN" attributeCode="" attributePath="/n1:livingSubjectName/n1:value/n1:given" />
+  <column attribute="UNIQUE_SIGN" attributeCode="" attributePath="/n1:otherIDsScopingOrganization/n1:value/@extension" />
+  <column attribute="LIVING_ADDR" attributeCode="" attributePath="/n1:patientAddress/n1:value" />
+  <column attribute="PERSON_TEL_NO" attributeCode="" attributePath="/n1:patientTelecom/n1:value/@value" />
+</table>

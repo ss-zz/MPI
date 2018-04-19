@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://cxf.apache.org/jaxws
+          http://cxf.apache.org/schemas/jaxws.xsd">
+
+  <jaxws:client id="iti44Client" serviceClass="com.sinosoft.pixpdqv3.iti44.Iti44PixPortType"
+                address="http://127.0.0.1:8080/mpi/ws/iti44"/>
+  <jaxws:client id="iti45Client" serviceClass="com.sinosoft.pixpdqv3.iti45.Iti45PortType"
+                address="http://127.0.0.1:8080/mpi/ws/iti45"/>
+  <jaxws:client id="iti47Client" serviceClass="com.sinosoft.pixpdqv3.iti47.Iti47PortType"
+                address="http://127.0.0.1:8080/mpi/ws/iti47"/>
+</beans>

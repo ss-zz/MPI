@@ -1,0 +1,157 @@
+@charset "utf-8";
+/* CSS Document */
+html { height:100%;}
+
+/*
+body { background:url(../images/login_images/dlbg.jpg) no-repeat center #015495; height:100%;}
+
+.dl_con { width:331px; height:202px;  margin:267px auto auto 277px;*margin:104px auto auto 277px;_margin:104px auto auto 277px; font-size:14px; color:white; font-weight:bold; font-family:"simsun";}
+.dl_con .text { height:18px; line-height:18px; background:#f3f3f3; border:1px solid #e5e5e5; padding:2px 3px; font-size:14px; font-weight:normal; color:#333333; width:150px;}
+.dl_con table { margin:34px 0 0 0;}
+.dl_con table tr { height:32px; padding:0;}
+
+.btn_login { width:74px; height:26px; background:url(../images/login_images/btn_login.gif) no-repeat; cursor:pointer; border:none; font-size:14px; color:#7f2402; font-weight:bold;}
+*/
+
+
+	body {
+		background-color:"#c1e3fa";
+		overflow:hidden;
+	}
+
+	#head .head-left {
+		background-image:url("../images/login_images/header-left.png");
+		width:15px;
+		height:82px;
+		background-repeat:no-repeat;
+		display:block;
+	}
+	#head .head-right {
+		background-image:url("../images/login_images/header-right.png");
+		margin-left:0px;
+		width:534px;
+		height:82px;
+		background-repeat:no-repeat;
+		display:block;
+	}
+	#head .dhow-head {
+		background-image:url("../images/login_images/dhow-head.png");
+		margin-left:0px;
+		width:549px;
+		height:82px;
+		background-repeat:no-repeat;
+		display:block;
+	}
+
+	#content #west .content-left {
+		background-image:url("../images/login_images/dhow-left.png");
+		width:10px;
+		height:265px;
+		background-repeat:no-repeat;
+		display:block;
+		float:left;
+	}
+	
+	#content #west .content-center {
+		background-image:url("../images/login_images/dhow-center.png");
+		width:164px;
+		height:265px;
+		background-repeat:no-repeat;
+		display:block;
+		float:left;
+	}
+	
+	#content .input-area {
+		background-image:url("../images/login_images/black.gif");
+		width:369px;
+		height:265px;
+		display:block;
+		background-repeat:repeat-x repeat-y;
+		float:left;
+	}
+	#content .content-right {
+		background-color:"#fff";
+		width:6px;
+		height:259px;
+		display:block;
+		float:left;
+	}
+
+	#content .center-right {
+		background-image:url("../images/login_images/center-right.png");
+		width:6px;
+		height:265px;
+		display:block;
+		float:left;
+	}
+
+	/**
+	 *包含表单的DIV
+	 */
+	#login-form-div{
+		margin:10px auto auto 20px;
+		font-family: NSimSun;
+		font-weight: 600;
+		/*font-weight: 600;
+		font-size:12pt;
+		*/
+	}
+
+	/**
+	 *表单中的字段
+	 */
+	#login-form-div font{
+		font-size:10pt;
+	}
+	
+	/**
+	 *表单中的input
+	 */
+	#login-form-div input{
+		width:290px;
+		height:25px;
+		margin-top:5px;
+	}
+
+	.login-button-div{
+		padding-top:20px
+	}
+	/**
+	 *包含登录按钮的DIV
+	 */
+	.loginBtn-span{
+		/*
+		margin-left:192px;
+		*/
+	}
+	/**
+	 *错误提示信息区域
+	 */
+	.errorMsgArea{
+		color:#v8a8a6;
+		font-size:16px;
+	}
+
+	/**
+	 *表单底部标注
+	 */
+	#form-footer {
+		margin:8px auto auto 80px;font-weight: 500;
+	}
+
+	#login-form-div .font-div{
+		margin-top:10px;
+	}
+	
+	/**
+	 *登录按钮
+	 */
+	 form .btn_login{
+	 	background:url(../images/login_images/login-button.png) no-repeat; 
+	 	cursor:pointer; 
+	 	border:none; 
+	 	font-size:14px; 
+	 	color:#7f2402; 
+	 	font-weight:bold;
+	 }
+
