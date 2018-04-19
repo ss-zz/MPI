@@ -42,14 +42,12 @@ import com.sinosoft.mpi.util.IDUtil;
 import com.sinosoft.mpi.util.NumberUtils;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.SqlUtils;
+
 @Service("personInfoService")
 public class PersonInfoService implements IPersonInfoService {
 	@Resource
 	private IBookLogDao bookLogDao;
 
-	/*
-	 * @Resource private IEventService eventSender;
-	 */
 	@Resource
 	private IIdentifierDomainDao identifierDomainDao;
 	@Resource
@@ -73,6 +71,7 @@ public class PersonInfoService implements IPersonInfoService {
 	private IVerifier<PersonInfo> personInfoVerifier;
 	@Resource
 	private RabbitTemplate template;
+
 	@Override
 	public void addNewIndex(String opId, String personId) {
 		// 取得人员
@@ -184,7 +183,7 @@ public class PersonInfoService implements IPersonInfoService {
 	private PersonInfo getByPersonIdentifier(IdentifierDomain domain, String PERSON_IDENTIFIER) {
 		String sql = "select * from mpi_person_info t where t.FIELD_PK in "
 				+ " ( select FIELD_PK from MPI_INDEX_IDENTIFIER_REL where PERSON_IDENTIFIER = ? and DOMAIN_ID = ? )";
-		List<PersonInfo> list = personInfoDao.find(sql, new Object[]{PERSON_IDENTIFIER, domain.getDOMAIN_ID()});
+		List<PersonInfo> list = personInfoDao.find(sql, new Object[] { PERSON_IDENTIFIER, domain.getDOMAIN_ID() });
 		PersonInfo result = null;
 		if (list != null && !list.isEmpty()) {
 			result = list.get(0);
@@ -209,6 +208,7 @@ public class PersonInfoService implements IPersonInfoService {
 			result = getByPersonIdentifier(domain, identifier);
 		return result;
 	}
+
 	@Override
 	public PersonInfo getObject(String id) {
 		PersonInfo t = personInfoDao.findByPK(id);
@@ -227,7 +227,7 @@ public class PersonInfoService implements IPersonInfoService {
 	private PersonIdentifier getPersonIdentifierByPersonId(String personId) {
 		String sql = " select * from mpi_person_identifier where person_id = ? ";
 		logger.debug("Execute sql:[" + sql + "],parameters:[" + personId + "]");
-		List<PersonIdentifier> list = personIdentifierDao.find(sql, new Object[]{personId});
+		List<PersonIdentifier> list = personIdentifierDao.find(sql, new Object[] { personId });
 		PersonIdentifier result = null;
 		if (list != null && !list.isEmpty()) {
 			result = list.get(0);
@@ -298,7 +298,8 @@ public class PersonInfoService implements IPersonInfoService {
 			PersonIndex rIdx = getPersonIndex(riir.getMPI_PK());
 			// 记录订阅日志
 			bookLogDao.autoFillAdd(rp.getFIELD_PK());
-			// 将 retired居民信息 解除索引关系 // 2018-01-09  原：indexIdentifierRelDao.deleteByFieldPK(sp.getFIELD_PK()); 
+			// 将 retired居民信息 解除索引关系 // 2018-01-09
+			// 原：indexIdentifierRelDao.deleteByFieldPK(sp.getFIELD_PK());
 			indexIdentifierRelDao.deleteByFieldPK(sp.getFIELD_PK());
 			// 添加解除索引log
 			saveIndexLog(rp.getFIELD_PK(), riir.getFIELD_PK(), riir.getDOMAIN_ID(), Constant.IDX_LOG_TYPE_MODIFY,
@@ -444,7 +445,7 @@ public class PersonInfoService implements IPersonInfoService {
 		String sql = " select * from mpi_person_info where 1=1 ";
 		sql = page.buildPageSql(sql);
 		logger.debug("Execute sql:[" + sql + "],params[]");
-		return personInfoDao.find(sql, new Object[]{});
+		return personInfoDao.find(sql, new Object[] {});
 	}
 
 	@Override
@@ -455,7 +456,7 @@ public class PersonInfoService implements IPersonInfoService {
 				.append(" a.phone_one,'open' \"state\",d.domain_desc from mpi_person_info a left join mpi_person_identifier b on a.person_id = b.person_id ")
 				.append(" left join mpi_index_identifier_rel c on c.identifier_id = b.identifier_id left join mpi_identifier_domain d ")
 				.append(" on b.domain_id = d.domain_id where c.index_id = ? ");
-		return personIndexDao.findForMap(sql.toString(), new Object[]{indexId});
+		return personIndexDao.findForMap(sql.toString(), new Object[] { indexId });
 	}
 
 	@Override
@@ -467,12 +468,12 @@ public class PersonInfoService implements IPersonInfoService {
 		// 取得总数查询sql
 		String countSql = page.buildCountSql(sql);
 		// 查询设置分页记录的总记录数
-		page.setTotal(personIndexDao.getCount(countSql, new Object[]{indexId}));
+		page.setTotal(personIndexDao.getCount(countSql, new Object[] { indexId }));
 		logger.debug("Execute sql:" + countSql);
 		// 取得分页查询语句
 		String querySql = page.buildPageSql(sql);
 		logger.debug("Execute sql:" + querySql);
-		return personIndexDao.findForMap(querySql, new Object[]{indexId});
+		return personIndexDao.findForMap(querySql, new Object[] { indexId });
 	}
 
 	@Override
@@ -502,8 +503,8 @@ public class PersonInfoService implements IPersonInfoService {
 		 * StringUtils.isBlank(p.getPERSON_ID())) {
 		 * logger.debug("查询索引信息时数据校验错误[DomainUniqueSign=" + p.getUNIQUE_SIGN() +
 		 * ",Identifier=" + p.getPERSON_ID() + "]"); throw new
-		 * ValidationException("查询索引信息时数据校验错误[DomainUniqueSign=" +
-		 * p.getUNIQUE_SIGN() + ",Identifier=" + p.getPERSON_ID() + "]"); }
+		 * ValidationException("查询索引信息时数据校验错误[DomainUniqueSign=" + p.getUNIQUE_SIGN() +
+		 * ",Identifier=" + p.getPERSON_ID() + "]"); }
 		 */
 		// lpk update 2013年5月9日
 		String type = p.getTYPE();
@@ -538,11 +539,11 @@ public class PersonInfoService implements IPersonInfoService {
 		List<PersonIndex> list = null;
 		if (type == "0") {
 			logger.debug("Execute sql:[" + sql + "],\nparams:[" + p.getDOMAIN_ID() + "," + p.getHR_ID() + "]");
-			list = personIndexDao.find(sql, new Object[]{p.getHR_ID(), p.getUNIQUE_SIGN()});
+			list = personIndexDao.find(sql, new Object[] { p.getHR_ID(), p.getUNIQUE_SIGN() });
 		} else {
 			logger.debug(
 					"Execute sql:[" + sql + "],\nparams:[" + p.getDOMAIN_ID() + "," + p.getMEDICALSERVICE_NO() + "]");
-			list = personIndexDao.find(sql, new Object[]{p.getMEDICALSERVICE_NO(), p.getUNIQUE_SIGN()});
+			list = personIndexDao.find(sql, new Object[] { p.getMEDICALSERVICE_NO(), p.getUNIQUE_SIGN() });
 		}
 
 		PersonIndex result = null;
@@ -559,7 +560,7 @@ public class PersonInfoService implements IPersonInfoService {
 
 		logger.debug("Execute sql:[" + sql + "],params:[" + indexId + "]");
 
-		return personInfoDao.findWithDomainInfo(sql, new Object[]{indexId});
+		return personInfoDao.findWithDomainInfo(sql, new Object[] { indexId });
 	}
 
 	@Override
@@ -570,7 +571,7 @@ public class PersonInfoService implements IPersonInfoService {
 
 		logger.debug("Execute sql:[" + sql + "],params:[" + indexId + "," + domainUniqueSign + "]");
 
-		return personInfoDao.findWithDomainInfo(sql, new Object[]{indexId, domainUniqueSign});
+		return personInfoDao.findWithDomainInfo(sql, new Object[] { indexId, domainUniqueSign });
 	}
 
 	@Override
@@ -860,7 +861,7 @@ public class PersonInfoService implements IPersonInfoService {
 		personInfoDao.update(t);
 		logger.debug("Update PersonInfo:" + t);
 		// 触发居民信息更新事件
-		PersonIdentifier pi = getPersonIdentifierByPersonId(t.getFIELD_PK());
+		// PersonIdentifier pi = getPersonIdentifierByPersonId(t.getFIELD_PK());
 		// eventSender.fireEvent(EventType.UPDATE_PERSON, pi);
 	}
 
@@ -894,10 +895,9 @@ public class PersonInfoService implements IPersonInfoService {
 		}
 
 		/*
-		 * if (retired.getPERSON_ID().equals(surviving.getPERSON_ID())) { throw
-		 * new Exception("不能合并同一个人:\n" + "retired[identifier=" +
-		 * retired.getFIELD_PK() + "],\n" + "surviving[identifier=" +
-		 * surviving.getFIELD_PK() + "]"); }
+		 * if (retired.getPERSON_ID().equals(surviving.getPERSON_ID())) { throw new
+		 * Exception("不能合并同一个人:\n" + "retired[identifier=" + retired.getFIELD_PK() +
+		 * "],\n" + "surviving[identifier=" + surviving.getFIELD_PK() + "]"); }
 		 */
 		// lpk update 2013年5月9日
 		if (retired.getTYPE() == surviving.getTYPE()) {
@@ -923,8 +923,8 @@ public class PersonInfoService implements IPersonInfoService {
 	}
 
 	/*
-	 * public void setEventSender(IEventService eventSender) { this.eventSender
-	 * = eventSender; }
+	 * public void setEventSender(IEventService eventSender) { this.eventSender =
+	 * eventSender; }
 	 */
 
 	public void setIdentifierDomainDao(IIdentifierDomainDao identifierDomainDao) {

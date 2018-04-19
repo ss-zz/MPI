@@ -6,6 +6,6 @@ import java.util.Map;
 import com.sinosoft.mpi.dao.IBaseDao;
 import com.sinosoft.mpi.sshl.model.DataUpload;
 
-public interface IDataUploadDao extends IBaseDao<DataUpload>{
-	public List<Map<String , String>> findAll(String sql);
+public interface IDataUploadDao extends IBaseDao<DataUpload> {
+	public List<Map<String, String>> findAll(String sql);
 }

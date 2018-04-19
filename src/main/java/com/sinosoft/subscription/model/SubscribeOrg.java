@@ -1,11 +1,8 @@
 package com.sinosoft.subscription.model;
 
-/** 
-* @ClassName: SubscribeOrgConfig 
-* @Description: 订阅发布注册机构
-* @author sinosoft_SunWG
-* @date 2013-11-18 上午11:54:59  
-*/
+/**
+ * 订阅发布注册机构
+ */
 public class SubscribeOrg {
 	/**
 	 * @Fields id : 机构主键

@@ -15,33 +15,29 @@ import com.sinosoft.mpi.util.PingYin4J;
 
 @Service("mpiAbstService")
 public class MpiAbstService implements IMpiAbstService {
-	@SuppressWarnings("unused")
+
 	private Logger logger = Logger.getLogger(MpiAbstService.class);
+
 	@Resource
 	private IMpiAbstDao mpiAbstDao;
 	@Resource
 	private IPinyinDicDao pinyinDicDao;
 
-
-
-
 	@Override
-	public List<Map<String, Object>> queryForSplitPage(PersonIndex index,
-			PageInfo page) {
-		// TODO Auto-generated method stub
+	public List<Map<String, Object>> queryForSplitPage(PersonIndex index, PageInfo page) {
 		return null;
 	}
 
 	@Override
-	public List<Map<String, Object>> queryForSplitPage(PersonIndex index,
-			String fromIndexId, PageInfo page) {
-		// TODO Auto-generated method stub
+	public List<Map<String, Object>> queryForSplitPage(PersonIndex index, String fromIndexId, PageInfo page) {
 		return null;
 	}
 
 	/**
 	 * 生成主索引摘要信息
-	 * @param PersonIndex 操作personIndex
+	 * 
+	 * @param PersonIndex
+	 *            操作personIndex
 	 *
 	 */
 	@Override
@@ -79,19 +75,15 @@ public class MpiAbstService implements IMpiAbstService {
 		sb.append("姓名：" + personIndex.getNAME_CN() + "\n");
 		sb.append("性别：" + personIndex.getGENDER_CD() + "\n");
 		sb.append("出生日期：" + personIndex.getBIRTH_DATE() + "\n");
-		sb.append("地址：" + personIndex.getPROVINCE_NAME() + "*"
-				+ personIndex.getCITY_NAME());
-		sb.append("*" + personIndex.getAREA_NAME() + "*"
-				+ personIndex.getSTREET_ID());
-		sb.append("*" + personIndex.getVILLAGE_NAME() + "*"
-				+ personIndex.getHOUSE_NO() + "\n");
-		sb.append("联系人信息：{" + personIndex.getLINKMAN_NAME() + "*"
-				+ personIndex.getLINKMAN_ADDR() + "*"
+		sb.append("地址：" + personIndex.getPROVINCE_NAME() + "*" + personIndex.getCITY_NAME());
+		sb.append("*" + personIndex.getAREA_NAME() + "*" + personIndex.getSTREET_ID());
+		sb.append("*" + personIndex.getVILLAGE_NAME() + "*" + personIndex.getHOUSE_NO() + "\n");
+		sb.append("联系人信息：{" + personIndex.getLINKMAN_NAME() + "*" + personIndex.getLINKMAN_ADDR() + "*"
 				+ personIndex.getLINKMAN_PHONE() + "};\n");
 		String abst = sb.toString();
-		
+
 		// suggest为身份证号插入摘要表
-		if (idno != null&&idno.length()>0) {
+		if (idno != null && idno.length() > 0) {
 			mpiAbstDao.addMpiAbst(personIndex, idno, abst);
 		}
 		// suggest为拼音循环插入摘要表
@@ -100,8 +92,8 @@ public class MpiAbstService implements IMpiAbstService {
 			if (suggest == null || suggest.isEmpty()) {
 				continue;
 			}
-			
-			 // 为了保证拼音记录冗余信息不要过多，查询拼音字典表判断 该拼音摘要记录超过10次不插入
+
+			// 为了保证拼音记录冗余信息不要过多，查询拼音字典表判断 该拼音摘要记录超过10次不插入
 			mpiAbstDao.addMpiAbst(personIndex, suggest, abst);
 			if (pinyinDicDao.isOverPinYinTimes(suggest)) {
 				pinyinDicDao.updatePinyinTimes(suggest);
@@ -110,9 +102,12 @@ public class MpiAbstService implements IMpiAbstService {
 		}
 
 	}
-	 /**
+
+	/**
 	 * 更新主索引摘要信息
-	 * @param PersonIndex 操作personIndex
+	 * 
+	 * @param PersonIndex
+	 *            操作personIndex
 	 * 
 	 */
 	@Override
@@ -120,9 +115,12 @@ public class MpiAbstService implements IMpiAbstService {
 		delete(t);
 		save(t);
 	}
-	 /**
+
+	/**
 	 * 主索引摘要信息
-	 * @param PersonIndex 操作personIndex
+	 * 
+	 * @param PersonIndex
+	 *            操作personIndex
 	 * 
 	 */
 	@Override

@@ -1,22 +1,15 @@
 package com.sinosoft.mpi.util;
 
 /**
- * 
- * @Description: 简单通过当前页 还有页条数，算出开始条数到结束条数
- * 
- * @Package com.sinosoft.platform.convey.vo
- * @author Qin,Shouxin
- * @version v1.0,2011-7-1
- * @see
- * @since v1.0
+ * 简单通过当前页 还有页条数，算出开始条数到结束条数
  */
 public class PageInfo {
+
 	private int currentPage;// 从0开始
 	private int limit;
 	private int page; // 前台传递来的分页参数 需要显示地几页
 	private int rows; // 前台传递来的参数 每页显示多少条
 	private int total; // 总数
-
 
 	public PageInfo() {
 		super();
@@ -57,7 +50,7 @@ public class PageInfo {
 
 	public void setPage(int page) {
 		this.page = page;
-		this.currentPage = (page-1)<0?0:(page-1);
+		this.currentPage = (page - 1) < 0 ? 0 : (page - 1);
 	}
 
 	public int getRows() {
@@ -76,22 +69,25 @@ public class PageInfo {
 	public void setTotal(int total) {
 		this.total = total;
 	}
-	
+
 	/**
 	 * 根据 起始 结束页数 取得 分页对象
-	 * @param start 起始页数 从1开始
-	 * @param end 结束页数
+	 * 
+	 * @param start
+	 *            起始页数 从1开始
+	 * @param end
+	 *            结束页数
 	 * @return 分页信息
 	 */
-	public static PageInfo getByStartAndEnd(int start,int end){
+	public static PageInfo getByStartAndEnd(int start, int end) {
 		int lim;
-		if(end < start){
+		if (end < start) {
 			lim = start - end + 1;
-		}else{
+		} else {
 			lim = end - start + 1;
 		}
-		int curr = start/lim - (lim==1?1:0);
-		return new PageInfo(curr,lim);
+		int curr = start / lim - (lim == 1 ? 1 : 0);
+		return new PageInfo(curr, lim);
 	}
 
 	/**
@@ -107,15 +103,16 @@ public class PageInfo {
 				.append(" ) TABLE_ALIAS where TABLE_ALIAS.rowno >= ").append(getStartRowNum());
 		return sb.toString();
 	}
+
 	/**
 	 * 根据原sql语句包装成总数查询语句
+	 * 
 	 * @param sql
 	 * @return
 	 */
 	public String buildCountSql(CharSequence sql) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(" select count(1) from ( ")
-			.append(sql).append(" ) ");
+		sb.append(" select count(1) from ( ").append(sql).append(" ) ");
 		return sb.toString();
 	}
 }

@@ -325,8 +325,6 @@ public class PersonInfoDao implements IPersonInfoDao {
 			return;
 		}
 		// lpk update 2013年4月17日18:25:04
-		String type = entity.getTYPE();
-		String State = entity.getSTATE().toString();
 		StringBuilder sql = new StringBuilder();
 		sql.append(" update mpi_person_info set ").append("REGISTER_ORG_CODE=?,").append("REGISTER_ORG_NAME=?,")
 				.append("MEDICALSERVICE_NO=?,").append("NAME_CN=?,").append("NAME_EN=?,").append("REMARK=?,")
@@ -614,8 +612,6 @@ public class PersonInfoDao implements IPersonInfoDao {
 		if (entity == null || entity.getFIELD_PK() == null) {
 			return;
 		}
-		String type = entity.getTYPE();
-		// String State=entity.getSTATE().toString();
 		StringBuilder sql = new StringBuilder();
 		sql.append(" update mpi_person_info set ").append("ABO_CD=?,").append("ABO_CS=?,").append("ABO_CSN=?,")
 				.append("ABO_CSV=?,").append("ABO_DN=?,").append("AD_CD=?,").append("AD_CS=?,").append("AD_CSN=?,")

@@ -15,45 +15,40 @@ import com.sinosoft.mpi.util.CodeConvertUtils;
 import com.sinosoft.mpi.util.PageInfo;
 
 @Service("dataUploadService")
-public class DataUploadService implements IDataUploadService{
+public class DataUploadService implements IDataUploadService {
+
 	private Logger logger = Logger.getLogger(DataUploadService.class);
 	@Resource
 	private IDataUploadDao dataUploadDao;
-	
+
 	@Override
 	public void save(DataUpload t) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void update(DataUpload t) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void delete(DataUpload t) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public DataUpload getObject(String id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<DataUpload> queryForPage(DataUpload t, PageInfo page) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Map<String, String>> queryForPageMap(DataUpload t, PageInfo page) {
-		// TODO Auto-generated method stub
-		StringBuffer sb  = new StringBuffer();
+		StringBuffer sb = new StringBuffer();
 		sb.append(" SELECT Z.DD_ID ZONECODE,			");
 		sb.append("    Z.DD_NAME ZONENAME,				");
 		sb.append("    T.ORGCODE ORGCODE,				");
@@ -72,19 +67,17 @@ public class DataUploadService implements IDataUploadService{
 			sb.append(" AND T.ORGCODE LIKE '" + t.getOrgcode() + "%' 	");
 		}
 		if (t.getOrgname() != null && !t.getOrgname().isEmpty()) {
-			sb.append(" AND B.ORGNAME LIKE '%"
-					+ CodeConvertUtils.decodeURI2UTF8(t.getOrgname()) + "%' ");
+			sb.append(" AND B.ORGNAME LIKE '%" + CodeConvertUtils.decodeURI2UTF8(t.getOrgname()) + "%' ");
 		}
-		sb.append(" AND T.UPLOAD_DATE BETWEEN  TO_DATE('" + t.getStDate()
-				+ "','YYYY-MM-DD')" + " AND TO_DATE('" + t.getEndDate()
-				+ "','YYYY-MM-DD') ");
+		sb.append(" AND T.UPLOAD_DATE BETWEEN  TO_DATE('" + t.getStDate() + "','YYYY-MM-DD')" + " AND TO_DATE('"
+				+ t.getEndDate() + "','YYYY-MM-DD') ");
 		sb.append("  GROUP BY Z.DD_ID, Z.DD_NAME, T.ORGCODE, B.ORGNAME	order by total desc	");
 		String sql = sb.toString();
 		String countSql = page.buildCountSql(sql);
-		page.setTotal(dataUploadDao.getCount(countSql, new Object[]{}));
-		logger.debug("Execute sql:["+countSql+"],params[]");
+		page.setTotal(dataUploadDao.getCount(countSql, new Object[] {}));
+		logger.debug("Execute sql:[" + countSql + "],params[]");
 		String querySql = page.buildPageSql(sql);
-		logger.debug("Execute sql:["+querySql+"],params[]");
-		return dataUploadDao.findAll(querySql);	
+		logger.debug("Execute sql:[" + querySql + "],params[]");
+		return dataUploadDao.findAll(querySql);
 	}
 }

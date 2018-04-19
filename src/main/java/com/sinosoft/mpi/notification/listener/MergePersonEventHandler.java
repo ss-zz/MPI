@@ -27,10 +27,10 @@ public class MergePersonEventHandler implements IEventHandler {
 	}
 
 	private void proccess(String[] ids) {
-		String retiredPersonId = ids[0];
-		String fromIndexId = ids[1];
-		String toIndexId = ids[2];
-		// TODO ben 合并后 暂未实现方法 处理订阅等信息???
+		// String retiredPersonId = ids[0];
+		// String fromIndexId = ids[1];
+		// String toIndexId = ids[2];
+		// 合并后 暂未实现方法 处理订阅等信息???
 
 		// 得到那个对象合并到那个对象下。
 

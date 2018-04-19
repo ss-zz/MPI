@@ -6,15 +6,10 @@ import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
- * @Description: 基本数据操作类接口
- * 
- * @Package com.sinosoft.mpi.dao
- * @author bysun
- * @version v1.0,2012-3-12
- * @see
- * @since v1.0
+ * 基本数据操作类接口
  */
 public interface IBaseDao<T> {
+	
 	/**
 	 * 添加对象数据到数据库
 	 * 
@@ -61,7 +56,7 @@ public interface IBaseDao<T> {
 	 * @return
 	 */
 	List<T> find(String sql, Object[] args);
-	
+
 	/**
 	 * @return
 	 */
@@ -86,24 +81,27 @@ public interface IBaseDao<T> {
 	 * @return
 	 */
 	int getCount(String sql, Object[] args);
-	
+
 	/**
 	 * 执行sql语句,已map形式返回结果
+	 * 
 	 * @param sql
 	 * @param args
 	 * @return
 	 */
-	List<Map<String, Object>> findForMap(String sql,Object[] args);
-	
+	List<Map<String, Object>> findForMap(String sql, Object[] args);
+
 	/**
 	 * 执行sql语句,已map形式返回结果
+	 * 
 	 * @param sql
 	 * @return
 	 */
 	List<Map<String, Object>> findForMap(String sql);
-	
+
 	/**
 	 * 取得 jdbc模板
+	 * 
 	 * @return
 	 */
 	JdbcTemplate getJdbcTemplate();

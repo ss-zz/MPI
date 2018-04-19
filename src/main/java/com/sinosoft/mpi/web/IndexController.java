@@ -5,9 +5,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 首页控制器
- * 
- * @author sinosoft
- *
  */
 @Controller
 public class IndexController {

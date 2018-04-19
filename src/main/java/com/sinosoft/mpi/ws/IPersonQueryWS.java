@@ -9,16 +9,7 @@ import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.PersonInfoSimple;
 
 /**
- * 
- * @Description 索引信息查询接口
- * 
- * 
- * @Package com.sinosoft.mpi.ws
- * @author Bysun
- * @version v1.0,2012-4-6
- * @see
- * @since （可选）
- * 
+ * 索引信息查询接口
  */
 @WebService
 @SOAPBinding(style = Style.DOCUMENT)
@@ -31,8 +22,7 @@ public interface IPersonQueryWS {
 	 *            简单居民信息对象
 	 * @return 结果集仅含PersonIndex信息 nullable
 	 */
-	QueryResult queryIndexByIdentifier(
-			@WebParam(name = "simplePerson") PersonInfoSimple simplePerson);
+	QueryResult queryIndexByIdentifier(@WebParam(name = "simplePerson") PersonInfoSimple simplePerson);
 
 	/**
 	 * 根据居民属性查询 取得符合条件的居民
@@ -63,5 +53,5 @@ public interface IPersonQueryWS {
 	 */
 	QueryResult queryPersonByIndexAndUniqueSign(@WebParam(name = "indexId") String indexId,
 			@WebParam(name = "domainUniqueSign") String domainUniqueSign);
-	
+
 }

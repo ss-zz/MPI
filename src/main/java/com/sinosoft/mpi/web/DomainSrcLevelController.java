@@ -23,36 +23,24 @@ import com.sinosoft.mpi.service.IDomainSrcLevelService;
 import com.sinosoft.mpi.service.IIdentifierDomainService;
 import com.sinosoft.mpi.util.PageInfo;
 
-/**   
-*    
-* @Description  数据源级别控制器  
-* 
-* 
-*
-* 
-* @Package com.sinosoft.mpi.web
-* @author lpk
-* @version v1.0,2012-4-23
-* @see	
-* @since	（可选）	
-*   
-*/ 
+/**
+ * 数据源级别控制器
+ */
 @Controller
 @RequestMapping("/domainsrclevel/srclevel.ac")
 public class DomainSrcLevelController {
 	private Logger logger = Logger.getLogger(DomainSrcLevelController.class);
-	
+
 	@Resource
 	private IDomainSrcLevelService domainSrcLevelService;
 	@Resource
 	private IIdentifierDomainService identifierDomainService;
-	
+
 	public IIdentifierDomainService getIdentifierDomainService() {
 		return identifierDomainService;
 	}
 
-	public void setIdentifierDomainService(
-			IIdentifierDomainService identifierDomainService) {
+	public void setIdentifierDomainService(IIdentifierDomainService identifierDomainService) {
 		this.identifierDomainService = identifierDomainService;
 	}
 
@@ -60,19 +48,18 @@ public class DomainSrcLevelController {
 		return domainSrcLevelService;
 	}
 
-	public void setDomainSrcLevelService(
-			IDomainSrcLevelService domainSrcLevelService) {
+	public void setDomainSrcLevelService(IDomainSrcLevelService domainSrcLevelService) {
 		this.domainSrcLevelService = domainSrcLevelService;
 	}
-	
+
 	/**
 	 * 取得配置列表数据
 	 */
 	@RequestMapping(params = "method=query")
-	public String list(PageInfo page,DomainSrcLevel t,HttpServletResponse response) throws IOException{
+	public String list(PageInfo page, DomainSrcLevel t, HttpServletResponse response) throws IOException {
 		List<DomainSrcLevel> list = null;
 		try {
-			list = domainSrcLevelService.queryForPage(t, page);		
+			list = domainSrcLevelService.queryForPage(t, page);
 		} catch (Throwable e) {
 			logger.error("查询匹配配置的时候出现错误", e);
 		}
@@ -85,14 +72,15 @@ public class DomainSrcLevelController {
 		response.getWriter().print(datas.toString());
 		return null;
 	}
+
 	/**
 	 * 取得配置列表数据
 	 */
 	@RequestMapping(params = "method=queryByID")
-	public String fieldlevellist(PageInfo page,DomainSrcLevel t,HttpServletResponse response) throws IOException{
+	public String fieldlevellist(PageInfo page, DomainSrcLevel t, HttpServletResponse response) throws IOException {
 		List<DomainSrcLevel> list = null;
 		try {
-			list = domainSrcLevelService.queryPageByID(t, page);		
+			list = domainSrcLevelService.queryPageByID(t, page);
 		} catch (Throwable e) {
 			logger.error("查询匹配配置的时候出现错误", e);
 		}
@@ -105,56 +93,62 @@ public class DomainSrcLevelController {
 		response.getWriter().print(datas.toString());
 		return null;
 	}
+
 	/**
 	 * 保存添加的身份域
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=add")
-	public String addSrcLevel(DomainSrcLevel srclevel,HttpServletResponse response) throws IOException{
+	public String addSrcLevel(DomainSrcLevel srclevel, HttpServletResponse response) throws IOException {
 		response.setCharacterEncoding(Constant.ENCODING_UTF8);
 		try {
-			DomainSrcLevel entity=domainSrcLevelService.queryByID(srclevel);
-			if(entity==null){
+			DomainSrcLevel entity = domainSrcLevelService.queryByID(srclevel);
+			if (entity == null) {
 				domainSrcLevelService.save(srclevel);
-			}else{
+			} else {
 				domainSrcLevelService.updateByDomainID(srclevel);
-				//return null;
-				//return "域："+srclevel.getDOMAIN_ID()+",字段："+srclevel.getFIELD_NAME()+"数据源级别已设置！";
-				//response.getWriter().print("域："+srclevel.getDOMAIN_ID()+",字段："+srclevel.getFIELD_NAME()+"数据源级别已设置！");
+				// return null;
+				// return
+				// "域："+srclevel.getDOMAIN_ID()+",字段："+srclevel.getFIELD_NAME()+"数据源级别已设置！";
+				// response.getWriter().print("域："+srclevel.getDOMAIN_ID()+",字段："+srclevel.getFIELD_NAME()+"数据源级别已设置！");
 			}
-		} catch(ValidationException e){
+		} catch (ValidationException e) {
 			response.getWriter().print(e.getMessage());
-		} catch (Throwable e){
+		} catch (Throwable e) {
 			logger.error("添加数据源级别时出现错误!", e);
 			response.getWriter().print("添加数据源级别时出现错误!");
 		}
 		return null;
 	}
+
 	/**
 	 * 配置列表页面入口
 	 */
 	@RequestMapping(params = "method=toAdd")
-	public ModelAndView toSrcLevelPage(String domainId){
+	public ModelAndView toSrcLevelPage(String domainId) {
 		// 取得居民信息 字段描述
-		List<IdentifierDomain> domainlist=identifierDomainService.queryByDomianId(domainId);
+		List<IdentifierDomain> domainlist = identifierDomainService.queryByDomianId(domainId);
 		List<PersonPropertiesDesc> pList = CacheManager.getAll(PersonPropertiesDesc.class);
 		JSONObject datas = new JSONObject();
 		// 字段属性
-		datas.put("pList",pList);
-		datas.put("domainList",domainlist);
-		datas.put("domainid",domainId);
-		//ModelAndView mv = new ModelAndView("/srclevel/page/srclevel_add");
+		datas.put("pList", pList);
+		datas.put("domainList", domainlist);
+		datas.put("domainid", domainId);
+		// ModelAndView mv = new ModelAndView("/srclevel/page/srclevel_add");
 		ModelAndView mv = new ModelAndView("/srclevel/page/srclevel");
 		mv.addObject("selectJson", datas.toString());
 		return mv;
 	}
+
 	/**
 	 * 删除系统用户
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
-	@RequestMapping(params = "method=del") 
-	public String deleteSrclevel(DomainSrcLevel t ,HttpServletResponse response) throws IOException{
-		
+	@RequestMapping(params = "method=del")
+	public String deleteSrclevel(DomainSrcLevel t, HttpServletResponse response) throws IOException {
+
 		response.setCharacterEncoding(Constant.ENCODING_UTF8);
 		try {
 			domainSrcLevelService.delete(t);
@@ -164,27 +158,30 @@ public class DomainSrcLevelController {
 		}
 		return null;
 	}
+
 	/**
 	 * 配置列表页面入口
 	 */
 	@RequestMapping(params = "method=toEdit")
-	public ModelAndView toEdit(DomainSrcLevel t ,HttpServletResponse response){
+	public ModelAndView toEdit(DomainSrcLevel t, HttpServletResponse response) {
 		// 取得居民信息 字段描述
-		List<IdentifierDomain> domainlist=identifierDomainService.queryAll();
+		List<IdentifierDomain> domainlist = identifierDomainService.queryAll();
 		List<PersonPropertiesDesc> pList = CacheManager.getAll(PersonPropertiesDesc.class);
 		JSONObject datas = new JSONObject();
 		// 字段属性
-		datas.put("pList",pList);
-		datas.put("domainList",domainlist);
+		datas.put("pList", pList);
+		datas.put("domainList", domainlist);
 		ModelAndView mv = new ModelAndView("/srclevel/page/srclevel_edit");
 		mv.addObject("selectJson", datas.toString());
 		return mv;
 	}
+
 	@RequestMapping(params = "method=toView")
-	public ModelAndView fieldLevellist(PageInfo page,DomainSrcLevel t,HttpServletResponse response) throws IOException{
+	public ModelAndView fieldLevellist(PageInfo page, DomainSrcLevel t, HttpServletResponse response)
+			throws IOException {
 		List<DomainSrcLevel> list = null;
 		try {
-			list = domainSrcLevelService.queryByID(t.getDOMAIN_ID());		
+			list = domainSrcLevelService.queryByID(t.getDOMAIN_ID());
 		} catch (Throwable e) {
 			logger.error("查询匹配配置的时候出现错误", e);
 		}

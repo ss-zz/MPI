@@ -2,18 +2,8 @@ package com.sinosoft.mpi.model;
 
 import java.io.Serializable;
 
-
 /**
- * 
- * @Description 简单的person对象 用于业务系统向MPI请求使用
- * 
- * 
- * @Package com.sinosoft.mpi.model;
- * @author Bysun
- * @version v1.0,2012-4-6
- * @see
- * @since （可选）
- * 
+ * 简单的person对象 用于业务系统向MPI请求使用
  */
 public class PersonInfoSimple implements Serializable {
 
@@ -47,11 +37,11 @@ public class PersonInfoSimple implements Serializable {
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
-	
-	public PersonInfo toPersonInfo(){
+
+	public PersonInfo toPersonInfo() {
 		PersonInfo person = new PersonInfo();
 		person.setUNIQUE_SIGN(domainUniqueSign);
-        //person.setPERSON_ID(identifier);
+		// person.setPERSON_ID(identifier);
 		return person;
 	}
 
@@ -88,8 +78,7 @@ public class PersonInfoSimple implements Serializable {
 
 	@Override
 	public String toString() {
-		return "PersonInfoSimple [domainUniqueSign=" + domainUniqueSign + ", identifier="
-				+ identifier + "]";
+		return "PersonInfoSimple [domainUniqueSign=" + domainUniqueSign + ", identifier=" + identifier + "]";
 	}
 
 }

@@ -14,7 +14,7 @@ public class DesEncrypter {
 
 	private static final String Algorithm = "DES"; // 定义 加密算法,可用
 													// DES,DESede,Blowfish
-	
+
 	private static final String DES_KEY = "E3C53322A78CD7BE";
 
 	// src为被加密的数据缓冲区（源）
@@ -92,6 +92,7 @@ public class DesEncrypter {
 		byte[] encrypt = encryptMode(key, str.getBytes());
 		return byte2hex(encrypt);
 	}
+
 	// 加密
 	public static byte[] EncryptRetByte(byte[] src, byte[] key) {
 		byte[] encrypt = encryptMode(key, src);
@@ -103,15 +104,17 @@ public class DesEncrypter {
 		byte[] decrypt = decryptMode(key, hex2byte(str));
 		return new String(decrypt);
 	}
+
 	// 解密
 	public static String Decrypt(String str) {
 		return Decrypt(str, hex2byte(DES_KEY));
 	}
+
 	// 加密
 	public static String Encrypt(String str) {
 		return Encrypt(str, hex2byte(DES_KEY));
 	}
-	
+
 	public static void main(String arg[]) {
 
 		System.out.println(Encrypt("embed"));

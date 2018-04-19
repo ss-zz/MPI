@@ -13,45 +13,43 @@ import com.sinosoft.mpi.sshl.model.DataUploadDetail;
 import com.sinosoft.mpi.sshl.service.IDataUploadDetailService;
 import com.sinosoft.mpi.util.CodeConvertUtils;
 import com.sinosoft.mpi.util.PageInfo;
+
 @Service("dataUploadDetailService")
-public class DataUploadDetailService implements IDataUploadDetailService{
+public class DataUploadDetailService implements IDataUploadDetailService {
+
 	private Logger logger = Logger.getLogger(DataUploadDetailService.class);
+
 	@Resource
 	private IDataUploadDetailDao dataUploadDetailDao;
+
 	@Override
 	public void save(DataUploadDetail t) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void update(DataUploadDetail t) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void delete(DataUploadDetail t) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public DataUploadDetail getObject(String id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<DataUploadDetail> queryForPage(DataUploadDetail t, PageInfo page) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Map<String, String>> queryForPageMap(DataUploadDetail t,
-			PageInfo page) {
-		StringBuffer sb  = new StringBuffer();
+	public List<Map<String, String>> queryForPageMap(DataUploadDetail t, PageInfo page) {
+		StringBuffer sb = new StringBuffer();
 		sb.append(" SELECT T.ORGCODE ORGCODE,			");
 		sb.append("    B.ORGNAME ORGNAME,				");
 		sb.append("    T.TAB_ID TABLEID,				");
@@ -62,21 +60,19 @@ public class DataUploadDetailService implements IDataUploadDetailService{
 		sb.append("  LEFT JOIN COM_HN_ORGANISE B ON B.ORGCODE = T.ORGCODE		");
 		sb.append(" WHERE T.ORGCODE = '" + t.getOrgcode() + "'					");
 		sb.append("  AND A.BS_TYPE = '" + t.getBs_type() + "'					");
-		sb.append(" AND T.UPLOAD_DATE BETWEEN TO_DATE('" + t.getStDate()
-				+ "','YYYY-MM-DD') AND TO_DATE('" + t.getEndDate()
-				+ "','YYYY-MM-DD') ");
+		sb.append(" AND T.UPLOAD_DATE BETWEEN TO_DATE('" + t.getStDate() + "','YYYY-MM-DD') AND TO_DATE('"
+				+ t.getEndDate() + "','YYYY-MM-DD') ");
 		if (t.getTablename() != null && !t.getTablename().isEmpty()) {
-			sb.append(" AND A.TABLENAME_CN LIKE '%"
-					+ CodeConvertUtils.decodeURI2UTF8(t.getTablename()) + "%' ");
+			sb.append(" AND A.TABLENAME_CN LIKE '%" + CodeConvertUtils.decodeURI2UTF8(t.getTablename()) + "%' ");
 		}
 		sb.append("  GROUP BY T.ORGCODE, B.ORGNAME, T.TAB_ID, A.TABLENAME_CN	order by total desc		");
 		String sql = sb.toString();
 		String countSql = page.buildCountSql(sql);
-		page.setTotal(dataUploadDetailDao.getCount(countSql, new Object[]{}));
-		logger.debug("Execute sql:["+countSql+"],params[]");
+		page.setTotal(dataUploadDetailDao.getCount(countSql, new Object[] {}));
+		logger.debug("Execute sql:[" + countSql + "],params[]");
 		String querySql = page.buildPageSql(sql);
-		logger.debug("Execute sql:["+querySql+"],params[]");
-		return dataUploadDetailDao.findAll(querySql);	
+		logger.debug("Execute sql:[" + querySql + "],params[]");
+		return dataUploadDetailDao.findAll(querySql);
 	}
-	
+
 }

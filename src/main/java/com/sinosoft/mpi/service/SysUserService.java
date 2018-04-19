@@ -27,21 +27,21 @@ public class SysUserService implements ISysUserService {
 
 	@Override
 	public void save(SysUser t) {
-		if(!testUserName(t.getUserName())){
-			logger.debug("用户名:"+t.getUserName()+"已存在");
-			throw new ValidationException("用户名:"+t.getUserName()+"已存在");
+		if (!testUserName(t.getUserName())) {
+			logger.debug("用户名:" + t.getUserName() + "已存在");
+			throw new ValidationException("用户名:" + t.getUserName() + "已存在");
 		}
 		sysUserDao.add(t);
 		logger.debug("Add SysUser:" + t);
 	}
-	
-	public boolean testUserName(String userName){
-		if(StringUtils.isBlank(userName))
+
+	public boolean testUserName(String userName) {
+		if (StringUtils.isBlank(userName))
 			return false;
 		int i = sysUserDao.getCount(" select count(*) from mpi_sys_user where upper(user_name) = ?",
-				new Object[] {userName.toUpperCase()});
-		
-		return i==0;
+				new Object[] { userName.toUpperCase() });
+
+		return i == 0;
 	}
 
 	@Override

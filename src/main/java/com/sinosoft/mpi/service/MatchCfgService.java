@@ -1,6 +1,5 @@
 package com.sinosoft.mpi.service;
 
-
 import java.util.Date;
 import java.util.List;
 
@@ -20,9 +19,9 @@ import com.sinosoft.mpi.util.PageInfo;
 
 @Service("matchCfgService")
 public class MatchCfgService implements IMatchCfgService {
-	
+
 	private Logger logger = Logger.getLogger(MatchCfgService.class);
-	
+
 	@Resource
 	private IMatchCfgDao matchCfgDao;
 	@Resource
@@ -36,25 +35,25 @@ public class MatchCfgService implements IMatchCfgService {
 		t.setState("0");
 		// 保存
 		matchCfgDao.add(t);
-		logger.debug("Add MatchCfg:"+t);
+		logger.debug("Add MatchCfg:" + t);
 		// 保存字段配置
-		for(MatchFieldCfg mfc : t.getMatchFieldCfgs()){
+		for (MatchFieldCfg mfc : t.getMatchFieldCfgs()) {
 			mfc.setConfigId(t.getConfigId());
 			matchFieldCfgDao.add(mfc);
-			logger.debug("Add MatchFieldCfg:"+mfc);
+			logger.debug("Add MatchFieldCfg:" + mfc);
 		}
 	}
 
 	@Override
 	public void update(MatchCfg t) {
 		matchCfgDao.update(t);
-		logger.debug("Update MatchCfg:"+t);
+		logger.debug("Update MatchCfg:" + t);
 	}
 
 	@Override
 	public void delete(MatchCfg t) {
 		matchCfgDao.deleteById(t);
-		logger.debug("Del MatchCfg:configId="+t.getConfigId());
+		logger.debug("Del MatchCfg:configId=" + t.getConfigId());
 	}
 
 	@Override
@@ -62,22 +61,24 @@ public class MatchCfgService implements IMatchCfgService {
 		MatchCfg t = new MatchCfg();
 		t.setConfigId(id);
 		t = matchCfgDao.findById(t);
-		if(t!=null){
+		if (t != null) {
 			// 取得 字段匹配详情
 			List<MatchFieldCfg> list = queryFieldCfg(id);
-			t.setMatchFieldCfgs(list);			
+			t.setMatchFieldCfgs(list);
 		}
-		logger.debug("Load MatchCfg:configId="+id+",result="+t);
+		logger.debug("Load MatchCfg:configId=" + id + ",result=" + t);
 		return t;
 	}
 
 	/**
 	 * 根据匹配配置id 查询关联的字段配置
-	 * @param configId 匹配配置id
+	 * 
+	 * @param configId
+	 *            匹配配置id
 	 */
 	private List<MatchFieldCfg> queryFieldCfg(String configId) {
 		String sql = " select * from mpi_match_field_cfg where config_id = ? ";
-		List<MatchFieldCfg> list = matchFieldCfgDao.find(sql, new Object[]{configId});
+		List<MatchFieldCfg> list = matchFieldCfgDao.find(sql, new Object[] { configId });
 		return list;
 	}
 
@@ -85,11 +86,11 @@ public class MatchCfgService implements IMatchCfgService {
 	public List<MatchCfg> queryForPage(MatchCfg t, PageInfo page) {
 		String sql = " select * from mpi_match_cfg where 1=1 ";
 		String countSql = page.buildCountSql(sql);
-		page.setTotal(matchCfgDao.getCount(countSql, new Object[]{}));
-		logger.debug("Execute sql:["+countSql+"],params[]");
+		page.setTotal(matchCfgDao.getCount(countSql, new Object[] {}));
+		logger.debug("Execute sql:[" + countSql + "],params[]");
 		String querySql = page.buildPageSql(sql);
-		logger.debug("Execute sql:["+querySql+"],params[]");
-		return matchCfgDao.find(querySql, new Object[]{});		
+		logger.debug("Execute sql:[" + querySql + "],params[]");
+		return matchCfgDao.find(querySql, new Object[] {});
 	}
 
 	public void setMatchCfgDao(IMatchCfgDao matchCfgDao) {
@@ -99,19 +100,17 @@ public class MatchCfgService implements IMatchCfgService {
 	public void setMatchFieldCfgDao(IMatchFieldCfgDao matchFieldCfgDao) {
 		this.matchFieldCfgDao = matchFieldCfgDao;
 	}
-	
-	
 
 	@Override
 	public void updateEffect(String cfgId) {
-		
+
 		// 使id配置 生效
 		matchCfgDao.effect(cfgId);
 		MatchCfg cfg = getObject(cfgId);
-		if(cfg!=null){
+		if (cfg != null) {
 			// 重新载入配置文件
-			MatchConfig.getInstanse().reloadCfg(cfg);			
-		}	
+			MatchConfig.getInstanse().reloadCfg(cfg);
+		}
 	}
 
 	@Override
@@ -119,25 +118,25 @@ public class MatchCfgService implements IMatchCfgService {
 		String sql = " select * from mpi_match_cfg where state = '1' ";
 		MatchCfg result = null;
 		List<MatchCfg> list = matchCfgDao.find(sql);
-		if(list!=null && !list.isEmpty()){
+		if (list != null && !list.isEmpty()) {
 			result = list.get(0);
 		}
-		if(result!=null){
+		if (result != null) {
 			result.setMatchFieldCfgs(queryFieldCfg(result.getConfigId()));
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * 用于从数据库初始化 匹配配置
 	 */
 	@PostConstruct
-	public void initMatchConfig(){
+	public void initMatchConfig() {
 		MatchCfg cfg = queryEffectCfg();
-		if(cfg!=null){
+		if (cfg != null) {
 			// 重新载入配置文件
-			MatchConfig.getInstanse().reloadCfg(cfg);	
+			MatchConfig.getInstanse().reloadCfg(cfg);
 		}
 	}
 }

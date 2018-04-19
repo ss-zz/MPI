@@ -31,18 +31,16 @@ public class DomainSrcLevelDao implements IDomainSrcLevelDao {
 
 	@Override
 	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Map<String, Object>> findForMap(String sql) {
-		// TODO Auto-generated method stub
-		final List result = new ArrayList();
+		final List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		jdbcTemplate.query(sql, new RowCallbackHandler() {
 			@Override
 			public void processRow(ResultSet rs) throws SQLException {
-				Map row = new HashMap();
+				Map<String, Object> row = new HashMap<String, Object>();
 				row.put("DOMAIN_ID", rs.getString("DOMAIN_ID"));
 				// row.put("DOMAIN_DESC", rs.getString("DOMAIN_DESC"));
 				// row.put("DOMAIN_LEVEL", rs.getString("DOMAIN_LEVEL"));

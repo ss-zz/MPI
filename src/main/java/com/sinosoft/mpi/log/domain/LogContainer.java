@@ -10,7 +10,7 @@ import com.sinosoft.mpi.log.model.SysLog;
  * 存放日志对象的容器 可以取出单个或批量取出多个
  */
 public class LogContainer {
-	
+
 	private LogManagerImpl logMgr = null;
 	// 容器存储日志对象最大限制
 	private int maxSize = 200;

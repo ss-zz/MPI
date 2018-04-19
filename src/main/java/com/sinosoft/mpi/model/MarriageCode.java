@@ -3,31 +3,32 @@ package com.sinosoft.mpi.model;
 import java.io.Serializable;
 
 /**
- * @author bysun 2012-3-12 婚姻状况编码 table:MPI_MARRIAGE_CODE schema:
+ * 婚姻状况编码 table:MPI_MARRIAGE_CODE
  */
-public class MarriageCode implements Serializable,IBaseCode {
+public class MarriageCode implements Serializable, IBaseCode {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8734119612794612569L;
-	
+
 	private String codeId;// 婚姻状况主键
 	private String codeName;// 婚姻状况名称
-	
+
 	// ========================setter&&getter
 	public String getCodeId() {
 		return codeId;
 	}
+
 	public void setCodeId(String codeId) {
 		this.codeId = codeId;
 	}
+
 	public String getCodeName() {
 		return codeName;
 	}
+
 	public void setCodeName(String codeName) {
 		this.codeName = codeName;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -36,6 +37,7 @@ public class MarriageCode implements Serializable,IBaseCode {
 		result = prime * result + ((codeName == null) ? 0 : codeName.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -57,6 +59,7 @@ public class MarriageCode implements Serializable,IBaseCode {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
 		return "MarriageCode [codeId=" + codeId + ", codeName=" + codeName + "]";

@@ -20,17 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sinosoft.mpi.context.Constant;
 
 /**
- * 
- * @author chenzhongzheng
- * @deprecated 下拉框操作类
+ * 下拉框操作类
  */
 @Controller
 @RequestMapping("/")
 public class ComboboxDataController {
-	
+
 	@Resource
 	private JdbcTemplate jdbcTemplate;
-	
+
 	@RequestMapping("countZonesCombobox.ac")
 	public void countZones(HttpServletResponse response) {
 		StringBuffer sb = new StringBuffer();
@@ -39,32 +37,31 @@ public class ComboboxDataController {
 		sb.append("		union																	");
 		sb.append("		(SELECT T.DD_ID AS ZONECODE,T.DD_NAME AS  ZONENAME FROM V_ZONECODE T)	");
 		sb.append("	)V order by v.zonecode														");
-		
-		RowMapper<Map<String , String>> mp = new RowMapper<Map<String , String>>() {
+
+		RowMapper<Map<String, String>> mp = new RowMapper<Map<String, String>>() {
 			@Override
 			public Map<String, String> mapRow(ResultSet rs, int row) throws SQLException {
 				Map<String, String> m = new HashMap<String, String>();
-				m.put("ZONECODE",rs.getString("ZONECODE"));
-				m.put("ZONENAME",rs.getString("ZONENAME"));
+				m.put("ZONECODE", rs.getString("ZONECODE"));
+				m.put("ZONENAME", rs.getString("ZONENAME"));
 				return m;
 			}
 		};
-		
+
 		// 查询数据
-		List<Map<String, String>> list  = jdbcTemplate.query(sb.toString(),mp);
+		List<Map<String, String>> list = jdbcTemplate.query(sb.toString(), mp);
 		JSONObject datas = new JSONObject();
 		// 写入数据
 		datas.put(Constant.PAGE_ROWS, list);
 		try {
 			response.getWriter().print(datas.toString());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	@RequestMapping("countOrgsOfZoneCommbobox.ac")
-	public void countOrgsOfZone(String zonecode,HttpServletResponse response){
+	public void countOrgsOfZone(String zonecode, HttpServletResponse response) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT V.ORGCODE, V.ORGNAME													");
 		sb.append("  FROM ((SELECT '0000' AS ORGCODE, '-- 请选择 --' AS ORGNAME FROM DUAL) 		");
@@ -75,50 +72,48 @@ public class ComboboxDataController {
 			sb.append("           WHERE T.APANAGECODE = '" + zonecode + "' ");
 		}
 		sb.append(" )) V ORDER BY V.ORGCODE	");
-		RowMapper<Map<String , String>> mp = new RowMapper<Map<String , String>>() {
+		RowMapper<Map<String, String>> mp = new RowMapper<Map<String, String>>() {
 			@Override
 			public Map<String, String> mapRow(ResultSet rs, int row) throws SQLException {
 				Map<String, String> m = new HashMap<String, String>();
-				m.put("ORGCODE",rs.getString("ORGCODE"));
-				m.put("ORGNAME",rs.getString("ORGNAME"));
+				m.put("ORGCODE", rs.getString("ORGCODE"));
+				m.put("ORGNAME", rs.getString("ORGNAME"));
 				return m;
 			}
 		};
 		// 查询数据
-		List<Map<String, String>> list  = jdbcTemplate.query(sb.toString(),mp);
+		List<Map<String, String>> list = jdbcTemplate.query(sb.toString(), mp);
 		JSONObject datas = new JSONObject();
 		// 写入数据
 		datas.put(Constant.PAGE_ROWS, list);
 		try {
 			response.getWriter().print(datas.toString());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	@RequestMapping("countYearsCombobox")
 	public void countYears(HttpServletResponse response) {
 		String sql = "SELECT V.DT FROM V_COUNT_YEARS V ORDER BY V.DT DESC";
-		
-		RowMapper<Map<String , String>> mp = new RowMapper<Map<String , String>>() {
+
+		RowMapper<Map<String, String>> mp = new RowMapper<Map<String, String>>() {
 			public Map<String, String> mapRow(ResultSet rs, int row) throws SQLException {
 				Map<String, String> m = new HashMap<String, String>();
-				m.put("DT",rs.getString("DT"));
+				m.put("DT", rs.getString("DT"));
 				return m;
 			}
 		};
 		// 查询数据
-		List<Map<String, String>> list  = jdbcTemplate.query(sql,mp);
+		List<Map<String, String>> list = jdbcTemplate.query(sql, mp);
 		JSONObject datas = new JSONObject();
 		// 写入数据
 		datas.put("rows", list);
 		try {
 			response.getWriter().print(datas.toString());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 }

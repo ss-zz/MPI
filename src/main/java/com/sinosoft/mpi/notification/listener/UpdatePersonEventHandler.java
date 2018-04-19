@@ -36,7 +36,6 @@ import com.sinosoft.mpi.util.NumberUtils;
 
 /**
  * 更新人员事件处理
- * 
  */
 public class UpdatePersonEventHandler implements IEventHandler {
 	private static Logger logger = Logger.getLogger(UpdatePersonEventHandler.class);

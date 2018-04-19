@@ -22,35 +22,25 @@ import com.sinosoft.mpi.service.IIdentifierDomainService;
 import com.sinosoft.mpi.service.IPersonIdxLogService;
 import com.sinosoft.mpi.util.PageInfo;
 
-/**   
-*    
-* @Description  索引操作日志(日志角度)
-* 
-* 
-*
-* 
-* @Package com.sinosoft.mpi.web 
-* @author Bysun
-* @version v1.0,2012-3-19
-* @see	
-* @since	（可选）	
-*   
-*/ 
+/**
+ * 索引操作日志(日志角度)
+ */
 @Controller
 @RequestMapping("/indexlog/il.ac")
 public class IdxOpLogController {
-	private Logger logger = Logger.getLogger(IdxOpLogController.class);	
+	private Logger logger = Logger.getLogger(IdxOpLogController.class);
 	@Resource
 	private IPersonIdxLogService personIdxLogService;
 	@Resource
 	private IIdentifierDomainService identifierDomainService;
-	
+
 	/**
 	 * 显示操作日志列表
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=query")
-	public String list(PageInfo page,PersonIdxLog t,HttpServletResponse response) throws IOException{
+	public String list(PageInfo page, PersonIdxLog t, HttpServletResponse response) throws IOException {
 		List<Map<String, Object>> list = null;
 		try {
 			list = personIdxLogService.queryForMapPage(t, page);
@@ -66,63 +56,66 @@ public class IdxOpLogController {
 		response.getWriter().print(datas.toString());
 		return null;
 	}
-	
+
 	/**
 	 * 获取身份域下拉菜单
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=listDomain")
-	public String listDomain(HttpServletResponse response) throws IOException{
+	public String listDomain(HttpServletResponse response) throws IOException {
 		response.setCharacterEncoding(Constant.ENCODING_UTF8);
 		try {
 			List<IdentifierDomain> list = identifierDomainService.queryAll();
 			IdentifierDomain first = new IdentifierDomain();
 			first.setDOMAIN_ID("");
 			first.setDOMAIN_DESC("--请选择--");
-			list.add(0,first);
-			JSONArray datas = JSONArray.fromObject(list);		
+			list.add(0, first);
+			JSONArray datas = JSONArray.fromObject(list);
 			response.getWriter().print(datas.toString());
 		} catch (Throwable e) {
 			response.getWriter().print("[]");
-		}				
+		}
 		return null;
 	}
-	
+
 	/**
 	 * 查看索引日志详情
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=view")
-	public String view(String logId,ModelMap modelMap){
+	public String view(String logId, ModelMap modelMap) {
 		Map<String, Object> map = personIdxLogService.queryMatchDetail(logId);
 		modelMap.putAll(map);
 		return "indexlog/page/view";
 	}
-	
+
 	/**
 	 * 查看居民详情
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=showPerson")
-	public String showPerson(String personId,ModelMap modelMap){
+	public String showPerson(String personId, ModelMap modelMap) {
 		Map<String, Object> map = personIdxLogService.queryPersonDetail(personId);
 		modelMap.putAll(map);
 		modelMap.put("type", "person");
 		return "indexlog/page/show";
 	}
-	
+
 	/**
 	 * 查看索引详情
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=showIndex")
-	public String showIndex(String indexId,ModelMap modelMap){
+	public String showIndex(String indexId, ModelMap modelMap) {
 		Map<String, Object> map = personIdxLogService.queryIndexDetail(indexId);
 		modelMap.putAll(map);
 		modelMap.put("type", "index");
 		return "indexlog/page/show";
 	}
-	
 
 	public void setPersonIdxLogService(IPersonIdxLogService personIdxLogService) {
 		this.personIdxLogService = personIdxLogService;
@@ -131,5 +124,5 @@ public class IdxOpLogController {
 	public void setIdentifierDomainService(IIdentifierDomainService identifierDomainService) {
 		this.identifierDomainService = identifierDomainService;
 	}
-	
+
 }

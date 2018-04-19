@@ -492,7 +492,7 @@ public class PersonIndexService implements IPersonIndexService {
 	 *            主索引
 	 * @param
 	 */
-	private void updateIndex(String formerPK, List<IndexOperate> mergeLogs) {
+	public void updateIndex(String formerPK, List<IndexOperate> mergeLogs) {
 		// 获取拆分点以后的主索引操作日志
 		StringBuilder sb = new StringBuilder();
 		sb.append(" select * from mpi_person_idx_log l");

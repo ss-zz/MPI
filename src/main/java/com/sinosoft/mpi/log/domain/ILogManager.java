@@ -11,12 +11,12 @@ public interface ILogManager {
 	 * @Description: 写日志
 	 * @param SysLog
 	 *            <br>
-	 * 			必须赋值属性 <br>
-	 * 			userID 用户ID <br>
-	 * 			funcID 功能点ID <br>
-	 * 			operateData 操作数据 <br>
-	 * 			operateResult 操作结果 1成功 0失败 <br>
-	 * 			operateDes 操作结果描述
+	 *            必须赋值属性 <br>
+	 *            userID 用户ID <br>
+	 *            funcID 功能点ID <br>
+	 *            operateData 操作数据 <br>
+	 *            operateResult 操作结果 1成功 0失败 <br>
+	 *            operateDes 操作结果描述
 	 * @throws Exception
 	 * @see Syslog
 	 */

@@ -1,7 +1,6 @@
 package com.sinosoft.mpi.dao;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +10,6 @@ import javax.annotation.Resource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.sinosoft.mpi.model.ProfessionCode;
@@ -80,19 +78,7 @@ public class ProfessionCodeDao implements IProfessionCodeDao {
 
 	@Override
 	public List<ProfessionCode> find(String sql, Object[] args) {
-		/*
-		 * List<ProfessionCode> datas = jdbcTemplate.query(sql, args, new
-		 * RowMapper<ProfessionCode>() {
-		 * 
-		 * @Override public ProfessionCode mapRow(ResultSet rs, int row) throws
-		 * SQLException { ProfessionCode result = new ProfessionCode();
-		 * result.setCodeId(rs.getString("CODE_ID"));
-		 * result.setCodeName(rs.getString("CODE_NAME")); return result; } }); return
-		 * datas;
-		 */
-		// TODO lpk 2012年11月18日11:29:10
-		return new ArrayList();
-
+		return new ArrayList<ProfessionCode>();
 	}
 
 	@Override

@@ -79,7 +79,7 @@ public class AddPersonEventHandler implements IEventHandler {
 			 * IndexIdentifierRel iir = indexIdentifierRelService
 			 * .queryByFieldPK(personinfo.getFIELD_PK()); // 查看是否居民是否首次入库 if (iir == null) {
 			 */
-			Record personRecord = new Record(personinfo);
+			Record<PersonInfo> personRecord = new Record<PersonInfo>(personinfo);
 			personRecord.setRecordId(personinfo.getFIELD_PK());
 			List<Record<PersonIndex>> records = blockService.findCandidates(personRecord);
 			// 找出匹配情况。

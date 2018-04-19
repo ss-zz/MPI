@@ -17,10 +17,6 @@ import com.sinosoft.mpi.log.model.SysLog;
 
 /**
  * 将日志持久化到数据库
- * 
- * @author zhaobs
- * 
- *         修改为使用JdbcTemplate bysun 2012-3-20
  */
 @Component
 public class JDBCLogDao implements ILogDao {

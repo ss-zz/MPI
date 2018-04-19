@@ -5,7 +5,6 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 
@@ -20,7 +19,6 @@ public class MessageSender {
 	private Destination sendDestination;
 
 	private JmsTemplate jmsTemplate;
-	private AmqpTemplate amqpTemplate;
 
 	/**
 	 * 发送到发送队列里

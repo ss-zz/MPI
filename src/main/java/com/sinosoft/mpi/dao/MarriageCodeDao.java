@@ -74,9 +74,7 @@ public class MarriageCodeDao implements IMarriageCodeDao {
 
 	@Override
 	public List<MarriageCode> find(String sql) {
-		// TODO lpk 2012年11月18日11:29:10
-		return new ArrayList();
-
+		return new ArrayList<MarriageCode>();
 	}
 
 	@Override

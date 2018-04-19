@@ -40,7 +40,7 @@ public class BookPushService implements IBookPushService {
 
 	}
 
-	private void sendMassage(IdentifierDomain domain, List<BookLog> list) {
+	public void sendMassage(IdentifierDomain domain, List<BookLog> list) {
 		/*
 		 * List<BookMassage> msgList = new ArrayList<BookMassage>(list.size()); for
 		 * (BookLog log : list) { // 组织数据 BookMassage msg = new
@@ -58,7 +58,7 @@ public class BookPushService implements IBookPushService {
 		// logger.debug("向身份域["+domain.getDOMAIN_DESC()+"]推送数据暂时取消");
 	}
 
-	private void updateLogResult(List<BookLog> list, String result) {
+	public void updateLogResult(List<BookLog> list, String result) {
 		for (BookLog log : list) {
 			log.setOpResult(result);
 			log.setOpTime(DateUtil.getTimeNow(new Date()));
@@ -67,7 +67,7 @@ public class BookPushService implements IBookPushService {
 		}
 	}
 
-	private IBookPushHandler getPushHandler(IdentifierDomain domain) {
+	public IBookPushHandler getPushHandler(IdentifierDomain domain) {
 		// TODO ben 这里取得要调用的远程连接地址 暂未实现 方式待定
 		JaxWsProxyFactoryBean factoryBean = new JaxWsProxyFactoryBean();
 		factoryBean.setServiceClass(IBookPushHandler.class);

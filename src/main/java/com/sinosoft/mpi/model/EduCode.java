@@ -3,31 +3,32 @@ package com.sinosoft.mpi.model;
 import java.io.Serializable;
 
 /**
- * @author bysun 2012-3-12 教育情况编码 table:MPI_EDU_CODE schema:
+ * 教育情况编码 table:MPI_EDU_CODE
  */
-public class EduCode implements Serializable,IBaseCode {
+public class EduCode implements Serializable, IBaseCode {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 346647021906848064L;
-	
+
 	private String codeId;// 教育情况编码主键
 	private String codeName;// 教育情况名称
-	
+
 	// ========================setter&&getter
 	public String getCodeId() {
 		return codeId;
 	}
+
 	public void setCodeId(String codeId) {
 		this.codeId = codeId;
 	}
+
 	public String getCodeName() {
 		return codeName;
 	}
+
 	public void setCodeName(String codeName) {
 		this.codeName = codeName;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -36,6 +37,7 @@ public class EduCode implements Serializable,IBaseCode {
 		result = prime * result + ((codeName == null) ? 0 : codeName.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -57,6 +59,7 @@ public class EduCode implements Serializable,IBaseCode {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
 		return "EduCode [codeId=" + codeId + ", codeName=" + codeName + "]";

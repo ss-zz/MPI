@@ -3,90 +3,107 @@ package com.sinosoft.mpi.model;
 import java.io.Serializable;
 
 /**
- * @author bysun 2012-3-12 订阅日志 table:MPI_CERT_CODE schema:
+ * MPI_CERT_CODE 订阅日志
  */
 public class BookLog implements Serializable {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -7371689382932829413L;
 	private String bookId; // 订阅日志主键
-	private String eventType; // 事件类型  0-添加至索引   1-与索引解除关系
+	private String eventType; // 事件类型 0-添加至索引 1-与索引解除关系
 	private String mpipk; // 索引id
 	private String fieldPK; // 居民id
 	private String domainId; // 居民域id
-	private String uniqueSign; // 居民域唯一标识 
+	private String uniqueSign; // 居民域唯一标识
 	private String personIdentifier; // 居民域下主键 暂不使用
 	private String opTime; // 操作时间
 	private String opCount; // 操作次数
-	private String opResult; // 操作结果 0-未操作   1-操作成功  2-操作失败
-		
-	
-	//=======================setter&getter
+	private String opResult; // 操作结果 0-未操作 1-操作成功 2-操作失败
+
+	// =======================setter&getter
 	public String getBookId() {
 		return bookId;
 	}
+
 	public void setBookId(String bookId) {
 		this.bookId = bookId;
 	}
+
 	public String getEventType() {
 		return eventType;
 	}
+
 	public void setEventType(String eventType) {
 		this.eventType = eventType;
 	}
+
 	public String getDomainId() {
 		return domainId;
 	}
+
 	public void setDomainId(String domainId) {
 		this.domainId = domainId;
 	}
+
 	public String getUniqueSign() {
 		return uniqueSign;
 	}
+
 	public void setUniqueSign(String uniqueSign) {
 		this.uniqueSign = uniqueSign;
 	}
+
 	public String getPersonIdentifier() {
 		return personIdentifier;
 	}
+
 	public String getMpipk() {
 		return mpipk;
 	}
+
 	public void setMpipk(String mpipk) {
 		this.mpipk = mpipk;
 	}
+
 	public String getFieldPK() {
 		return fieldPK;
 	}
+
 	public void setFieldPK(String fieldPK) {
 		this.fieldPK = fieldPK;
 	}
+
 	public void setPersonIdentifier(String personIdentifier) {
 		this.personIdentifier = personIdentifier;
 	}
+
 	public String getOpTime() {
 		return opTime;
 	}
+
 	public void setOpTime(String opTime) {
 		this.opTime = opTime;
 	}
+
 	public String getOpCount() {
 		return opCount;
 	}
+
 	public void setOpCount(String opCount) {
 		this.opCount = opCount;
 	}
+
 	public String getOpResult() {
 		return opResult;
 	}
+
 	public void setOpResult(String opResult) {
 		this.opResult = opResult;
 	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -103,6 +120,7 @@ public class BookLog implements Serializable {
 		result = prime * result + ((uniqueSign == null) ? 0 : uniqueSign.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -164,12 +182,12 @@ public class BookLog implements Serializable {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
-		return "BookLog [bookId=" + bookId + ", eventType=" + eventType + ", mpipk=" + mpipk
-				+ ", personId=" + mpipk + ", domainId=" + domainId + ", uniqueSign="
-				+ uniqueSign + ", personIdentifier=" + personIdentifier + ", opTime=" + opTime
-				+ ", opCount=" + opCount + ", opResult=" + opResult + "]";
+		return "BookLog [bookId=" + bookId + ", eventType=" + eventType + ", mpipk=" + mpipk + ", personId=" + mpipk
+				+ ", domainId=" + domainId + ", uniqueSign=" + uniqueSign + ", personIdentifier=" + personIdentifier
+				+ ", opTime=" + opTime + ", opCount=" + opCount + ", opResult=" + opResult + "]";
 	}
-	
+
 }

@@ -3,7 +3,7 @@ package com.sinosoft.mpi.model;
 import java.io.Serializable;
 
 /**
- * @author bysun 2012-3-26 主索引操作日志 table: MPI_PERSON_IDX_LOG schema:
+ * 主索引操作日志 table: MPI_PERSON_IDX_LOG
  */
 public class PersonIdxLog implements Serializable {
 
@@ -17,101 +17,121 @@ public class PersonIdxLog implements Serializable {
 	private String infoSour; // 信息来源 记录域主键
 	private String mpipk;// 主索引主键
 	private String fieldpk;// 居民主键
-	private String formermpipk;//用于记录人工合并原主索引MPI_PK 2018-01-18
-	
+	private String formermpipk;// 用于记录人工合并原主索引MPI_PK 2018-01-18
+
 	// 一下非库存自动用于传接值查询使用
 	private String opTimeEnd;
 	private String personName;
 	private String personIdcard;
-	
-	
-	
+
 	public String getPersonIdxLogId() {
 		return personIdxLogId;
 	}
+
 	public void setPersonIdxLogId(String personIdxLogId) {
 		this.personIdxLogId = personIdxLogId;
 	}
+
 	public String getOpType() {
 		return opType;
 	}
+
 	public void setOpType(String opType) {
 		this.opType = opType;
 	}
+
 	public String getOpStyle() {
 		return opStyle;
 	}
+
 	public void setOpStyle(String opStyle) {
 		this.opStyle = opStyle;
 	}
+
 	public String getOpTime() {
 		return opTime;
 	}
+
 	public void setOpTime(String opTime) {
 		this.opTime = opTime;
 	}
+
 	public String getOpUserId() {
 		return opUserId;
 	}
+
 	public void setOpUserId(String opUserId) {
 		this.opUserId = opUserId;
 	}
+
 	public String getOpDesc() {
 		return opDesc;
 	}
+
 	public void setOpDesc(String opDesc) {
 		this.opDesc = opDesc;
 	}
+
 	public String getInfoSour() {
 		return infoSour;
 	}
+
 	public void setInfoSour(String infoSour) {
 		this.infoSour = infoSour;
 	}
+
 	public String getFieldpk() {
 		return fieldpk;
 	}
+
 	public void setFieldpk(String fieldpk) {
 		this.fieldpk = fieldpk;
 	}
+
 	public String getMpipk() {
 		return mpipk;
 	}
+
 	public void setMpipk(String mpipk) {
 		this.mpipk = mpipk;
 	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
+
 	public String getOpTimeEnd() {
 		return opTimeEnd;
 	}
+
 	public void setOpTimeEnd(String opTimeEnd) {
 		this.opTimeEnd = opTimeEnd;
 	}
+
 	public String getPersonName() {
 		return personName;
 	}
+
 	public void setPersonName(String personName) {
 		this.personName = personName;
 	}
+
 	public String getPersonIdcard() {
 		return personIdcard;
 	}
+
 	public void setPersonIdcard(String personIdcard) {
 		this.personIdcard = personIdcard;
 	}
-	
-	
-	
+
 	public String getFormermpipk() {
 		return formermpipk;
 	}
+
 	public void setFormermpipk(String formermpipk) {
 		this.formermpipk = formermpipk;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -125,9 +145,10 @@ public class PersonIdxLog implements Serializable {
 		result = prime * result + ((opType == null) ? 0 : opType.hashCode());
 		result = prime * result + ((opUserId == null) ? 0 : opUserId.hashCode());
 		result = prime * result + ((personIdxLogId == null) ? 0 : personIdxLogId.hashCode());
-		result = prime * result + ((formermpipk == null) ? 0 :formermpipk.hashCode());
+		result = prime * result + ((formermpipk == null) ? 0 : formermpipk.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -184,11 +205,11 @@ public class PersonIdxLog implements Serializable {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
-		return "PersonIdxLog [personIdxLogId=" + personIdxLogId + ", opType=" + opType
-				+ ", opStyle=" + opStyle + ", opTime=" + opTime + ", opUserId=" + opUserId
-				+ ", opDesc=" + opDesc + ", infoSour=" + infoSour + ", mpipk=" + mpipk
-				+ ", fieldpk=" + fieldpk + "]";
+		return "PersonIdxLog [personIdxLogId=" + personIdxLogId + ", opType=" + opType + ", opStyle=" + opStyle
+				+ ", opTime=" + opTime + ", opUserId=" + opUserId + ", opDesc=" + opDesc + ", infoSour=" + infoSour
+				+ ", mpipk=" + mpipk + ", fieldpk=" + fieldpk + "]";
 	}
 }

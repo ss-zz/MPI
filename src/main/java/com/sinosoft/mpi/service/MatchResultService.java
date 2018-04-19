@@ -10,11 +10,13 @@ import org.springframework.stereotype.Service;
 import com.sinosoft.mpi.dao.IMatchResultDao;
 import com.sinosoft.mpi.model.MatchResult;
 import com.sinosoft.mpi.util.PageInfo;
+
 @Service("matchResultService")
 public class MatchResultService implements IMatchResultService {
 	private Logger logger = Logger.getLogger(MatchResultService.class);
 	@Resource
 	private IMatchResultDao matchResultDao;
+
 	@Override
 	public void save(MatchResult t) {
 		matchResultDao.add(t);
@@ -32,7 +34,7 @@ public class MatchResultService implements IMatchResultService {
 		matchResultDao.deleteById(t);
 		logger.debug("delete MatchResult,matchResultId=" + t.getMatchResultId());
 	}
-	
+
 	@Override
 	public MatchResult getObject(String id) {
 		MatchResult t = new MatchResult();

@@ -3,31 +3,32 @@ package com.sinosoft.mpi.model;
 import java.io.Serializable;
 
 /**
- * @author bysun 2012-3-12 系统角色 table:MPI_SYS_ROLE schema:
+ * 系统角色 table:MPI_SYS_ROLE
  */
 public class SysRole implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1133070745219243196L;
-	
-	private String sysRoleId;	//角色id
-	private String roleName;	//角色名
-	
+
+	private String sysRoleId; // 角色id
+	private String roleName; // 角色名
+
 	// ========================setter&&getter
 	public String getSysRoleId() {
 		return sysRoleId;
 	}
+
 	public void setSysRoleId(String sysRoleId) {
 		this.sysRoleId = sysRoleId;
 	}
+
 	public String getRoleName() {
 		return roleName;
 	}
+
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -36,6 +37,7 @@ public class SysRole implements Serializable {
 		result = prime * result + ((sysRoleId == null) ? 0 : sysRoleId.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -57,6 +59,7 @@ public class SysRole implements Serializable {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
 		return "SysRole [sysRoleId=" + sysRoleId + ", roleName=" + roleName + "]";

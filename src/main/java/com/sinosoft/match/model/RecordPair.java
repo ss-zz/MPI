@@ -4,15 +4,7 @@ import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 
 /**
- *
- * @Description 标示两个对象的相识度，以及匹配的情况。
- *
- * @Package com.sinosoft.match.model
- * @author <a href="mailto:qinshouxin@sinosoft.com.cn">Qin Shouxin </a>
- * @version v1.0,2012-3-20
- * @see
- * @since （可选）
- *
+ * 标示两个对象的相识度，以及匹配的情况
  */
 @SuppressWarnings("rawtypes")
 public class RecordPair {

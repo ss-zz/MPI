@@ -1,26 +1,20 @@
 package com.sinosoft.mpi.sshl.model;
 
-/**
- * 
- * @author chenzhongzheng
- *
- */
 public class DataUploadBusiness {
 
 	private String zonecode;
-	
-	private String orgcode;
-	
-	private String endDate;
-	
-	private String stDate;
-	
-	private String childTabs;
-	
-	private String childservids;
-	
-	private String childTypes;
 
+	private String orgcode;
+
+	private String endDate;
+
+	private String stDate;
+
+	private String childTabs;
+
+	private String childservids;
+
+	private String childTypes;
 
 	public String getZonecode() {
 		return zonecode;
@@ -77,6 +71,5 @@ public class DataUploadBusiness {
 	public void setChildTypes(String childTypes) {
 		this.childTypes = childTypes;
 	}
-	
-	
+
 }

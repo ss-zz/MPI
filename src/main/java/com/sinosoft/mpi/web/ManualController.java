@@ -34,25 +34,14 @@ import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.JsonDateValueProcessor;
 import com.sinosoft.mpi.util.PageInfo;
 
-
-/**   
-*    
-* @Description 手工拆分合并
-* 
-* 
-*
-* 
-* @Package com.sinosoft.mpi.web 
-* @author Bysun
-* @version v1.0,2012-3-19
-* @see	
-* @since	（可选）	
-*   
-*/ 
+/**
+ * 手工拆分合并
+ */
 @Controller
 @RequestMapping("/manual/manual.ac")
 public class ManualController {
-	private Logger logger = Logger.getLogger(ManualController.class);	
+	
+	private Logger logger = Logger.getLogger(ManualController.class);
 	@Resource
 	private IManOpPersonService manOpPersonService;
 	@Resource
@@ -61,55 +50,58 @@ public class ManualController {
 	private IPersonIndexService personIndexService;
 	@Resource
 	private IPersonInfoService personInfoService;
-	
+
 	/**
 	 * 人工干预新建索引
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
-	@RequestMapping(params = "method=addNewIndex")	
-	public String addNewIndex(String opId,String personId,HttpServletResponse response) throws IOException{
+	@RequestMapping(params = "method=addNewIndex")
+	public String addNewIndex(String opId, String personId, HttpServletResponse response) throws IOException {
 		response.setCharacterEncoding(Constant.ENCODING_UTF8);
 		try {
-			personInfoService.addNewIndex(opId,personId);
+			personInfoService.addNewIndex(opId, personId);
 		} catch (Throwable e) {
 			response.getWriter().print("发生错误,请重试!");
 			logger.error("新建索引的时候出现错误", e);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 人工干预归属到索引
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
-	@RequestMapping(params = "method=addToIndex")	
-	public String addToIndex(String opId,String personId,String indexId,HttpServletResponse response) throws IOException{
+	@RequestMapping(params = "method=addToIndex")
+	public String addToIndex(String opId, String personId, String indexId, HttpServletResponse response)
+			throws IOException {
 		response.setCharacterEncoding(Constant.ENCODING_UTF8);
 		try {
-			personInfoService.addToIndex(opId,personId,indexId);
+			personInfoService.addToIndex(opId, personId, indexId);
 		} catch (Throwable e) {
 			response.getWriter().print("发生错误,请重试!");
 			logger.error("合并到索引的时候出现错误", e);
 		}
 		return null;
 	}
-	
+
 	private void converCode(final List<Map<String, Object>> list) {
 		// 转换编码数据
-		for(Map<String, Object> map : list){
+		for (Map<String, Object> map : list) {
 			String sexCode = (String) map.get("SEX");
-			if(StringUtils.isNotBlank(sexCode)){
+			if (StringUtils.isNotBlank(sexCode)) {
 				SexCode code = CacheManager.get(SexCode.class, sexCode);
 				String sexName = "";
-				if(code!=null){
+				if (code != null) {
 					sexName = code.getCodeName();
-				}else{
+				} else {
 					sexName = "未知的性别";
 				}
-				map.put("sexName", sexName);				
+				map.put("sexName", sexName);
 			}
-			
-			java.sql.Timestamp BIRTH_DATE = (java.sql.Timestamp)map.get("BIRTH_DATE");
+
+			java.sql.Timestamp BIRTH_DATE = (java.sql.Timestamp) map.get("BIRTH_DATE");
 			if (BIRTH_DATE != null) {
 				// 将TIMESTAMP.DATE 转成UTIL.DATE
 				java.util.Date date = new java.util.Date(BIRTH_DATE.getTime());
@@ -117,18 +109,19 @@ public class ManualController {
 			}
 		}
 	}
-	
+
 	/**
 	 * 查询显示需要人工干预的居民列表
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=query")
-	public String list(PageInfo page,ManOpPerson t,HttpServletResponse response) throws IOException{
+	public String list(PageInfo page, ManOpPerson t, HttpServletResponse response) throws IOException {
 		List<Map<String, Object>> list = null;
 		try {
 			list = manOpPersonService.queryForMapPage(t, page);
 			// 转换编码
-			converCode(list);			
+			converCode(list);
 		} catch (Throwable e) {
 			logger.error("查询索引日志时出错", e);
 		}
@@ -141,16 +134,17 @@ public class ManualController {
 		response.getWriter().print(datas.toString());
 		return null;
 	}
-	
+
 	/**
 	 * 查询显示需要人工干预的居民列表
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(params = "method=listCode")
-	public String listCode(String codeName,HttpServletResponse response) throws IOException{
+	public String listCode(String codeName, HttpServletResponse response) throws IOException {
 		response.setCharacterEncoding(Constant.ENCODING_UTF8);
-		String clzStr = "com.sinosoft.mpi.model."+codeName;
+		String clzStr = "com.sinosoft.mpi.model." + codeName;
 		try {
 			Class<IBaseCode> clz = (Class<IBaseCode>) Class.forName(clzStr);
 			List<IBaseCode> list = CacheManager.getAll(clz);
@@ -158,26 +152,26 @@ public class ManualController {
 			def.setCodeId("");
 			def.setCodeName("--请选择--");
 			list.add(0, def);
-			JSONArray datas = JSONArray.fromObject(list);		
+			JSONArray datas = JSONArray.fromObject(list);
 			response.getWriter().print(datas.toString());
 		} catch (Throwable e) {
 			response.getWriter().print("[]");
 		}
 		return null;
-	}	
-	
-	
+	}
+
 	/**
 	 * 查询显示可进行拆分的索引记录
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=list")
-	public String listIndex(PageInfo page,PersonIndex index,HttpServletResponse response) throws IOException{
+	public String listIndex(PageInfo page, PersonIndex index, HttpServletResponse response) throws IOException {
 		List<Map<String, Object>> list = null;
 		try {
 			list = personIndexService.queryForSplitPage(index, page);
 			// 转换编码
-			converCode(list);			
+			converCode(list);
 		} catch (Throwable e) {
 			logger.error("查询索引日志时出错", e);
 		}
@@ -190,50 +184,53 @@ public class ManualController {
 		response.getWriter().print(datas.toString());
 		return null;
 	}
-	
+
 	/**
 	 * 查询显示需要人工干预的居民的匹配明细
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=matchList")
-	public String listMatch(String personId,int start,int end,HttpServletResponse response) throws IOException{
-		response.setCharacterEncoding(Constant.ENCODING_UTF8);		
+	public String listMatch(String personId, int start, int end, HttpServletResponse response) throws IOException {
+		response.setCharacterEncoding(Constant.ENCODING_UTF8);
 		try {
-			List<Map<String, Object>> list = personIdxLogService.queryMatchDetailPage(personId,start,end);
+			List<Map<String, Object>> list = personIdxLogService.queryMatchDetailPage(personId, start, end);
 			JSONArray datas = JSONArray.fromObject(list);
 			response.getWriter().print(datas.toString());
 		} catch (Throwable e) {
 			logger.error("查询详细匹配记录时出错", e);
 			response.getWriter().print("[]");
-		}		
+		}
 		return null;
 	}
-	
+
 	/**
 	 * 查询显示需要人工干预的居民的匹配明细
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=matchListByIds")
-	public String listMatchByIdxIds(String personid,String[] idxIds,HttpServletResponse response) throws IOException{
-		response.setCharacterEncoding(Constant.ENCODING_UTF8);		
+	public String listMatchByIdxIds(String personid, String[] idxIds, HttpServletResponse response) throws IOException {
+		response.setCharacterEncoding(Constant.ENCODING_UTF8);
 		try {
-			List<Map<String, Object>> list = personIdxLogService.queryMatchDetailPageByIdxIds(personid,idxIds);
+			List<Map<String, Object>> list = personIdxLogService.queryMatchDetailPageByIdxIds(personid, idxIds);
 			JSONArray datas = JSONArray.fromObject(list);
 			response.getWriter().print(datas.toString());
 		} catch (Throwable e) {
 			logger.error("查询详细匹配记录时出错", e);
 			response.getWriter().print("[]");
-		}		
+		}
 		return null;
-	}	
-	
+	}
+
 	/**
 	 * 查询显示所有匹配索引摘要列表
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=listMatchIndex")
-	public String listMatchIndex(String personId,HttpServletResponse response) throws IOException{
-		response.setCharacterEncoding(Constant.ENCODING_UTF8);		
+	public String listMatchIndex(String personId, HttpServletResponse response) throws IOException {
+		response.setCharacterEncoding(Constant.ENCODING_UTF8);
 		try {
 			List<Map<String, Object>> list = personIdxLogService.queryMatchIndex(personId);
 			JSONArray datas = JSONArray.fromObject(list);
@@ -241,21 +238,22 @@ public class ManualController {
 		} catch (Throwable e) {
 			logger.error("查询详细匹配记录时出错", e);
 			response.getWriter().print("[]");
-		}		
+		}
 		return null;
 	}
-	
+
 	/**
 	 * 查询显示可进行拆分的索引记录
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=listPerson")
-	public String listPerson(PageInfo page,String indexId,HttpServletResponse response) throws IOException{
+	public String listPerson(PageInfo page, String indexId, HttpServletResponse response) throws IOException {
 		List<Map<String, Object>> list = null;
 		try {
 			list = personInfoService.queryForSplitPersonPage(indexId, page);
 			// 转换编码
-			converCode(list);			
+			converCode(list);
 		} catch (Throwable e) {
 			logger.error("查询索引日志时出错", e);
 		}
@@ -268,66 +266,69 @@ public class ManualController {
 		response.getWriter().print(datas.toString());
 		return null;
 	}
-	
+
 	/**
 	 * 将人员从索引中拆分,并建立新索引与之关联
 	 */
 	@RequestMapping(params = "method=split")
-	public String splitPerson(String indexId,String personId,HttpServletResponse response) throws IOException{
-		response.setCharacterEncoding(Constant.ENCODING_UTF8);		
+	public String splitPerson(String indexId, String personId, HttpServletResponse response) throws IOException {
+		response.setCharacterEncoding(Constant.ENCODING_UTF8);
 		try {
-			personInfoService.splitPerson(indexId,personId);
+			personInfoService.splitPerson(indexId, personId);
 		} catch (Throwable e) {
 			response.getWriter().print("发生错误,请重试!");
 			logger.error("将人员从索引拆分出来的时候出现错误", e);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 将人员从索引中拆分出来,并关联至指定索引
 	 */
 	@RequestMapping(params = "method=splitToIndex")
-	public String splitPersonToIndex(String indexId,String personId,String fromIndexId,HttpServletResponse response) throws IOException{
-		response.setCharacterEncoding(Constant.ENCODING_UTF8);		
+	public String splitPersonToIndex(String indexId, String personId, String fromIndexId, HttpServletResponse response)
+			throws IOException {
+		response.setCharacterEncoding(Constant.ENCODING_UTF8);
 		try {
-			personInfoService.splitPersonToIndex(indexId,personId,fromIndexId);
+			personInfoService.splitPersonToIndex(indexId, personId, fromIndexId);
 		} catch (Throwable e) {
 			response.getWriter().print("发生错误,请重试!");
 			logger.error("将人员从索引拆分出来的时候出现错误", e);
 		}
 		return null;
 	}
+
 	/**
 	 * 前往匹配列表页面
 	 */
 	@RequestMapping(params = "method=toMatch")
-	public ModelAndView toMatchPage(String personId,String opId){
+	public ModelAndView toMatchPage(String personId, String opId) {
 		ModelAndView mv = new ModelAndView("/manual/page/match");
 		PersonInfo person = personInfoService.getObject(personId);
 		// 转码
-		//CodeConvertUtils.convert(person);
+		// CodeConvertUtils.convert(person);
 		List<PerInfoPropertiesDesc> fields = CacheManager.getAll(PerInfoPropertiesDesc.class);
-		int total  = personIdxLogService.queryMatchIndexCount(personId);
-		JsonConfig jsonConfig = new JsonConfig();   //JsonConfig是net.sf.json.JsonConfig中的这个，为固定写法   
-		jsonConfig.registerJsonValueProcessor(Date.class , new JsonDateValueProcessor());   
-		JSONObject datas=JSONObject.fromObject(person, jsonConfig);
-		//JSONObject datas = new JSONObject();
-		//datas.put("person", person);
+		int total = personIdxLogService.queryMatchIndexCount(personId);
+		JsonConfig jsonConfig = new JsonConfig(); // JsonConfig是net.sf.json.JsonConfig中的这个，为固定写法
+		jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
+		JSONObject datas = JSONObject.fromObject(person, jsonConfig);
+		// JSONObject datas = new JSONObject();
+		// datas.put("person", person);
 		datas.put("fields", fields);
 		datas.put("total", total);
 		datas.put("opId", opId);
-		mv.addObject("datas",datas.toString());
-		return mv;		
+		mv.addObject("datas", datas.toString());
+		return mv;
 	}
+
 	public void setManOpPersonService(IManOpPersonService manOpPersonService) {
 		this.manOpPersonService = manOpPersonService;
 	}
-	
+
 	public void setPersonIdxLogService(IPersonIdxLogService personIdxLogService) {
 		this.personIdxLogService = personIdxLogService;
 	}
-	
+
 	public void setPersonIndexService(IPersonIndexService personIndexService) {
 		this.personIndexService = personIndexService;
 	}

@@ -144,7 +144,7 @@ public class UpdatePersonEventHandler implements IEventHandler {
 	}
 
 	public void savePersonIndex(PersonInfo personinfo) {
-		Record personRecord = new Record(personinfo);
+		Record<PersonInfo> personRecord = new Record<PersonInfo>(personinfo);
 		personRecord.setRecordId(personinfo.getFIELD_PK());
 		List<Record<PersonIndex>> records = blockService.findCandidates(personRecord);
 		// 找出匹配情况。

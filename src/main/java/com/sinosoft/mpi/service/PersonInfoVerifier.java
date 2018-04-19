@@ -4,15 +4,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.model.PersonInfo;
 
 @Service("personInfoVerifier")
 public class PersonInfoVerifier implements IVerifier<PersonInfo> {
-
-	private Logger logger = Logger.getLogger(PersonInfoVerifier.class);
 
 	@Override
 	public VerifyResult verify(final PersonInfo t) {
@@ -50,6 +47,7 @@ public class PersonInfoVerifier implements IVerifier<PersonInfo> {
 	private boolean verifyBlankValue(String value) {
 		return !StringUtils.isBlank(value);
 	}
+
 	// lpk update 2013年5月9日 验证身份证
 	private boolean verifyIdNoValue(PersonInfo person) {
 		String value = person.getID_NO();
@@ -84,7 +82,7 @@ public class PersonInfoVerifier implements IVerifier<PersonInfo> {
 	}
 
 	// update 2013年12月9日 验证新农合卡
-	private boolean verifyNhCard(PersonInfo person) {
+	public boolean verifyNhCard(PersonInfo person) {
 		String value = person.getNH_CARD();
 		boolean result = true;
 		// Pattern reg = Pattern.compile("^\\d{16}$");
@@ -93,8 +91,9 @@ public class PersonInfoVerifier implements IVerifier<PersonInfo> {
 		}
 		return result;
 	}
+
 	// lpk update 2013年12月9日 居民健康档案编号为17位
-	private boolean verifyHRID(PersonInfo person) {
+	public boolean verifyHRID(PersonInfo person) {
 		String value = person.getHR_ID();
 		boolean result = true;
 		if (StringUtils.isBlank(value)) {// 为空
@@ -102,8 +101,9 @@ public class PersonInfoVerifier implements IVerifier<PersonInfo> {
 		}
 		return result;
 	}
+
 	// lpk update 2013年12月9日 社会保障卡号
-	private boolean verifySSCID(PersonInfo person) {
+	public boolean verifySSCID(PersonInfo person) {
 		String value = person.getSSCID();
 		boolean result = true;
 		if (StringUtils.isBlank(value)) {// 为空

@@ -14,7 +14,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.sinosoft.mpi.model.MpiCombineRec;
-import com.sinosoft.mpi.model.PersonInfo;
 
 @Repository("mpiCombineRecDao")
 public class MpiCombineRecDao implements IMpiCombineRecDao {

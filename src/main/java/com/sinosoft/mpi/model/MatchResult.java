@@ -2,9 +2,8 @@ package com.sinosoft.mpi.model;
 
 import java.io.Serializable;
 
-
 /**
- * @author bysun 2012-3-26 匹配结果 table: MPI_MATCH_RESULT schema:
+ * 匹配结果 table: MPI_MATCH_RESULT
  */
 public class MatchResult implements Serializable {
 
@@ -14,36 +13,47 @@ public class MatchResult implements Serializable {
 	private String fieldPk;// 居民信_居民主键
 	private String matchDegree;// 匹配度
 	private String fieldMatDegrees;// 属性匹配数组
+
 	public String getMatchResultId() {
 		return matchResultId;
 	}
+
 	public void setMatchResultId(String matchResultId) {
 		this.matchResultId = matchResultId;
 	}
+
 	public String getMpiPk() {
 		return mpiPk;
 	}
+
 	public void setMpiPk(String mpiPk) {
 		this.mpiPk = mpiPk;
 	}
+
 	public String getFieldPk() {
 		return fieldPk;
 	}
+
 	public void setFieldPk(String fieldPk) {
 		this.fieldPk = fieldPk;
 	}
+
 	public String getMatchDegree() {
 		return matchDegree;
 	}
+
 	public void setMatchDegree(String matchDegree) {
 		this.matchDegree = matchDegree;
 	}
+
 	public String getFieldMatDegrees() {
 		return fieldMatDegrees;
 	}
+
 	public void setFieldMatDegrees(String fieldMatDegrees) {
 		this.fieldMatDegrees = fieldMatDegrees;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -55,6 +65,7 @@ public class MatchResult implements Serializable {
 		result = prime * result + ((fieldPk == null) ? 0 : fieldPk.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -91,10 +102,10 @@ public class MatchResult implements Serializable {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
-		return "MatchResult [matchResultId=" + matchResultId + ", mpiPk=" + mpiPk
-				+ ", fieldPk=" + fieldPk + ", matchDegree=" + matchDegree
-				+ ", fieldMatDegrees=" + fieldMatDegrees + "]";
+		return "MatchResult [matchResultId=" + matchResultId + ", mpiPk=" + mpiPk + ", fieldPk=" + fieldPk
+				+ ", matchDegree=" + matchDegree + ", fieldMatDegrees=" + fieldMatDegrees + "]";
 	}
 }

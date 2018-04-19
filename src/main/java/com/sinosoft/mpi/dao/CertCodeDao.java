@@ -1,7 +1,6 @@
 package com.sinosoft.mpi.dao;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +10,13 @@ import javax.annotation.Resource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.sinosoft.mpi.model.CertCode;
 
+/**
+ * 证书类型操作
+ */
 @Repository("certCodeDao")
 public class CertCodeDao implements ICertCodeDao {
 
@@ -32,7 +33,6 @@ public class CertCodeDao implements ICertCodeDao {
 				ps.setString(2, entity.getCodeName());
 			}
 		});
-
 	}
 
 	@Override
@@ -87,8 +87,7 @@ public class CertCodeDao implements ICertCodeDao {
 		 * result.setCodeName(rs.getString("CODE_NAME")); return result; } }); return
 		 * datas;
 		 */
-		// TODO lpk 2012年11月18日11:29:10
-		return new ArrayList();
+		return new ArrayList<CertCode>();
 	}
 
 	@Override

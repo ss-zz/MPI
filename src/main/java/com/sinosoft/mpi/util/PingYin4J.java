@@ -1,9 +1,5 @@
 package com.sinosoft.mpi.util;
 
-/**
- * 将汉字转化成拼音
- */
-
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -16,13 +12,15 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
+/**
+ * 将汉字转化成拼音
+ */
 public class PingYin4J {
 
 	public static String getPingYin(String src) {
 		char[] t1 = src.toCharArray();
 		String[] t2 = new String[t1.length];
 		HanyuPinyinOutputFormat t3 = new HanyuPinyinOutputFormat();
-		// t3.setCaseType(HanyuPinyinCaseType.LOWERCASE);//小写
 		t3.setCaseType(HanyuPinyinCaseType.UPPERCASE);// 大写
 		t3.setToneType(HanyuPinyinToneType.WITHOUT_TONE);// WITH_TONE_NUMBER//第几声
 		t3.setVCharType(HanyuPinyinVCharType.WITH_V);
@@ -30,8 +28,7 @@ public class PingYin4J {
 		try {
 			for (int i = 0; i < t1.length; i++) {
 				// 判断是否为汉字字符函数
-				if (java.lang.Character.toString(t1[i]).matches(
-						"[\\u4E00-\\u9FA5]+")) {
+				if (java.lang.Character.toString(t1[i]).matches("[\\u4E00-\\u9FA5]+")) {
 					t2 = PinyinHelper.toHanyuPinyinStringArray(t1[i], t3);
 					t4 += t2[0] + " ";
 				} else {
@@ -88,8 +85,7 @@ public class PingYin4J {
 			if (nameChar[i] > 128) {
 				try {
 					// 取得当前汉字的所有全拼
-					String[] strs = PinyinHelper.toHanyuPinyinStringArray(
-							nameChar[i], defaultFormat);
+					String[] strs = PinyinHelper.toHanyuPinyinStringArray(nameChar[i], defaultFormat);
 					if (strs != null) {
 						for (int j = 0; j < strs.length; j++) {
 							pinyinName.append(strs[j]);
@@ -114,8 +110,7 @@ public class PingYin4J {
 	 * 
 	 * @return
 	 */
-	private static String parseTheChineseByObject(
-			List<Map<String, Integer>> list) {
+	private static String parseTheChineseByObject(List<Map<String, Integer>> list) {
 		Map<String, Integer> first = null; // 用于统计每一次,集合组合数据
 		// 遍历每一组集合
 		for (int i = 0; i < list.size(); i++) {
@@ -175,8 +170,7 @@ public class PingYin4J {
 			if (nameChar[i] > 128) {
 				try {
 					// 取得当前汉字的所有全拼
-					String[] strs = PinyinHelper.toHanyuPinyinStringArray(
-							nameChar[i], defaultFormat);
+					String[] strs = PinyinHelper.toHanyuPinyinStringArray(nameChar[i], defaultFormat);
 					if (strs != null) {
 						for (int j = 0; j < strs.length; j++) {
 							// 取首字母
@@ -220,8 +214,7 @@ public class PingYin4J {
 			if (nameChar[i] > 128) {
 				try {
 					// 取得当前汉字的所有全拼
-					String[] strs = PinyinHelper.toHanyuPinyinStringArray(
-							nameChar[i], defaultFormat);
+					String[] strs = PinyinHelper.toHanyuPinyinStringArray(nameChar[i], defaultFormat);
 					if (strs != null) {
 						for (int j = 0; j < strs.length; j++) {
 							pinyinName.append(strs[j]);
@@ -241,7 +234,6 @@ public class PingYin4J {
 		// return pinyinName.toString();
 		return parseTheChineseByObject(discountTheChinese(pinyinName.toString()));
 	}
-
 
 	/**
 	 * 去除多音字重复数据

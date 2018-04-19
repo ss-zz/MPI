@@ -7,18 +7,15 @@ import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
-
 /**
  * 自定义配置文件加载类
  * 
- * @author  wmc
+ * @author wmc
  * @date 2015-12-17
  */
-public class EncryptablePropertyPlaceholderConfigurer extends
-		PropertyPlaceholderConfigurer {
+public class EncryptablePropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer {
 
-	protected void processProperties(
-			ConfigurableListableBeanFactory beanFactory, Properties props)
+	protected void processProperties(ConfigurableListableBeanFactory beanFactory, Properties props)
 			throws BeansException {
 		try {
 			String password = props.getProperty("jdbc.password");

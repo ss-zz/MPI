@@ -2,12 +2,12 @@ package com.sinosoft.mpi.model;
 
 import java.io.Serializable;
 
-public class PerInfoPropertiesDesc implements IBaseCode,Serializable {
-	
+public class PerInfoPropertiesDesc implements IBaseCode, Serializable {
+
 	private static final long serialVersionUID = 8389151965152987583L;
-	private String propertyName; //属性名
-	private String propertyDesc; //属性描述
-	private String column;//对应数据库字段
+	private String propertyName; // 属性名
+	private String propertyDesc; // 属性描述
+	private String column;// 对应数据库字段
 
 	public PerInfoPropertiesDesc() {
 		super();

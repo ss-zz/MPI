@@ -6,22 +6,18 @@ public class MpiException extends RuntimeException {
 
 	public MpiException() {
 		super();
-
 	}
 
 	public MpiException(String message, Throwable cause) {
 		super(message, cause);
-
 	}
 
 	public MpiException(String message) {
 		super(message);
-
 	}
 
 	public MpiException(Throwable cause) {
 		super(cause);
-
 	}
 
 }

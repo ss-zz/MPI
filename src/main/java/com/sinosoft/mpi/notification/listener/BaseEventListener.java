@@ -18,7 +18,6 @@ public class BaseEventListener implements MessageListener {
 		if (message instanceof ObjectMessage) {
 			ObjectMessage om = (ObjectMessage) message;
 			try {
-				// Thread.sleep(1000);
 				IEvent event = (IEvent) om.getObject();
 				IEventHandler handler = handlerMap.get(event.getEventType().getName());
 				handler.processEvent(event);

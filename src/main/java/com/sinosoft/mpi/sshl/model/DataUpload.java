@@ -1,22 +1,17 @@
 package com.sinosoft.mpi.sshl.model;
 
-/**
- * 
- * @author chenzhongzheng
- *
- */
 public class DataUpload {
-	
+
 	private String orgcode;
-	
+
 	private String orgname;
-	
+
 	private String stDate;
-	
+
 	private String endDate;
-	
+
 	private String bs_type;
-	
+
 	private String zonecode;
 
 	public String getOrgcode() {
@@ -66,6 +61,5 @@ public class DataUpload {
 	public void setZonecode(String zonecode) {
 		this.zonecode = zonecode;
 	}
-	
-	
+
 }

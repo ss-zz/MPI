@@ -1,20 +1,15 @@
 package com.sinosoft.mpi.sshl.model;
 
-/**
- * 
- * @author chenzhongzheng
- *
- */
 public class DataUploadDetail {
-	
+
 	private String orgcode;
-	
+
 	private String tablename;
-	
+
 	private String stDate;
-	
+
 	private String endDate;
-	
+
 	private String bs_type;
 
 	public String getOrgcode() {
@@ -56,6 +51,5 @@ public class DataUploadDetail {
 	public void setBs_type(String bs_type) {
 		this.bs_type = bs_type;
 	}
-	
-	
+
 }

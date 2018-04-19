@@ -2,16 +2,9 @@ package com.sinosoft.mpi.dao;
 
 import com.sinosoft.mpi.model.ManOpPerson;
 
-
 /**
-* @Description: 需要人工干预的居民列表数据操作类接口
-* 
-* @Package com.sinosoft.mpi.dao 
-* @author bysun
-* @version v1.0,2012-3-12
-* @see	
-* @since	v1.0
+ * 需要人工干预的居民列表数据操作类接口
  */
 public interface IManOpPersonDao extends IBaseDao<ManOpPerson> {
-	
+
 }

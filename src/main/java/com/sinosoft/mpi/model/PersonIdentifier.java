@@ -3,46 +3,50 @@ package com.sinosoft.mpi.model;
 import java.io.Serializable;
 
 /**
- * @author bysun 2012-3-12 居民标志 table:MPI_PERSON_IDENTIFIER schema:
+ * 居民标志 table:MPI_PERSON_IDENTIFIER
  */
 public class PersonIdentifier implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3314024038778094508L;
-	
-	private String	identifierId;	// 居民标志主键
-	private String	personId;	// 居民主键
-	private String	domainId;	// 域主键
-	private String	personIdentifier;	// 居民标志
-	
-	// ========================setter&&getter
 
+	private static final long serialVersionUID = 3314024038778094508L;
+
+	private String identifierId; // 居民标志主键
+	private String personId; // 居民主键
+	private String domainId; // 域主键
+	private String personIdentifier; // 居民标志
+
+	// ========================setter&&getter
 	public String getPersonId() {
 		return personId;
 	}
+
 	public String getDomainId() {
 		return domainId;
 	}
+
 	public void setDomainId(String domainId) {
 		this.domainId = domainId;
 	}
+
 	public void setPersonId(String personId) {
 		this.personId = personId;
 	}
+
 	public String getIdentifierId() {
 		return identifierId;
 	}
+
 	public void setIdentifierId(String identifierId) {
 		this.identifierId = identifierId;
 	}
+
 	public String getPersonIdentifier() {
 		return personIdentifier;
 	}
+
 	public void setPersonIdentifier(String personIdentifier) {
 		this.personIdentifier = personIdentifier;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -53,6 +57,7 @@ public class PersonIdentifier implements Serializable {
 		result = prime * result + ((personIdentifier == null) ? 0 : personIdentifier.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -84,10 +89,11 @@ public class PersonIdentifier implements Serializable {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
-		return "PersonIdentifier [identifierId=" + identifierId + ", personId=" + personId
-				+ ", domainId=" + domainId + ", personIdentifier=" + personIdentifier + "]";
+		return "PersonIdentifier [identifierId=" + identifierId + ", personId=" + personId + ", domainId=" + domainId
+				+ ", personIdentifier=" + personIdentifier + "]";
 	}
 
 }

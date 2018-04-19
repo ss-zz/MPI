@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.dao.IIdentifierDomainDao;
 import com.sinosoft.mpi.dao.IIndexIdentifierRelDao;
 import com.sinosoft.mpi.dao.IMpiCombineLevelDao;
@@ -48,20 +47,20 @@ public class PersonIndexUpdateService implements IPersonIndexUpdateService {
 	public void updateIndex(PersonInfo person, String indexId) {
 
 		switch (policy) {
-			case UNUPDATE :
-				// 不更新 无操作
-				break;
-			case UPDATE :
-				updateIndexDirect(person, indexId);
-				break;
-			case UNUPDATE_MAN :
-				// TODO 人工更新 暂无实现
-				break;
-			case UPDATE_LEVEL :
-				updateIndexByLevel(person, indexId);
-				break;
-			default :
-				break;
+		case UNUPDATE:
+			// 不更新 无操作
+			break;
+		case UPDATE:
+			updateIndexDirect(person, indexId);
+			break;
+		case UNUPDATE_MAN:
+			// TODO 人工更新 暂无实现
+			break;
+		case UPDATE_LEVEL:
+			updateIndexByLevel(person, indexId);
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -178,11 +177,11 @@ public class PersonIndexUpdateService implements IPersonIndexUpdateService {
 	public PersonIndex updateIndex(PersonIndex personindex, PersonInfo person) {
 
 		switch (policy) {
-			case UPDATE_LEVEL_NEW :
-				personindex = mergeIndex(personindex, person);
-				break;
-			default :
-				break;
+		case UPDATE_LEVEL_NEW:
+			personindex = mergeIndex(personindex, person);
+			break;
+		default:
+			break;
 		}
 		return personindex;
 	}
