@@ -1,23 +1,59 @@
 $(function() {
 	$('#centerTab').tabs({
 		tools:[{
-			iconCls:'icon-undo',
+			iconCls:'icon-cancel',
 			handler: function(){
-				$.messager.confirm('注销提示', '你确定注销吗?', function(r){
+				$.messager.confirm('关闭提示', '您确定其他标签页吗?', function(r){
 					if(r){
-						window.location = root+'/logout';
+						var $tab = $('#centerTab');
+						var allTabs = $tab.tabs('tabs');
+						var selectTab = $tab.tabs('getSelected');
+						var selectTabIndex = $tab.tabs('getTabIndex',selectTab);
+						for(var i = allTabs.length - 1; i >= 0 ; i--){
+							var tab = allTabs[i];
+							var idx = $tab.tabs('getTabIndex',tab);
+							if(selectTabIndex !== idx){
+								$tab.tabs('close', idx);
+							}
+						}
 					}
 				});
 			}
-		}]
+		}/*,{
+			iconCls:'icon-remove',
+			handler: function(){
+				$.messager.confirm('关闭提示', '您确定关闭所有标签页吗?', function(r){
+					if(r){
+						var $tab = $('#centerTab');
+						var allTabs = $tab.tabs('tabs');
+						var selectTab = $tab.tabs('getSelected');
+						var selectTabIndex = $tab.tabs('getTabIndex',selectTab);
+						for(var i = allTabs.length - 1; i >= 0 ; i--){
+							var tab = allTabs[i];
+							var idx = $tab.tabs('getTabIndex',tab);
+							$tab.tabs('close', idx);
+						}
+					}
+				});
+			}
+		}*/]
 	});
 });
 
+// 退出登录
+function logout(){
+	$.messager.confirm('退出提示', '您确定退出吗?', function(r){
+		if(r){
+			window.location = root+'/logout';
+		}
+	});
+}
+
 /**
  * 创建新选项卡
- * @param tabId    选项卡id
- * @param title    选项卡标题
- * @param url      选项卡远程调用路径
+ * @param tabId	选项卡id
+ * @param title	选项卡标题
+ * @param url	  选项卡远程调用路径
  */
 function addTab(tabId,title,url){
 	//如果当前id的tab不存在则创建一个tab

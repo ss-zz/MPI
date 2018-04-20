@@ -67,7 +67,7 @@
 		</tr>
 	</div>
 			<div>
-				<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="mergeIndex()">人工合并居民主索引</a> 
+				<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="mergeIndex()">合并主索引</a> 
 						<a href="#" class="easyui-linkbutton" style="float: right; margin-right: 40px;" iconCls="icon-search" onclick="searchReset();">重置</a>
 						<a href="#" class="easyui-linkbutton" style="float: right; margin-right: 10px;" iconCls="icon-search" onclick="searchListTable();">搜索</a>
 						

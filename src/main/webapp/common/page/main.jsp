@@ -87,7 +87,7 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
-	var t=$("#jh a")[0].click();
+	$(".easyui-accordion ul li a")[0].click();
 });
 
 </script>
@@ -96,20 +96,40 @@ $(document).ready(function(){
 <body class="easyui-layout">
 	<!-- 正上方panel -->
 	<div region="north" class="topStyle">
-		<div></div>
+		<div style="color: #fff; line-height: 64px; text-align: right; padding-right: 10px; font-size: 14px;">
+			<c:out value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}"></c:out>，欢迎您
+			&nbsp;&nbsp;<a style="color: #fff;" href="javascript: void(0);" onclick="logout()">退出</a>
+		</div>
 	</div>
 	<!-- 正左边panel -->
-	<div region="west" title="菜单栏" split="true"
+	<div region="west" title="菜单" split="true"
 		style="width: 280px; padding: 1px; overflow: hidden;">
 		<div class="easyui-accordion" fit="false" border="false">
-			<div id="jh" title="人员主索引管理" selected="true" class="myMenu">
+			<div title="主索引管理" selected="true" class="myMenu">
 				<ul>
-				 	<li><a
-						onclick="addTab('tabId_su','系统用户管理','${pageContext.request.contextPath}/sysuser/su.ac');"
-						href="#">系统用户管理</a></li>
 					<li><a
-						onclick="addTab('tabId_sr','系统角色管理','${pageContext.request.contextPath}/sysrole/page/role.jsp');"
-						href="#">系统角色管理</a></li> 
+						onclick="addTab('tabId_qi','主索引记录查询','${pageContext.request.contextPath}/query/page/query.jsp');"
+						href="#">主索引记录查询</a></li>
+					<li><a
+						onclick="addTab('tabId_me','主索引记录合并','${pageContext.request.contextPath}/merge/page/merge.jsp');"
+						href="#">主索引记录合并</a></li>
+				</ul>
+			</div>
+			<div title="主索引日志" selected="true" class="myMenu">
+				<ul>
+					<li><a
+						onclick="addTab('tabId_ma','人工审核记录','${pageContext.request.contextPath}/manual/page/add.jsp');"
+						href="#">人工审核记录</a></li>
+					<li><a
+						onclick="addTab('tabId_il','主索引处理日志','${pageContext.request.contextPath}/indexlog/page/il.jsp');"
+						href="#">主索引处理日志</a></li>
+					<li><a
+						onclick="addTab('tabId_pl','居民处理日志','${pageContext.request.contextPath}/personlog/page/pl.jsp');"
+						href="#">居民处理日志</a></li>
+				</ul>
+			</div>
+			<div title="主索引设置" selected="false" class="myMenu">
+				<ul>
 					<li><a
 						onclick="addTab('tabId_mc','匹配规则管理','${pageContext.request.contextPath}/cfg/page/match.jsp');"
 						href="#">匹配规则管理</a></li>
@@ -119,21 +139,16 @@ $(document).ready(function(){
 					<li><a
 						onclick="addTab('tabId_id','身份域管理','${pageContext.request.contextPath}/domain/page/domain.jsp');"
 						href="#">身份域管理</a></li> 
+				</ul>
+			</div>
+			<div title="权限管理" selected="false" class="myMenu">
+				<ul>
+				 	<li><a
+						onclick="addTab('tabId_su','系统用户管理','${pageContext.request.contextPath}/sysuser/su.ac');"
+						href="#">用户管理</a></li>
 					<li><a
-						onclick="addTab('tabId_il','主索引处理日志','${pageContext.request.contextPath}/indexlog/page/il.jsp');"
-						href="#">主索引处理日志</a></li>
-					<li><a
-						onclick="addTab('tabId_pl','居民处理日志','${pageContext.request.contextPath}/personlog/page/pl.jsp');"
-						href="#">居民处理日志</a></li>
-					<li><a
-						onclick="addTab('tabId_ma','人工审核记录','${pageContext.request.contextPath}/manual/page/add.jsp');"
-						href="#">人工审核记录</a></li>
-					<li><a
-						onclick="addTab('tabId_me','主索引记录合并','${pageContext.request.contextPath}/merge/page/merge.jsp');"
-						href="#">主索引记录合并</a></li> 
-					<li><a
-						onclick="addTab('tabId_qi','主索引记录查询','${pageContext.request.contextPath}/query/page/query.jsp');"
-						href="#">主索引记录查询</a></li>
+						onclick="addTab('tabId_sr','系统角色管理','${pageContext.request.contextPath}/sysrole/page/role.jsp');"
+						href="#">角色管理</a></li> 
 				</ul>
 			</div>
 		</div>
