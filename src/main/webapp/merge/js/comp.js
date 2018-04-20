@@ -50,7 +50,6 @@ function addCellData(rowid,startCell,datas){
 	var tr = $("#"+rowid);
 	$.each(datas,function(index,val){
 		var textVal;
-		console.dir($.type(val));
 		if($.type(val) === "string"){
 			textVal = val;
 		}else{

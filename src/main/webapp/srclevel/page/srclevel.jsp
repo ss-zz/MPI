@@ -19,52 +19,41 @@ var SELECT_JSON = ${selectJson};
 
 </head>
 <body>
-<font size="3" font-weight='bold' color='#15428b'>新增域字段数据源级别:</font>
-<div class="panel-header panel-header-noborder"  style="padding: 5px; width:1050px; height: 200px;"  id="table_add"class="ToolTip_Form" id="table_edit" onkeydown="if(event.keyCode==13){editData();}">
- <ul style='margin:0;padding:5px;list-style-type: none;'>       
-        <input type="button" value="重置" id="resetBtn" onclick="resetAllData()" />&nbsp;&nbsp;
-		<input type="button" value="保存" id="saveBtn" onclick="saveMatchCfg()" />&nbsp;&nbsp;
-				<!-- <input type="button" value="返回" id="gobackBtn" onclick="goBackClose()" /><br/><br/>	 -->
-			<li>
-				<label for="add_domainSelect">域唯一标识:</label><select id="add_domainSelect"></select>
-			    &nbsp; &nbsp; &nbsp;<label for="add_fieldSelect">字段名称:</label>
-			    <select id="add_fieldSelect">
-			      <!--   <option value="">--请选择--</option>
-					<option value="ID_NO">身份证号</option>
-					<option value="NH_CARD">农合卡号</option>
-					<option value="HR_ID">城乡居民健康档案编号</option>
-					<option value="SSCID">社会保障卡号</option>
-					<option value="MEDICALSERVICE_NO">医疗服务编号</option>
-					<option value="NAME_CN">姓名</option>
-					<option value="GENDER_CD">性别</option>
-					<option value="BIRTH_DATE">出生日期</option> -->
-			    
-			    </select>
-				 &nbsp; &nbsp; &nbsp;<label>字段数据源级别：</label>
-				<select id="add_fieldlevel" length="50">
-				    <option value="">--请选择--</option>
-					<option value="0">0级</option>
-					<option value="1">1级</option>
-					<option value="2">2级</option>
-					<option value="3">3级</option>
-					<option value="4">4级</option>
-					<option value="5">5级</option>
-				</select>
-			</li>		
-</ul>
-</div>  
+<div class="easyui-panel" title="新增域字段数据源级别" id="table_add" onkeydown="if(event.keyCode==13){editData();}">
+	<label for="add_domainSelect">域唯一标识:</label>
+	<select id="add_domainSelect"></select>
+	&nbsp; &nbsp; &nbsp;
+	<label for="add_fieldSelect">字段名称:</label>
+	<select id="add_fieldSelect">
+	<!--   <option value="">--请选择--</option>
+		<option value="ID_NO">身份证号</option>
+		<option value="NH_CARD">农合卡号</option>
+		<option value="HR_ID">城乡居民健康档案编号</option>
+		<option value="SSCID">社会保障卡号</option>
+		<option value="MEDICALSERVICE_NO">医疗服务编号</option>
+		<option value="NAME_CN">姓名</option>
+		<option value="GENDER_CD">性别</option>
+		<option value="BIRTH_DATE">出生日期</option> -->
+	</select>
+	&nbsp; &nbsp; &nbsp;<label>字段数据源级别：</label>
+	<select id="add_fieldlevel" length="50">
+		<option value="">--请选择--</option>
+		<option value="0">0级</option>
+		<option value="1">1级</option>
+		<option value="2">2级</option>
+		<option value="3">3级</option>
+		<option value="4">4级</option>
+		<option value="5">5级</option>
+	</select>
+	<br/>
+	<a onclick="saveMatchCfg()" class="easyui-linkbutton" iconCls="icon-save">保存</a>
+	<a onclick="resetAllData()" class="easyui-linkbutton" iconCls="icon-reload">重置</a>
+</div>
 <!-- 表格 -->
 <table 	id="listTable"
-		title="已配置的域字段数据源级别列表"  
-		border="0"
-		cellspacing="0"
-		cellpadding="0"
-		iconCls="icon-edit" 
-		width="98%" 
+		title="已配置的域字段数据源级别"
 		idField="ID" 
-		remoteSort="false" 
 		singleSelect="false" 
-		showFooter="false"
 		striped="true"
 		url="${pageContext.request.contextPath}/domainsrclevel/srclevel.ac?method=queryByID" >
 	<thead>
