@@ -3,7 +3,7 @@ $(function() {
 		tools:[{
 			iconCls:'icon-cancel',
 			handler: function(){
-				$.messager.confirm('关闭提示', '您确定其他标签页吗?', function(r){
+				$.messager.confirm('关闭提示', '您确定关闭其他标签页吗?', function(r){
 					if(r){
 						var $tab = $('#centerTab');
 						var allTabs = $tab.tabs('tabs');

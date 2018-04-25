@@ -8,7 +8,6 @@ import org.apache.cxf.jaxws.EndpointImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.sinosoft.book.pull.BookPullService;
 import com.sinosoft.mpi.ws.PersonQueryWS;
 import com.sinosoft.mpi.ws.PersonWS;
 
@@ -37,11 +36,6 @@ public class WsPersonConfig {
 	}
 
 	@Bean
-	public BookPullService bookPullService() {
-		return new BookPullService();
-	}
-
-	@Bean
 	public Endpoint endpointPersonWs() {
 		EndpointImpl endpoint = new EndpointImpl(springBus(), personWS());
 		endpoint.publish("/personWS");
@@ -52,13 +46,6 @@ public class WsPersonConfig {
 	public Endpoint endpointPersonQueryWS() {
 		EndpointImpl endpoint = new EndpointImpl(springBus(), personQueryWS());
 		endpoint.publish("/personQueryWS");
-		return endpoint;
-	}
-
-	@Bean
-	public Endpoint endpointBookPullWS() {
-		EndpointImpl endpoint = new EndpointImpl(springBus(), bookPullService());
-		endpoint.publish("/bookPullWS");
 		return endpoint;
 	}
 
