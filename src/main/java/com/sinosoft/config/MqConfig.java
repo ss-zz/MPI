@@ -25,6 +25,7 @@ import com.sinosoft.index.service.MpiMqMessageHandler;
 public class MqConfig {
 
 	private static final String MQ_HOST = "mq.host";
+	private static final String MQ_PORT = "mq.port";
 	private static final String MQ_EXCHANGE_NAME = "mq.exchange.name";
 	private static final String MQ_QUEUE_NAME_INDEX = "mq.queue.index.name";
 	private static final String MQ_QUEUE_NAME_RESULT = "mq.queue.result.name";
@@ -69,6 +70,7 @@ public class MqConfig {
 	ConnectionFactory connectionFactory() {
 		CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
 		connectionFactory.setHost(env.getProperty(MQ_HOST));
+		connectionFactory.setPort(env.getProperty(MQ_PORT, Integer.class));
 		return connectionFactory;
 	}
 

@@ -1,7 +1,6 @@
 package com.sinosoft.index.service;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,9 +58,6 @@ public class BizCommonFieldConfigService {
 	 * @return
 	 */
 	public String save(BizCommonFieldConfigModel bizFieldConfig) {
-		if (bizFieldConfig.getId() == null || bizFieldConfig.getId().trim().equals("")) {
-			bizFieldConfig.setId(UUID.randomUUID().toString());
-		}
 		BizCommonFieldConfigModel ret = bizCommonFieldConfigRepository.save(bizFieldConfig);
 		return ret.getId();
 	}

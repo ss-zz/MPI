@@ -15,6 +15,8 @@ body {
 	href="${pageContext.request.contextPath}/js/easyui/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/js/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/css/common.css">
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript"
@@ -23,6 +25,55 @@ body {
 <script type="text/javascript">
 	var root = "${pageContext.request.contextPath}"; //js中存放当前页面的root路径方便调用
 	
+	// 显示ajax错误信息
+	function showAjaxErrorMsg(msg){
+		$.messager.alert('消息', msg, 'error');
+	}
+	
+	// jquery全局异常处理
+	$.ajaxSetup({
+		error: function(jqXHR, textStatus, errorThrown){
+			var status = 0;
+			switch (jqXHR.status) {
+				case (500):
+					showAjaxErrorMsg('服务器异常');
+					break;
+				case (400):
+					showAjaxErrorMsg('参数异常');
+					break;
+				case (401):
+					showAjaxErrorMsg('未授权');
+					break;
+				case (403):
+					showAjaxErrorMsg('无权访问');
+					break;
+				case (404):
+					showAjaxErrorMsg('请求资源不存在');
+					break;
+				case (408):
+					showAjaxErrorMsg('请求超时');
+					break;
+				case (0):
+					break;
+				default:
+					showAjaxErrorMsg('操作异常');
+			}
+		},
+		complete: function(jqXHR, textStatus){
+			switch (jqXHR.status) {
+				case (302):
+					showAjaxErrorMsg('登录超时，请重新登录');
+					if (self != top) {
+						parent.window.location.reload();
+					}else{
+						window.location.reload();
+					}
+					break;
+				default:
+			}
+		},
+	})
+	
 	$(function(){
 		// 覆盖默认easyui配置
 		$.fn.datagrid.defaults.method = 'get';
@@ -30,6 +81,38 @@ body {
 		$.fn.datagrid.defaults.fitColumns = true;
 		$.fn.datagrid.defaults.striped = true;
 	})
+	
+	// 扩展easyui校验
+	$.extend($.fn.validatebox.defaults.rules, {
+		key: {// 唯一标识
+			validator: function(value, param){
+				var reg = /^[a-zA-Z0-9_]*$/;
+				return reg.test(value);
+			},
+			message: '请输入字母、数字、下划线组合'
+		},
+		field: {// 唯一标识
+			validator: function(value, param){
+				var reg = /^[a-zA-Z0-9_-]*$/;
+				return reg.test(value);
+			},
+			message: '请输入字母、数字、下划线、连接号组合'
+		},
+		integer: {// 整数
+			validator: function(value, param){
+				var reg = /^-?\d+$/;
+				return reg.test(value);
+			},
+			message: '请输入整数'
+		},
+		decimal: {// 小数
+			validator: function(value, param){
+				var reg = /^[-\+]?\d+(\.\d+)?$/;
+				return reg.test(value);
+			},
+			message: '请输入整数或小数'
+		},
+	});
 
 	// 公共方法
 
