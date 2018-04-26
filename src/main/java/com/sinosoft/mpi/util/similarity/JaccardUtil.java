@@ -1,20 +1,17 @@
-package com.sinosoft.mpi.util;
+package com.sinosoft.mpi.util.similarity;
 
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 计算两个字符串的Jaccard相似度，每个字符串可以转化为一个集合，如“abc”->{#a,ab,bc,c#}结果为两个字符串的交集/并集。值越大越相似。适用于任意两个字符串
+ * 
+ * Jaccard 算法
  * @author hsg
+ * 算法介绍： 计算两个字符串的Jaccard相似度，每个字符串可以转化为一个集合，如“abc”->{#a,ab,bc,c#}结果为两个字符串的交集/并集。
+ * 值越大越相似。适用于任意两个字符串。
  *
  */
 public class JaccardUtil {
-	public static void main(String[] args) {
-		float j = jaccard("dave", "dave");
-		int o = o("dave", "dave");
-		System.out.println(o);
-		System.out.println(j);
-	}
 
 	public static int o(String a, String b) {
 		Set<String> setA = set(a);
@@ -24,7 +21,7 @@ public class JaccardUtil {
 		o.retainAll(setB);
 		return o.size();
 	}
-
+	
 	public static float jaccard(String a, String b) {
 
 		Set<String> setA = set(a);
