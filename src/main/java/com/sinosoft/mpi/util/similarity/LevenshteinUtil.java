@@ -1,12 +1,13 @@
 package com.sinosoft.mpi.util.similarity;
 
 /**
- * Levenshtein 距离
- * @author hsg
- * 算法介绍： Levenshtein距离是一种计算两个字符串间的差异程度的字符串度量（string metric）。
+ * 算法工具：Levenshtein 距离算法<br/>
+ * Levenshtein距离是一种计算两个字符串间的差异程度的字符串度量（string metric）。
  * 我们可以认为Levenshtein距离就是从一个字符串修改到另一个字符串时，其中编辑单个字符（比如修改、插入、删除）所需要的最少次数。
  * 将每个词与词典中的词条比较，英文单词往往需要做词干提取等规范化处理，如果一个词在词典中不存在，就被认为是一个错误，然后试图提示N个最可能要输入的词——拼写建议。
  * 常用的提示单词的算法就是列出词典中与原词具有最小编辑距离的词条。
+ * 
+ * @author hsg
  *
  */
 public class LevenshteinUtil {

@@ -15,18 +15,7 @@ server:
   #端口
   port: 9201
 
-index:
-  update:
-    policy: UPDATE_LEVEL_NEW
-
 ## mq配置
 mq:
-  host: localhost
-  exchange:
-    name: ex_direct
-  queue:
-    index:
-      name: index
-    result:
-      name: result
-
+  host: 192.168.1.252
+  port: 5672

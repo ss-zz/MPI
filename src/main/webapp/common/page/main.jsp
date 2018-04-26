@@ -121,14 +121,15 @@ $(document).ready(function(){
 			<div title="系统设置" selected="false" class="myMenu">
 				<ul>
 					<li><a
-						onclick="addTab('tabId_tyzdgl','通用字段管理','${pageContext.request.contextPath}/config/page/common_field_config.jsp');"
-						href="#">通用字段管理</a></li>
+						onclick="addTab('tabId_tyzdgl','通用字段配置','${pageContext.request.contextPath}/config/page/common_field_config.jsp');"
+						href="#">通用字段配置</a></li>
 					<li><a
-						onclick="addTab('tabId_ywgl','业务管理','${pageContext.request.contextPath}/config/page/biz_config.jsp');"
-						href="#">业务管理</a></li>
+						onclick="addTab('tabId_biz_config','业务配置','${pageContext.request.contextPath}/config/page/biz_config.jsp');"
+						href="#">业务配置</a></li>
 				</ul>
 			</div>
 			
+			<!--
 			<div title="主索引设置" selected="false" class="myMenu">
 				<ul>
 					<li><a
@@ -142,6 +143,7 @@ $(document).ready(function(){
 						href="#">身份域管理</a></li> 
 				</ul>
 			</div>
+			-->
 			<div title="权限管理" selected="false" class="myMenu">
 				<ul>
 				 	<li><a

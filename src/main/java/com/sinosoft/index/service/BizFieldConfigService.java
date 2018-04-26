@@ -68,8 +68,8 @@ public class BizFieldConfigService {
 	 *            业务字段配置
 	 * @return
 	 */
-	public void save(BizFieldConfigModel bizFieldConfig) {
-		bizFieldConfigRepository.save(bizFieldConfig);
+	public String save(BizFieldConfigModel bizFieldConfig) {
+		return bizFieldConfigRepository.save(bizFieldConfig).getId();
 	}
 
 	/**

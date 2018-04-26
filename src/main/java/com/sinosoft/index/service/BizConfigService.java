@@ -68,8 +68,9 @@ public class BizConfigService {
 	 *            业务配置
 	 * @return
 	 */
-	public void save(BizConfigModel bizConfig) {
-		bizConfigRepository.save(bizConfig);
+	public String save(BizConfigModel bizConfig) {
+		BizConfigModel ret = bizConfigRepository.save(bizConfig);
+		return ret.getId();
 	}
 
 	/**

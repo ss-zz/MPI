@@ -9,7 +9,7 @@ function loadTable() {
 	// 加载表格
 	$('#listTable').datagrid({
 		toolbar : [ {
-			text : '添加通用字段',
+			text : '添加业务字段',
 			iconCls : 'icon-add',
 			handler : function() {
 				openSavePage();
@@ -33,7 +33,9 @@ function reloadTable() {
 
 // 打开添加、编辑页面
 function openSavePage(id) {
-	openTab('tabId_common_field_config_add', '通用字段编辑', root + '/mgr/bizcommonfieldconfig/toEditPage?id=' + id);
+	// 业务配置id
+	var bizConfigId = $("#inputBizConfigId").val();
+	openTab('tabId_biz_field_config_add', '业务字段编辑', root + '/mgr/bizfieldconfig/toEditPage?id=' + id + '&bizConfigId=' + bizConfigId);
 }
 
 // 删除
@@ -41,7 +43,7 @@ function del(id){
 	$.messager.confirm('确认', '确认删除？删除之后不可撤销。', function(r){
 		if (r){
 			$.ajax({
-				url: root + '/mgr/bizcommonfieldconfig/del/' + id,
+				url: root + '/mgr/bizfieldconfig/del/' + id,
 				type: 'post',
 				success: function(){
 					$.messager.show({title:'消息', msg:'删除成功'});
