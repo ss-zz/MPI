@@ -86,13 +86,6 @@ body {
 	$.extend($.fn.validatebox.defaults.rules, {
 		key: {// 唯一标识
 			validator: function(value, param){
-				var reg = /^[a-zA-Z0-9_]*$/;
-				return reg.test(value);
-			},
-			message: '请输入字母、数字、下划线组合'
-		},
-		field: {// 唯一标识
-			validator: function(value, param){
 				var reg = /^[a-zA-Z0-9_-]*$/;
 				return reg.test(value);
 			},

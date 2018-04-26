@@ -5,21 +5,19 @@
 <head>
 <%@include file="/common/page/master.jsp"%>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/config/js/common_field_config.js"></script>
+	src="${pageContext.request.contextPath}/config/js/biz_config.js"></script>
 </head>
 <body>
 	<!-- 表格 -->
 	<table id="listTable" 
-		title="通用字段配置" 
-		url="${pageContext.request.contextPath}/mgr/bizcommonfieldconfig/all">
+		title="业务配置" 
+		url="${pageContext.request.contextPath}/mgr/bizconfig/all">
 		<thead>
 			<tr align="center">
 				<th field="key" width=100>唯一标识</th>
-				<th field="name" width=100>字段名</th>
+				<th field="name" width=100>业务名</th>
 				<th field="comment" width=100>备注</th>
-				<th field="algorithm" width=100>默认算法</th>
-				<th field="rank" width=100>顺序</th>
-				<th field="weight" width=100>默认权重</th>
+				<th field="threshold" width=100>阈值</th>
 				<th field="id" width="150" formatter="buildOptLink">操作</th>
 			</tr>
 		</thead>

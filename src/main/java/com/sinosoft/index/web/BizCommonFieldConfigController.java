@@ -39,7 +39,7 @@ public class BizCommonFieldConfigController {
 	public List<BizCommonFieldConfigModel> getAll() {
 		return bizCommonFieldConfigService.getAll();
 	}
-
+	
 	/**
 	 * 跳转编辑、新增页面
 	 * 

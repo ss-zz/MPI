@@ -1,12 +1,12 @@
 $(function(){
 	$('#form').form({
-		url: root + '/mgr/bizcommonfieldconfig/save',
+		url: root + '/mgr/bizfieldconfig/save',
 		onSubmit: function(){
 			return $(this).form('validate');
 		},
 		success:function(data){
 			back(function(){
-				parent.tabCallPass('iframe_tabId_tyzdgl', "reloadTable");
+				parent.tabCallPass('iframe_tabId_biz_field_config', "reloadTable");
 			});
 		}
 	});
@@ -22,8 +22,8 @@ $(function(){
 	
 	// 返回上一页
 	function back(cb){
-		backTab('tabId_tyzdgl', '通用字段配置', root + '/config/page/common_field_config.jsp', cb);
-		parent.$('#centerTab').tabs('close','通用字段编辑');
+		backTab('tabId_biz_field_config', '业务字段配置', root + '/mgr/bizconfig/toBizFieldConfigPage/' + $("#inputBizConfigId").val(), cb);
+		parent.$('#centerTab').tabs('close','业务字段编辑');
 	}
 	
 })
