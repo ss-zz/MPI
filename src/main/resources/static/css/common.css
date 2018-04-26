@@ -14,9 +14,12 @@
 }
 
 .my-form .comment {
-	display: inline-block;
 	font-size: 12px;
 	color: #348420;
+	display: block;
+	text-align: left;
+	margin-left: 105px;
+	margin-bottom: 20px;
 }
 
 .my-form label {
