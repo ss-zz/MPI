@@ -3,15 +3,14 @@ package com.sinosoft.mpi.util.similarity;
 import java.util.Arrays;
 
 /**
- * Jaro-Winkler 算法
- * @author hsg
- * 算法介绍：Jaro-Winkler是计算2个字符之间相似度的一种算法,主要用于 record linkage/数据连接(duplicate/重复记录)方面的领域，Jaro-Winkler distance 最后得分越高说明相似度越大,
+ * 算法工具：Jaro-Winkler 算法<br/>
+ * Jaro-Winkler是计算2个字符之间相似度的一种算法,主要用于 record
+ * linkage/数据连接(duplicate/重复记录)方面的领域，Jaro-Winkler distance 最后得分越高说明相似度越大,
  * 适合于字符串比较如名字这样较短字符之间计算相似度。0分标识没有任何相似度，1标识完全匹配。
- *
+ * 
+ * @author hsg
  */
 public class JaroWinklerUtil {
-	
-	private static float threshold = 0.7f;
 
 	private static int[] matches(String s1, String s2) {
 
@@ -76,7 +75,7 @@ public class JaroWinklerUtil {
 
 	}
 
-	public static float getDistance(String s1, String s2) {
+	public static float getDistance(String s1, String s2, float threshold) {
 
 		int[] mtp = matches(s1, s2);
 		float m = (float) mtp[0];
@@ -86,29 +85,9 @@ public class JaroWinklerUtil {
 
 		}
 		float j = ((m / s1.length() + m / s2.length() + (m - mtp[1]) / m)) / 3;
-		float jw = j < getThreshold() ? j : j + Math.min(0.1f, 1f / mtp[3]) * mtp[2] * (1 - j);
+		float jw = j < threshold ? j : j + Math.min(0.1f, 1f / mtp[3]) * mtp[2] * (1 - j);
 		return jw;
 
 	}
 
-	/**
-	 * Sets the threshold used to determine when Winkler bonus should be used.
-	 * Set to a negative value to get the Jaro distance.
-	 * 
-	 * @param threshold
-	 *            the new value of the threshold
-	 */
-	public void setThreshold(float threshold) {
-		this.threshold = threshold;
-	}
-
-	/**
-	 * Returns the current value of the threshold used for adding the Winkler
-	 * bonus. The default value is 0.7.
-	 * 
-	 * @return the current value of the threshold
-	 */
-	public static float getThreshold() {
-		return threshold;
-	}
 }
