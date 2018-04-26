@@ -1,5 +1,9 @@
 package com.sinosoft.mpi.util.similarity;
 
+/**
+ * 匹配算法测试
+ * @author admin
+ */
 public class SimilarityTest {
 	public static void main(String[] args) {
 
