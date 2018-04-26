@@ -9,7 +9,7 @@ function loadTable() {
 	// 加载表格
 	$('#listTable').datagrid({
 		toolbar : [ {
-			text : '添加通用业务字段',
+			text : '添加通用字段',
 			iconCls : 'icon-add',
 			handler : function() {
 				openSavePage();
