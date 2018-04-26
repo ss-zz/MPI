@@ -50,7 +50,6 @@ public class JaccardUtil {
 		for (int i = 0; i < x.length() - 1; i++) {
 			set.add(x.charAt(i) + "" + x.charAt(i + 1));
 		}
-
 		return set;
 	}
 }
