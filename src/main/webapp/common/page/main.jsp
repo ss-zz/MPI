@@ -1,20 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@include file="/common/page/master.jsp"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/easyui/jquery-1.7.1.min.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/js/easyui/themes/gray/easyui.css">
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/js/easyui/themes/icon.css">
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/easyui/jquery.easyui.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+<%@include file="/common/page/master.jsp"%>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/common/js/main.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -128,6 +117,18 @@ $(document).ready(function(){
 						href="#">居民处理日志</a></li>
 				</ul>
 			</div>
+			
+			<div title="系统设置" selected="false" class="myMenu">
+				<ul>
+					<li><a
+						onclick="addTab('tabId_tyzdgl','通用字段管理','${pageContext.request.contextPath}/config/page/common_field_config.jsp');"
+						href="#">通用字段管理</a></li>
+					<li><a
+						onclick="addTab('tabId_ywgl','业务管理','${pageContext.request.contextPath}/config/page/biz_config.jsp');"
+						href="#">业务管理</a></li>
+				</ul>
+			</div>
+			
 			<div title="主索引设置" selected="false" class="myMenu">
 				<ul>
 					<li><a

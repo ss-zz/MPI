@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<table id="PRPA_IN201309UV02" clazz="com.sinosoft.mpi.model.PersonInfoSimple"
-       basepath="/n1:PRPA_IN201309UV02/n1:controlActProcess/n1:queryByParameter/n1:parameterList">
-  <column attribute="identifier" attributeCode="" attributePath="/n1:patientIdentifier/n1:value/@extension"/>
-  <column attribute="domainUniqueSign" attributeCode="" attributePath="/n1:dataSource/n1:value/@extension"/>
-</table>
