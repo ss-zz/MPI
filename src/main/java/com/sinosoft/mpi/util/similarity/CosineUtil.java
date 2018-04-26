@@ -1,4 +1,4 @@
-package com.sinosoft.mpi.util;
+package com.sinosoft.mpi.util.similarity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +7,8 @@ import java.util.Set;
 /**
  * Cosine 余弦相似度
  * @author hsg
+ * 算法介绍：通过测量两个向量之间的角的余弦值来度量它们之间的相似性。0度角的余弦值是1，而其他任何角度的余弦值都不大于1;并且其最小值是-1。
+ * 从而两个向量之间的角度的余弦值确定两个向量是否大致指向相同的方向。所以，它通常用于文本文件比较，文本位置不同内容相同算完全匹配，适用于易颠倒文本
  *
  */
 public class CosineUtil {
@@ -56,7 +58,7 @@ public class CosineUtil {
 	}
 
 	// 求平方和
-	private double squares(Map<Character, int[]> paramMap) {
+	private static double squares(Map<Character, int[]> paramMap) {
 		double result1 = 0;
 		double result2 = 0;
 		Set<Character> keySet = paramMap.keySet();
@@ -69,7 +71,7 @@ public class CosineUtil {
 	}
 
 	// 点乘法
-	private double pointMulti(Map<Character, int[]> paramMap) {
+	private static double pointMulti(Map<Character, int[]> paramMap) {
 		double result = 0;
 		Set<Character> keySet = paramMap.keySet();
 		for (Character character : keySet) {
