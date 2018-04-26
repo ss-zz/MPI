@@ -9,7 +9,7 @@ function loadTable() {
 	// 加载表格
 	$('#listTable').datagrid({
 		toolbar : [ {
-			text : '添加',
+			text : '添加业务',
 			iconCls : 'icon-add',
 			handler : function() {
 				openSavePage();
