@@ -16,7 +16,7 @@
 			<span class="comment">由字母、数字、下划线、连接符组成</span>
 		</div>
 		<div>
-			<label for="name">业务名:</label>
+			<label for="name"><span class="star">*</span>业务名:</label>
 			<input class="easyui-validatebox" type="text" name="name" required="true" value="${item.name }" />
 			<span class="comment">字段中文或英文名，用于查看时显示</span>
 		</div>
@@ -25,7 +25,7 @@
 			<textarea class="easyui-validatebox" name="comment">${item.comment }</textarea>
 		</div>
 		<div>
-			<label for="weight">阈值:</label>
+			<label for="weight"><span class="star">*</span>阈值:</label>
 			<input class="easyui-validatebox" type="text" name="threshold" required="true" validType="decimal" value="${item.threshold }" />
 			<span class="comment">决定最终是否匹配</span>
 		</div>

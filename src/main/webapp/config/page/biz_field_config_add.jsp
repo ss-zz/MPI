@@ -12,7 +12,7 @@
 		<input type="hidden" name="id" value="${item.id }"/>
 		<input id="inputBizConfigId" type="hidden" name="bizConfigId" value="${bizConfigId }"/>
 		<div>
-			<label for="bizCommonFieldConfigId">通用字段:</label>
+			<label for="bizCommonFieldConfigId"><span class="star">*</span>通用字段:</label>
 			<select class="easyui-combobox" name="bizCommonFieldConfigId" style="width:400px;" data-options="value: '${item.bizCommonFieldConfigId }'">
 				<option>算法1</option>
 				<option>算法2</option>
@@ -27,12 +27,12 @@
 			<span class="comment">与注册数据中属性保持一致，同一业务不能重复</span>
 		</div>
 		<div>
-			<label for="name">字段名:</label>
+			<label for="name"><span class="star">*</span>字段名:</label>
 			<input class="easyui-validatebox" type="text" name="name" required="true" value="${item.name }" />
 			<span class="comment">字段中文或英文名，仅用于展示</span>
 		</div>
 		<div>
-			<label for="isFirstMatch">是否初筛:</label>
+			<label for="isFirstMatch"><span class="star">*</span>是否初筛:</label>
 			<input type="radio" name="isFirstMatch" value="true" />是
 			<input type="radio" name="isFirstMatch" value="false" checked/>否
 			<span class="comment">是否作为初步过滤条件，会当成查询条件从数据库中进行简单模糊查询</span>
@@ -42,7 +42,7 @@
 			<textarea class="easyui-validatebox" name="comment">${item.comment }</textarea>
 		</div>
 		<div>
-			<label for="algorithm">算法:</label>
+			<label for="algorithm"><span class="star">*</span>算法:</label>
 			<select class="easyui-combobox" name="algorithm" style="width:400px;" data-options="value: '${item.algorithm }'">
 				<option>算法1</option>
 				<option>算法2</option>
@@ -52,13 +52,13 @@
 			</select>
 		</div>
 		<div>
-			<label for="rank">顺序:</label>
-			<input class="easyui-validatebox" type="text" name="rank" required="true" validType="integer" value="${item.rank }" />
-			<span class="comment">仅用于展示位置不同</span>
+			<label for="weight"><span class="star">*</span>权重:</label>
+			<input class="easyui-validatebox" type="text" name="weight" required="true" validType="decimal" value="${item.weight }" />
 		</div>
 		<div>
-			<label for="weight">权重:</label>
-			<input class="easyui-validatebox" type="text" name="weight" required="true" validType="decimal" value="${item.weight }" />
+			<label for="rank">顺序:</label>
+			<input class="easyui-validatebox" type="text" name="rank" validType="integer" value="${item.rank }" />
+			<span class="comment">仅用于展示位置不同</span>
 		</div>
 		<div>
 			<a id="btn-submit" href="#" class="easyui-linkbutton" iconCls='icon-save'>提交</a>
