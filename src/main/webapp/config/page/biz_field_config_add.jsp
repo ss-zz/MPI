@@ -12,7 +12,7 @@
 		<input type="hidden" name="id" value="${item.id }"/>
 		<input id="inputBizConfigId" type="hidden" name="bizConfigId" value="${bizConfigId }"/>
 		<div>
-			<label for="algorithm">通用字段:</label>
+			<label for="bizCommonFieldConfigId">通用字段:</label>
 			<select class="easyui-combobox" name="bizCommonFieldConfigId" style="width:400px;" data-options="value: '${item.bizCommonFieldConfigId }'">
 				<option>算法1</option>
 				<option>算法2</option>
@@ -30,6 +30,12 @@
 			<label for="name">字段名:</label>
 			<input class="easyui-validatebox" type="text" name="name" required="true" value="${item.name }" />
 			<span class="comment">字段中文或英文名，仅用于展示</span>
+		</div>
+		<div>
+			<label for="isFirstMatch">是否初筛:</label>
+			<input type="radio" name="isFirstMatch" value="true" />是
+			<input type="radio" name="isFirstMatch" value="false" checked/>否
+			<span class="comment">是否作为初步过滤条件，会当成查询条件从数据库中进行简单模糊查询</span>
 		</div>
 		<div>
 			<label for="comment">备注:</label>
