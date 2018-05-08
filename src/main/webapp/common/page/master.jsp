@@ -253,6 +253,10 @@ body {
 		return '<iframe name="'+ ('iframe_' + tabId) + '" id="'+ tabId + '" src="' + url + '" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>';
 	}
 	
+	// 覆盖默认的alert弹出框
+	function alert(info){
+		$.messager.alert('提示', info);
+	}
 	
 	// 转换函数数据
 	var SELECT_FUNS = [{
