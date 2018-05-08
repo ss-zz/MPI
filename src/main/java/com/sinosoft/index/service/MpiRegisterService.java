@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sinosoft.index.entity.BizCommonFieldConfig;
+import com.sinosoft.index.entity.BizFieldConfigModel;
+import com.sinosoft.index.entity.BizMatchConfig;
 import com.sinosoft.index.exception.RegisterBizException;
 import com.sinosoft.index.exception.RegisterCheckException;
-import com.sinosoft.index.model.BizCommonFieldConfigModel;
-import com.sinosoft.index.model.BizConfigModel;
-import com.sinosoft.index.model.BizFieldConfigModel;
 import com.sinosoft.index.model.IndexRegister;
 
 /**
@@ -39,7 +39,7 @@ public class MpiRegisterService {
 	private ObjectMapper om = new ObjectMapper();
 
 	/**
-	 * 主索引注册
+	 * 主索引注册：校验数据，并将数据放入待处理消息队列中
 	 * 
 	 * @param index
 	 *            注册数据
@@ -62,22 +62,31 @@ public class MpiRegisterService {
 			index.setType(type);
 		}
 
-		// 原始id
-		String srcId = index.getDataId();
-		if (isNull(srcId)) {
-			throw new RegisterCheckException("数据原始唯一标示[dataId]不能为空");
+		// 原始id-业务
+		String bizId = index.getBizId();
+		if (isNull(bizId)) {
+			throw new RegisterCheckException("数据原始唯一标示[bizId]不能为空");
 		}
 
 		// 注册数据内容
-		String jsonData = index.getJsonData();
-		if (isNull(jsonData)) {
-			throw new RegisterCheckException("注册数据内容[jsonData]不能为空");
+		String personData = index.getPersonData();// 人员数据
+		String bizData = index.getBizData();// 业务数据
+		if (isNull(personData)) {// 人员不能为空
+			throw new RegisterCheckException("人员信息[personData]不能为空");
 		}
 		try {
-			om.readValue(jsonData, new TypeReference<HashMap<String, String>>() {
+			om.readValue(personData, new TypeReference<HashMap<String, String>>() {
 			});
 		} catch (IOException e) {
-			throw new RegisterCheckException("注册数据内容[jsonData]解析失败，请确定是合法的json格式");
+			throw new RegisterCheckException("人员信息[personData]解析失败，请确定是合法的json格式");
+		}
+		if (!isNull(bizData)) {// 业务可为空
+			try {
+				om.readValue(bizData, new TypeReference<HashMap<String, String>>() {
+				});
+			} catch (IOException e) {
+				throw new RegisterCheckException("业务信息[bizData]解析失败，请确定是合法的json格式");
+			}
 		}
 
 		// 业务id
@@ -86,11 +95,10 @@ public class MpiRegisterService {
 			throw new RegisterCheckException("业务唯一标识[bizKey]不能为空");
 		}
 		// 获取业务配置
-		List<BizConfigModel> bizConfigs = bizConfigService.getByKey(bizKey);
-		if (bizConfigs == null || bizConfigs.size() == 0) {
+		BizMatchConfig bizConfig = bizConfigService.getByKey(bizKey);
+		if (bizConfig == null) {
 			throw new RegisterCheckException("业务[" + bizKey + "]未配置，请在管理系统中添加对应业务");
 		}
-		BizConfigModel bizConfig = bizConfigs.get(0);
 		String bizConfigId = bizConfig.getId();
 		// 获取业务字段配置
 		List<BizFieldConfigModel> bizFieldConfigs = bizFieldConfigService.getByBizConfigId(bizConfigId);
@@ -99,7 +107,7 @@ public class MpiRegisterService {
 		}
 
 		// 获取通用业务字段配置
-		List<BizCommonFieldConfigModel> bizCommonFieldConfigs = bizCommonFieldConfigService.getAll();
+		List<BizCommonFieldConfig> bizCommonFieldConfigs = bizCommonFieldConfigService.getAll();
 		if (bizCommonFieldConfigs == null || bizCommonFieldConfigs.size() == 0) {
 			throw new RegisterCheckException("通用业务字段未配置，请在管理系统中配置通用业务字段");
 		}

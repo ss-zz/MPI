@@ -4,11 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -16,10 +12,8 @@ import org.springframework.stereotype.Repository;
 import com.sinosoft.mpi.model.IdentifierDomain;
 import com.sinosoft.mpi.util.IDUtil;
 
-@Repository("identifierDomainDao")
-public class IdentifierDomainDao implements IIdentifierDomainDao {
-	@Resource
-	private JdbcTemplate jdbcTemplate;
+@Repository
+public class IdentifierDomainDao extends IBaseDao<IdentifierDomain> {
 
 	@Override
 	public void add(final IdentifierDomain entity) {
@@ -137,25 +131,6 @@ public class IdentifierDomainDao implements IIdentifierDomainDao {
 		return datas;
 	}
 
-	@Override
-	public int getCount(String sql) {
-		return getCount(sql, new Object[] {});
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return jdbcTemplate.queryForObject(sql, args, Integer.class);
-	}
-
-	public JdbcTemplate getJdbcTemplate() {
-		return jdbcTemplate;
-	}
-
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	@Override
 	public IdentifierDomain getByUniqueSign(String sign) {
 		String sql = " select * from mpi_identifier_domain where unique_sign = ? and rownum <2 ";
 		List<IdentifierDomain> list = find(sql, new Object[] { sign });
@@ -166,17 +141,6 @@ public class IdentifierDomainDao implements IIdentifierDomainDao {
 		return domain;
 	}
 
-	@Override
-	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		return jdbcTemplate.queryForList(sql, args);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
-		return jdbcTemplate.queryForList(sql);
-	}
-
-	@Override
 	public IdentifierDomain getByPersonId(String personId) {
 		String sql = " select * from mpi_identifier_domain a where exists( select 1 from mpi_index_identifier_rel b "
 				+ " where b.domain_id = a.domain_id and b.field_pk = ? ) ";

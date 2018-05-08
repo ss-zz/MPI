@@ -7,17 +7,14 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/cfg/js/match.js"></script>
 </head>
 <body>
+
+<a href="#" onclick="openCurrentPage();" class="easyui-linkbutton" data-options="selected:true">查看当前匹配规则</a>
+<br/>
+<br/>
 <!-- 表格 -->
 <table 	id="listTable"
-		title="匹配规则配置列表"  
-		border="0"
-		cellspacing="0"
-		cellpadding="0"
-		idField="configId" 
-		remoteSort="false" 
-		singleSelect="false" 
-		showFooter="false"
-		striped="true"
+		title="匹配规则配置列表"
+		idField="configId"
 		url="${pageContext.request.contextPath}/cfg/match.ac" >
 	<thead>
 		<tr align="center">

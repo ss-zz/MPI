@@ -8,7 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.IIdentifierDomainDao;
+import com.sinosoft.mpi.dao.IdentifierDomainDao;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.IdentifierDomain;
 import com.sinosoft.mpi.util.PageInfo;
@@ -17,7 +17,7 @@ import com.sinosoft.mpi.util.PageInfo;
 public class IdentifierDomainService implements IIdentifierDomainService {
 	private Logger logger = Logger.getLogger(IdentifierDomainService.class);
 	@Resource
-	private IIdentifierDomainDao identifierDomainDao;
+	private IdentifierDomainDao identifierDomainDao;
 
 	@Override
 	public void save(IdentifierDomain t) {
@@ -61,14 +61,6 @@ public class IdentifierDomainService implements IIdentifierDomainService {
 		t = identifierDomainDao.findById(t);
 		logger.debug("Load IdentifierDomain:domainId=" + id + ",result=" + t);
 		return t;
-	}
-
-	public IIdentifierDomainDao getIdentifierDomainDao() {
-		return identifierDomainDao;
-	}
-
-	public void setIdentifierDomainDao(IIdentifierDomainDao identifierDomainDao) {
-		this.identifierDomainDao = identifierDomainDao;
 	}
 
 	@Override

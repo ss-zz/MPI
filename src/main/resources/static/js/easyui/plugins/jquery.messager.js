@@ -1,211 +1,186 @@
-﻿/**
- * jQuery EasyUI 1.2.6
+/**
+ * EasyUI for jQuery 1.5.5.1
  * 
- * Licensed under the GPL terms
- * To use it on other terms please contact us
+ * Copyright (c) 2009-2018 www.jeasyui.com. All rights reserved.
  *
- * Copyright(c) 2009-2012 stworthy [ stworthy@gmail.com ] 
- * 
+ * Licensed under the freeware license: http://www.jeasyui.com/license_freeware.php
+ * To use it on other terms please contact us: info@jeasyui.com
+ *
  */
 (function($){
-function _1(el,_2,_3,_4){
-var _5=$(el).window("window");
-if(!_5){
+function _1(){
+$(document).unbind(".messager").bind("keydown.messager",function(e){
+if(e.keyCode==27){
+$("body").children("div.messager-window").children("div.messager-body").each(function(){
+$(this).dialog("close");
+});
+}else{
+if(e.keyCode==9){
+var _2=$("body").children("div.messager-window");
+if(!_2.length){
 return;
 }
-switch(_2){
-case null:
-_5.show();
-break;
-case "slide":
-_5.slideDown(_3);
-break;
-case "fade":
-_5.fadeIn(_3);
-break;
-case "show":
-_5.show(_3);
-break;
+var _3=_2.find(".messager-input,.messager-button .l-btn");
+for(var i=0;i<_3.length;i++){
+if($(_3[i]).is(":focus")){
+$(_3[i>=_3.length-1?0:i+1]).focus();
+return false;
 }
-var _6=null;
-if(_4>0){
-_6=setTimeout(function(){
-_7(el,_2,_3);
-},_4);
 }
-_5.hover(function(){
-if(_6){
-clearTimeout(_6);
+}else{
+if(e.keyCode==13){
+var _4=$(e.target).closest("input.messager-input");
+if(_4.length){
+var _5=_4.closest(".messager-body");
+_6(_5,_4.val());
 }
-},function(){
-if(_4>0){
-_6=setTimeout(function(){
-_7(el,_2,_3);
-},_4);
+}
+}
 }
 });
 };
-function _7(el,_8,_9){
-if(el.locked==true){
-return;
-}
-el.locked=true;
-var _a=$(el).window("window");
-if(!_a){
-return;
-}
-switch(_8){
-case null:
-_a.hide();
-break;
-case "slide":
-_a.slideUp(_9);
-break;
-case "fade":
-_a.fadeOut(_9);
-break;
-case "show":
-_a.hide(_9);
-break;
-}
-setTimeout(function(){
-$(el).window("destroy");
-},_9);
+function _7(){
+$(document).unbind(".messager");
 };
-function _b(_c,_d,_e){
+function _8(_9){
+var _a=$.extend({},$.messager.defaults,{modal:false,shadow:false,draggable:false,resizable:false,closed:true,style:{left:"",top:"",right:0,zIndex:$.fn.window.defaults.zIndex++,bottom:-document.body.scrollTop-document.documentElement.scrollTop},title:"",width:300,height:150,minHeight:0,showType:"slide",showSpeed:600,content:_9.msg,timeout:4000},_9);
+var _b=$("<div class=\"messager-body\"></div>").appendTo("body");
+_b.dialog($.extend({},_a,{noheader:(_a.title?false:true),openAnimation:(_a.showType),closeAnimation:(_a.showType=="show"?"hide":_a.showType),openDuration:_a.showSpeed,closeDuration:_a.showSpeed,onOpen:function(){
+_b.dialog("dialog").hover(function(){
+if(_a.timer){
+clearTimeout(_a.timer);
+}
+},function(){
+_c();
+});
+_c();
+function _c(){
+if(_a.timeout>0){
+_a.timer=setTimeout(function(){
+if(_b.length&&_b.data("dialog")){
+_b.dialog("close");
+}
+},_a.timeout);
+}
+};
+if(_9.onOpen){
+_9.onOpen.call(this);
+}else{
+_a.onOpen.call(this);
+}
+},onClose:function(){
+if(_a.timer){
+clearTimeout(_a.timer);
+}
+if(_9.onClose){
+_9.onClose.call(this);
+}else{
+_a.onClose.call(this);
+}
+_b.dialog("destroy");
+}}));
+_b.dialog("dialog").css(_a.style);
+_b.dialog("open");
+return _b;
+};
+function _d(_e){
+_1();
 var _f=$("<div class=\"messager-body\"></div>").appendTo("body");
-_f.append(_d);
-if(_e){
-var tb=$("<div class=\"messager-button\"></div>").appendTo(_f);
-for(var _10 in _e){
-$("<a></a>").attr("href","javascript:void(0)").text(_10).css("margin-left",10).bind("click",eval(_e[_10])).appendTo(tb).linkbutton();
+_f.dialog($.extend({},_e,{noheader:(_e.title?false:true),onClose:function(){
+_7();
+if(_e.onClose){
+_e.onClose.call(this);
 }
-}
-_f.window({title:_c,noheader:(_c?false:true),width:300,height:"auto",modal:true,collapsible:false,minimizable:false,maximizable:false,resizable:false,onClose:function(){
-setTimeout(function(){
-_f.window("destroy");
-},100);
-}});
-_f.window("window").addClass("messager-window");
-_f.children("div.messager-button").children("a:first").focus();
+_f.dialog("destroy");
+}}));
+var win=_f.dialog("dialog").addClass("messager-window");
+win.find(".dialog-button").addClass("messager-button").find("a:first").focus();
 return _f;
 };
-$.messager={show:function(_11){
-var _12=$.extend({showType:"slide",showSpeed:600,width:250,height:100,msg:"",title:"",timeout:4000},_11||{});
-var win=$("<div class=\"messager-body\"></div>").html(_12.msg).appendTo("body");
-win.window({title:_12.title,width:_12.width,height:_12.height,collapsible:false,minimizable:false,maximizable:false,shadow:false,draggable:false,resizable:false,closed:true,onBeforeOpen:function(){
-_1(this,_12.showType,_12.showSpeed,_12.timeout);
-return false;
-},onBeforeClose:function(){
-_7(this,_12.showType,_12.showSpeed);
-return false;
-}});
-win.window("window").css({left:"",top:"",right:0,zIndex:$.fn.window.defaults.zIndex++,bottom:-document.body.scrollTop-document.documentElement.scrollTop});
-win.window("open");
+function _6(dlg,_10){
+var _11=dlg.dialog("options");
+dlg.dialog("close");
+_11.fn(_10);
+};
+$.messager={show:function(_12){
+return _8(_12);
 },alert:function(_13,msg,_14,fn){
-var _15="<div>"+msg+"</div>";
-switch(_14){
-case "error":
-_15="<div class=\"messager-icon messager-error\"></div>"+_15;
-break;
-case "info":
-_15="<div class=\"messager-icon messager-info\"></div>"+_15;
-break;
-case "question":
-_15="<div class=\"messager-icon messager-question\"></div>"+_15;
-break;
-case "warning":
-_15="<div class=\"messager-icon messager-warning\"></div>"+_15;
-break;
+var _15=typeof _13=="object"?_13:{title:_13,msg:msg,icon:_14,fn:fn};
+var cls=_15.icon?"messager-icon messager-"+_15.icon:"";
+_15=$.extend({},$.messager.defaults,{content:"<div class=\""+cls+"\"></div>"+"<div>"+_15.msg+"</div>"+"<div style=\"clear:both;\"/>"},_15);
+if(!_15.buttons){
+_15.buttons=[{text:_15.ok,onClick:function(){
+_6(dlg);
+}}];
 }
-_15+="<div style=\"clear:both;\"/>";
-var _16={};
-_16[$.messager.defaults.ok]=function(){
-win.dialog({closed:true});
-if(fn){
-fn();
-return false;
+var dlg=_d(_15);
+return dlg;
+},confirm:function(_16,msg,fn){
+var _17=typeof _16=="object"?_16:{title:_16,msg:msg,fn:fn};
+_17=$.extend({},$.messager.defaults,{content:"<div class=\"messager-icon messager-question\"></div>"+"<div>"+_17.msg+"</div>"+"<div style=\"clear:both;\"/>"},_17);
+if(!_17.buttons){
+_17.buttons=[{text:_17.ok,onClick:function(){
+_6(dlg,true);
+}},{text:_17.cancel,onClick:function(){
+_6(dlg,false);
+}}];
 }
-};
-_16[$.messager.defaults.ok]=function(){
-win.window("close");
-if(fn){
-fn();
-return false;
+var dlg=_d(_17);
+return dlg;
+},prompt:function(_18,msg,fn){
+var _19=typeof _18=="object"?_18:{title:_18,msg:msg,fn:fn};
+_19=$.extend({},$.messager.defaults,{content:"<div class=\"messager-icon messager-question\"></div>"+"<div>"+_19.msg+"</div>"+"<br/>"+"<div style=\"clear:both;\"/>"+"<div><input class=\"messager-input\" type=\"text\"/></div>"},_19);
+if(!_19.buttons){
+_19.buttons=[{text:_19.ok,onClick:function(){
+_6(dlg,dlg.find(".messager-input").val());
+}},{text:_19.cancel,onClick:function(){
+_6(dlg);
+}}];
 }
-};
-var win=_b(_13,_15,_16);
-},confirm:function(_17,msg,fn){
-var _18="<div class=\"messager-icon messager-question\"></div>"+"<div>"+msg+"</div>"+"<div style=\"clear:both;\"/>";
-var _19={};
-_19[$.messager.defaults.ok]=function(){
-win.window("close");
-if(fn){
-fn(true);
-return false;
-}
-};
-_19[$.messager.defaults.cancel]=function(){
-win.window("close");
-if(fn){
-fn(false);
-return false;
-}
-};
-var win=_b(_17,_18,_19);
-},prompt:function(_1a,msg,fn){
-var _1b="<div class=\"messager-icon messager-question\"></div>"+"<div>"+msg+"</div>"+"<br/>"+"<input class=\"messager-input\" type=\"text\"/>"+"<div style=\"clear:both;\"/>";
-var _1c={};
-_1c[$.messager.defaults.ok]=function(){
-win.window("close");
-if(fn){
-fn($(".messager-input",win).val());
-return false;
-}
-};
-_1c[$.messager.defaults.cancel]=function(){
-win.window("close");
-if(fn){
-fn();
-return false;
-}
-};
-var win=_b(_1a,_1b,_1c);
-win.children("input.messager-input").focus();
-},progress:function(_1d){
-var _1e=$.extend({title:"",msg:"",text:undefined,interval:300},_1d||{});
-var _1f={bar:function(){
+var dlg=_d(_19);
+dlg.find(".messager-input").focus();
+return dlg;
+},progress:function(_1a){
+var _1b={bar:function(){
 return $("body>div.messager-window").find("div.messager-p-bar");
 },close:function(){
-var win=$("body>div.messager-window>div.messager-body");
-if(win.length){
-if(win[0].timer){
-clearInterval(win[0].timer);
-}
-win.window("close");
+var dlg=$("body>div.messager-window>div.messager-body:has(div.messager-progress)");
+if(dlg.length){
+dlg.dialog("close");
 }
 }};
-if(typeof _1d=="string"){
-var _20=_1f[_1d];
-return _20();
+if(typeof _1a=="string"){
+var _1c=_1b[_1a];
+return _1c();
 }
-var _21="<div class=\"messager-progress\"><div class=\"messager-p-msg\"></div><div class=\"messager-p-bar\"></div></div>";
-var win=_b(_1e.title,_21,null);
-win.find("div.messager-p-msg").html(_1e.msg);
-var bar=win.find("div.messager-p-bar");
-bar.progressbar({text:_1e.text});
-win.window({closable:false});
-if(_1e.interval){
-win[0].timer=setInterval(function(){
+_1a=_1a||{};
+var _1d=$.extend({},{title:"",minHeight:0,content:undefined,msg:"",text:undefined,interval:300},_1a);
+var dlg=_d($.extend({},$.messager.defaults,{content:"<div class=\"messager-progress\"><div class=\"messager-p-msg\">"+_1d.msg+"</div><div class=\"messager-p-bar\"></div></div>",closable:false,doSize:false},_1d,{onClose:function(){
+if(this.timer){
+clearInterval(this.timer);
+}
+if(_1a.onClose){
+_1a.onClose.call(this);
+}else{
+$.messager.defaults.onClose.call(this);
+}
+}}));
+var bar=dlg.find("div.messager-p-bar");
+bar.progressbar({text:_1d.text});
+dlg.dialog("resize");
+if(_1d.interval){
+dlg[0].timer=setInterval(function(){
 var v=bar.progressbar("getValue");
 v+=10;
 if(v>100){
 v=0;
 }
 bar.progressbar("setValue",v);
-},_1e.interval);
+},_1d.interval);
 }
+return dlg;
 }};
-$.messager.defaults={ok:"Ok",cancel:"Cancel"};
+$.messager.defaults=$.extend({},$.fn.dialog.defaults,{ok:"Ok",cancel:"Cancel",width:300,height:"auto",minHeight:150,modal:true,collapsible:false,minimizable:false,maximizable:false,resizable:false,fn:function(){
+}});
 })(jQuery);
 

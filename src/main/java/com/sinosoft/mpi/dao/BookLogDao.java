@@ -10,10 +10,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.exception.ValidationException;
@@ -22,13 +21,11 @@ import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.IDUtil;
 
-@Repository("bookLogDao")
-public class BookLogDao implements IBookLogDao {
+@Component
+public class BookLogDao extends IBaseDao<BookLog> {
 
 	@Resource
-	private JdbcTemplate jdbcTemplate;
-	@Resource
-	private IIndexIdentifierRelDao indexIdentifierRelDao;
+	private IndexIdentifierRelDao indexIdentifierRelDao;
 
 	@Override
 	public void add(final BookLog entity) {
@@ -153,7 +150,6 @@ public class BookLogDao implements IBookLogDao {
 		return jdbcTemplate.queryForList(sql);
 	}
 
-	@Override
 	public BookLog autoFillAdd(String fieldpk, String mpipk, String eventType) {
 		Map<String, Object> map = getDomainInfo(fieldpk);
 		BookLog t = new BookLog();
@@ -171,13 +167,6 @@ public class BookLogDao implements IBookLogDao {
 	}
 
 	private Map<String, Object> getDomainInfo(String field_pk) {
-		/*
-		 * String sql =
-		 * " select a.domain_id,a.person_identifier,b.unique_sign,a.identifier_id from mpi_person_identifier a "
-		 * +
-		 * " left join mpi_identifier_domain b on a.domain_id = b.domain_id where a.field_pk = ? "
-		 * ;
-		 */
 		String sql = " select a.field_pk,c.unique_sign,c.domain_id,b.mpi_pk from mpi_person_info a "
 				+ " left join mpi_index_identifier_rel b on a.field_pk = b.field_pk "
 				+ " left join mpi_identifier_domain c on c.domain_id = b.domain_id where a.field_pk = ? ";
@@ -189,7 +178,6 @@ public class BookLogDao implements IBookLogDao {
 		return map;
 	}
 
-	@Override
 	public List<BookLog> autoFillAdd(String personId) {
 		// 取得域相关信息
 		Map<String, Object> map = getDomainInfo(personId);
@@ -218,16 +206,4 @@ public class BookLogDao implements IBookLogDao {
 		return result;
 	}
 
-	public void setIndexIdentifierRelDao(IIndexIdentifierRelDao indexIdentifierRelDao) {
-		this.indexIdentifierRelDao = indexIdentifierRelDao;
-	}
-
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	@Override
-	public JdbcTemplate getJdbcTemplate() {
-		return this.jdbcTemplate;
-	}
 }

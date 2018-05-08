@@ -6,26 +6,27 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sinosoft.block.config.BlockConfig;
-import com.sinosoft.mpi.cache.CacheManager;
+import com.sinosoft.index.entity.MpiConfigField;
+import com.sinosoft.index.service.MpiConfigFieldService;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.exception.BaseBussinessException;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.BlockCfg;
-import com.sinosoft.mpi.model.PersonPropertiesDesc;
 import com.sinosoft.mpi.service.IBlockCfgService;
 import com.sinosoft.mpi.util.PageInfo;
 
+import net.sf.json.JSONObject;
+
 /**
- * 匹配配置页面控制器
+ * 初筛配置页面控制器
  */
 @Controller
 @RequestMapping("/cfg/block.ac")
@@ -34,6 +35,8 @@ public class BlockCfgController {
 
 	@Resource
 	private IBlockCfgService blockCfgService;
+	@Autowired
+	MpiConfigFieldService mpiConfigFieldService;
 
 	/**
 	 * 取得配置列表数据
@@ -62,7 +65,9 @@ public class BlockCfgController {
 	@RequestMapping(params = "method=toAdd")
 	public ModelAndView toMatchCfgPage() {
 		// 取得居民信息 字段描述
-		List<PersonPropertiesDesc> pList = CacheManager.getAll(PersonPropertiesDesc.class);
+		// List<PersonPropertiesDesc> pList =
+		// CacheManager.getAll(PersonPropertiesDesc.class);
+		List<MpiConfigField> pList = mpiConfigFieldService.getAll();
 		JSONObject datas = new JSONObject();
 		// 字段属性
 		datas.put("pList", pList);

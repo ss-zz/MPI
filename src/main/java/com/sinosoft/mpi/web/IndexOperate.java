@@ -19,7 +19,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sinosoft.mpi.dao.IPersonIndexDao;
+import com.sinosoft.mpi.dao.PersonIndexDao;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.service.IPersonIdxLogService;
@@ -42,7 +42,7 @@ public class IndexOperate {
 	@Resource
 	private IPersonIdxLogService personIdxLogService;
 	@Resource
-	private IPersonIndexDao personIndexDao;
+	private PersonIndexDao personIndexDao;
 
 	@Resource
 	private JdbcTemplate jdbcTemplate;

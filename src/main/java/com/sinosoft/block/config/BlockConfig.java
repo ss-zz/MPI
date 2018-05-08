@@ -14,9 +14,10 @@ import com.sinosoft.mpi.model.BlockCfg;
 import com.sinosoft.mpi.model.BlockGroup;
 
 /**
- * 初步过滤查询配置
+ * 从配置文件block-config.xml加载初筛配置
  */
 public class BlockConfig {
+
 	private static BlockConfig config = new BlockConfig();
 
 	private List<BlockRound> blockRounds;
@@ -26,6 +27,18 @@ public class BlockConfig {
 		init();
 	}
 
+	/**
+	 * 获取实例
+	 * 
+	 * @return
+	 */
+	public static BlockConfig getInstanse() {
+		return config;
+	}
+
+	/**
+	 * 初始化
+	 */
 	@SuppressWarnings("unchecked")
 	private void init() {
 		blockRounds = new ArrayList<BlockRound>();
@@ -38,8 +51,6 @@ public class BlockConfig {
 		}
 		Element root = document.getRootElement();
 		List<Element> roundElements = root.element("blocking-rounds").elements("blocking-round");
-
-		// element("blocking-fields").elements("blocking-field");
 
 		for (Element roundElement : roundElements) {
 			BlockRound round = new BlockRound();
@@ -61,10 +72,6 @@ public class BlockConfig {
 
 	}
 
-	public static BlockConfig getInstanse() {
-		return config;
-	}
-
 	public List<BlockRound> getBlockRounds() {
 		return blockRounds;
 	}
@@ -73,6 +80,11 @@ public class BlockConfig {
 		this.blockRounds = blockRounds;
 	}
 
+	/**
+	 * 重新加载配置文件
+	 * 
+	 * @param cfg
+	 */
 	public void reloadCfg(BlockCfg cfg) {
 		blockRounds.clear();
 		for (Integer key : cfg.getGroups().keySet()) {

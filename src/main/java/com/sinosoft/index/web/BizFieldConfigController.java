@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.sinosoft.index.model.BizFieldConfigModel;
+import com.sinosoft.index.entity.BizFieldConfigModel;
+import com.sinosoft.index.exception.ServiceException;
 import com.sinosoft.index.model.SimpleRestResponse;
 import com.sinosoft.index.service.BizFieldConfigService;
 
@@ -79,7 +80,11 @@ public class BizFieldConfigController {
 	@PostMapping("/save")
 	@ResponseBody
 	public Map<String, Object> save(BizFieldConfigModel bizFieldConfig) {
-		return SimpleRestResponse.create("id", bizFieldConfigService.save(bizFieldConfig));
+		try {
+			return SimpleRestResponse.create("id", bizFieldConfigService.save(bizFieldConfig));
+		} catch (ServiceException e) {
+			return SimpleRestResponse.createErrorMsg(e.getMessage());
+		}
 	}
 
 	/**

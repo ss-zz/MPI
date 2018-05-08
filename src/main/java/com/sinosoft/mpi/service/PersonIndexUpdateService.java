@@ -9,11 +9,11 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.IIdentifierDomainDao;
-import com.sinosoft.mpi.dao.IIndexIdentifierRelDao;
-import com.sinosoft.mpi.dao.IMpiCombineLevelDao;
-import com.sinosoft.mpi.dao.IMpiCombineRecDao;
-import com.sinosoft.mpi.dao.IPersonIndexDao;
+import com.sinosoft.mpi.dao.IdentifierDomainDao;
+import com.sinosoft.mpi.dao.IndexIdentifierRelDao;
+import com.sinosoft.mpi.dao.MpiCombineLevelDao;
+import com.sinosoft.mpi.dao.MpiCombineRecDao;
+import com.sinosoft.mpi.dao.PersonIndexDao;
 import com.sinosoft.mpi.model.IdentifierDomain;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.MpiCombineRec;
@@ -27,15 +27,15 @@ public class PersonIndexUpdateService implements IPersonIndexUpdateService {
 	private static Logger logger = Logger.getLogger(PersonIndexUpdateService.class);
 
 	@Resource
-	private IPersonIndexDao personIndexDao;
+	private PersonIndexDao personIndexDao;
 	@Resource
-	private IIdentifierDomainDao identifierDomainDao;
+	private IdentifierDomainDao identifierDomainDao;
 	@Resource
-	IIndexIdentifierRelDao indexIdentifierRelDao;
+	IndexIdentifierRelDao indexIdentifierRelDao;
 	@Resource
-	IMpiCombineRecDao mpiCombineRecDao;
+	MpiCombineRecDao mpiCombineRecDao;
 	@Resource
-	IMpiCombineLevelDao mpiCombineLevelDao;
+	MpiCombineLevelDao mpiCombineLevelDao;
 	@Value("${index.update.policy}")
 	private UpdateStrategy policy;
 	@Resource
@@ -159,14 +159,6 @@ public class PersonIndexUpdateService implements IPersonIndexUpdateService {
 			this.orgincollevellist = mpiCombineLevelDao.findForMap("select * from MPI_COMBINE_LEVEL");
 		}
 		return this.orgincollevellist;
-	}
-
-	public void setPersonIndexDao(IPersonIndexDao personIndexDao) {
-		this.personIndexDao = personIndexDao;
-	}
-
-	public void setIdentifierDomainDao(IIdentifierDomainDao identifierDomainDao) {
-		this.identifierDomainDao = identifierDomainDao;
 	}
 
 	public void setPolicy(UpdateStrategy policy) {

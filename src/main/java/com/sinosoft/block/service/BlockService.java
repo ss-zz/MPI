@@ -19,7 +19,7 @@ import com.sinosoft.block.fun.IBlockFuntion;
 import com.sinosoft.block.model.BlockField;
 import com.sinosoft.block.model.BlockRound;
 import com.sinosoft.match.model.Record;
-import com.sinosoft.mpi.dao.IPersonIndexDao;
+import com.sinosoft.mpi.dao.PersonIndexDao;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 
@@ -31,7 +31,7 @@ public class BlockService implements IBlockService {
 	private Logger logger = Logger.getLogger(BlockService.class);
 
 	@Resource
-	private IPersonIndexDao personIndexDao;
+	private PersonIndexDao personIndexDao;
 
 	/**
 	 * 获取初筛匹配的人员信息

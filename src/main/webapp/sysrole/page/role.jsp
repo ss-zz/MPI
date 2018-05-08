@@ -8,16 +8,9 @@
 </head>
 <body>
 <!-- 表格 -->
-<table 	id="listTable"
-		title="系统角色列表"
-		border="0"
-		cellspacing="0"
-		cellpadding="0"
-		idField="sysRoleId" 
-		remoteSort="false" 
-		singleSelect="false" 
-		showFooter="false"
-		striped="true"
+<table id="listTable"
+		title="角色列表"
+		idField="sysRoleId"
 		url="${pageContext.request.contextPath}/role/role.ac?method=query" >
 	<thead>
 		<tr align="center">
@@ -29,35 +22,31 @@
 </table>
 <!-- 添加角色 -->
 <!-- 添加 -->
-<div id="add" icon="icon-save" style="padding: 5px; width: 400px; height: 150px;">
-	<h5 id="add_message" style="color: red;"></h5>
-	<div class="ToolTip_Form" id="table_add" onkeydown="if(event.keyCode==13){addData();}">
-        <ul>
-			<li>
-				<label>角色名称：</label>
-				<input type="text" class="easyui-validatebox" id="add_roleName" maxlength="50" required="true" validType="roleName['${pageContext.request.contextPath}/role/role.ac?method=test']" />
-			</li>
-			<li>
-				<a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="addData();">提交</a>
-			</li>
-		</ul>
+<div id="add" icon="icon-save">
+	<span id="add_message" style="color: red;"></span>
+	<div class="my-form" id="table_add" onkeydown="if(event.keyCode==13){addData();}">
+		<div>
+			<label>角色名称：</label>
+			<input type="text" class="easyui-validatebox" id="add_roleName" maxlength="50" required="true" validType="roleName['${pageContext.request.contextPath}/role/role.ac?method=test']" />
+		</div>
+		<div>
+			<a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="addData();">提交</a>
+		</div>
 	</div>
 </div>
+
 <!-- 修改角色 -->
-<div id="edit" icon="icon-save"
-	style="padding: 5px; width: 400px; height: 150px;">
-	<h5 id="edit_message" style="color: red;"></h5>
-	<div class="ToolTip_Form" id="table_edit" onkeydown="if(event.keyCode==13){editData();}">
-        <ul>
-			<li>
-				<label>角色名称：</label>
-				<input type="text" class="easyui-validatebox" id="edit_roleName"  maxlength="50" required="true"></input>
-				<input type="hidden" id="edit_roleId" >
-			</li>
-			<li>
-				<a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="editData();">提交</a>
-			</li>
-		</ul>
+<div id="edit" icon="icon-save">
+	<span id="edit_message" style="color: red;"></span>
+	<div class="my-form" id="my-form" onkeydown="if(event.keyCode==13){editData();}">
+		<div>
+			<label>角色名称：</label>
+			<input type="text" class="easyui-validatebox" id="edit_roleName"  maxlength="50" required="true"></input>
+			<input type="hidden" id="edit_roleId" >
+		</div>
+		<div>
+			<a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="editData();">提交</a>
+		</div>
 	</div>
 </div>
 
@@ -65,27 +54,21 @@
 <!-- 角色用户显示窗口 -->
 <div id="window_view_user" title="角色用户" iconCls="icon-detail">
 	<div class="easyui-layout" fit="true">
-		<div id="role_user_view" region="center" border="false" style="padding: 10px; background: #fff; border: 1px solid #ccc;">
-			<input type="hidden" id="current_sysrole_id">				
-			<table 	id="userListTable"
-					title="角色用户列表"  
-					border="0"
-					cellspacing="0"
-					cellpadding="0"
+		<div id="role_user_view" region="center" border="false"
+			style="padding: 10px; background: #fff; border: 1px solid #ccc;">
+			<input type="hidden" id="current_sysrole_id">
+			<table id="userListTable"
+					title="角色用户列表"
 					iconCls="icon-detail" 
 					width="98%" 
 					idField="USER_ID" 
-					remoteSort="false" 
-					singleSelect="false" 
-					showFooter="false"
-					striped="true"
 					url="${pageContext.request.contextPath}/role/role.ac?method=listUser" >
 				<thead>
 					<tr align="center">
 						<th field="NAME"  width="100">姓名</th>
 						<th field="USER_NAME"  width="100">用户名</th>
 						<th field="EMAIL"  width="100">电子邮件</th>
-						<th field="ROLE_NAME"  width="100">系统角色</th>
+						<th field="ROLE_NAME"  width="100">角色</th>
 					</tr>
 				</thead>
 			</table>

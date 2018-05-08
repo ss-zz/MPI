@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.IPersonIdentifierDao;
+import com.sinosoft.mpi.dao.PersonIdentifierDao;
 import com.sinosoft.mpi.model.PersonIdentifier;
 import com.sinosoft.mpi.util.PageInfo;
 
@@ -17,7 +17,7 @@ public class PersonIdentifierService implements IPersonIdentifierService {
 	private Logger logger = Logger.getLogger(PersonIdentifierService.class);
 
 	@Resource
-	private IPersonIdentifierDao personIdentifierDao;
+	private PersonIdentifierDao personIdentifierDao;
 
 	@Override
 	public void save(PersonIdentifier t) {
@@ -55,14 +55,6 @@ public class PersonIdentifierService implements IPersonIdentifierService {
 		String querySql = page.buildPageSql(sql);
 		logger.debug("Execute sql:[" + sql + "],params[]");
 		return personIdentifierDao.find(querySql, new Object[] {});
-	}
-
-	public IPersonIdentifierDao getPersonIdentifierDao() {
-		return personIdentifierDao;
-	}
-
-	public void setPersonIdentifierDao(IPersonIdentifierDao personIdentifierDao) {
-		this.personIdentifierDao = personIdentifierDao;
 	}
 
 }

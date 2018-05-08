@@ -10,8 +10,8 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.match.config.MatchConfig;
-import com.sinosoft.mpi.dao.IMatchCfgDao;
-import com.sinosoft.mpi.dao.IMatchFieldCfgDao;
+import com.sinosoft.mpi.dao.MatchCfgDao;
+import com.sinosoft.mpi.dao.MatchFieldCfgDao;
 import com.sinosoft.mpi.model.MatchCfg;
 import com.sinosoft.mpi.model.MatchFieldCfg;
 import com.sinosoft.mpi.util.DateUtil;
@@ -23,9 +23,9 @@ public class MatchCfgService implements IMatchCfgService {
 	private Logger logger = Logger.getLogger(MatchCfgService.class);
 
 	@Resource
-	private IMatchCfgDao matchCfgDao;
+	private MatchCfgDao matchCfgDao;
 	@Resource
-	private IMatchFieldCfgDao matchFieldCfgDao;
+	private MatchFieldCfgDao matchFieldCfgDao;
 
 	@Override
 	public void save(MatchCfg t) {
@@ -93,14 +93,6 @@ public class MatchCfgService implements IMatchCfgService {
 		return matchCfgDao.find(querySql, new Object[] {});
 	}
 
-	public void setMatchCfgDao(IMatchCfgDao matchCfgDao) {
-		this.matchCfgDao = matchCfgDao;
-	}
-
-	public void setMatchFieldCfgDao(IMatchFieldCfgDao matchFieldCfgDao) {
-		this.matchFieldCfgDao = matchFieldCfgDao;
-	}
-
 	@Override
 	public void updateEffect(String cfgId) {
 
@@ -113,6 +105,9 @@ public class MatchCfgService implements IMatchCfgService {
 		}
 	}
 
+	/**
+	 * 查询生效的配置
+	 */
 	@Override
 	public MatchCfg queryEffectCfg() {
 		String sql = " select * from mpi_match_cfg where state = '1' ";

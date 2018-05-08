@@ -3,11 +3,9 @@ package com.sinosoft.stringcomparison.metrics;
 import com.sinosoft.mpi.util.IdcardUtils;
 
 /**
- * 身份证匹配
+ * 身份证匹配算法
  */
 public class IDDistanceMetric implements IDistanceMetric {
-
-	private String name = "id";
 
 	@Override
 	public double score(String left, String right) {
@@ -42,7 +40,7 @@ public class IDDistanceMetric implements IDistanceMetric {
 
 	@Override
 	public String getName() {
-		return name;
+		return "id";
 	}
 
 	@Override

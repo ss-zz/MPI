@@ -4,11 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -16,10 +12,8 @@ import org.springframework.stereotype.Repository;
 import com.sinosoft.mpi.model.ManOpPerson;
 import com.sinosoft.mpi.util.IDUtil;
 
-@Repository("manOpPersonDao")
-public class ManOpPersonDao implements IManOpPersonDao {
-	@Resource
-	private JdbcTemplate jdbcTemplate;
+@Repository
+public class ManOpPersonDao extends IBaseDao<ManOpPerson> {
 
 	@Override
 	public void add(final ManOpPerson entity) {
@@ -107,32 +101,4 @@ public class ManOpPersonDao implements IManOpPersonDao {
 		return find(sql);
 	}
 
-	@Override
-	public int getCount(String sql) {
-		return getCount(sql, new Object[] {});
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return jdbcTemplate.queryForObject(sql, args, Integer.class);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		return jdbcTemplate.queryForList(sql, args);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
-		return jdbcTemplate.queryForList(sql);
-	}
-
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	@Override
-	public JdbcTemplate getJdbcTemplate() {
-		return this.jdbcTemplate;
-	}
 }

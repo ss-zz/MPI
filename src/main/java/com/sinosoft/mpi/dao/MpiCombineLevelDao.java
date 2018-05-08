@@ -10,17 +10,14 @@ import javax.annotation.Resource;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.sinosoft.mpi.model.MpiCombineLevel;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 
-@Repository("mpiCombineLevelDao")
-public class MpiCombineLevelDao implements IMpiCombineLevelDao {
-	@Resource
-	JdbcTemplate jdbcTemplate;
+@Repository
+public class MpiCombineLevelDao extends IBaseDao<MpiCombineLevel> {
 
 	@Resource
 	List<String> filterColumns;
@@ -62,33 +59,6 @@ public class MpiCombineLevelDao implements IMpiCombineLevelDao {
 		return null;
 	}
 
-	@Override
-	public int getCount(String sql) {
-		return 0;
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return 0;
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		return jdbcTemplate.queryForList(sql, args);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
-		return jdbcTemplate.queryForList(sql);
-	}
-
-	@Override
-	public JdbcTemplate getJdbcTemplate() {
-		return null;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
 	/**
 	 *
 	 * 新数据来源字段级别，如果新数据来源查不到新字段级别,则应用数据来源级别比较
@@ -106,6 +76,7 @@ public class MpiCombineLevelDao implements IMpiCombineLevelDao {
 		try {
 			if (srcLevelcolmap != null) {
 				// 个人信息map lpk update
+				@SuppressWarnings("unchecked")
 				Map<String, Object> map = BeanUtils.describe(personindex);
 				Iterator<String> it = map.keySet().iterator();
 				while (it.hasNext()) {
@@ -135,7 +106,6 @@ public class MpiCombineLevelDao implements IMpiCombineLevelDao {
 	/***
 	 * 合并字段级别信息 旧字段合并级别,新数据来源字段级别，如果新数据来源查不到新字段级别,则应用数据来源级别比较
 	 */
-	@Override
 	public PersonIndex compareBatchAdd(PersonIndex personindex, PersonInfo personinfo, Long combono, Short domainLevel,
 			List<Map<String, Object>> orgincolLevellist, List<Map<String, Object>> srcLevelcollist) {
 		Iterator<Map<String, Object>> it = orgincolLevellist.iterator();

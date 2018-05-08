@@ -6,20 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.sinosoft.mpi.sshl.dao.IDataUploadDetailDao;
+import com.sinosoft.mpi.dao.IBaseDao;
 import com.sinosoft.mpi.sshl.model.DataUploadDetail;
 
-@Repository("dataUploadDetailDao")
-public class DataUploadDetailDao implements IDataUploadDetailDao {
-
-	@Resource
-	private JdbcTemplate jdbcTemplate;
+@Repository
+public class DataUploadDetailDao extends IBaseDao<DataUploadDetail> {
 
 	@Override
 	public void add(DataUploadDetail entity) {
@@ -56,35 +50,6 @@ public class DataUploadDetailDao implements IDataUploadDetailDao {
 		return null;
 	}
 
-	@Override
-	public int getCount(String sql) {
-		return getCount(sql, new Object[] {});
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return jdbcTemplate.queryForObject(sql, args, Integer.class);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public JdbcTemplate getJdbcTemplate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Map<String, String>> findAll(String sql) {
 		return findAll(sql, new Object[] {});
 	}

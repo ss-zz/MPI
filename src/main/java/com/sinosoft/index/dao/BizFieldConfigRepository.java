@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.sinosoft.index.model.BizFieldConfigModel;
+import com.sinosoft.index.entity.BizFieldConfigModel;
 
 /**
  * 业务字段配置 dao
@@ -19,5 +19,7 @@ public interface BizFieldConfigRepository extends MongoRepository<BizFieldConfig
 	List<BizFieldConfigModel> findByKey(String key);
 
 	long countByKey(String key);
+
+	long countByKeyAndBizConfigId(String key, String bizConfigId);
 
 }

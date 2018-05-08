@@ -2,14 +2,14 @@ package com.sinosoft.index.dao;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.sinosoft.index.model.MpiIndexModel;
+import com.sinosoft.index.entity.MpiIndex;
 
 /**
- * mpi index dao
+ * mpi index dao 主索引
  * 
  * @author sinosoft
  *
  */
-public interface MpiIndexRepository extends MongoRepository<MpiIndexModel, String> {
+public interface MpiIndexRepository extends MongoRepository<MpiIndex, String> {
 
 }

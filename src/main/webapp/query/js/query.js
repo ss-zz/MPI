@@ -1,17 +1,12 @@
 $(function() {
 	// 加载表格数据
-	//ajaxTable();
 	$('#listTable').treegrid({
 		title : '主索引记录',
-		toolbar:"#listTable_tb",
-		singleSelect:false,//单选
-		pagination:true,//分页
-		loadMsg:'数据加载中,请稍后...',
-		idField:"ROW_ID",
-		treeField:"NAME",
-		remoteSort:false, 
-		showFooter:false,
-		striped:true,
+		toolbar: "#listTable_tb",
+		loadMsg: '数据加载中,请稍后...',
+		idField: "ROW_ID",
+		treeField: "NAME",
+		fitColunms: true,
 		columns:[[  
 			{field:'ck',checkbox:true},  
 			{field:'NAME_CN',title:'姓名',width:150,formatter:buildViewLink},
@@ -22,20 +17,9 @@ $(function() {
 			//{field:'DOMAIN_DESC',title:'数据来源',width:100},
 			{field:'PERSON_COUNT',title:'关联居民数',width:200,formatter:buildRemoveLink},
 			{field:'OPERATION',title:'操作',width:115,formatter:spileIndex}
-		]],
-		onClickRow:function(index, row){
-		}
+		]]
 	});
 	
-
-	var p = $('#listTable').treegrid('getPager');
-	$(p).pagination({
-		beforePageText : '第',
-		afterPageText : '页	共 {pages} 页',
-		displayMsg : '当前显示 {from} - {to} 条记录   共 {total} 条记录',
-		pageSize : 10,
-		pageList : [ 10, 20, 50, 100 ]
-	});
 });
 
 function d_close(){

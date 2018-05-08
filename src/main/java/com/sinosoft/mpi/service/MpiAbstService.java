@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import com.sinosoft.mpi.dao.IMpiAbstDao;
-import com.sinosoft.mpi.dao.IPinyinDicDao;
+
+import com.sinosoft.mpi.dao.MpiAbstDao;
+import com.sinosoft.mpi.dao.PinyinDicDao;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.PingYin4J;
@@ -19,9 +22,9 @@ public class MpiAbstService implements IMpiAbstService {
 	private Logger logger = Logger.getLogger(MpiAbstService.class);
 
 	@Resource
-	private IMpiAbstDao mpiAbstDao;
+	private MpiAbstDao mpiAbstDao;
 	@Resource
-	private IPinyinDicDao pinyinDicDao;
+	private PinyinDicDao pinyinDicDao;
 
 	@Override
 	public List<Map<String, Object>> queryForSplitPage(PersonIndex index, PageInfo page) {
@@ -130,13 +133,11 @@ public class MpiAbstService implements IMpiAbstService {
 
 	@Override
 	public PersonIndex getObject(String id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<PersonIndex> queryForPage(PersonIndex t, PageInfo page) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

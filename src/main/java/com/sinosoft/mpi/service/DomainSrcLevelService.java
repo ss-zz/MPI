@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.IDomainSrcLevelDao;
+import com.sinosoft.mpi.dao.DomainSrcLevelDao;
 import com.sinosoft.mpi.model.DomainSrcLevel;
 import com.sinosoft.mpi.util.PageInfo;
 
@@ -17,7 +17,7 @@ import com.sinosoft.mpi.util.PageInfo;
 public class DomainSrcLevelService implements IDomainSrcLevelService {
 
 	@Resource
-	private IDomainSrcLevelDao domainSrcLevelDao;
+	private DomainSrcLevelDao domainSrcLevelDao;
 
 	/**
 	 * 对象缓存-根据域id获取数据

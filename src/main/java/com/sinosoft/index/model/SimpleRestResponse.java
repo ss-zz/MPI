@@ -16,5 +16,11 @@ public class SimpleRestResponse {
 		ret.put(key, value);
 		return ret;
 	}
+	
+	public static Map<String, Object> createErrorMsg(String message) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("ERROR_MSG", message);
+		return ret;
+	}
 
 }

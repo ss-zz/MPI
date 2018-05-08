@@ -8,6 +8,9 @@ import com.sinosoft.stringcomparison.MetricsException;
 import com.sinosoft.stringcomparison.config.StringComparisionConfig;
 import com.sinosoft.stringcomparison.model.DistanceMetricType;
 
+/**
+ * 字符串匹配服务
+ */
 @Service("stringComparisonService")
 public class StringComparisonService implements IStringComparisonService {
 

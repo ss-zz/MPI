@@ -8,9 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,10 +16,8 @@ import org.springframework.stereotype.Repository;
 import com.sinosoft.mpi.model.DomainSrcLevel;
 import com.sinosoft.mpi.util.IDUtil;
 
-@Repository("domainSrcLevelDao")
-public class DomainSrcLevelDao implements IDomainSrcLevelDao {
-	@Resource
-	private JdbcTemplate jdbcTemplate;
+@Repository
+public class DomainSrcLevelDao extends IBaseDao<DomainSrcLevel> {
 
 	@Override
 	public List<DomainSrcLevel> find(String sql) {
@@ -42,11 +37,8 @@ public class DomainSrcLevelDao implements IDomainSrcLevelDao {
 			public void processRow(ResultSet rs) throws SQLException {
 				Map<String, Object> row = new HashMap<String, Object>();
 				row.put("DOMAIN_ID", rs.getString("DOMAIN_ID"));
-				// row.put("DOMAIN_DESC", rs.getString("DOMAIN_DESC"));
-				// row.put("DOMAIN_LEVEL", rs.getString("DOMAIN_LEVEL"));
 				row.put("FIELD_NAME", rs.getString("FIELD_NAME"));
 				row.put("FIELD_LEVEL", rs.getString("FIELD_LEVEL"));
-				// row.put("FIELD_DESC", rs.getString("FIELD_DESC"));
 				result.add(row);
 			}
 		});
@@ -54,29 +46,18 @@ public class DomainSrcLevelDao implements IDomainSrcLevelDao {
 
 	}
 
-	@Override
-	public JdbcTemplate getJdbcTemplate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void effect(String id) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public List<DomainSrcLevel> findAll() {
-		// TODO Auto-generated method stub
 		String sql = " select * from MPI_DOMAIN_SRCLEVEL where 1=1 ";
 		List<DomainSrcLevel> datas = find(sql);
 		return datas;
 	}
 
-	@Override
 	public List<DomainSrcLevel> findByID(String domainid) {
-		// TODO Auto-generated method stub
 		String sql = " select * from MPI_DOMAIN_SRCLEVEL where DOMAIN_ID='" + domainid + "'";
 		List<DomainSrcLevel> datas = find(sql);
 		return datas;
@@ -161,7 +142,6 @@ public class DomainSrcLevelDao implements IDomainSrcLevelDao {
 
 	}
 
-	@Override
 	public void updateByDomainID(final DomainSrcLevel entity) {
 		if (entity == null) {
 			return;
@@ -191,16 +171,6 @@ public class DomainSrcLevelDao implements IDomainSrcLevelDao {
 			result = datas.get(0);
 		}
 		return result;
-	}
-
-	@Override
-	public int getCount(String sql) {
-		return getCount(sql, new Object[] {});
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return jdbcTemplate.queryForObject(sql, args, Integer.class);
 	}
 
 }

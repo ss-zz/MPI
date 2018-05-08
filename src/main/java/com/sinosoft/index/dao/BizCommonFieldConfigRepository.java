@@ -2,7 +2,7 @@ package com.sinosoft.index.dao;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.sinosoft.index.model.BizCommonFieldConfigModel;
+import com.sinosoft.index.entity.BizCommonFieldConfig;
 
 /**
  * 通用业务字段配置 dao
@@ -10,8 +10,8 @@ import com.sinosoft.index.model.BizCommonFieldConfigModel;
  * @author sinosoft
  *
  */
-public interface BizCommonFieldConfigRepository extends MongoRepository<BizCommonFieldConfigModel, String> {
+public interface BizCommonFieldConfigRepository extends MongoRepository<BizCommonFieldConfig, String> {
 
-	long countByKey(String key);
+	long countByFieldName(String fieldName);
 
 }

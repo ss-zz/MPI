@@ -4,11 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -16,10 +12,8 @@ import org.springframework.stereotype.Repository;
 import com.sinosoft.mpi.model.MatchResult;
 import com.sinosoft.mpi.util.IDUtil;
 
-@Repository("matchResultDao")
-public class MatchResultDao implements IMatchResultDao {
-	@Resource
-	private JdbcTemplate jdbcTemplate;
+@Repository
+public class MatchResultDao extends IBaseDao<MatchResult> {
 
 	@Override
 	public void add(final MatchResult entity) {
@@ -108,37 +102,11 @@ public class MatchResultDao implements IMatchResultDao {
 		return find(sql);
 	}
 
-	@Override
-	public int getCount(String sql) {
-		return getCount(sql, new Object[] {});
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return jdbcTemplate.queryForObject(sql, args, Integer.class);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		return jdbcTemplate.queryForList(sql, args);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
-		return jdbcTemplate.queryForList(sql);
-	}
-
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	@Override
 	public void deleteByPersonID(String personID) {
 		String sql = " delete mpi_match_result where field_pk = ? ";
 		jdbcTemplate.update(sql, new Object[] { personID });
 	}
 
-	@Override
 	public MatchResult findByPersonAndIndex(String fieldPk, String mpiPk) {
 		String sql = " select * from mpi_match_result where mpi_pk = ? and field_pk = ?";
 		List<MatchResult> datas = find(sql, new Object[] { mpiPk, fieldPk });
@@ -147,11 +115,6 @@ public class MatchResultDao implements IMatchResultDao {
 			result = datas.get(0);
 		}
 		return result;
-	}
-
-	@Override
-	public JdbcTemplate getJdbcTemplate() {
-		return this.jdbcTemplate;
 	}
 
 }

@@ -1,23 +1,23 @@
 var INUSED_FIELDS={};
 
-$(function() {    
-    // 初始化字段下拉
-    createSelect("add_fieldSelect",SELECT_JSON.pList,"codeName","codeId",INUSED_FIELDS);
-    if (typeof (JSON) == 'undefined') {
-        $.getScript(root+'/js/easyui/json2.js');
-    }
+$(function() {	
+	// 初始化字段下拉
+	createSelect("add_fieldSelect",SELECT_JSON.pList,"codeName","codeId",INUSED_FIELDS);
+	if (typeof (JSON) == 'undefined') {
+		$.getScript(root+'/js/easyui/json2.js');
+	}
 });
 
 //锁定按钮
 function lockBtn(btn){
-    $(btn).unbind('click').removeAttr('onclick');
-    $(btn).attr("disabled",true);  
+	$(btn).unbind('click').removeAttr('onclick');
+	$(btn).attr("disabled",true);  
 }
 
 // 解锁按钮
 function unlockBtn(btn,handler){
-    $(btn).bind("click",handler);
-    $(btn).attr("disabled",false);      
+	$(btn).bind("click",handler);
+	$(btn).attr("disabled",false);	  
 }
 
 /**
@@ -66,15 +66,15 @@ function addFieldCfg(){
 		return;
 	}
 	// 定义要添加的html代码	
-	var htm = '<br/><fieldset id="'+filedId+'_add_fieldset"><legend>[<span style="color:#ff0000;font-weight:bold;">'+data.codeName+'</span>]匹配设定</legend>'+
+	var htm = '<fieldset id="'+filedId+'_add_fieldset"><legend><span style="color:#78a9cb;font-weight:bold;">'+data.codeName+'</span>-匹配设定</legend>'+
 		'<input type="hidden" id="'+filedId+'_add_fieldName" value="xxx">'+
 		'<input type="hidden" id="'+filedId+'_add_desc" value="'+data.codeName+'">'+			
 		'<label for="'+filedId+'_add_agreeThreshold">完全匹配值:</label><input type="text" class="easyui-validatebox" id="'+filedId+'_add_agreeThreshold" maxlength="10" required="true" validType="decimalValid"/>&nbsp;&nbsp;'+
 		'<label for="'+filedId+'_add_disagreeThreshold">不匹配值:</label><input type="text" class="easyui-validatebox" id="'+filedId+'_add_disagreeThreshold" maxlength="10" required="true" validType="decimalValid"/>&nbsp;&nbsp;'+
-		'<label for="'+filedId+'_add_matchThreshold">匹配阀值:</label><input type="text" class="easyui-validatebox" id="'+filedId+'_add_matchThreshold" maxlength="10" required="true" validType="decimalValid"/><br/><br/>'+
+		'<label for="'+filedId+'_add_matchThreshold">匹配阀值:</label><input type="text" class="easyui-validatebox" id="'+filedId+'_add_matchThreshold" maxlength="10" required="true" validType="decimalValid"/>'+
 		'<label for="'+filedId+'_add_weight">权重:</label><input type="text" class="easyui-validatebox" id="'+filedId+'_add_weight" maxlength="10" required="true" validType="decimalValid"/>&nbsp;&nbsp;'+
-		'<label for="'+filedId+'_add_matchFunction">比较函数:</label><select id="'+filedId+'_add_matchFunction" required="true"></select>&nbsp;&nbsp;'+
-		'<input type="button" value="移除本字段" onclick="removeFieldCfg(\''+filedId+'\')"/></fieldset>';
+		'<label for="'+filedId+'_add_matchFunction">匹配算法:</label><select id="'+filedId+'_add_matchFunction" required="true"></select>&nbsp;&nbsp;'+
+		'<div class="my-btn my-btn-danger" onclick="removeFieldCfg(\''+filedId+'\')">移除字段</div></fieldset>';
 	$("#field_cfg_div").prepend(htm);
 	// 重建 字段下拉
 	createSelect("add_fieldSelect",SELECT_JSON.pList,"codeName","codeId",INUSED_FIELDS);
@@ -91,6 +91,7 @@ function addFieldCfg(){
  */
 function removeFieldCfg(fieldId){
 	// 消除验证框
+	/*
 	$('#table_add input').each(function() {
 		if($(this).attr('id')=="add_agreeThreshold"||$(this).attr('id')=="add_matchThreshold"){
 			return;
@@ -99,6 +100,7 @@ function removeFieldCfg(fieldId){
 			$(this).validatebox('destroy');
 		}
 	});
+	*/
 	delete INUSED_FIELDS[fieldId];
 	$("#"+fieldId+"_add_fieldset").remove();
 	// 重建 字段下拉
@@ -255,7 +257,7 @@ function goBackClose(){
 	//如果当前id的tab不存在则创建一个tab
 	if(parent.$("#"+tabId).html()==null){		
 		parent.$('#centerTab').tabs('add',{
-			title: title,         
+			title: title,		 
 			closable:true,
 			cache : false,
 			//注：使用iframe即可防止同一个页面出现js和css冲突的问题

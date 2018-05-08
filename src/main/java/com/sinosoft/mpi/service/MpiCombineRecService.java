@@ -6,7 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.IMpiCombineRecDao;
+import com.sinosoft.mpi.dao.MpiCombineRecDao;
 import com.sinosoft.mpi.model.MpiCombineRec;
 import com.sinosoft.mpi.util.PageInfo;
 
@@ -14,7 +14,7 @@ import com.sinosoft.mpi.util.PageInfo;
 public class MpiCombineRecService implements IMpiCombineRecService {
 
 	@Resource
-	IMpiCombineRecDao mpiCombineRecDao;
+	MpiCombineRecDao mpiCombineRecDao;
 
 	@Override
 	public void save(MpiCombineRec t) {

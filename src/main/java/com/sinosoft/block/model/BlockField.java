@@ -2,18 +2,17 @@ package com.sinosoft.block.model;
 
 import java.io.Serializable;
 
+/**
+ * 初筛配置-字段
+ */
 public class BlockField implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1682703665869495046L;
-	
-	
+
 	private String dbField;
-	
+
 	private String field;
-	
+
 	private String funName;
 
 	public String getDbField() {
@@ -39,8 +38,5 @@ public class BlockField implements Serializable {
 	public void setFunName(String funName) {
 		this.funName = funName;
 	}
-	
-	
-	
 
 }

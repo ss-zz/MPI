@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.sinosoft.index.model.BizConfigModel;
+import com.sinosoft.index.entity.BizMatchConfig;
 import com.sinosoft.index.model.SimpleRestResponse;
 import com.sinosoft.index.service.BizConfigService;
 
@@ -36,7 +36,7 @@ public class BizConfigController {
 	 */
 	@GetMapping("/all")
 	@ResponseBody
-	public List<BizConfigModel> getAll() {
+	public List<BizMatchConfig> getAll() {
 		return bizConfigService.getAll();
 	}
 
@@ -77,7 +77,7 @@ public class BizConfigController {
 	 */
 	@PostMapping("/save")
 	@ResponseBody
-	public Map<String, Object> save(BizConfigModel bizConfig) {
+	public Map<String, Object> save(BizMatchConfig bizConfig) {
 		return SimpleRestResponse.create("id", bizConfigService.save(bizConfig));
 	}
 

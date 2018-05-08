@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.IMatchResultDao;
+import com.sinosoft.mpi.dao.MatchResultDao;
 import com.sinosoft.mpi.model.MatchResult;
 import com.sinosoft.mpi.util.PageInfo;
 
@@ -15,7 +15,7 @@ import com.sinosoft.mpi.util.PageInfo;
 public class MatchResultService implements IMatchResultService {
 	private Logger logger = Logger.getLogger(MatchResultService.class);
 	@Resource
-	private IMatchResultDao matchResultDao;
+	private MatchResultDao matchResultDao;
 
 	@Override
 	public void save(MatchResult t) {
@@ -51,10 +51,6 @@ public class MatchResultService implements IMatchResultService {
 		sql = page.buildPageSql(sql);
 		logger.debug("Execute sql:" + sql);
 		return matchResultDao.find(sql, new Object[] {});
-	}
-
-	public void setMatchResultDao(IMatchResultDao matchResultDao) {
-		this.matchResultDao = matchResultDao;
 	}
 
 	@Override

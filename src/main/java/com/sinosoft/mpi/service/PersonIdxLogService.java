@@ -17,11 +17,11 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.QueryConditionType;
-import com.sinosoft.mpi.dao.IIdentifierDomainDao;
-import com.sinosoft.mpi.dao.IMatchResultDao;
-import com.sinosoft.mpi.dao.IPersonIdxLogDao;
-import com.sinosoft.mpi.dao.IPersonIndexDao;
-import com.sinosoft.mpi.dao.IPersonInfoDao;
+import com.sinosoft.mpi.dao.IdentifierDomainDao;
+import com.sinosoft.mpi.dao.MatchResultDao;
+import com.sinosoft.mpi.dao.PersonIdxLogDao;
+import com.sinosoft.mpi.dao.PersonIndexDao;
+import com.sinosoft.mpi.dao.PersonInfoDao;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.form.MatchDetailForm;
 import com.sinosoft.mpi.model.IdentifierDomain;
@@ -41,17 +41,17 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 	private Logger logger = Logger.getLogger(PersonIdxLogService.class);
 
 	@Resource
-	private IIdentifierDomainDao identifierDomainDao;
+	private IdentifierDomainDao identifierDomainDao;
 	@Resource
-	private IMatchResultDao matchResultDao;
+	private MatchResultDao matchResultDao;
 	@Resource
-	private IPersonIdxLogDao personIdxLogDao;
+	private PersonIdxLogDao personIdxLogDao;
 	@Resource
-	private IPersonIndexDao personIndexDao;
+	private PersonIndexDao personIndexDao;
 	@Resource
-	private IPersonInfoDao personInfoDao;
+	private PersonInfoDao personInfoDao;
 	@Resource
-	private IPersonIndexService personIndexService;
+	private PersonIndexService personIndexService;
 
 	private void addconditions(final PersonIdxLog t, final StringBuilder sql, final List<Object> args) {
 		SqlUtils.appendCondition(t.getOpType(), "a.op_type", sql, args, QueryConditionType.EQUAL);
@@ -605,26 +605,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 	public void update(PersonIdxLog t) {
 		personIdxLogDao.update(t);
 		logger.debug("update PersonIdxLog:" + t);
-	}
-
-	public void setIdentifierDomainDao(IIdentifierDomainDao identifierDomainDao) {
-		this.identifierDomainDao = identifierDomainDao;
-	}
-
-	public void setMatchResultDao(IMatchResultDao matchResultDao) {
-		this.matchResultDao = matchResultDao;
-	}
-
-	public void setPersonIdxLogDao(IPersonIdxLogDao personIdxLogDao) {
-		this.personIdxLogDao = personIdxLogDao;
-	}
-
-	public void setPersonIndexDao(IPersonIndexDao personIndexDao) {
-		this.personIndexDao = personIndexDao;
-	}
-
-	public void setPersonInfoDao(IPersonInfoDao personInfoDao) {
-		this.personInfoDao = personInfoDao;
 	}
 
 }

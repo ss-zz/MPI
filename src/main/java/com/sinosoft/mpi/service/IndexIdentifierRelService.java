@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.IIndexIdentifierRelDao;
+import com.sinosoft.mpi.dao.IndexIdentifierRelDao;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.util.PageInfo;
 
@@ -15,7 +15,7 @@ import com.sinosoft.mpi.util.PageInfo;
 public class IndexIdentifierRelService implements IIndexIdentifierRelService {
 	private Logger logger = Logger.getLogger(IndexIdentifierRelService.class);
 	@Resource
-	private IIndexIdentifierRelDao indexIdentifierRelDao;
+	private IndexIdentifierRelDao indexIdentifierRelDao;
 
 	@Override
 	public void save(IndexIdentifierRel t) {
@@ -31,14 +31,11 @@ public class IndexIdentifierRelService implements IIndexIdentifierRelService {
 	@Override
 	public void delete(IndexIdentifierRel t) {
 		indexIdentifierRelDao.deleteById(t);
-		logger.debug("Del IndexIdentifierRel:indexId=" + t.getMPI_PK() + ",identifierId=" + t.getPERSON_IDENTIFIER());
 	}
 
 	@Override
 	public void deleteByFieldPk(String fieldpk) {
 		indexIdentifierRelDao.deleteByFieldPK(fieldpk);
-		;
-		logger.debug("Del IndexIdentifierRel:field_pk=" + fieldpk);
 	}
 
 	@Override
@@ -51,14 +48,6 @@ public class IndexIdentifierRelService implements IIndexIdentifierRelService {
 	public List<IndexIdentifierRel> queryForPage(IndexIdentifierRel t, PageInfo page) {
 		// XXX ben 中间表操作 无需实现
 		return null;
-	}
-
-	public IIndexIdentifierRelDao getIndexIdentifierRelDao() {
-		return indexIdentifierRelDao;
-	}
-
-	public void setIndexIdentifierRelDao(IIndexIdentifierRelDao indexIdentifierRelDao) {
-		this.indexIdentifierRelDao = indexIdentifierRelDao;
 	}
 
 	@Override

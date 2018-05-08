@@ -6,20 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.sinosoft.mpi.sshl.dao.IDataUploadDao;
+import com.sinosoft.mpi.dao.IBaseDao;
 import com.sinosoft.mpi.sshl.model.DataUpload;
 
-@Repository("dataUploadDao")
-public class DataUploadDao implements IDataUploadDao {
-
-	@Resource
-	private JdbcTemplate jdbcTemplate;
+@Repository
+public class DataUploadDao extends IBaseDao<DataUpload> {
 
 	@Override
 	public void add(DataUpload entity) {
@@ -76,12 +70,6 @@ public class DataUploadDao implements IDataUploadDao {
 		return null;
 	}
 
-	@Override
-	public JdbcTemplate getJdbcTemplate() {
-		return null;
-	}
-
-	@Override
 	public List<Map<String, String>> findAll(String sql) {
 		return findAll(sql, new Object[] {});
 	}

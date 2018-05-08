@@ -1,7 +1,7 @@
 package com.sinosoft.block.fun;
 
 /**
- * 转换函数接口
+ * 初筛转换函数接口
  */
 public interface IBlockFuntion {
 

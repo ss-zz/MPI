@@ -4,11 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -16,11 +12,8 @@ import org.springframework.stereotype.Repository;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.util.IDUtil;
 
-@Repository("indexIdentifierRelDao")
-public class IndexIdentifierRelDao implements IIndexIdentifierRelDao {
-
-	@Resource
-	private JdbcTemplate jdbcTemplate;
+@Repository
+public class IndexIdentifierRelDao extends IBaseDao<IndexIdentifierRel> {
 
 	@Override
 	public void add(final IndexIdentifierRel entity) {
@@ -51,7 +44,6 @@ public class IndexIdentifierRelDao implements IIndexIdentifierRelDao {
 		});
 	}
 
-	@Override
 	public void deleteByFieldPK(final String field_pk) {
 		String sql = " delete from mpi_index_identifier_rel where field_pk = ? ";
 		jdbcTemplate.update(sql, new PreparedStatementSetter() {
@@ -61,7 +53,6 @@ public class IndexIdentifierRelDao implements IIndexIdentifierRelDao {
 		});
 	}
 
-	@Override
 	public void deleteByMpiPK(final String mpi_pk) {
 		String sql = " delete from mpi_index_identifier_rel where mpi_pk = ? ";
 		jdbcTemplate.update(sql, new PreparedStatementSetter() {
@@ -119,35 +110,6 @@ public class IndexIdentifierRelDao implements IIndexIdentifierRelDao {
 		return datas;
 	}
 
-	@Override
-	public int getCount(String sql) {
-		return getCount(sql, new Object[] {});
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return jdbcTemplate.queryForObject(sql, args, Integer.class);
-	}
-
-	public JdbcTemplate getJdbcTemplate() {
-		return jdbcTemplate;
-	}
-
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		return jdbcTemplate.queryForList(sql, args);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
-		return jdbcTemplate.queryForList(sql);
-	}
-
-	@Override
 	public IndexIdentifierRel findByFieldPK(String field_pk) {
 		String sql = " select * from mpi_index_identifier_rel where field_pk = ? order by combine_no desc";
 		List<IndexIdentifierRel> list = find(sql, new Object[] { field_pk });
@@ -158,14 +120,12 @@ public class IndexIdentifierRelDao implements IIndexIdentifierRelDao {
 		return result;
 	}
 
-	@Override
 	public List<IndexIdentifierRel> findByMpiPK(String mpi_pk) {
 		String sql = " select * from mpi_index_identifier_rel where mpi_pk = ? order by combine_no asc";
 		List<IndexIdentifierRel> list = find(sql, new Object[] { mpi_pk });
 		return list;
 	}
 
-	@Override
 	public IndexIdentifierRel findByMpiPKByLatest(String mpi_pk) {
 		String sql = " select * from mpi_index_identifier_rel  where mpi_pk = ? order by COMBINE_REC desc ";
 		List<IndexIdentifierRel> list = find(sql, new Object[] { mpi_pk });
@@ -176,12 +136,10 @@ public class IndexIdentifierRelDao implements IIndexIdentifierRelDao {
 		return result;
 	}
 
-	@Override
 	public void deleteRecurByCombinNo(String sql, Long args) {
 		jdbcTemplate.update(sql, new Object[] { args });
 	}
 
-	@Override
 	public void deleteByMpiPKFieldPk(final String mpi_pk, String field_pk) {
 		String sql = " delete from mpi_index_identifier_rel where mpi_pk = '" + mpi_pk + "' and field_pk = '" + field_pk
 				+ "' ";
