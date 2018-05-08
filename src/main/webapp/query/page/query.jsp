@@ -7,15 +7,6 @@
 <%@include file="/common/page/master.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/query/js/query.js"></script>
 <style type="text/css">
-.mytable {
-	border-collapse:collapse;
-	border: 1px #CCCCCC dotted ;
-	margin: 0px;
-}
-.mytable tr td {
-	border: 1px #CCCCCC dotted ;
-	margin: 0px;
-}
 .tree-folder{
 	background:url('${pageContext.request.contextPath}/images/index_0.png') no-repeat !important;
 }

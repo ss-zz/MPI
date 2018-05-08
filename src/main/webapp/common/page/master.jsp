@@ -94,7 +94,10 @@ body {
 		$.fn.datagrid.defaults.fitColumns = true;
 		$.fn.datagrid.defaults.striped = true;
 		$.fn.datagrid.defaults.showFooter = false;
+		$.fn.datagrid.defaults.pagination = true;
 		$.fn.datagrid.defaults.loadMsg = '数据加载中,请稍后...';
+		
+		$.fn.treegrid.defaults.pagination = true;
 		
 		$.fn.form.defaults.iframe = false;
 		$.fn.form.defaults.ajax = true;

@@ -52,9 +52,9 @@ public class IndexOperate {
 	 * 
 	 * @return
 	 */
-	@ResponseBody
 	@RequestMapping(params = "method=merge")
-	public String mergeIndex(String retiredPk, String survivingPk) {
+	@ResponseBody
+	public Map<String, Object> mergeIndex(String retiredPk, String survivingPk) {
 		try {
 			personIndexService.mergeIndex(retiredPk, survivingPk);
 		} catch (ValidationException e) {// 验证异常
@@ -62,7 +62,7 @@ public class IndexOperate {
 		} catch (Exception e) {
 			logger.error("系统错误,无法完成合并主索引操作", e);
 		}
-		return null;
+		return new HashMap<>();
 	}
 
 	/**
