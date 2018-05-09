@@ -82,6 +82,15 @@ dependencies {
 	// cxf web service 服务
 	compile('org.apache.cxf:cxf-spring-boot-starter-jaxws:3.1.15')
 	
+	// ehcache 缓存
+	compile('org.ehcache:ehcache:3.4.0')
+	
+	//JSR-107 规范
+	compile('javax.cache:cache-api:1.0.0')
+	
+	compile('org.springframework.boot:spring-boot-starter-cache')
+	
+	
 	// 3rd jar
 	compile files('src/main/lib/batik-all-1.7.jar')
 	compile files('src/main/lib/pinyin4j-2.5.0.jar')

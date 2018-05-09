@@ -16,7 +16,9 @@ spring:
   # 资源文件
   resources:
     static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
-
+  cache:
+    jcache:
+      config:classpath:ehcache.xml
 ## mq配置
 mq:
   host: localhost

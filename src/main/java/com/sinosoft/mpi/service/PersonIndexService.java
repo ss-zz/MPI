@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.annotation.Resource;
+import javax.cache.annotation.CacheDefaults;
+import javax.cache.annotation.CacheResult;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
@@ -43,6 +45,7 @@ import com.sinosoft.mpi.util.SqlUtils;
  * 主索引人员服务
  */
 @Service("personIndexService")
+@CacheDefaults(cacheName = "peopleCache")
 public class PersonIndexService implements IPersonIndexService {
 
 	private Logger logger = Logger.getLogger(PersonIndexService.class);
@@ -114,9 +117,12 @@ public class PersonIndexService implements IPersonIndexService {
 		logger.debug("Execute sql:[" + sql + "],params[]");
 		return personIndexDao.find(sql, new Object[] {});
 	}
-
+	
+	
 	@Override
+	@CacheResult
 	public List<Map<String, Object>> queryForSplitPage(PersonIndex index, PageInfo page) {
+		
 		StringBuilder sql = new StringBuilder();
 		sql.append(
 				"select * from (select a.MPI_PK,a.MPI_PK row_id,1 row_type,a.name_cn,getCodeValue('GBT226112003',a.gender_cd) gender_cd,a.gender_dn,a.birth_date,a.id_no,a.person_tel_no,nvl(b.person_count,0) person_count, ");
@@ -125,7 +131,11 @@ public class PersonIndexService implements IPersonIndexService {
 				" ,(select distinct (g.mpi_pk) from mpi_index_operate g where g.op_style = 4 and g.mpi_pk = a.MPI_PK) mergeStatus");
 		sql.append(" from mpi_person_index a left join ( select count(c.DOMAIN_ID) person_count,c.MPI_PK ");
 		sql.append(
-				" from mpi_index_identifier_rel c group by c.MPI_PK ) b on a.MPI_PK = b.MPI_PK where 1=1 and a.state != 1) l");
+				" from mpi_index_identifier_rel c group by c.MPI_PK ) b on a.MPI_PK = b.MPI_PK where 1=1 and a.state != 1");
+		
+		// 添加查询条件
+		List<Object> args = buildQueryConditions(sql, index);
+		sql.append(" ) l ");
 		if (index.getSTATE() != null) {
 			if (index.getSTATE().toString().equals("0")) {
 				sql.append(" where l.mergeStatus is null");
@@ -134,8 +144,6 @@ public class PersonIndexService implements IPersonIndexService {
 				sql.append(" where l.mergeStatus is not null");
 			}
 		}
-		// 添加查询条件
-		List<Object> args = buildQueryConditions(sql, index);
 		// 添加排序条件
 		// sql.append(" order by nvl(b.person_count,0) desc ");
 

@@ -1,5 +1,9 @@
 package com.sinosoft.mpi.util.similarity;
 
+/**
+ * 匹配算法测试
+ * @author admin
+ */
 public class SimilarityTest {
 	public static void main(String[] args) {
 
@@ -7,8 +11,8 @@ public class SimilarityTest {
 		 * String str1 = "刘梅2018-04-26"; String str2 = "张梅2018-04-26";
 		 */
 
-		String str1 = "123456";
-		String str2 = "654321";
+		String str1 = "AAAB";
+		String str2 = "AAAA";
 
 		/**
 		 * Jaro-Winkler Distance 算法
