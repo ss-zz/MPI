@@ -16,8 +16,8 @@ import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.PingYin4J;
 
-@Service("mpiAbstService")
-public class MpiAbstService implements IMpiAbstService {
+@Service
+public class MpiAbstService {
 
 	private Logger logger = Logger.getLogger(MpiAbstService.class);
 
@@ -26,12 +26,10 @@ public class MpiAbstService implements IMpiAbstService {
 	@Resource
 	private PinyinDicDao pinyinDicDao;
 
-	@Override
 	public List<Map<String, Object>> queryForSplitPage(PersonIndex index, PageInfo page) {
 		return null;
 	}
 
-	@Override
 	public List<Map<String, Object>> queryForSplitPage(PersonIndex index, String fromIndexId, PageInfo page) {
 		return null;
 	}
@@ -43,7 +41,6 @@ public class MpiAbstService implements IMpiAbstService {
 	 *            操作personIndex
 	 *
 	 */
-	@Override
 	public void save(PersonIndex personIndex) {
 		if (personIndex == null) {
 			return;
@@ -113,7 +110,6 @@ public class MpiAbstService implements IMpiAbstService {
 	 *            操作personIndex
 	 * 
 	 */
-	@Override
 	public void update(PersonIndex t) {
 		delete(t);
 		save(t);
@@ -126,17 +122,14 @@ public class MpiAbstService implements IMpiAbstService {
 	 *            操作personIndex
 	 * 
 	 */
-	@Override
 	public void delete(PersonIndex t) {
 		mpiAbstDao.deleteById(t);
 	}
 
-	@Override
 	public PersonIndex getObject(String id) {
 		return null;
 	}
 
-	@Override
 	public List<PersonIndex> queryForPage(PersonIndex t, PageInfo page) {
 		return null;
 	}

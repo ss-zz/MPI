@@ -7,10 +7,10 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 
-import com.sinosoft.block.service.IBlockService;
+import com.sinosoft.block.service.BlockService;
 import com.sinosoft.match.model.Record;
 import com.sinosoft.match.model.RecordPair;
-import com.sinosoft.match.service.IMatchService;
+import com.sinosoft.match.service.MatchService;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.MpiCombineRec;
@@ -19,15 +19,15 @@ import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.notification.event.IEvent;
 import com.sinosoft.mpi.notification.listener.IEventHandler;
-import com.sinosoft.mpi.service.IBookLogService;
-import com.sinosoft.mpi.service.IIndexIdentifierRelService;
-import com.sinosoft.mpi.service.IMpiAbstService;
-import com.sinosoft.mpi.service.IMpiCombineLevelService;
-import com.sinosoft.mpi.service.IMpiCombineRecService;
-import com.sinosoft.mpi.service.IPersonIdxLogService;
-import com.sinosoft.mpi.service.IPersonIndexService;
-import com.sinosoft.mpi.service.IPersonIndexUpdateService;
-import com.sinosoft.mpi.service.IPersonInfoService;
+import com.sinosoft.mpi.service.BookLogService;
+import com.sinosoft.mpi.service.IndexIdentifierRelService;
+import com.sinosoft.mpi.service.MpiAbstService;
+import com.sinosoft.mpi.service.MpiCombineLevelService;
+import com.sinosoft.mpi.service.MpiCombineRecService;
+import com.sinosoft.mpi.service.PersonIdxLogService;
+import com.sinosoft.mpi.service.PersonIndexService;
+import com.sinosoft.mpi.service.PersonIndexUpdateService;
+import com.sinosoft.mpi.service.PersonInfoService;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.NumberUtils;
 
@@ -35,32 +35,31 @@ import com.sinosoft.mpi.util.NumberUtils;
  * 拆分主索引信息
  */
 public class SplitPersonEventHandler implements IEventHandler {
+	
 	@Resource
-	private IIndexIdentifierRelService indexIdentifierRelService;
+	private IndexIdentifierRelService indexIdentifierRelService;
 	@Resource
-	private IPersonIndexService personIndexService;
+	private PersonIndexService personIndexService;
 	@Resource
-	private IPersonInfoService personInfoService;
+	private PersonInfoService personInfoService;
 	@Resource
-	private IBookLogService bookLogService;
+	private BookLogService bookLogService;
 	@Resource
-	private IPersonIndexUpdateService personIndexUpdateService;
+	private PersonIndexUpdateService personIndexUpdateService;
 	@Resource
-	IMpiCombineRecService mpiCombineRecService;
+	private MpiCombineRecService mpiCombineRecService;
 	@Resource
-	IMpiCombineLevelService mpiCombineLevelService;
+	private MpiCombineLevelService mpiCombineLevelService;
 	@Resource
-	IPersonIdxLogService personIdxLogService;
+	private PersonIdxLogService personIdxLogService;
 	@Resource
-	IPersonInfoService personinfoService;
+	private PersonInfoService personinfoService;
 	@Resource
-	private IMpiAbstService mpiAbstService;
-
+	private MpiAbstService mpiAbstService;
 	@Resource
-	private IBlockService blockService;
-
+	private BlockService blockService;
 	@Resource
-	private IMatchService matchServcie;
+	private MatchService matchServcie;
 
 	private Logger logger = Logger.getLogger(UpdatePersonEventHandler.class);
 

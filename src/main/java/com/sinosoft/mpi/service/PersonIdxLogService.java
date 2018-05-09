@@ -36,8 +36,9 @@ import com.sinosoft.mpi.util.NumberUtils;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.SqlUtils;
 
-@Service("personIdxLogService")
-public class PersonIdxLogService implements IPersonIdxLogService {
+@Service
+public class PersonIdxLogService {
+
 	private Logger logger = Logger.getLogger(PersonIdxLogService.class);
 
 	@Resource
@@ -175,7 +176,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		return args;
 	}
 
-	@Override
 	public void delete(PersonIdxLog t) {
 		personIdxLogDao.deleteById(t);
 		logger.debug("delete PersonIdxLog,personIdxLogId=" + t.getPersonIdxLogId());
@@ -246,7 +246,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		return desc.getPropertyDesc();
 	}
 
-	@Override
 	public PersonIdxLog getObject(String id) {
 		PersonIdxLog t = new PersonIdxLog();
 		t.setPersonIdxLogId(id);
@@ -275,7 +274,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 	}
 
 	public List<MatchDetailForm> queryCompareData(String personId, String mpiPk) {
-		// TODO
 		// 取得 居民
 		PersonInfo person = findPersonInfo(personId);
 		// 取得 索引
@@ -296,15 +294,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 
 	public List<Map<String, Object>> queryForMapPage(PersonIdxLog t, PageInfo page) {
 		StringBuilder sql = new StringBuilder();
-		/*
-		 * sql.append(
-		 * " select a.person_idx_log_id,a.op_time,a.op_type,a.op_style,a.op_desc,b.domain_desc,d.name from mpi_person_idx_log a "
-		 * )
-		 * .append(" left join mpi_identifier_domain b on a.info_sour = b.domain_id left join mpi_person_info c on "
-		 * )
-		 * .append(" a.field_pk = c.field_pk left join mpi_sys_user d on a.op_user_id = d.user_id where 1=1 "
-		 * );
-		 */
 		sql.append(
 				" select a.person_idx_log_id,a.op_time,a.op_type,a.op_style,a.op_desc,b.domain_desc,d.name,c.name_cn personname,c.id_no personIdcard from mpi_person_idx_log a  ")
 				.append("left join  mpi_person_info c on a.field_pk = c.field_pk")
@@ -327,9 +316,7 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		return personIdxLogDao.findForMap(querySql, args.toArray());
 	}
 
-	@Override
 	public List<PersonIdxLog> queryForPage(PersonIdxLog t, PageInfo page) {
-		// XXX ben 实际应用的时候这里需要添加查询条件
 		String sql = " select * from mpi_person_idx_log where 1=1 ";
 		String countSql = page.buildCountSql(sql);
 		page.setTotal(personIdxLogDao.getCount(countSql));
@@ -339,7 +326,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		return personIdxLogDao.find(sql, new Object[] {});
 	}
 
-	@Override
 	public Map<String, Object> queryIndexDetail(String mpiPk) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		// 取得索引数据
@@ -355,7 +341,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		return result;
 	}
 
-	@Override
 	public List<Map<String, Object>> queryIndexDetails(String mpiPk) {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		// 被合并的主索引集合
@@ -370,11 +355,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		return result;
 	}
 
-	/**
-	 * @date 2012年12月4日
-	 * @param obj
-	 * @return List<MatchDetailForm>
-	 */
 	private List<MatchDetailForm> buildFieldByIndex(Object obj) {
 		List<PersonPropertiesDesc> fields = CacheManager.getAll(PersonPropertiesDesc.class);
 		List<MatchDetailForm> result = new ArrayList<MatchDetailForm>(fields.size());
@@ -393,11 +373,9 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		return result;
 	}
 
-	@Override
 	public Map<String, Object> queryMatchDetail(String logId) {
 		// 校验数据
 		if (StringUtils.isBlank(logId)) {
-			logger.debug("参数为空:logId=" + logId);
 			throw new ValidationException("参数为空:logId=" + logId);
 		}
 
@@ -406,7 +384,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		// 取得 索引日志
 		PersonIdxLog log = getObject(logId);
 		if (log == null) {
-			logger.debug("无法取得相关信息:PersonIdxLog=" + log);
 			throw new ValidationException("无法取得相关信息:PersonIdxLog=" + log);
 		}
 		// 取得域信息
@@ -416,15 +393,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 			domain = identifierDomainDao.findById(domain);
 			log.setInfoSour(domain.getDOMAIN_DESC());
 		}
-		/*
-		 * // 取得居民数据 PersonInfo person = findPersonInfo(log.getFieldpk()); // 取得索引数据
-		 * PersonIndex index = findPersonIndex(log.getMpipk()); if (log == null ||
-		 * person == null || index == null) { logger.debug("无法取得相关信息:PersonIdxLog=" +
-		 * log + ",\nPersonInfo=" + person + ",\nPersonIndex=" + index); throw new
-		 * ValidationException("无法取得相关信息:PersonIdxLog=" + log + ",\nPersonInfo=" +
-		 * person + ",\nPersonIndex=" + index); }
-		 */
-
 		// 取得居民数据
 		PersonInfo person;
 		// 取得索引数据
@@ -474,7 +442,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		return result;
 	}
 
-	@Override
 	public List<Map<String, Object>> queryMatchDetailPage(String personId, int start, int end) {
 
 		// 创建分页信息,每次查询出一条匹配记录
@@ -503,7 +470,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		return result;
 	}
 
-	@Override
 	public List<Map<String, Object>> queryMatchDetailPageByIdxIds(String personId, String[] idxIds) {
 
 		// 取得匹配数据
@@ -530,7 +496,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		return result;
 	}
 
-	@Override
 	public List<Map<String, Object>> queryMatchIndex(String personId) {
 		String sql = " select b.mpi_pk,b.name_cn,b.id_no,a.match_degree from mpi_match_result a left join "
 				+ " mpi_person_index b on a.mpi_pk = b.mpi_pk where a.field_pk = ? order by a.match_degree desc ";
@@ -539,18 +504,13 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		return result;
 	}
 
-	@Override
 	public int queryMatchIndexCount(String personId) {
 		String sql = " select count(*) from mpi_match_result where FIELD_PK=? ";
 		return matchResultDao.getCount(sql, new Object[] { personId });
 	}
 
-	@Override
 	public List<Map<String, Object>> queryOpLogByPersonId(String personId) {
 		String sql = "select a.person_idx_log_id row_id,2 row_type,a.index_id,a.op_type optype,a.op_style,a.op_time domain_desc,b.name,b.gender_cd, "
-				// +
-				// " b.birth_date,b.id_no,b.phone_one,'open'
-				// \"state\",b.health_record_num,b.nh_card,'' opcount "
 				+ " b.birth_date,b.id_no,b.person_tel_no,'open' \"state\",b.nh_card,'' opcount "
 				+ " from mpi_person_idx_log a left join mpi_person_index b on a.index_id = b.index_id where 1=1 and a.mpi_person_id = ? "
 				+ " order by a.op_time desc ";
@@ -558,7 +518,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		return personIdxLogDao.findForMap(sql, new Object[] { personId });
 	}
 
-	@Override
 	public Map<String, Object> queryPersonDetail(String personId) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		// 取得居民数据
@@ -575,7 +534,6 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		return result;
 	}
 
-	@Override
 	public List<Map<String, Object>> queryPersonForMapPage(PersonInfo t, PageInfo page) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(
@@ -588,23 +546,17 @@ public class PersonIdxLogService implements IPersonIdxLogService {
 		List<Object> args = buildQueryConditions(sql, t);
 		String countSql = page.buildCountSql(sql);
 		String querySql = page.buildPageSql(sql);
-		logger.debug("Execute sql:[" + countSql + "],params:[" + args.toString() + "]");
 		int count = personInfoDao.getCount(countSql, args.toArray());
 		page.setTotal(count);
-		logger.debug("Execute sql:[" + querySql + "],params:[" + args.toString() + "]");
 		return personIdxLogDao.findForMap(querySql, args.toArray());
 	}
 
-	@Override
 	public void save(PersonIdxLog t) {
 		personIdxLogDao.add(t);
-		logger.debug("Add PersonIdxLog:" + t);
 	}
 
-	@Override
 	public void update(PersonIdxLog t) {
 		personIdxLogDao.update(t);
-		logger.debug("update PersonIdxLog:" + t);
 	}
 
 }

@@ -7,8 +7,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.SysRole;
-import com.sinosoft.mpi.service.ISysRoleService;
+import com.sinosoft.mpi.service.SysRoleService;
 import com.sinosoft.mpi.util.PageInfo;
+
+import net.sf.json.JSONObject;
 
 /**
  * 系统角色控制
@@ -28,7 +28,7 @@ public class RoleController {
 	private Logger logger = Logger.getLogger(RoleController.class);
 
 	@Resource
-	private ISysRoleService sysRoleService;
+	private SysRoleService sysRoleService;
 
 	/**
 	 * 系统角色列表
@@ -127,7 +127,4 @@ public class RoleController {
 		return null;
 	}
 
-	public void setSysRoleService(ISysRoleService sysRoleService) {
-		this.sysRoleService = sysRoleService;
-	}
 }

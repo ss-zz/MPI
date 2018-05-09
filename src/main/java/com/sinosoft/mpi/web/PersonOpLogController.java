@@ -19,7 +19,7 @@ import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.SexCode;
-import com.sinosoft.mpi.service.IPersonIdxLogService;
+import com.sinosoft.mpi.service.PersonIdxLogService;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.PageInfo;
 
@@ -32,9 +32,11 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping("/personlog/pl.ac")
 public class PersonOpLogController {
+
 	private Logger logger = Logger.getLogger(PersonOpLogController.class);
+
 	@Resource
-	private IPersonIdxLogService personIdxLogService;
+	private PersonIdxLogService personIdxLogService;
 
 	/**
 	 * 显示人员列表
@@ -117,7 +119,4 @@ public class PersonOpLogController {
 		}
 	}
 
-	public void setPersonIdxLogService(IPersonIdxLogService personIdxLogService) {
-		this.personIdxLogService = personIdxLogService;
-	}
 }

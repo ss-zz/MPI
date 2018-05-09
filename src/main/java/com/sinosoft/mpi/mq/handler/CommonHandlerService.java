@@ -8,11 +8,11 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.block.service.IBlockService;
+import com.sinosoft.block.service.BlockService;
 import com.sinosoft.match.config.MatchConfig;
 import com.sinosoft.match.model.Record;
 import com.sinosoft.match.model.RecordPair;
-import com.sinosoft.match.service.IMatchService;
+import com.sinosoft.match.service.MatchService;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.ManOpPerson;
@@ -20,14 +20,14 @@ import com.sinosoft.mpi.model.MpiCombineRec;
 import com.sinosoft.mpi.model.PersonIdxLog;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
-import com.sinosoft.mpi.service.IDomainSrcLevelService;
-import com.sinosoft.mpi.service.IIndexIdentifierRelService;
-import com.sinosoft.mpi.service.IManOpPersonService;
-import com.sinosoft.mpi.service.IMpiCombineLevelService;
-import com.sinosoft.mpi.service.IMpiCombineRecService;
-import com.sinosoft.mpi.service.IPersonIdxLogService;
-import com.sinosoft.mpi.service.IPersonIndexService;
-import com.sinosoft.mpi.service.IPersonIndexUpdateService;
+import com.sinosoft.mpi.service.DomainSrcLevelService;
+import com.sinosoft.mpi.service.IndexIdentifierRelService;
+import com.sinosoft.mpi.service.ManOpPersonService;
+import com.sinosoft.mpi.service.MpiCombineLevelService;
+import com.sinosoft.mpi.service.MpiCombineRecService;
+import com.sinosoft.mpi.service.PersonIdxLogService;
+import com.sinosoft.mpi.service.PersonIndexService;
+import com.sinosoft.mpi.service.PersonIndexUpdateService;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.NumberUtils;
 
@@ -38,25 +38,25 @@ import com.sinosoft.mpi.util.NumberUtils;
 public class CommonHandlerService {
 
 	@Resource
-	IPersonIndexService personIndexService;
+	PersonIndexService personIndexService;
 	@Resource
-	IMpiCombineRecService mpiCombineRecService;
+	MpiCombineRecService mpiCombineRecService;
 	@Resource
-	IDomainSrcLevelService domainSrcLevelService;
+	DomainSrcLevelService domainSrcLevelService;
 	@Resource
-	IIndexIdentifierRelService indexIdentifierRelService;
+	IndexIdentifierRelService indexIdentifierRelService;
 	@Resource
-	IMpiCombineLevelService mpiCombineLevelService;
+	MpiCombineLevelService mpiCombineLevelService;
 	@Resource
-	IPersonIdxLogService personIdxLogService;
+	PersonIdxLogService personIdxLogService;
 	@Resource
-	IManOpPersonService manOpPersonService;
+	ManOpPersonService manOpPersonService;
 	@Resource
-	IBlockService blockService;
+	BlockService blockService;
 	@Resource
-	IMatchService matchServcie;
+	MatchService matchServcie;
 	@Resource
-	IPersonIndexUpdateService personIndexUpdateService;
+	PersonIndexUpdateService personIndexUpdateService;
 
 	/**
 	 * 处理人员信息并处理主索引

@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.block.BlockException;
@@ -26,9 +25,8 @@ import com.sinosoft.mpi.model.PersonInfo;
 /**
  * 过滤服务
  */
-@Service("blockService")
-public class BlockService implements IBlockService {
-	private Logger logger = Logger.getLogger(BlockService.class);
+@Service
+public class BlockService {
 
 	@Resource
 	private PersonIndexDao personIndexDao;
@@ -41,7 +39,6 @@ public class BlockService implements IBlockService {
 	 * @return 初筛结果集
 	 * @see com.sinosoft.block.service.IBlockService#findCandidates(com.sinosoft.match.model.Record)
 	 */
-	@Override
 	public List<Record<PersonIndex>> findCandidates(Record<PersonInfo> record) {
 		List<Record<PersonIndex>> result = new ArrayList<Record<PersonIndex>>();
 		List<BlockRound> rounds = BlockConfig.getInstanse().getBlockRounds();
@@ -96,9 +93,7 @@ public class BlockService implements IBlockService {
 		// bysun 2012-5-9 13:38:53 增加一个排序 主动关联至 关联人员最多的索引上
 		sb.append(
 				" order by (select count(b.COMBINE_NO) from mpi_index_identifier_rel b where b.mpi_pk = a.mpi_pk ) desc ");
-		logger.info("{K=" + k + "};{rounds.size()=" + rounds.size() + "}");
 		if (k != rounds.size()) {
-			logger.info("{sql=" + sb.toString() + "}");
 			List<PersonIndex> indexes = personIndexDao.find(sb.toString(), args.toArray());
 			for (PersonIndex index : indexes) {
 				Record<PersonIndex> indexRecord = new Record<PersonIndex>(index);

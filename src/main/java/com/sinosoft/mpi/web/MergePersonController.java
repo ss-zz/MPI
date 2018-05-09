@@ -8,9 +8,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +18,12 @@ import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.PerInfoPropertiesDesc;
 import com.sinosoft.mpi.model.PersonInfo;
-import com.sinosoft.mpi.service.IPersonInfoService;
+import com.sinosoft.mpi.service.PersonInfoService;
 import com.sinosoft.mpi.util.JsonDateValueProcessor;
 import com.sinosoft.mpi.util.PageInfo;
+
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 
 /**
  * 居民信息合并
@@ -31,9 +31,11 @@ import com.sinosoft.mpi.util.PageInfo;
 @Controller
 @RequestMapping("/merge/merge.ac")
 public class MergePersonController {
+
 	private Logger logger = Logger.getLogger(MergePersonController.class);
+
 	@Resource
-	private IPersonInfoService personInfoService;
+	private PersonInfoService personInfoService;
 
 	/**
 	 * 列表显示居民信息
@@ -94,7 +96,4 @@ public class MergePersonController {
 		return null;
 	}
 
-	public void setPersonInfoService(IPersonInfoService personInfoService) {
-		this.personInfoService = personInfoService;
-	}
 }

@@ -13,13 +13,14 @@ import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.IdentifierDomain;
 import com.sinosoft.mpi.util.PageInfo;
 
-@Service("identifierDomainService")
-public class IdentifierDomainService implements IIdentifierDomainService {
+@Service
+public class IdentifierDomainService {
+
 	private Logger logger = Logger.getLogger(IdentifierDomainService.class);
+
 	@Resource
 	private IdentifierDomainDao identifierDomainDao;
 
-	@Override
 	public void save(IdentifierDomain t) {
 		if (testDomain(t)) {
 			identifierDomainDao.add(t);
@@ -30,7 +31,6 @@ public class IdentifierDomainService implements IIdentifierDomainService {
 		}
 	}
 
-	@Override
 	public void update(IdentifierDomain t) {
 		if (testDomain(t)) {
 			IdentifierDomain tmp = identifierDomainDao.findById(t);
@@ -48,13 +48,11 @@ public class IdentifierDomainService implements IIdentifierDomainService {
 		}
 	}
 
-	@Override
 	public void delete(IdentifierDomain t) {
 		identifierDomainDao.deleteById(t);
 		logger.debug("Del IdentifierDomain:domainId=" + t.getDOMAIN_ID());
 	}
 
-	@Override
 	public IdentifierDomain getObject(String id) {
 		IdentifierDomain t = new IdentifierDomain();
 		t.setDOMAIN_ID(id);
@@ -63,7 +61,6 @@ public class IdentifierDomainService implements IIdentifierDomainService {
 		return t;
 	}
 
-	@Override
 	public List<IdentifierDomain> queryForPage(IdentifierDomain t, PageInfo page) {
 		// XXX ben 实际应用的时候这里需要添加查询条件
 		String sql = " select * from mpi_identifier_domain where 1=1 ";
@@ -77,12 +74,10 @@ public class IdentifierDomainService implements IIdentifierDomainService {
 		return identifierDomainDao.find(sql, new Object[] {});
 	}
 
-	@Override
 	public List<IdentifierDomain> queryAll() {
 		return identifierDomainDao.findAll();
 	}
 
-	@Override
 	public boolean testDomain(IdentifierDomain domain) {
 		StringBuilder sql = new StringBuilder();
 		Object[] args = null;
@@ -98,13 +93,11 @@ public class IdentifierDomainService implements IIdentifierDomainService {
 		return count == 0;
 	}
 
-	@Override
 	public List<IdentifierDomain> queryPushDomain() {
 		String sql = "select * from mpi_identifier_domain where book_type = '0'";
 		return identifierDomainDao.find(sql);
 	}
 
-	@Override
 	public List<IdentifierDomain> queryByDomianId(String unique_sign) {
 		String sql = " select * from mpi_identifier_domain  where unique_sign='" + unique_sign + "'";
 		return identifierDomainDao.find(sql);

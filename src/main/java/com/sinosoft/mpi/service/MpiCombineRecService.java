@@ -11,37 +11,31 @@ import com.sinosoft.mpi.model.MpiCombineRec;
 import com.sinosoft.mpi.util.PageInfo;
 
 @Service
-public class MpiCombineRecService implements IMpiCombineRecService {
+public class MpiCombineRecService {
 
 	@Resource
 	MpiCombineRecDao mpiCombineRecDao;
 
-	@Override
 	public void save(MpiCombineRec t) {
 		mpiCombineRecDao.add(t);
 	}
 
-	@Override
 	public void update(MpiCombineRec t) {
 
 	}
 
-	@Override
 	public void delete(MpiCombineRec t) {
 
 	}
 
-	@Override
 	public MpiCombineRec getObject(String id) {
 		return null;
 	}
 
-	@Override
 	public List<MpiCombineRec> queryForPage(MpiCombineRec t, PageInfo page) {
 		return null;
 	}
 
-	@Override
 	public MpiCombineRec queryByCombineNo(Long combineNo) {
 		MpiCombineRec t = mpiCombineRecDao.find(combineNo);
 		return t;

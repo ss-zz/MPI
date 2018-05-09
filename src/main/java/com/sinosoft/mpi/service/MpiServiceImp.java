@@ -19,10 +19,10 @@ import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 
 /**
- * MPI注册服务类 author:caojia
+ * MPI注册服务类
  */
-@Service("mpiService")
-public class MpiServiceImp implements IMpiService {
+@Service
+public class MpiServiceImp {
 
 	@Resource
 	private PersonIndexDao personIndexDao;
@@ -41,7 +41,6 @@ public class MpiServiceImp implements IMpiService {
 
 	}
 
-	@Override
 	public void handleMpi(PersonInfo personinfo) {
 		// 校验系统中是否有对应注册域
 		IdentifierDomain domain = identifierDomainDao.getByUniqueSign(personinfo.getUNIQUE_SIGN());
@@ -67,7 +66,6 @@ public class MpiServiceImp implements IMpiService {
 
 	}
 
-	@Override
 	public void regMpi(PersonInfo personinfo) {
 		// 校验该居民信息是否已注册
 		PersonInfo p = getByPersonIdentifier(personinfo);
@@ -80,19 +78,14 @@ public class MpiServiceImp implements IMpiService {
 			// 保存居民信息
 			personInfoDao.add(personinfo);
 			logger.debug("Add PersonInfo:" + personinfo);
-			// eventSender.fireEvent(EventType.ADD_PERSON, personinfo);
 		}
 	}
 
-	@Override
 	public void MergeMpi(PersonInfo personinfo, PersonIndex personindex) {
-		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void MergeMpi(PersonInfo personinfo) {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -19,7 +19,7 @@ import com.sinosoft.mpi.exception.BaseBussinessException;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.BlockCfg;
 import com.sinosoft.mpi.model.PersonPropertiesDesc;
-import com.sinosoft.mpi.service.IBlockCfgService;
+import com.sinosoft.mpi.service.BlockCfgService;
 import com.sinosoft.mpi.util.PageInfo;
 
 import net.sf.json.JSONObject;
@@ -33,7 +33,7 @@ public class BlockCfgController {
 	private Logger logger = Logger.getLogger(BlockCfgController.class);
 
 	@Resource
-	private IBlockCfgService blockCfgService;
+	private BlockCfgService blockCfgService;
 
 	/**
 	 * 取得配置列表数据
@@ -128,10 +128,6 @@ public class BlockCfgController {
 		ModelAndView mv = new ModelAndView("/cfg/page/current_block");
 		mv.addObject("cfg", cfg);
 		return mv;
-	}
-
-	public void setBlockCfgService(IBlockCfgService blockCfgService) {
-		this.blockCfgService = blockCfgService;
 	}
 
 }

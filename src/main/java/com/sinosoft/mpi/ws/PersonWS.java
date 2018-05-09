@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.PersonInfoSimple;
-import com.sinosoft.mpi.service.IPersonInfoService;
+import com.sinosoft.mpi.service.PersonInfoService;
 
 /**
  * 居民服务
@@ -18,8 +18,9 @@ public class PersonWS implements IPersonWS {
 	private final static int MAX_DATA_LENGTH = 100;
 
 	private Logger logger = Logger.getLogger(PersonWS.class);
+
 	@Resource
-	private IPersonInfoService personInfoService;
+	private PersonInfoService personInfoService;
 
 	/**
 	 * 添加居民信息
@@ -150,7 +151,4 @@ public class PersonWS implements IPersonWS {
 		}
 	}
 
-	public void setPersonInfoService(IPersonInfoService personInfoService) {
-		this.personInfoService = personInfoService;
-	}
 }

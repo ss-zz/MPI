@@ -20,15 +20,21 @@ import com.sinosoft.stringcomparison.service.IStringComparisonService;
 /**
  * 匹配服务
  */
-@Service("matchService")
-public class MatchService implements IMatchService {
+@Service
+public class MatchService {
 
 	@Resource
 	private IStringComparisonService stringComparisonService;
 
 	List<MatchField> matchFields = MatchConfig.getInstanse().getMatchFields();
 
-	@Override
+	/**
+	 * 两个对象的匹配情况
+	 * 
+	 * @param leftRecord
+	 * @param rightRecord
+	 * @return
+	 */
 	public RecordPair match(Record<PersonInfo> leftRecord, Record<PersonIndex> rightRecord) {
 		RecordPair pair = new RecordPair(leftRecord, rightRecord);
 		// 计算比较
@@ -39,7 +45,14 @@ public class MatchService implements IMatchService {
 		return pair;
 	}
 
-	@Override
+	/**
+	 * 找出所有的可能符合条件匹配对
+	 * 
+	 * @param leftRecord
+	 * @param rightRecords
+	 *            参与被匹配的集合
+	 * @return
+	 */
 	public List<RecordPair> match(Record<PersonInfo> leftRecord, List<Record<PersonIndex>> rightRecords) {
 		List<RecordPair> result = new ArrayList<RecordPair>(0);
 		for (Record<PersonIndex> rightRecord : rightRecords) {
@@ -60,11 +73,6 @@ public class MatchService implements IMatchService {
 			String fieldName = matchField.getFieldName();
 			String value1 = pair.getLeftRecord().getAsString(fieldName);
 			String value2 = pair.getRightRecord().getAsString(fieldName);
-			/*
-			 * double distance =
-			 * stringComparisonService.score(matchField.getComparatorFunction(), value1,
-			 * value2);
-			 */
 			if (!value1.equals("") && !value2.equals("")) {
 				distance = stringComparisonService.score(matchField.getComparatorFunction(), value1, value2);
 			}
@@ -92,14 +100,25 @@ public class MatchService implements IMatchService {
 		pair.setWeight(wight);
 	}
 
+	/**
+	 * 是否匹配
+	 * 
+	 * @param leftRecord
+	 * @param rightRecord
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
 	public boolean isMatched(Record leftRecord, Record rightRecord) {
 		return MatchConfig.getInstanse().getAgreementWeightThreshold() <= this.match(leftRecord, rightRecord)
 				.getWeight();
 	}
 
-	@Override
+	/**
+	 * 找到匹配对
+	 * 
+	 * @param pairs
+	 * @return
+	 */
 	public RecordPair matchedPair(List<RecordPair> pairs) {
 		for (RecordPair pair : pairs) {
 			if (MatchConfig.getInstanse().getAgreementWeightThreshold() <= pair.getWeight()) {

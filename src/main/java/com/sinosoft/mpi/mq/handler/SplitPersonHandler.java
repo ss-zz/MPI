@@ -11,11 +11,11 @@ import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.MpiCombineRec;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
-import com.sinosoft.mpi.service.IIndexIdentifierRelService;
-import com.sinosoft.mpi.service.IMpiCombineRecService;
-import com.sinosoft.mpi.service.IPersonIndexService;
-import com.sinosoft.mpi.service.IPersonIndexUpdateService;
-import com.sinosoft.mpi.service.IPersonInfoService;
+import com.sinosoft.mpi.service.IndexIdentifierRelService;
+import com.sinosoft.mpi.service.MpiCombineRecService;
+import com.sinosoft.mpi.service.PersonIndexService;
+import com.sinosoft.mpi.service.PersonIndexUpdateService;
+import com.sinosoft.mpi.service.PersonInfoService;
 
 /**
  * 拆分主索引
@@ -24,15 +24,15 @@ import com.sinosoft.mpi.service.IPersonInfoService;
 public class SplitPersonHandler {
 
 	@Resource
-	IIndexIdentifierRelService indexIdentifierRelService;
+	IndexIdentifierRelService indexIdentifierRelService;
 	@Resource
-	IPersonIndexService personIndexService;
+	PersonIndexService personIndexService;
 	@Resource
-	IPersonInfoService personInfoService;
+	PersonInfoService personInfoService;
 	@Resource
-	IPersonIndexUpdateService personIndexUpdateService;
+	PersonIndexUpdateService personIndexUpdateService;
 	@Resource
-	IMpiCombineRecService mpiCombineRecService;
+	MpiCombineRecService mpiCombineRecService;
 	@Resource
 	CommonHandlerService commonHanlderService;
 

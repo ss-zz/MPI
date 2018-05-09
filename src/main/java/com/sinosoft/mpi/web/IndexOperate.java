@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sinosoft.mpi.dao.PersonIndexDao;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.PersonIndex;
-import com.sinosoft.mpi.service.IPersonIdxLogService;
-import com.sinosoft.mpi.service.IPersonIndexService;
+import com.sinosoft.mpi.service.PersonIdxLogService;
+import com.sinosoft.mpi.service.PersonIndexService;
 
 import net.sf.json.JSONArray;
 
@@ -37,10 +37,9 @@ public class IndexOperate {
 	private Logger logger = Logger.getLogger(IndexQueryController.class);
 
 	@Resource
-	private IPersonIndexService personIndexService;
-
+	private PersonIndexService personIndexService;
 	@Resource
-	private IPersonIdxLogService personIdxLogService;
+	private PersonIdxLogService personIdxLogService;
 	@Resource
 	private PersonIndexDao personIndexDao;
 

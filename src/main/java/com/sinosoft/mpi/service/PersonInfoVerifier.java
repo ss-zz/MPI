@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.model.PersonInfo;
 
-@Service("personInfoVerifier")
-public class PersonInfoVerifier implements IVerifier<PersonInfo> {
+@Service
+public class PersonInfoVerifier {
 
-	@Override
 	public VerifyResult verify(final PersonInfo t) {
 		boolean result = true;
 		StringBuilder sb = new StringBuilder();

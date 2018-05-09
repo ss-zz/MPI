@@ -7,11 +7,11 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 
-import com.sinosoft.block.service.IBlockService;
+import com.sinosoft.block.service.BlockService;
 import com.sinosoft.match.config.MatchConfig;
 import com.sinosoft.match.model.Record;
 import com.sinosoft.match.model.RecordPair;
-import com.sinosoft.match.service.IMatchService;
+import com.sinosoft.match.service.MatchService;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.ManOpPerson;
@@ -20,56 +20,48 @@ import com.sinosoft.mpi.model.PersonIdxLog;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.notification.event.IEvent;
-import com.sinosoft.mpi.notification.listener.IEventHandler;
-import com.sinosoft.mpi.service.IBookLogService;
-import com.sinosoft.mpi.service.IIndexIdentifierRelService;
-import com.sinosoft.mpi.service.IManOpPersonService;
-import com.sinosoft.mpi.service.IMpiAbstService;
-import com.sinosoft.mpi.service.IMpiCombineLevelService;
-import com.sinosoft.mpi.service.IMpiCombineRecService;
-import com.sinosoft.mpi.service.IPersonIdxLogService;
-import com.sinosoft.mpi.service.IPersonIndexService;
-import com.sinosoft.mpi.service.IPersonIndexUpdateService;
+import com.sinosoft.mpi.service.BookLogService;
+import com.sinosoft.mpi.service.IndexIdentifierRelService;
+import com.sinosoft.mpi.service.ManOpPersonService;
+import com.sinosoft.mpi.service.MpiAbstService;
+import com.sinosoft.mpi.service.MpiCombineLevelService;
+import com.sinosoft.mpi.service.MpiCombineRecService;
+import com.sinosoft.mpi.service.PersonIdxLogService;
+import com.sinosoft.mpi.service.PersonIndexService;
+import com.sinosoft.mpi.service.PersonIndexUpdateService;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.NumberUtils;
 
 /**
  * 增加主索引信息
  */
-public class AddPersonEventHandler implements IEventHandler {
-	@Resource
-	private IBlockService blockService;
+public class AddPersonEventHandler {
 
 	@Resource
-	private IMatchService matchServcie;
-
+	BlockService blockService;
 	@Resource
-	IPersonIdxLogService personIdxLogService;
-
+	MatchService matchServcie;
 	@Resource
-	IBookLogService bookLogService;
-
+	PersonIdxLogService personIdxLogService;
 	@Resource
-	IMpiCombineRecService mpiCombineRecService;
-
+	BookLogService bookLogService;
 	@Resource
-	IMpiCombineLevelService mpiCombineLevelService;
+	MpiCombineRecService mpiCombineRecService;
 	@Resource
-	private IPersonIndexService personIndexService;
-
+	MpiCombineLevelService mpiCombineLevelService;
 	@Resource
-	private IPersonIndexUpdateService personIndexUpdateService;
+	PersonIndexService personIndexService;
 	@Resource
-	private IIndexIdentifierRelService indexIdentifierRelService;
+	PersonIndexUpdateService personIndexUpdateService;
+	@Resource
+	IndexIdentifierRelService indexIdentifierRelService;
+	@Resource
+	MpiAbstService mpiAbstService;
+	@Resource
+	ManOpPersonService manOpPersonService;
 
 	private Logger logger = Logger.getLogger(AddPersonEventHandler.class);
 
-	@Resource
-	private IMpiAbstService mpiAbstService;
-	@Resource
-	private IManOpPersonService manOpPersonService;
-
-	@Override
 	public void processEvent(IEvent event) {
 
 		Object obj = event.getValue();

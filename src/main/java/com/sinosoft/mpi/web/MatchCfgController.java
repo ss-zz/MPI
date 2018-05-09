@@ -8,8 +8,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,10 +22,12 @@ import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.MatchCfg;
 import com.sinosoft.mpi.model.MatchFieldCfg;
 import com.sinosoft.mpi.model.PersonPropertiesDesc;
-import com.sinosoft.mpi.service.IMatchCfgService;
+import com.sinosoft.mpi.service.MatchCfgService;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.stringcomparison.config.StringComparisionConfig;
 import com.sinosoft.stringcomparison.model.DistanceMetricType;
+
+import net.sf.json.JSONObject;
 
 /**
  * 匹配配置控制器
@@ -35,10 +35,11 @@ import com.sinosoft.stringcomparison.model.DistanceMetricType;
 @Controller
 @RequestMapping("/cfg/match.ac")
 public class MatchCfgController {
+
 	private Logger logger = Logger.getLogger(MatchCfgController.class);
 
 	@Resource
-	private IMatchCfgService matchCfgService;
+	private MatchCfgService matchCfgService;
 
 	/**
 	 * 取得配置列表数据
@@ -157,7 +158,4 @@ public class MatchCfgController {
 		return mv;
 	}
 
-	public void setMatchCfgService(IMatchCfgService matchCfgService) {
-		this.matchCfgService = matchCfgService;
-	}
 }

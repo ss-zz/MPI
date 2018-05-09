@@ -7,8 +7,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +16,9 @@ import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.SysRole;
 import com.sinosoft.mpi.model.SysUser;
-import com.sinosoft.mpi.service.ISysUserService;
+import com.sinosoft.mpi.service.SysUserService;
+
+import net.sf.json.JSONObject;
 
 /**
  * 系统用户控制器
@@ -26,9 +26,11 @@ import com.sinosoft.mpi.service.ISysUserService;
 @Controller
 @RequestMapping("/sysuser/su.ac")
 public class UserController {
+
 	private Logger logger = Logger.getLogger(UserController.class);
+
 	@Resource
-	private ISysUserService sysUserService;
+	private SysUserService sysUserService;
 
 	/**
 	 * 前往列表页面
@@ -142,10 +144,6 @@ public class UserController {
 			response.getWriter().print("删除系统用户时出现错误!");
 		}
 		return null;
-	}
-
-	public void setSysUserService(ISysUserService sysUserService) {
-		this.sysUserService = sysUserService;
 	}
 
 }

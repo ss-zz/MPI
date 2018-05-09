@@ -8,10 +8,10 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import com.sinosoft.block.service.IBlockService;
+import com.sinosoft.block.service.BlockService;
 import com.sinosoft.match.model.Record;
 import com.sinosoft.match.model.RecordPair;
-import com.sinosoft.match.service.IMatchService;
+import com.sinosoft.match.service.MatchService;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.dao.IdentifierDomainDao;
 import com.sinosoft.mpi.model.IdentifierDomain;
@@ -23,54 +23,46 @@ import com.sinosoft.mpi.model.PersonIdxLog;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.notification.event.IEvent;
-import com.sinosoft.mpi.service.IBookLogService;
-import com.sinosoft.mpi.service.IIndexIdentifierRelService;
-import com.sinosoft.mpi.service.IManOpPersonService;
-import com.sinosoft.mpi.service.IMatchResultService;
-import com.sinosoft.mpi.service.IPersonIdxLogService;
-import com.sinosoft.mpi.service.IPersonIndexService;
-import com.sinosoft.mpi.service.IPersonIndexUpdateService;
-import com.sinosoft.mpi.service.IPersonInfoService;
+import com.sinosoft.mpi.service.BookLogService;
+import com.sinosoft.mpi.service.IndexIdentifierRelService;
+import com.sinosoft.mpi.service.ManOpPersonService;
+import com.sinosoft.mpi.service.MatchResultService;
 import com.sinosoft.mpi.service.MpiAbstService;
+import com.sinosoft.mpi.service.PersonIdxLogService;
+import com.sinosoft.mpi.service.PersonIndexService;
+import com.sinosoft.mpi.service.PersonIndexUpdateService;
+import com.sinosoft.mpi.service.PersonInfoService;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.NumberUtils;
 
 /**
  * 添加人员事件处理
  */
-
 @Component
 public class AddPersonEventHandler implements IEventHandler {
+
 	private static Logger logger = Logger.getLogger(AddPersonEventHandler.class);
-	@Resource
-	private IBlockService blockService;
 
 	@Resource
-	private IMatchService matchServcie;
-
+	private BlockService blockService;
 	@Resource
-	private IPersonIndexService personIndexService;
-
+	private MatchService matchServcie;
 	@Resource
-	private IPersonInfoService personInfoService;
-
+	private PersonIndexService personIndexService;
 	@Resource
-	private IIndexIdentifierRelService indexIdentifierRelService;
-
+	private PersonInfoService personInfoService;
 	@Resource
-	private IPersonIdxLogService personIdxLogService;
-
+	private IndexIdentifierRelService indexIdentifierRelService;
 	@Resource
-	private IMatchResultService matchResultService;
-
+	private PersonIdxLogService personIdxLogService;
 	@Resource
-	private IManOpPersonService manOpPersonService;
-
+	private MatchResultService matchResultService;
 	@Resource
-	private IBookLogService bookLogService;
-
+	private ManOpPersonService manOpPersonService;
 	@Resource
-	private IPersonIndexUpdateService personIndexUpdateService;
+	private BookLogService bookLogService;
+	@Resource
+	private PersonIndexUpdateService personIndexUpdateService;
 	@Resource
 	private IdentifierDomainDao identifierDomainDao;
 

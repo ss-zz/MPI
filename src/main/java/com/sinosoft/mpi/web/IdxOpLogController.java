@@ -7,9 +7,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -18,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.IdentifierDomain;
 import com.sinosoft.mpi.model.PersonIdxLog;
-import com.sinosoft.mpi.service.IIdentifierDomainService;
-import com.sinosoft.mpi.service.IPersonIdxLogService;
+import com.sinosoft.mpi.service.IdentifierDomainService;
+import com.sinosoft.mpi.service.PersonIdxLogService;
 import com.sinosoft.mpi.util.PageInfo;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * 索引操作日志(日志角度)
@@ -28,11 +28,13 @@ import com.sinosoft.mpi.util.PageInfo;
 @Controller
 @RequestMapping("/indexlog/il.ac")
 public class IdxOpLogController {
+
 	private Logger logger = Logger.getLogger(IdxOpLogController.class);
+
 	@Resource
-	private IPersonIdxLogService personIdxLogService;
+	private PersonIdxLogService personIdxLogService;
 	@Resource
-	private IIdentifierDomainService identifierDomainService;
+	private IdentifierDomainService identifierDomainService;
 
 	/**
 	 * 显示操作日志列表
@@ -115,14 +117,6 @@ public class IdxOpLogController {
 		modelMap.putAll(map);
 		modelMap.put("type", "index");
 		return "indexlog/page/show";
-	}
-
-	public void setPersonIdxLogService(IPersonIdxLogService personIdxLogService) {
-		this.personIdxLogService = personIdxLogService;
-	}
-
-	public void setIdentifierDomainService(IIdentifierDomainService identifierDomainService) {
-		this.identifierDomainService = identifierDomainService;
 	}
 
 }

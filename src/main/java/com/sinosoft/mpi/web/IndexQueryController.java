@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,9 +26,9 @@ import com.sinosoft.mpi.form.MatchDetailForm;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.SexCode;
-import com.sinosoft.mpi.service.IPersonIdxLogService;
-import com.sinosoft.mpi.service.IPersonIndexService;
-import com.sinosoft.mpi.service.IPersonInfoService;
+import com.sinosoft.mpi.service.PersonIdxLogService;
+import com.sinosoft.mpi.service.PersonIndexService;
+import com.sinosoft.mpi.service.PersonInfoService;
 import com.sinosoft.mpi.util.CodeConvertUtils;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.PageInfo;
@@ -43,6 +42,7 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping("/query/query.ac")
 public class IndexQueryController {
+
 	private Logger logger = Logger.getLogger(IndexQueryController.class);
 
 	@InitBinder
@@ -56,11 +56,11 @@ public class IndexQueryController {
 	}
 
 	@Resource
-	private IPersonInfoService personInfoService;
+	private PersonInfoService personInfoService;
 	@Resource
-	private IPersonIndexService personIndexService;
+	private PersonIndexService personIndexService;
 	@Resource
-	private IPersonIdxLogService personIdxLogService;
+	private PersonIdxLogService personIdxLogService;
 
 	/**
 	 * 查询显示索引记录
@@ -201,15 +201,4 @@ public class IndexQueryController {
 		}
 	}
 
-	public void setPersonInfoService(IPersonInfoService personInfoService) {
-		this.personInfoService = personInfoService;
-	}
-
-	public void setPersonIndexService(IPersonIndexService personIndexService) {
-		this.personIndexService = personIndexService;
-	}
-
-	public void setPersonIdxLogService(IPersonIdxLogService personIdxLogService) {
-		this.personIdxLogService = personIdxLogService;
-	}
 }

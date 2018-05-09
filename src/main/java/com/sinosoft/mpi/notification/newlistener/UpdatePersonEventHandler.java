@@ -7,11 +7,11 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 
-import com.sinosoft.block.service.IBlockService;
+import com.sinosoft.block.service.BlockService;
 import com.sinosoft.match.config.MatchConfig;
 import com.sinosoft.match.model.Record;
 import com.sinosoft.match.model.RecordPair;
-import com.sinosoft.match.service.IMatchService;
+import com.sinosoft.match.service.MatchService;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.ManOpPerson;
@@ -21,48 +21,47 @@ import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.notification.event.IEvent;
 import com.sinosoft.mpi.notification.listener.IEventHandler;
-import com.sinosoft.mpi.service.IBookLogService;
-import com.sinosoft.mpi.service.IIndexIdentifierRelService;
-import com.sinosoft.mpi.service.IManOpPersonService;
-import com.sinosoft.mpi.service.IMpiAbstService;
-import com.sinosoft.mpi.service.IMpiCombineLevelService;
-import com.sinosoft.mpi.service.IMpiCombineRecService;
-import com.sinosoft.mpi.service.IPersonIdxLogService;
-import com.sinosoft.mpi.service.IPersonIndexService;
-import com.sinosoft.mpi.service.IPersonIndexUpdateService;
-import com.sinosoft.mpi.service.IPersonInfoService;
+import com.sinosoft.mpi.service.BookLogService;
+import com.sinosoft.mpi.service.IndexIdentifierRelService;
+import com.sinosoft.mpi.service.ManOpPersonService;
+import com.sinosoft.mpi.service.MpiAbstService;
+import com.sinosoft.mpi.service.MpiCombineLevelService;
+import com.sinosoft.mpi.service.MpiCombineRecService;
+import com.sinosoft.mpi.service.PersonIdxLogService;
+import com.sinosoft.mpi.service.PersonIndexService;
+import com.sinosoft.mpi.service.PersonIndexUpdateService;
+import com.sinosoft.mpi.service.PersonInfoService;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.NumberUtils;
 
 public class UpdatePersonEventHandler implements IEventHandler {
-	@Resource
-	IMpiCombineRecService mpiCombineRecService;
-	@Resource
-	IMpiCombineLevelService mpiCombineLevelService;
-	@Resource
-	private IIndexIdentifierRelService indexIdentifierRelService;
-	@Resource
-	private IPersonIndexService personIndexService;
-	@Resource
-	private IPersonInfoService personInfoService;
-	@Resource
-	private IBookLogService bookLogService;
-	@Resource
-	private IPersonIndexUpdateService personIndexUpdateService;
-	@Resource
-	IPersonIdxLogService personIdxLogService;
 
 	private Logger logger = Logger.getLogger(UpdatePersonEventHandler.class);
-	@Resource
-	private IMpiAbstService mpiAbstService;
 
 	@Resource
-	private IBlockService blockService;
-
+	MpiCombineRecService mpiCombineRecService;
 	@Resource
-	private IMatchService matchServcie;
+	MpiCombineLevelService mpiCombineLevelService;
 	@Resource
-	private IManOpPersonService manOpPersonService;
+	private IndexIdentifierRelService indexIdentifierRelService;
+	@Resource
+	private PersonIndexService personIndexService;
+	@Resource
+	private PersonInfoService personInfoService;
+	@Resource
+	private BookLogService bookLogService;
+	@Resource
+	private PersonIndexUpdateService personIndexUpdateService;
+	@Resource
+	PersonIdxLogService personIdxLogService;
+	@Resource
+	private MpiAbstService mpiAbstService;
+	@Resource
+	private BlockService blockService;
+	@Resource
+	private MatchService matchServcie;
+	@Resource
+	private ManOpPersonService manOpPersonService;
 
 	@Override
 	public void processEvent(IEvent event) {
@@ -70,7 +69,6 @@ public class UpdatePersonEventHandler implements IEventHandler {
 		Object obj = event.getValue();
 		if (obj instanceof PersonInfo) {
 			PersonInfo personinfo = (PersonInfo) obj;
-			logger.debug("relationpk=" + personinfo.getRELATION_PK());
 			// 查询本次更新的原记录
 			IndexIdentifierRel iir = indexIdentifierRelService.queryByFieldPK(personinfo.getRELATION_PK());
 

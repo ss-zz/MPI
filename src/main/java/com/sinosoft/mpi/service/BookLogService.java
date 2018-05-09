@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.dao.BookLogDao;
@@ -15,29 +14,24 @@ import com.sinosoft.mpi.util.PageInfo;
 /**
  * 订阅日志业务操作类
  */
-@Service("bookLogService")
-public class BookLogService implements IBookLogService {
-	private Logger logger = Logger.getLogger(BookLogService.class);
+@Service
+public class BookLogService {
 
 	@Resource
 	private BookLogDao bookLogDao;
 
-	@Override
 	public void save(BookLog t) {
 		bookLogDao.add(t);
 	}
 
-	@Override
 	public void update(BookLog t) {
 		bookLogDao.update(t);
 	}
 
-	@Override
 	public void delete(BookLog t) {
 		bookLogDao.deleteById(t);
 	}
 
-	@Override
 	public BookLog getObject(String id) {
 		BookLog t = new BookLog();
 		t.setBookId(id);
@@ -45,7 +39,6 @@ public class BookLogService implements IBookLogService {
 		return t;
 	}
 
-	@Override
 	public List<BookLog> queryForPage(BookLog t, PageInfo page) {
 		String sql = "select * from mpi_book_log where 1=1 ";
 		String countSql = page.buildCountSql(sql);
@@ -65,7 +58,6 @@ public class BookLogService implements IBookLogService {
 	 *            操作类型 0-关联至索引 1-与索引解除关联
 	 * @return 入库的BookLog对象
 	 */
-	@Override
 	public BookLog save(String personId, String indexid, String eventType) {
 		return bookLogDao.autoFillAdd(personId, indexid, eventType);
 	}
@@ -77,7 +69,6 @@ public class BookLogService implements IBookLogService {
 	 *            居民id
 	 * @return 入库的BookLog对象
 	 */
-	@Override
 	public List<BookLog> save(String personId) {
 		return bookLogDao.autoFillAdd(personId);
 	}
@@ -85,7 +76,6 @@ public class BookLogService implements IBookLogService {
 	/**
 	 * 查询取得需要发送的数据
 	 */
-	@Override
 	public List<BookLog> queryDatas(IdentifierDomain domain) {
 		// XXX ben 此处可能需要更加详细的现在
 		// 比如发送几次后就不再发送 产生通知
@@ -99,7 +89,6 @@ public class BookLogService implements IBookLogService {
 	/**
 	 * 查询取得需要发送的数据
 	 */
-	@Override
 	public List<BookLog> queryDatasByDomain(String domainUniqueSign) {
 		// XXX ben 此处可能需要更详细修改 暂按最简实现
 		String sql = "select * from mpi_book_log t where t.op_result != '1' and t.unique_sign = ?";

@@ -5,7 +5,9 @@ import java.util.Date;
 
 import com.sinosoft.mpi.annotation.PropertyDesc;
 
-public class PersonIndex implements Serializable{
+public class PersonIndex implements Serializable {
+
+	private static final long serialVersionUID = -3245610779703132448L;
 
 	private String DOMAIN_LEVEL;
 

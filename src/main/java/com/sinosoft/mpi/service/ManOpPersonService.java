@@ -14,31 +14,29 @@ import com.sinosoft.mpi.dao.ManOpPersonDao;
 import com.sinosoft.mpi.model.ManOpPerson;
 import com.sinosoft.mpi.util.PageInfo;
 
-@Service("manOpPersonService")
-public class ManOpPersonService implements IManOpPersonService {
+@Service
+public class ManOpPersonService {
+
 	private Logger logger = Logger.getLogger(ManOpPersonService.class);
+
 	@Resource
 	private ManOpPersonDao manOpPersonDao;
 
-	@Override
 	public void save(ManOpPerson t) {
 		manOpPersonDao.add(t);
 		logger.debug("Add ManOpPerson:" + t);
 	}
 
-	@Override
 	public void update(ManOpPerson t) {
 		manOpPersonDao.update(t);
 		logger.debug("update ManOpPerson:" + t);
 	}
 
-	@Override
 	public void delete(ManOpPerson t) {
 		manOpPersonDao.deleteById(t);
 		logger.debug("delete ManOpPerson,manOpId=" + t.getMAN_OP_ID());
 	}
 
-	@Override
 	public ManOpPerson getObject(String id) {
 		ManOpPerson t = new ManOpPerson();
 		t.setMAN_OP_ID(id);
@@ -47,16 +45,13 @@ public class ManOpPersonService implements IManOpPersonService {
 		return t;
 	}
 
-	@Override
 	public List<ManOpPerson> queryForPage(ManOpPerson t, PageInfo page) {
-		// XXX ben 实际应用的时候这里需要添加查询条件
 		String sql = " select * from mpi_man_op_person where 1=1 ";
 		sql = page.buildPageSql(sql);
 		logger.debug("Execute sql:" + sql);
 		return manOpPersonDao.find(sql, new Object[] {});
 	}
 
-	@Override
 	public List<Map<String, Object>> queryForMapPage(ManOpPerson t, PageInfo page) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(" select a.man_op_id,a.field_pk,a.man_op_status,a.man_op_time,b.name_CN,b.gender_cd ")

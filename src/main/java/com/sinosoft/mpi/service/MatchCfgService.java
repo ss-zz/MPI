@@ -17,8 +17,8 @@ import com.sinosoft.mpi.model.MatchFieldCfg;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.PageInfo;
 
-@Service("matchCfgService")
-public class MatchCfgService implements IMatchCfgService {
+@Service
+public class MatchCfgService {
 
 	private Logger logger = Logger.getLogger(MatchCfgService.class);
 
@@ -27,7 +27,6 @@ public class MatchCfgService implements IMatchCfgService {
 	@Resource
 	private MatchFieldCfgDao matchFieldCfgDao;
 
-	@Override
 	public void save(MatchCfg t) {
 		// 设置必要信息
 		t.setCreateDate(DateUtil.getTimeNow(new Date()));
@@ -44,19 +43,16 @@ public class MatchCfgService implements IMatchCfgService {
 		}
 	}
 
-	@Override
 	public void update(MatchCfg t) {
 		matchCfgDao.update(t);
 		logger.debug("Update MatchCfg:" + t);
 	}
 
-	@Override
 	public void delete(MatchCfg t) {
 		matchCfgDao.deleteById(t);
 		logger.debug("Del MatchCfg:configId=" + t.getConfigId());
 	}
 
-	@Override
 	public MatchCfg getObject(String id) {
 		MatchCfg t = new MatchCfg();
 		t.setConfigId(id);
@@ -82,7 +78,6 @@ public class MatchCfgService implements IMatchCfgService {
 		return list;
 	}
 
-	@Override
 	public List<MatchCfg> queryForPage(MatchCfg t, PageInfo page) {
 		String sql = " select * from mpi_match_cfg where 1=1 ";
 		String countSql = page.buildCountSql(sql);
@@ -93,7 +88,6 @@ public class MatchCfgService implements IMatchCfgService {
 		return matchCfgDao.find(querySql, new Object[] {});
 	}
 
-	@Override
 	public void updateEffect(String cfgId) {
 
 		// 使id配置 生效
@@ -108,7 +102,6 @@ public class MatchCfgService implements IMatchCfgService {
 	/**
 	 * 查询生效的配置
 	 */
-	@Override
 	public MatchCfg queryEffectCfg() {
 		String sql = " select * from mpi_match_cfg where state = '1' ";
 		MatchCfg result = null;

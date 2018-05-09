@@ -43,11 +43,11 @@ import com.sinosoft.mpi.util.NumberUtils;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.SqlUtils;
 
-@Service("personInfoService")
-public class PersonInfoService implements IPersonInfoService {
+@Service
+public class PersonInfoService {
+
 	@Resource
 	private BookLogDao bookLogDao;
-
 	@Resource
 	private IdentifierDomainDao identifierDomainDao;
 	@Resource
@@ -68,11 +68,10 @@ public class PersonInfoService implements IPersonInfoService {
 	@Resource
 	private PersonInfoDao personInfoDao;
 	@Resource
-	private IVerifier<PersonInfo> personInfoVerifier;
+	private PersonInfoVerifier personInfoVerifier;
 	@Resource
 	private RabbitTemplate template;
 
-	@Override
 	public void addNewIndex(String opId, String personId) {
 		// 取得人员
 		PersonInfo person = getObject(personId);
@@ -80,7 +79,6 @@ public class PersonInfoService implements IPersonInfoService {
 		PersonIdentifier pi = getPersonIdentifierByPersonId(personId);
 		// 验证数据
 		if (person == null || pi == null) {
-			logger.debug("无法取得相关信息:PersonInfo=" + person + ",\n PersonIdentifier=" + pi);
 			throw new ValidationException("无法取得相关信息:PersonInfo=" + person + ",\n PersonIdentifier=" + pi);
 		}
 		// 记录订阅日志
@@ -108,14 +106,12 @@ public class PersonInfoService implements IPersonInfoService {
 		modifyManOpPerson(opId);
 	}
 
-	@Override
 	public void addPersonBatch(PersonInfo[] persons) {
 		for (PersonInfo p : persons) {
 			save(p);
 		}
 	}
 
-	@Override
 	public void addToIndex(String opId, String personId, String indexId) {
 		// 取得人员
 		PersonInfo person = getObject(personId);
@@ -125,7 +121,6 @@ public class PersonInfoService implements IPersonInfoService {
 		PersonIndex index = getPersonIndex(indexId);
 		// 验证数据
 		if (person == null || pi == null || index == null) {
-			logger.debug("无法取得相关信息:PersonInfo=" + person + ",\n PersonIdentifier=" + pi + ",\n PersonIndex=" + index);
 			throw new ValidationException(
 					"无法取得相关信息:PersonInfo=" + person + ",\n PersonIdentifier=" + pi + ",\n PersonIndex=" + index);
 		}
@@ -174,10 +169,8 @@ public class PersonInfoService implements IPersonInfoService {
 		return args;
 	}
 
-	@Override
 	public void delete(PersonInfo t) {
 		personInfoDao.deleteById(t);
-		logger.debug("Del PersonInfo,FIELD_PK=" + t.getFIELD_PK());
 	}
 
 	private PersonInfo getByPersonIdentifier(IdentifierDomain domain, String PERSON_IDENTIFIER) {
@@ -191,7 +184,6 @@ public class PersonInfoService implements IPersonInfoService {
 		return result;
 	}
 
-	@Override
 	public PersonInfo getByPersonIdentifier(String domainUnique, String identifier) {
 		IdentifierDomain domain = identifierDomainDao.getByUniqueSign(domainUnique);
 		PersonInfo result = null;
@@ -200,7 +192,6 @@ public class PersonInfoService implements IPersonInfoService {
 		return result;
 	}
 
-	@Override
 	public PersonInfo getByDomainid(String domainid, String identifier) {
 		IdentifierDomain domain = identifierDomainDao.findById(domainid);
 		PersonInfo result = null;
@@ -209,14 +200,11 @@ public class PersonInfoService implements IPersonInfoService {
 		return result;
 	}
 
-	@Override
 	public PersonInfo getObject(String id) {
 		PersonInfo t = personInfoDao.findByPK(id);
-		logger.debug("Load PersonInfo:FIELD_PK=" + id + ",result=" + t);
 		return t;
 	}
 
-	@Override
 	public PersonInfo getObjectWithDomainInfo(String id) {
 		PersonInfo person = new PersonInfo();
 		person.setFIELD_PK(id);
@@ -242,7 +230,6 @@ public class PersonInfoService implements IPersonInfoService {
 		return result;
 	}
 
-	@Override
 	public void mergePerson(PersonInfo retired, PersonInfo surviving) {
 		// 验证基本信息
 		try {
@@ -268,7 +255,6 @@ public class PersonInfoService implements IPersonInfoService {
 		mergePersonFlow(rp, sp);
 	}
 
-	@Override
 	public void mergePersonBatch(PersonInfoSimple[] retireds, PersonInfoSimple surviving) {
 		for (PersonInfoSimple rp : retireds) {
 			mergePerson(rp.toPersonInfo(), surviving.toPersonInfo());
@@ -319,7 +305,6 @@ public class PersonInfoService implements IPersonInfoService {
 		personIndexUpdateService.updateIndex(rp, siir.getMPI_PK());
 	}
 
-	@Override
 	public void mergePersonFromPage(String retiredPersonId, String survivePersonId) {
 		PersonInfo survive = getObject(survivePersonId);
 		PersonInfo retired = getObject(retiredPersonId);
@@ -347,19 +332,8 @@ public class PersonInfoService implements IPersonInfoService {
 	}
 
 	/*
-	 * * 主索引信息合并页面首次查询
-	 *
-	 * @author lpk
-	 *
-	 * @PersonInfo 主索引信息
-	 *
-	 * @isSurvive 限制条件
-	 *
-	 * @PageInfo
-	 *
-	 * @date 2012年11月27日
+	 * 主索引信息合并页面首次查询
 	 */
-	@Override
 	public List<Map<String, Object>> queryForMapPage(PersonInfo t, boolean isSurvive, PageInfo page) {
 		String domainId = t.getDOMAIN_ID();
 		if (!isSurvive && StringUtils.isBlank(domainId)) {
@@ -395,18 +369,14 @@ public class PersonInfoService implements IPersonInfoService {
 		return personInfoDao.findForMap(pageSql, args);
 	}
 
-	/*
+	/**
 	 * 比较人员信息
 	 *
-	 * @author lpk
-	 *
-	 * @survivePersonId 目标居民
-	 *
-	 * @retiredPersonId 被合并居民
-	 *
-	 * @date 2012年11月27日
+	 * @param survivePersonId
+	 *            目标居民
+	 * @param retiredPersonId
+	 *            被合并居民
 	 */
-	@Override
 	public Map<String, Object> queryComparePersonData(String survivePersonId, String retiredPersonId) {
 		// 取得两个居民信息
 		PersonInfo survive = getObjectWithDomainInfo(survivePersonId);
@@ -424,14 +394,11 @@ public class PersonInfoService implements IPersonInfoService {
 		return result;
 	}
 
-	/*
+	/**
 	 * 主索引信息合并
-	 *
-	 * @author lpk
-	 *
-	 * @mpiPk 主索引主键
-	 *
-	 * @date 2012年11月27日
+	 * 
+	 * @param mpiPk
+	 *            主索引主键
 	 */
 	public PersonIndex getPerIndexByMpiPk(String mpiPk) {
 		PersonIndex personidex = new PersonIndex();
@@ -440,15 +407,12 @@ public class PersonInfoService implements IPersonInfoService {
 		return personidex;
 	}
 
-	@Override
 	public List<PersonInfo> queryForPage(PersonInfo t, PageInfo page) {
 		String sql = " select * from mpi_person_info where 1=1 ";
 		sql = page.buildPageSql(sql);
-		logger.debug("Execute sql:[" + sql + "],params[]");
 		return personInfoDao.find(sql, new Object[] {});
 	}
 
-	@Override
 	public List<Map<String, Object>> queryForPersonByIndexId(String indexId) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(
@@ -459,7 +423,6 @@ public class PersonInfoService implements IPersonInfoService {
 		return personIndexDao.findForMap(sql.toString(), new Object[] { indexId });
 	}
 
-	@Override
 	public List<Map<String, Object>> queryForSplitPersonPage(String indexId, PageInfo page) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(" select a.person_id,b.identifier_id,a.name,a.sex,a.birth_date,a.id_no,a.phone_one ");
@@ -469,14 +432,11 @@ public class PersonInfoService implements IPersonInfoService {
 		String countSql = page.buildCountSql(sql);
 		// 查询设置分页记录的总记录数
 		page.setTotal(personIndexDao.getCount(countSql, new Object[] { indexId }));
-		logger.debug("Execute sql:" + countSql);
 		// 取得分页查询语句
 		String querySql = page.buildPageSql(sql);
-		logger.debug("Execute sql:" + querySql);
 		return personIndexDao.findForMap(querySql, new Object[] { indexId });
 	}
 
-	@Override
 	public List<PersonInfo> queryPersonByAttributes(PersonInfo p) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(" select a.*,b.person_identifier,c.unique_sign from mpi_person_info a left join ");
@@ -485,27 +445,16 @@ public class PersonInfoService implements IPersonInfoService {
 		List<Object> args = buildQueryConditions(sql, p);
 		PageInfo page = new PageInfo(0, 100);
 		String countSql = page.buildCountSql(sql);
-		logger.debug("Execute sql:[" + countSql + "],params:[" + args.toString() + "]");
 		int count = personInfoDao.getCount(countSql, args.toArray());
 		if (count > 100) {
 			logger.debug("条件查询居民信息时,返回结果过多!需增加查询条件.");
 			throw new BaseBussinessException("条件查询居民信息时,返回结果过多(" + count + "条)!需增加查询条件.");
 		}
-		logger.debug("Execute sql:[" + sql.toString() + "],params:[" + args.toString() + "]");
 
 		return personInfoDao.findWithDomainInfo(sql.toString(), args.toArray());
 	}
 
-	@Override
 	public PersonIndex queryPersonIndexByPersonInfo(PersonInfo p) {
-		/*
-		 * if (StringUtils.isBlank(p.getUNIQUE_SIGN()) ||
-		 * StringUtils.isBlank(p.getPERSON_ID())) {
-		 * logger.debug("查询索引信息时数据校验错误[DomainUniqueSign=" + p.getUNIQUE_SIGN() +
-		 * ",Identifier=" + p.getPERSON_ID() + "]"); throw new
-		 * ValidationException("查询索引信息时数据校验错误[DomainUniqueSign=" + p.getUNIQUE_SIGN() +
-		 * ",Identifier=" + p.getPERSON_ID() + "]"); }
-		 */
 		// lpk update 2013年5月9日
 		String type = p.getTYPE();
 		if (type == "0") {
@@ -553,28 +502,19 @@ public class PersonInfoService implements IPersonInfoService {
 		return result;
 	}
 
-	@Override
 	public List<PersonInfo> queryPersonsByIndex(String indexId) {
 		String sql = "select a.*,b.person_identifier from mpi_person_info a left join "
 				+ " mpi_index_identifier_rel b on a.field_pk = b.field_pk where  b.mpi_pk = ?  ";
-
-		logger.debug("Execute sql:[" + sql + "],params:[" + indexId + "]");
-
 		return personInfoDao.findWithDomainInfo(sql, new Object[] { indexId });
 	}
 
-	@Override
 	public List<PersonInfo> queryPersonsByIndex(String indexId, String domainUniqueSign) {
 		String sql = "select a.*,b.person_identifier,c.unique_sign from mpi_person_info a left join "
 				+ " mpi_index_identifier_rel b on a.field_pk = b.field_pk left join mpi_identifier_domain c "
 				+ " on b.domain_id = c.domain_id where  b.mpi_pk = ? and c.unique_sign=?";
-
-		logger.debug("Execute sql:[" + sql + "],params:[" + indexId + "," + domainUniqueSign + "]");
-
 		return personInfoDao.findWithDomainInfo(sql, new Object[] { indexId, domainUniqueSign });
 	}
 
-	@Override
 	public void save(PersonInfo t) {
 		// 校验居民信息
 		VerifyResult flag = personInfoVerifier.verify(t);
@@ -585,7 +525,6 @@ public class PersonInfoService implements IPersonInfoService {
 		// 校验系统中是否有对应注册域
 		IdentifierDomain domain = identifierDomainDao.getByUniqueSign(t.getUNIQUE_SIGN());
 		if (domain == null) {
-			logger.debug("无法找到域,没有找到域标识为:" + t.getUNIQUE_SIGN() + "的身份域.");
 			throw new ValidationException("无法找到域,没有找到域标识为:" + t.getUNIQUE_SIGN() + "的身份域.");
 		}
 
@@ -766,7 +705,6 @@ public class PersonInfoService implements IPersonInfoService {
 		personIdxLogDao.add(result);
 	}
 
-	@Override
 	public void splitPerson(String indexId, String personId) {
 		// 取得索引信息
 		PersonIndex index = getPersonIndex(indexId);
@@ -806,7 +744,6 @@ public class PersonInfoService implements IPersonInfoService {
 				Constant.IDX_LOG_STYLE_MAN_NEW, "新建主索引[" + newIndex.getNAME_CN() + "]");
 	}
 
-	@Override
 	public void splitPersonToIndex(String indexId, String personId, String fromIndexId) {
 		// 取得索引信息
 		PersonIndex index = getPersonIndex(indexId);
@@ -839,7 +776,6 @@ public class PersonInfoService implements IPersonInfoService {
 				"[" + person.getNAME_CN() + "]合并到主索引[" + index.getNAME_CN() + "]");
 	}
 
-	@Override
 	public void update(PersonInfo t) {
 		// 校验居民信息
 		VerifyResult flag = personInfoVerifier.verify(t);
@@ -865,7 +801,6 @@ public class PersonInfoService implements IPersonInfoService {
 		// eventSender.fireEvent(EventType.UPDATE_PERSON, pi);
 	}
 
-	@Override
 	public void updatePersonBatch(PersonInfo[] persons) {
 		for (PersonInfo p : persons) {
 			update(p);
@@ -913,12 +848,10 @@ public class PersonInfoService implements IPersonInfoService {
 
 	}
 
-	@Override
 	public Map<String, Object> findByRelationPK(String relationpk, String org_code) {
 		return personInfoDao.findById(relationpk, org_code);
 	}
 
-	@Override
 	public PersonInfo queryPersonsByFieldPK(String fieldpk) {
 		return personInfoDao.findByPK(fieldpk);
 	}

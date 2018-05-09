@@ -8,10 +8,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-import net.sf.json.JSONArray;
-import net.sf.json.JsonConfig;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -26,13 +22,17 @@ import com.sinosoft.mpi.model.PerInfoPropertiesDesc;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.SexCode;
-import com.sinosoft.mpi.service.IManOpPersonService;
-import com.sinosoft.mpi.service.IPersonIdxLogService;
-import com.sinosoft.mpi.service.IPersonIndexService;
-import com.sinosoft.mpi.service.IPersonInfoService;
+import com.sinosoft.mpi.service.ManOpPersonService;
+import com.sinosoft.mpi.service.PersonIdxLogService;
+import com.sinosoft.mpi.service.PersonIndexService;
+import com.sinosoft.mpi.service.PersonInfoService;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.JsonDateValueProcessor;
 import com.sinosoft.mpi.util.PageInfo;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 
 /**
  * 手工拆分合并
@@ -40,16 +40,17 @@ import com.sinosoft.mpi.util.PageInfo;
 @Controller
 @RequestMapping("/manual/manual.ac")
 public class ManualController {
-	
+
 	private Logger logger = Logger.getLogger(ManualController.class);
+
 	@Resource
-	private IManOpPersonService manOpPersonService;
+	private ManOpPersonService manOpPersonService;
 	@Resource
-	private IPersonIdxLogService personIdxLogService;
+	private PersonIdxLogService personIdxLogService;
 	@Resource
-	private IPersonIndexService personIndexService;
+	private PersonIndexService personIndexService;
 	@Resource
-	private IPersonInfoService personInfoService;
+	private PersonInfoService personInfoService;
 
 	/**
 	 * 人工干预新建索引
@@ -305,15 +306,11 @@ public class ManualController {
 	public ModelAndView toMatchPage(String personId, String opId) {
 		ModelAndView mv = new ModelAndView("/manual/page/match");
 		PersonInfo person = personInfoService.getObject(personId);
-		// 转码
-		// CodeConvertUtils.convert(person);
 		List<PerInfoPropertiesDesc> fields = CacheManager.getAll(PerInfoPropertiesDesc.class);
 		int total = personIdxLogService.queryMatchIndexCount(personId);
 		JsonConfig jsonConfig = new JsonConfig(); // JsonConfig是net.sf.json.JsonConfig中的这个，为固定写法
 		jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
 		JSONObject datas = JSONObject.fromObject(person, jsonConfig);
-		// JSONObject datas = new JSONObject();
-		// datas.put("person", person);
 		datas.put("fields", fields);
 		datas.put("total", total);
 		datas.put("opId", opId);
@@ -321,19 +318,4 @@ public class ManualController {
 		return mv;
 	}
 
-	public void setManOpPersonService(IManOpPersonService manOpPersonService) {
-		this.manOpPersonService = manOpPersonService;
-	}
-
-	public void setPersonIdxLogService(IPersonIdxLogService personIdxLogService) {
-		this.personIdxLogService = personIdxLogService;
-	}
-
-	public void setPersonIndexService(IPersonIndexService personIndexService) {
-		this.personIndexService = personIndexService;
-	}
-
-	public void setPersonInfoService(IPersonInfoService personInfoService) {
-		this.personInfoService = personInfoService;
-	}
 }

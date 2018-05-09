@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -14,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.IdentifierDomain;
-import com.sinosoft.mpi.service.IIdentifierDomainService;
+import com.sinosoft.mpi.service.IdentifierDomainService;
 import com.sinosoft.mpi.util.PageInfo;
+
+import net.sf.json.JSONObject;
 
 /**
  * 身份域控制器
@@ -23,9 +24,11 @@ import com.sinosoft.mpi.util.PageInfo;
 @Controller
 @RequestMapping("/domain/domain.ac")
 public class DomainController {
+
 	private Logger logger = Logger.getLogger(DomainController.class);
+
 	@Resource
-	private IIdentifierDomainService identifierDomainService;
+	private IdentifierDomainService identifierDomainService;
 
 	/**
 	 * 显示身份域列表
@@ -132,7 +135,4 @@ public class DomainController {
 		return null;
 	}
 
-	public void setIdentifierDomainService(IIdentifierDomainService identifierDomainService) {
-		this.identifierDomainService = identifierDomainService;
-	}
 }

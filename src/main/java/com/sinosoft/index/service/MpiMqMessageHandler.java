@@ -39,7 +39,7 @@ import com.sinosoft.match.model.MatchField;
 import com.sinosoft.match.model.Record;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.PersonIdxLog;
-import com.sinosoft.mpi.service.IPersonIdxLogService;
+import com.sinosoft.mpi.service.PersonIdxLogService;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.NumberUtils;
 import com.sinosoft.stringcomparison.service.IStringComparisonService;
@@ -59,19 +59,14 @@ public class MpiMqMessageHandler {
 	MpiIndexService mpiIndexService;
 	@Autowired
 	MpiIndexRelService mpiIndexRelService;
-
 	@Autowired
 	MpiBizRelService mpiBizRelService;
-
 	@Autowired
 	MpiConfigService mpiConfigService;
-
 	@Autowired
 	IStringComparisonService stringComparisonService;
-
 	@Autowired
-	IPersonIdxLogService personIdxLogService;
-
+	PersonIdxLogService personIdxLogService;
 	@Autowired
 	MqService mqService;
 
@@ -291,17 +286,17 @@ public class MpiMqMessageHandler {
 
 		// 查询匹配的数据
 		List<MpiBizRel> bizMatchs = mpiBizRelService.find(qBiz);
-		
+
 		// 是否有匹配的数据
 		MpiBizRel newMpiBizRel = new MpiBizRel();
 		newMpiBizRel.setSrcBizId(srcBizId);
 		newMpiBizRel.setSrcData(bizData);
-		if(bizMatchs.size() > 0) {
+		if (bizMatchs.size() > 0) {
 			// 取第一条
 			MpiBizRel mpiBizRel = bizMatchs.get(0);
 			newMpiBizRel.setMpiIndexId(mpiBizRel.getMpiIndexId());
 			newMpiBizRel.setGroupId(mpiBizRel.getGroupId());
-		}else {
+		} else {
 			newMpiBizRel.setMpiIndexId(mpiId);
 			newMpiBizRel.setGroupId(UUID.randomUUID().toString());
 		}

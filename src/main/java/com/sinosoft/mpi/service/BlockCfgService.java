@@ -24,8 +24,8 @@ import com.sinosoft.mpi.util.PageInfo;
 /**
  * 初筛配置服务
  */
-@Service("blockCfgService")
-public class BlockCfgService implements IBlockCfgService {
+@Service
+public class BlockCfgService {
 
 	private Logger logger = Logger.getLogger(BlockCfgService.class);
 
@@ -37,7 +37,6 @@ public class BlockCfgService implements IBlockCfgService {
 	/**
 	 * 保存配置信息
 	 */
-	@Override
 	public void save(BlockCfg t) {
 		t.setCreateDate(DateUtil.getTimeNow(new Date()));
 		t.setState("0");
@@ -59,18 +58,15 @@ public class BlockCfgService implements IBlockCfgService {
 		}
 	}
 
-	@Override
 	public void update(BlockCfg t) {
 		blockCfgDao.update(t);
 	}
 
-	@Override
 	public void delete(BlockCfg t) {
 		blockCfgDao.deleteById(t);
 		logger.debug("Del BlockCfg:bolckId=" + t.getBolckId());
 	}
 
-	@Override
 	public BlockCfg getObject(String id) {
 		BlockCfg t = new BlockCfg();
 		t.setBolckId(id);
@@ -81,7 +77,6 @@ public class BlockCfgService implements IBlockCfgService {
 		return t;
 	}
 
-	@Override
 	public List<BlockCfg> queryForPage(BlockCfg t, PageInfo page) {
 		String sql = " select * from MPI_BLOCK_CFG where 1=1 ";
 		String countSql = page.buildCountSql(sql);
@@ -90,7 +85,6 @@ public class BlockCfgService implements IBlockCfgService {
 		return blockCfgDao.find(querySql, new Object[] {});
 	}
 
-	@Override
 	public void updateEffect(String cfgId) {
 		// 使id配置 生效
 		blockCfgDao.effect(cfgId);
@@ -104,7 +98,6 @@ public class BlockCfgService implements IBlockCfgService {
 	/**
 	 * 查询生效的配置
 	 */
-	@Override
 	public BlockCfg queryEffectCfg() {
 		String sql = " select * from MPI_BLOCK_CFG where state = '1' ";
 		BlockCfg result = null;
