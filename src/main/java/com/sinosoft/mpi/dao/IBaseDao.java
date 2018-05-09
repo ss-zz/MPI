@@ -3,33 +3,39 @@ package com.sinosoft.mpi.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 /**
  * 基本数据操作类接口
  */
-public interface IBaseDao<T> {
-	
+@Component
+public abstract class IBaseDao<T> {
+
+	@Autowired
+	public JdbcTemplate jdbcTemplate;
+
 	/**
 	 * 添加对象数据到数据库
 	 * 
 	 * @param entity
 	 */
-	void add(T entity);
+	public abstract void add(T entity);
 
 	/**
 	 * 根据id删除数据
 	 * 
 	 * @param entity
 	 */
-	void deleteById(T entity);
+	public abstract void deleteById(T entity);
 
 	/**
 	 * 更新对象数据到数据库
 	 * 
 	 * @param entity
 	 */
-	void update(T entity);
+	public abstract void update(T entity);
 
 	/**
 	 * 根据id查找对象
@@ -37,7 +43,7 @@ public interface IBaseDao<T> {
 	 * @param entity
 	 * @return 没有找到返回null
 	 */
-	T findById(T entity);
+	public abstract T findById(T entity);
 
 	/**
 	 * 根据sql一句查询数据
@@ -46,33 +52,10 @@ public interface IBaseDao<T> {
 	 *            查询语句
 	 * @return
 	 */
-	List<T> find(String sql);
+	public abstract List<T> find(String sql);
 
 	/**
-	 * @param sql
-	 *            查询语句
-	 * @param args
-	 *            参数
-	 * @return
-	 */
-	List<T> find(String sql, Object[] args);
-
-	/**
-	 * @return
-	 */
-	List<T> findAll();
-
-	/**
-	 * 根据sql语句取得数量
-	 * 
-	 * @param sql
-	 *            查询语句
-	 * @return
-	 */
-	int getCount(String sql);
-
-	/**
-	 * 根据sql语句取得数量
+	 * 根据sql查询数据
 	 * 
 	 * @param sql
 	 *            查询语句
@@ -80,29 +63,53 @@ public interface IBaseDao<T> {
 	 *            参数
 	 * @return
 	 */
-	int getCount(String sql, Object[] args);
+	public abstract List<T> find(String sql, Object[] args);
 
 	/**
-	 * 执行sql语句,已map形式返回结果
+	 * 查询所有数据
+	 */
+	public abstract List<T> findAll();
+
+	/**
+	 * 执行sql语句,以map形式返回结果
 	 * 
 	 * @param sql
 	 * @param args
 	 * @return
 	 */
-	List<Map<String, Object>> findForMap(String sql, Object[] args);
+	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
+		return jdbcTemplate.queryForList(sql, args);
+	};
 
 	/**
-	 * 执行sql语句,已map形式返回结果
+	 * 执行sql语句,以map形式返回结果
 	 * 
 	 * @param sql
 	 * @return
 	 */
-	List<Map<String, Object>> findForMap(String sql);
+	public List<Map<String, Object>> findForMap(String sql) {
+		return jdbcTemplate.queryForList(sql);
+	};
 
 	/**
-	 * 取得 jdbc模板
+	 * 根据sql获取数据量
 	 * 
+	 * @param sql
 	 * @return
 	 */
-	JdbcTemplate getJdbcTemplate();
+	public int getCount(String sql) {
+		return getCount(sql, new Object[] {});
+	}
+
+	/**
+	 * 根据sql获取数据量
+	 * 
+	 * @param sql
+	 * @param args
+	 * @return
+	 */
+	public int getCount(String sql, Object[] args) {
+		return jdbcTemplate.queryForObject(sql, args, Integer.class);
+	}
+
 }

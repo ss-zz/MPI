@@ -16,15 +16,15 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.context.QueryConditionType;
-import com.sinosoft.mpi.dao.IBookLogDao;
-import com.sinosoft.mpi.dao.IIdentifierDomainDao;
-import com.sinosoft.mpi.dao.IIndexIdentifierRelDao;
-import com.sinosoft.mpi.dao.IManOpPersonDao;
-import com.sinosoft.mpi.dao.IMatchResultDao;
-import com.sinosoft.mpi.dao.IPersonIdentifierDao;
-import com.sinosoft.mpi.dao.IPersonIdxLogDao;
-import com.sinosoft.mpi.dao.IPersonIndexDao;
-import com.sinosoft.mpi.dao.IPersonInfoDao;
+import com.sinosoft.mpi.dao.BookLogDao;
+import com.sinosoft.mpi.dao.IdentifierDomainDao;
+import com.sinosoft.mpi.dao.IndexIdentifierRelDao;
+import com.sinosoft.mpi.dao.ManOpPersonDao;
+import com.sinosoft.mpi.dao.MatchResultDao;
+import com.sinosoft.mpi.dao.PersonIdentifierDao;
+import com.sinosoft.mpi.dao.PersonIdxLogDao;
+import com.sinosoft.mpi.dao.PersonIndexDao;
+import com.sinosoft.mpi.dao.PersonInfoDao;
 import com.sinosoft.mpi.exception.BaseBussinessException;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.IdentifierDomain;
@@ -46,27 +46,27 @@ import com.sinosoft.mpi.util.SqlUtils;
 @Service("personInfoService")
 public class PersonInfoService implements IPersonInfoService {
 	@Resource
-	private IBookLogDao bookLogDao;
+	private BookLogDao bookLogDao;
 
 	@Resource
-	private IIdentifierDomainDao identifierDomainDao;
+	private IdentifierDomainDao identifierDomainDao;
 	@Resource
-	private IIndexIdentifierRelDao indexIdentifierRelDao;
+	private IndexIdentifierRelDao indexIdentifierRelDao;
 	private Logger logger = Logger.getLogger(PersonInfoService.class);
 	@Resource
-	private IManOpPersonDao manOpPersonDao;
+	private ManOpPersonDao manOpPersonDao;
 	@Resource
-	private IMatchResultDao matchResultDao;
+	private MatchResultDao matchResultDao;
 	@Resource
-	private IPersonIdentifierDao personIdentifierDao;
+	private PersonIdentifierDao personIdentifierDao;
 	@Resource
-	private IPersonIdxLogDao personIdxLogDao;
+	private PersonIdxLogDao personIdxLogDao;
 	@Resource
-	private IPersonIndexDao personIndexDao;
+	private PersonIndexDao personIndexDao;
 	@Resource
-	private IPersonIndexUpdateService personIndexUpdateService;
+	private PersonIndexUpdateService personIndexUpdateService;
 	@Resource
-	private IPersonInfoDao personInfoDao;
+	private PersonInfoDao personInfoDao;
 	@Resource
 	private IVerifier<PersonInfo> personInfoVerifier;
 	@Resource
@@ -916,55 +916,6 @@ public class PersonInfoService implements IPersonInfoService {
 	@Override
 	public Map<String, Object> findByRelationPK(String relationpk, String org_code) {
 		return personInfoDao.findById(relationpk, org_code);
-	}
-
-	public void setBookLogDao(IBookLogDao bookLogDao) {
-		this.bookLogDao = bookLogDao;
-	}
-
-	/*
-	 * public void setEventSender(IEventService eventSender) { this.eventSender =
-	 * eventSender; }
-	 */
-
-	public void setIdentifierDomainDao(IIdentifierDomainDao identifierDomainDao) {
-		this.identifierDomainDao = identifierDomainDao;
-	}
-
-	public void setIndexIdentifierRelDao(IIndexIdentifierRelDao indexIdentifierRelDao) {
-		this.indexIdentifierRelDao = indexIdentifierRelDao;
-	}
-
-	public void setManOpPersonDao(IManOpPersonDao manOpPersonDao) {
-		this.manOpPersonDao = manOpPersonDao;
-	}
-
-	public void setMatchResultDao(IMatchResultDao matchResultDao) {
-		this.matchResultDao = matchResultDao;
-	}
-
-	public void setPersonIdentifierDao(IPersonIdentifierDao personIdentifierDao) {
-		this.personIdentifierDao = personIdentifierDao;
-	}
-
-	public void setPersonIdxLogDao(IPersonIdxLogDao personIdxLogDao) {
-		this.personIdxLogDao = personIdxLogDao;
-	}
-
-	public void setPersonIndexDao(IPersonIndexDao personIndexDao) {
-		this.personIndexDao = personIndexDao;
-	}
-
-	public void setPersonIndexUpdateService(IPersonIndexUpdateService personIndexUpdateService) {
-		this.personIndexUpdateService = personIndexUpdateService;
-	}
-
-	public void setPersonInfoDao(IPersonInfoDao personInfoDao) {
-		this.personInfoDao = personInfoDao;
-	}
-
-	public void setPersonInfoVerifier(IVerifier<PersonInfo> personInfoVerifier) {
-		this.personInfoVerifier = personInfoVerifier;
 	}
 
 	@Override

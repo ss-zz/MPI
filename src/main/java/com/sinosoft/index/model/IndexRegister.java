@@ -14,9 +14,14 @@ public class IndexRegister {
 	private String bizKey;
 
 	/**
-	 * 数据唯一标识
+	 * 业务id
 	 */
-	private String dataId;
+	private String bizId;
+
+	/**
+	 * 人员id
+	 */
+	private String personId;
 
 	/**
 	 * 数据类型-1、新增；2-编辑；3-删除。默认：1
@@ -24,16 +29,29 @@ public class IndexRegister {
 	private String type;
 
 	/**
-	 * 数据对象
+	 * 数据-人员
 	 */
-	private String jsonData;
+	private String personData;
 
-	public String getDataId() {
-		return dataId;
+	/**
+	 * 数据-业务
+	 */
+	private String bizData;
+
+	public String getBizId() {
+		return bizId;
 	}
 
-	public void setDataId(String dataId) {
-		this.dataId = dataId;
+	public void setBizId(String bizId) {
+		this.bizId = bizId;
+	}
+
+	public String getPersonId() {
+		return personId;
+	}
+
+	public void setPersonId(String personId) {
+		this.personId = personId;
 	}
 
 	public String getType() {
@@ -44,20 +62,28 @@ public class IndexRegister {
 		this.type = type;
 	}
 
-	public String getJsonData() {
-		return jsonData;
-	}
-
-	public void setJsonData(String jsonData) {
-		this.jsonData = jsonData;
-	}
-
 	public String getBizKey() {
 		return bizKey;
 	}
 
 	public void setBizKey(String bizKey) {
 		this.bizKey = bizKey;
+	}
+
+	public String getBizData() {
+		return bizData;
+	}
+
+	public void setBizData(String bizData) {
+		this.bizData = bizData;
+	}
+
+	public String getPersonData() {
+		return personData;
+	}
+
+	public void setPersonData(String personData) {
+		this.personData = personData;
 	}
 
 }

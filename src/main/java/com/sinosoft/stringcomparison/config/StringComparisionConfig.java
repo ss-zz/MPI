@@ -8,7 +8,12 @@ import com.sinosoft.stringcomparison.metrics.IDistanceMetric;
 import com.sinosoft.stringcomparison.model.DistanceMetricType;
 import com.sinosoft.stringcomparison.util.ClassUtil;
 
+/**
+ * 字符串匹配配置
+ *
+ */
 public class StringComparisionConfig {
+	
 	private static StringComparisionConfig stringComparisionConfig = new StringComparisionConfig();
 
 	private Map<String, DistanceMetricType> metrices = new HashMap<String, DistanceMetricType>();

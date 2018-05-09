@@ -1,5 +1,8 @@
 package com.sinosoft.stringcomparison;
 
+/**
+ * 算法异常
+ */
 public class StringComparisionException extends RuntimeException {
 
 	private static final long serialVersionUID = -293213844441471932L;

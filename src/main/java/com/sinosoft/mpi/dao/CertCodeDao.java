@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -17,8 +16,8 @@ import com.sinosoft.mpi.model.CertCode;
 /**
  * 证书类型操作
  */
-@Repository("certCodeDao")
-public class CertCodeDao implements ICertCodeDao {
+@Repository
+public class CertCodeDao extends IBaseDao<CertCode> {
 
 	@Resource
 	private JdbcTemplate jdbcTemplate;
@@ -78,15 +77,6 @@ public class CertCodeDao implements ICertCodeDao {
 	}
 
 	public List<CertCode> find(String sql, Object[] args) {
-		/*
-		 * List<CertCode> datas = jdbcTemplate.query(sql, args, new
-		 * RowMapper<CertCode>() {
-		 * 
-		 * @Override public CertCode mapRow(ResultSet rs, int row) throws SQLException {
-		 * CertCode result = new CertCode(); result.setCodeId(rs.getString("CODE_ID"));
-		 * result.setCodeName(rs.getString("CODE_NAME")); return result; } }); return
-		 * datas;
-		 */
 		return new ArrayList<CertCode>();
 	}
 
@@ -94,34 +84,6 @@ public class CertCodeDao implements ICertCodeDao {
 	public List<CertCode> findAll() {
 		String sql = " select * from mpi_cert_code where 1=1 ";
 		return find(sql);
-	}
-
-	@Override
-	public int getCount(String sql) {
-		return getCount(sql, new Object[] {});
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return jdbcTemplate.queryForObject(sql, args, Integer.class);
-	}
-
-	public JdbcTemplate getJdbcTemplate() {
-		return jdbcTemplate;
-	}
-
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		return jdbcTemplate.queryForList(sql, args);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
-		return jdbcTemplate.queryForList(sql);
 	}
 
 }

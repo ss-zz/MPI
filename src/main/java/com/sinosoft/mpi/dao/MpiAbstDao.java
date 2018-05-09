@@ -3,23 +3,16 @@ package com.sinosoft.mpi.dao;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
+
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.util.IDUtil;
 
-@Repository("mpiAbstDao")
-public class MpiAbstDao implements IMpiAbstDao {
+@Repository
+public class MpiAbstDao extends IBaseDao<PersonIndex> {
 
-	@Resource
-	private JdbcTemplate jdbcTemplate;
-
-	@Override
 	public void addMpiAbst(final PersonIndex personIndex, final String seach_condition, final String abst) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(" insert into MPI_ABST(").append(" NAME,BIRTH_DATE,GENDER_CD,CARD_MARITAL_ST_CD,ID_NO_CD,")
@@ -66,66 +59,32 @@ public class MpiAbstDao implements IMpiAbstDao {
 	}
 
 	@Override
-	public int getCount(String sql) {
-		return getCount(sql, new Object[] {});
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return jdbcTemplate.queryForObject(sql, args, Integer.class);
-	}
-
-	public JdbcTemplate getJdbcTemplate() {
-		return jdbcTemplate;
-	}
-
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		return jdbcTemplate.queryForList(sql, args);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
-		return jdbcTemplate.queryForList(sql);
-	}
-
-	@Override
 	public PersonIndex findById(PersonIndex entity) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<PersonIndex> find(String sql) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<PersonIndex> find(String sql, Object[] args) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<PersonIndex> findAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void add(PersonIndex entity) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void update(PersonIndex entity) {
-		// TODO Auto-generated method stub
 
 	}
 }

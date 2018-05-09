@@ -28,6 +28,12 @@ public class Record<T> {
 		this.dynaBean = new ConvertingWrapDynaBean(object);
 	}
 
+	public Record(T object, String recordId) {
+		this.object = object;
+		this.recordId = recordId;
+		this.dynaBean = new ConvertingWrapDynaBean(object);
+	}
+
 	public synchronized RecordTypeDef getRecordDef() {
 		if (recordTypeDefinition == null) {
 			recordTypeDefinition = new RecordTypeDef(object);

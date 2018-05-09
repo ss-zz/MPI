@@ -4,22 +4,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.sinosoft.mpi.model.SexCode;
 
-@Repository("sexCodeDao")
-public class SexCodeDao implements ISexCodeDao {
-
-	@Resource
-	private JdbcTemplate jdbcTemplate;
+@Repository
+public class SexCodeDao extends IBaseDao<SexCode> {
 
 	@Override
 	public void add(final SexCode entity) {
@@ -87,43 +80,12 @@ public class SexCodeDao implements ISexCodeDao {
 			}
 		});
 		return datas;
-		// TODO lpk 2012年11月18日11:29:10
-		// return new ArrayList();
-
 	}
 
 	@Override
 	public List<SexCode> findAll() {
-		// String sql = " select * from mpi_sex_code where 1=1 ";
 		String sql = "select  t.dic_id ,t.dic_name  from ehr_dic t where t.dic_type_id='GBT226112003'";
 		return find(sql);
 	}
 
-	@Override
-	public int getCount(String sql) {
-		return getCount(sql, new Object[] {});
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return jdbcTemplate.queryForObject(sql, args, Integer.class);
-	}
-
-	public JdbcTemplate getJdbcTemplate() {
-		return jdbcTemplate;
-	}
-
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		return jdbcTemplate.queryForList(sql, args);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
-		return jdbcTemplate.queryForList(sql);
-	}
 }

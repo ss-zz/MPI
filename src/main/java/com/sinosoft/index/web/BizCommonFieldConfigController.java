@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.sinosoft.index.model.BizCommonFieldConfigModel;
+import com.sinosoft.index.entity.BizCommonFieldConfig;
+import com.sinosoft.index.exception.ServiceException;
 import com.sinosoft.index.model.SimpleRestResponse;
 import com.sinosoft.index.service.BizCommonFieldConfigService;
 
@@ -36,10 +37,10 @@ public class BizCommonFieldConfigController {
 	 */
 	@GetMapping("/all")
 	@ResponseBody
-	public List<BizCommonFieldConfigModel> getAll() {
+	public List<BizCommonFieldConfig> getAll() {
 		return bizCommonFieldConfigService.getAll();
 	}
-	
+
 	/**
 	 * 跳转编辑、新增页面
 	 * 
@@ -63,8 +64,13 @@ public class BizCommonFieldConfigController {
 	 */
 	@PostMapping("/save")
 	@ResponseBody
-	public Map<String, Object> save(BizCommonFieldConfigModel bizCommonFieldConfig) {
-		return SimpleRestResponse.create("id", bizCommonFieldConfigService.save(bizCommonFieldConfig));
+	public Map<String, Object> save(BizCommonFieldConfig bizCommonFieldConfig) {
+		try {
+			return SimpleRestResponse.create("id", bizCommonFieldConfigService.save(bizCommonFieldConfig));
+		} catch (ServiceException e) {
+			return SimpleRestResponse.createErrorMsg(e.getMessage());
+		}
+
 	}
 
 	/**

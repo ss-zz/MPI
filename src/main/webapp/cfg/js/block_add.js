@@ -1,19 +1,19 @@
 var GROUP_FIELDS = {};
 $(function() {
-    if (typeof (JSON) == 'undefined') {
-        $.getScript(root+'/js/easyui/json2.js');
-    }
+	if (typeof (JSON) == 'undefined') {
+		$.getScript(root+'/js/easyui/json2.js');
+	}
 });
 //锁定按钮
 function lockBtn(btn){
-    $(btn).unbind('click').removeAttr('onclick');
-    $(btn).attr("disabled",true);  
+	$(btn).unbind('click').removeAttr('onclick');
+	$(btn).attr("disabled",true);
 }
 
 // 解锁按钮
 function unlockBtn(btn,handler){
-    $(btn).bind("click",handler);
-    $(btn).attr("disabled",false);      
+	$(btn).bind("click",handler);
+	$(btn).attr("disabled",false);
 }
 
 /**
@@ -32,7 +32,7 @@ function createSelect(id,data,textStr,valStr,inused){
 		var text = obj[textStr];
 		var val = obj[valStr];
 		if(inused!=undefined && inused!=null && inused[val]!=null)
-			continue;		
+			continue;
 		sel.append('<option value="'+val+'">'+text+'</option>');
 	}
 }
@@ -56,7 +56,7 @@ function addFieldCfg(groupId){
 	// 定义要添加的html代码	
 	var htm = '<tr id="row_'+rowId+'"><td>属性描述:&nbsp;'+fieldCnName+'</td>'+
 		'<td>转换函数:&nbsp;'+(funName==""?"无":funName)+'</td>'+
-		'<td><input type="button" value="移除字段" onclick="removeFieldCfg(\''+groupId+'\',\''+rowId+'\')"/></td></tr>';
+		'<td><div class="my-btn my-btn-danger my-btn-small" onclick="removeFieldCfg(\''+groupId+'\',\''+rowId+'\')">移除字段</div></td></tr>';
 	$("#group_field_view_"+groupId).prepend(htm);
 	GROUP_FIELDS[groupId][rowId]={"propertyName":fieldName,"funName":funName};
 }
@@ -81,15 +81,16 @@ function addGroup(){
 	GROUP_FIELDS[group_id]={};
 	// 定义要添加的html代码	
 	var htm = '<fieldset id="group_fieldset_'+group_id+'">'+
-		'<legend>分组配置</legend>'+	
+		'<legend>分组配置</legend>'+
 		'<label for="add_fieldSelect_'+group_id+'">选择字段:</label><select id="add_fieldSelect_'+group_id+'"></select>&nbsp;&nbsp;'+
-		'<label for="add_funName_'+group_id+'">转换函数:</label><input type="text" class="easyui-validatebox" id="add_funName_'+group_id+'" maxlength="100"/>&nbsp;&nbsp;'+
-		'<input type="button" value="添加字段" onclick="addFieldCfg(\''+group_id+'\')" />&nbsp;&nbsp;'+
-		'<input type="button" value="移除分组" onclick="removeGroup(\''+group_id+'\')"/><br/><br/>'+
+		'<label for="add_funName_'+group_id+'">转换函数:</label><select id="add_funName_'+group_id+'"></select>&nbsp;&nbsp;'+
+		'<div class="my-btn" onclick="addFieldCfg(\''+group_id+'\')">添加字段</div>&nbsp;&nbsp;'+
+		'<div class="my-btn my-btn-danger" onclick="removeGroup(\''+group_id+'\')">移除分组</div><br/><br/>'+
 		'<table id="group_field_view_'+group_id+'" class="myTable"></table><div id="add_fieldTip_'+group_id+'" style="color:#ff0000;font-weight:bold;"></div></fieldset>';
 	$("#field_cfg_div").prepend(htm);	
 	//建立 下拉
 	createSelect("add_fieldSelect_"+group_id,SELECT_JSON.pList,"codeName","codeId");
+	createSelect("add_funName_"+group_id,SELECT_FUNS,"desc","clazz");
 }
 
 /**
@@ -187,7 +188,7 @@ function goBackClose(){
 	//如果当前id的tab不存在则创建一个tab
 	if(parent.$("#"+tabId).html()==null){		
 		parent.$('#centerTab').tabs('add',{
-			title: title,         
+			title: title,		 
 			closable:true,
 			cache : false,
 			//注：使用iframe即可防止同一个页面出现js和css冲突的问题
@@ -216,8 +217,8 @@ function getPropertyCount(o) {
  * 生成唯一id
  */
 function uniqid(prefix) {
-    var uid = new Date().getTime().toString(16);
-    uid += Math.floor((1 + Math.random()) * Math.pow(16, (16 - uid.length)))
-        .toString(16).substr(1);    
-    return (prefix || '') + uid;
+	var uid = new Date().getTime().toString(16);
+	uid += Math.floor((1 + Math.random()) * Math.pow(16, (16 - uid.length)))
+		.toString(16).substr(1);	
+	return (prefix || '') + uid;
 }

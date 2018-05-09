@@ -7,11 +7,11 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.IIdentifierDomainDao;
-import com.sinosoft.mpi.dao.IIndexIdentifierRelDao;
-import com.sinosoft.mpi.dao.IPersonIdxLogDao;
-import com.sinosoft.mpi.dao.IPersonIndexDao;
-import com.sinosoft.mpi.dao.IPersonInfoDao;
+import com.sinosoft.mpi.dao.IdentifierDomainDao;
+import com.sinosoft.mpi.dao.IndexIdentifierRelDao;
+import com.sinosoft.mpi.dao.PersonIdxLogDao;
+import com.sinosoft.mpi.dao.PersonIndexDao;
+import com.sinosoft.mpi.dao.PersonInfoDao;
 import com.sinosoft.mpi.exception.NotificationExcpetion;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.IdentifierDomain;
@@ -25,15 +25,15 @@ import com.sinosoft.mpi.model.PersonInfo;
 public class MpiServiceImp implements IMpiService {
 
 	@Resource
-	private IPersonIndexDao personIndexDao;
+	private PersonIndexDao personIndexDao;
 	@Resource
-	private IPersonInfoDao personInfoDao;
+	private PersonInfoDao personInfoDao;
 	@Resource
-	private IPersonIdxLogDao personIdxLogDao;
+	private PersonIdxLogDao personIdxLogDao;
 	@Resource
-	private IIdentifierDomainDao identifierDomainDao;
+	private IdentifierDomainDao identifierDomainDao;
 	@Resource
-	private IIndexIdentifierRelDao indexIdentifierRelDao;
+	private IndexIdentifierRelDao indexIdentifierRelDao;
 
 	private Logger logger = Logger.getLogger(MpiServiceImp.class);
 

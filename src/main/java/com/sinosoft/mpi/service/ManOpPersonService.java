@@ -10,7 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.IManOpPersonDao;
+import com.sinosoft.mpi.dao.ManOpPersonDao;
 import com.sinosoft.mpi.model.ManOpPerson;
 import com.sinosoft.mpi.util.PageInfo;
 
@@ -18,7 +18,7 @@ import com.sinosoft.mpi.util.PageInfo;
 public class ManOpPersonService implements IManOpPersonService {
 	private Logger logger = Logger.getLogger(ManOpPersonService.class);
 	@Resource
-	private IManOpPersonDao manOpPersonDao;
+	private ManOpPersonDao manOpPersonDao;
 
 	@Override
 	public void save(ManOpPerson t) {
@@ -54,10 +54,6 @@ public class ManOpPersonService implements IManOpPersonService {
 		sql = page.buildPageSql(sql);
 		logger.debug("Execute sql:" + sql);
 		return manOpPersonDao.find(sql, new Object[] {});
-	}
-
-	public void setManOpPersonDao(IManOpPersonDao manOpPersonDao) {
-		this.manOpPersonDao = manOpPersonDao;
 	}
 
 	@Override

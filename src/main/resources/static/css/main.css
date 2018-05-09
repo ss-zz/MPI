@@ -1,12 +1,13 @@
-
-*{
-	font-size:14px;
+* {
+	font-size: 14px;
 }
 
-.topmenu{
-	position:absolute;bottom:0px;
+.topmenu {
+	position: absolute;
+	bottom: 0px;
 	width: 100%;
 }
+
 a:link {
 	font-size: 14px;
 	color: #013365;
@@ -35,23 +36,28 @@ a:active {
 }
 
 /* 资源图标 */
-.icon-func{
-	background:url('../images/main/resource/func.gif') no-repeat;
+.icon-func {
+	background: url('../images/main/resource/func.gif') no-repeat;
 }
-.icon-menu{
-	background:url('../images/main/resource/menu.gif') no-repeat;
+
+.icon-menu {
+	background: url('../images/main/resource/menu.gif') no-repeat;
 }
-.icon-module{
-	background:url('../images/main/resource/module.gif') no-repeat;
+
+.icon-module {
+	background: url('../images/main/resource/module.gif') no-repeat;
 }
-.icon-resource{
-	background:url('../images/main/resource/resource.gif') no-repeat;
+
+.icon-resource {
+	background: url('../images/main/resource/resource.gif') no-repeat;
 }
-.icon-service{
-	background:url('../images/main/resource/service.gif') no-repeat;
+
+.icon-service {
+	background: url('../images/main/resource/service.gif') no-repeat;
 }
-.icon-ui{
-	background:url('../images/main/resource/ui.gif') no-repeat;
+
+.icon-ui {
+	background: url('../images/main/resource/ui.gif') no-repeat;
 }
 
 /*	
@@ -79,68 +85,76 @@ a:active {
 	padding-left:5px;
 }
 */
-#app_menu a.menu-nav-item span.btn-left{
-	background:transparent;
-	padding-left:18px;
-	padding-top:4px;
-}
-#app_menu a span span.btn-text{
-	display:inline-block;
-	height:16px;
-	line-height:16px;
-	padding:0px;
-}
-#app_menu a:hover.menu-nav-item {
-	color:#444;
-	background:url('../images/main/new/span-button-right.gif') no-repeat top right;
-	font-size:12px;
-	text-decoration:none;
-	display:inline-block;
-	zoom:1;
-	height:24px;
-	padding-right:18px;
-	cursor:pointer;
-	outline:none;
-}
-#app_menu a.menu-nav-item {
-	color:#444;
-	font-size:12px;
-	text-decoration:none;
-	display:inline-block;
-	zoom:1;
-	height:24px;
-	padding-right:18px;
-	cursor:pointer;
-	outline:none;
+#app_menu a.menu-nav-item span.btn-left {
+	background: transparent;
+	padding-left: 18px;
+	padding-top: 4px;
 }
 
-#app_menu a:hover.menu-nav-item span.btn-left{
-	background:url('../images/main/new/span-button-left.gif') no-repeat top left;
-	display:inline-block;
-	padding:4px 0px 4px 18px;
-	line-height:16px;
-	height:16px;
+#app_menu a span span.btn-text {
+	display: inline-block;
+	height: 16px;
+	line-height: 16px;
+	padding: 0px;
+}
+
+#app_menu a:hover.menu-nav-item {
+	color: #444;
+	background: url('../images/main/new/span-button-right.gif') no-repeat
+		top right;
+	font-size: 12px;
+	text-decoration: none;
+	display: inline-block;
+	zoom: 1;
+	height: 24px;
+	padding-right: 18px;
+	cursor: pointer;
+	outline: none;
+}
+
+#app_menu a.menu-nav-item {
+	color: #444;
+	font-size: 12px;
+	text-decoration: none;
+	display: inline-block;
+	zoom: 1;
+	height: 24px;
+	padding-right: 18px;
+	cursor: pointer;
+	outline: none;
+}
+
+#app_menu a:hover.menu-nav-item span.btn-left {
+	background: url('../images/main/new/span-button-left.gif') no-repeat top
+		left;
+	display: inline-block;
+	padding: 4px 0px 4px 18px;
+	line-height: 16px;
+	height: 16px;
 }
 
 /**
  *导航按钮被按下
  */
-.menu-nav-item-active{
-	color:#444;
-	background:url('../images/main/new/span-button-right.gif') no-repeat bottom right;
-	font-size:12px;
-	text-decoration:none;
-	display:inline-block;
-	zoom:1;
-	height:24px;
-	padding-right:18px;
-	cursor:pointer;
-	outline:none;
+.menu-nav-item-active {
+	color: #444;
+	background: url('../images/main/new/span-button-right.gif') no-repeat
+		bottom right;
+	font-size: 12px;
+	text-decoration: none;
+	display: inline-block;
+	zoom: 1;
+	height: 24px;
+	padding-right: 18px;
+	cursor: pointer;
+	outline: none;
 }
-.active-btn-left{
-	background:url('../images/main/new/span-button-left.gif') no-repeat bottom left;
-	display:inline-block;
-	padding:4px 0px 4px 18px;
-	line-height:16px;
-	height:16px;
+
+.active-btn-left {
+	background: url('../images/main/new/span-button-left.gif') no-repeat
+		bottom left;
+	display: inline-block;
+	padding: 4px 0px 4px 18px;
+	line-height: 16px;
+	height: 16px;
 }

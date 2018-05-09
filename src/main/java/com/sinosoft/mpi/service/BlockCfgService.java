@@ -13,24 +13,30 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.block.config.BlockConfig;
 import com.sinosoft.mpi.cache.CacheManager;
-import com.sinosoft.mpi.dao.IBlockCfgDao;
-import com.sinosoft.mpi.dao.IBlockGroupDao;
+import com.sinosoft.mpi.dao.BlockCfgDao;
+import com.sinosoft.mpi.dao.BlockGroupDao;
 import com.sinosoft.mpi.model.BlockCfg;
 import com.sinosoft.mpi.model.BlockGroup;
 import com.sinosoft.mpi.model.PersonPropertiesDesc;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.PageInfo;
 
+/**
+ * 初筛配置服务
+ */
 @Service("blockCfgService")
 public class BlockCfgService implements IBlockCfgService {
 
 	private Logger logger = Logger.getLogger(BlockCfgService.class);
 
 	@Resource
-	private IBlockCfgDao blockCfgDao;
+	private BlockCfgDao blockCfgDao;
 	@Resource
-	private IBlockGroupDao blockGroupDao;
+	private BlockGroupDao blockGroupDao;
 
+	/**
+	 * 保存配置信息
+	 */
 	@Override
 	public void save(BlockCfg t) {
 		t.setCreateDate(DateUtil.getTimeNow(new Date()));
@@ -56,7 +62,6 @@ public class BlockCfgService implements IBlockCfgService {
 	@Override
 	public void update(BlockCfg t) {
 		blockCfgDao.update(t);
-		logger.debug("Update BlockCfg:" + t);
 	}
 
 	@Override
@@ -73,7 +78,6 @@ public class BlockCfgService implements IBlockCfgService {
 		if (t != null) {
 			t.setGroups(queryFieldCfg(t));
 		}
-		logger.debug("Load BlockCfg:bolckId=" + id + ",result=" + t);
 		return t;
 	}
 
@@ -83,21 +87,11 @@ public class BlockCfgService implements IBlockCfgService {
 		String countSql = page.buildCountSql(sql);
 		page.setTotal(blockCfgDao.getCount(countSql, new Object[] {}));
 		String querySql = page.buildPageSql(sql);
-		logger.debug("Execute sql:[" + sql + "],params[]");
 		return blockCfgDao.find(querySql, new Object[] {});
-	}
-
-	public void setBlockCfgDao(IBlockCfgDao blockCfgDao) {
-		this.blockCfgDao = blockCfgDao;
-	}
-
-	public void setBlockGroupDao(IBlockGroupDao blockGroupDao) {
-		this.blockGroupDao = blockGroupDao;
 	}
 
 	@Override
 	public void updateEffect(String cfgId) {
-
 		// 使id配置 生效
 		blockCfgDao.effect(cfgId);
 		BlockCfg cfg = getObject(cfgId);
@@ -107,6 +101,9 @@ public class BlockCfgService implements IBlockCfgService {
 		}
 	}
 
+	/**
+	 * 查询生效的配置
+	 */
 	@Override
 	public BlockCfg queryEffectCfg() {
 		String sql = " select * from MPI_BLOCK_CFG where state = '1' ";

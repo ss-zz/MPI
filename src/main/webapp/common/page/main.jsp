@@ -54,24 +54,22 @@
 	color: #000000;
 	background-color: #FFFFFF;
 	line-height: 30px;
-	border-bottom-style: solid;
-	border-bottom-width: 1px;
-	border-bottom-color: #CCCCCC;
-	padding-left: 40px;
+	padding-left: 20px;
 	cursor: pointer;
-	background-image:url("${pageContext.request.contextPath}/css/default/images/layout_button_right.gif");
-	background-repeat: no-repeat;
-	background-position: 20px 8px;
 }
 
 .myMenu ul li a:hover {
-	color: #FFFFFF;
-	background-color: #7DAECE;
-	font-weight: bold;
+	background-color: #eee;
 }
 
 .myMenu ul li a strong {
 	margin-right: 10px;
+}
+.accordion .accordion-header{
+	background-color: #6494bc;
+}
+.accordion .accordion-header .panel-title{
+	color: #fff;
 }
 </style>
 <script type="text/javascript">
@@ -91,74 +89,87 @@ $(document).ready(function(){
 		</div>
 	</div>
 	<!-- 正左边panel -->
-	<div region="west" title="菜单" split="true"
-		style="width: 280px; padding: 1px; overflow: hidden;">
-		<div class="easyui-accordion" fit="false" border="false">
-			<div title="主索引管理" selected="true" class="myMenu">
+	<div region="west"
+		style="width: 180px; overflow: hidden; margin-top: 1px; border-left: 1px solid;">
+		<div class="easyui-accordion" data-options="fit:false,border:false">
+		
+			<div title="主索引管理" data-options="collapsed:false,collapsible:false" class="myMenu">
 				<ul>
 					<li><a
 						onclick="addTab('tabId_qi','主索引记录查询','${pageContext.request.contextPath}/query/page/query.jsp');"
-						href="#">主索引记录查询</a></li>
+						href="#">主索引查询</a></li>
 					<li><a
 						onclick="addTab('tabId_me','主索引记录合并','${pageContext.request.contextPath}/merge/page/merge.jsp');"
-						href="#">主索引记录合并</a></li>
-				</ul>
-			</div>
-			<div title="主索引日志" selected="true" class="myMenu">
-				<ul>
+						href="#">主索引人工合并</a></li>
+					<%-- <li><a
+						onclick="addTab('tabId_field','主索引字段管理','${pageContext.request.contextPath}/cfg/page/field.jsp');"
+						href="#">主索引字段管理</a></li> --%>
 					<li><a
-						onclick="addTab('tabId_ma','人工审核记录','${pageContext.request.contextPath}/manual/page/add.jsp');"
-						href="#">人工审核记录</a></li>
+						onclick="addTab('tabId_bc','主索引初筛规则管理','${pageContext.request.contextPath}/cfg/page/block.jsp');"
+						href="#">主索引初筛规则管理</a></li>
 					<li><a
-						onclick="addTab('tabId_il','主索引处理日志','${pageContext.request.contextPath}/indexlog/page/il.jsp');"
-						href="#">主索引处理日志</a></li>
+						onclick="addTab('tabId_mc','主索引匹配规则管理','${pageContext.request.contextPath}/cfg/page/match.jsp');"
+						href="#">主索引匹配规则管理</a></li>
+					<!-- 
 					<li><a
-						onclick="addTab('tabId_pl','居民处理日志','${pageContext.request.contextPath}/personlog/page/pl.jsp');"
-						href="#">居民处理日志</a></li>
+						onclick="addTab('tabId_id','身份域管理','${pageContext.request.contextPath}/domain/page/domain.jsp');"
+						href="#">身份域管理</a></li>
+					 -->
 				</ul>
 			</div>
 			
-			<div title="系统设置" selected="false" class="myMenu">
+			<div title="业务管理" data-options="collapsed:false,collapsible:false" class="myMenu">
 				<ul>
-					<li><a
+					<%-- <li><a
 						onclick="addTab('tabId_tyzdgl','通用字段配置','${pageContext.request.contextPath}/config/page/common_field_config.jsp');"
 						href="#">通用字段配置</a></li>
 					<li><a
 						onclick="addTab('tabId_biz_config','业务配置','${pageContext.request.contextPath}/config/page/biz_config.jsp');"
-						href="#">业务配置</a></li>
+						href="#">业务配置</a></li> --%>
+					<li><a
+						onclick="addTab('tabId_qi','业务查询','${pageContext.request.contextPath}/query/page/query.jsp');"
+						href="#">业务查询</a></li>
+					<li><a
+						onclick="addTab('tabId_bc','业务初筛规则管理','${pageContext.request.contextPath}/cfg/page/block.jsp');"
+						href="#">业务初筛规则管理</a></li>
+					<li><a
+						onclick="addTab('tabId_mc','业务匹配规则管理','${pageContext.request.contextPath}/cfg/page/match.jsp');"
+						href="#">业务匹配规则管理</a></li>
 				</ul>
 			</div>
 			
-			<!--
-			<div title="主索引设置" selected="false" class="myMenu">
+			<div title="日志管理" data-options="collapsed:false,collapsible:false" class="myMenu">
 				<ul>
+					<%-- <li><a
+						onclick="addTab('tabId_ma','人工审核记录','${pageContext.request.contextPath}/manual/page/add.jsp');"
+						href="#">人工审核记录</a></li> --%>
 					<li><a
-						onclick="addTab('tabId_mc','匹配规则管理','${pageContext.request.contextPath}/cfg/page/match.jsp');"
-						href="#">匹配规则管理</a></li>
+						onclick="addTab('tabId_il','主索引处理日志','${pageContext.request.contextPath}/indexlog/page/il.jsp');"
+						href="#">主索引处理日志</a></li>
 					<li><a
-						onclick="addTab('tabId_bc','初筛规则管理','${pageContext.request.contextPath}/cfg/page/block.jsp');"
-						href="#">初筛规则管理</a></li>
-					<li><a
-						onclick="addTab('tabId_id','身份域管理','${pageContext.request.contextPath}/domain/page/domain.jsp');"
-						href="#">身份域管理</a></li> 
+						onclick="addTab('tabId_il','主索引处理日志','${pageContext.request.contextPath}/indexlog/page/il.jsp');"
+						href="#">业务处理日志</a></li>
+					<%-- <li><a
+						onclick="addTab('tabId_pl','居民处理日志','${pageContext.request.contextPath}/personlog/page/pl.jsp');"
+						href="#">居民处理日志</a></li> --%>
 				</ul>
 			</div>
-			-->
-			<div title="权限管理" selected="false" class="myMenu">
+			
+			<div title="权限管理" data-options="collapsed:false,collapsible:false" class="myMenu">
 				<ul>
 				 	<li><a
-						onclick="addTab('tabId_su','系统用户管理','${pageContext.request.contextPath}/sysuser/su.ac');"
+						onclick="addTab('tabId_su','用户管理','${pageContext.request.contextPath}/sysuser/su.ac');"
 						href="#">用户管理</a></li>
 					<li><a
-						onclick="addTab('tabId_sr','系统角色管理','${pageContext.request.contextPath}/sysrole/page/role.jsp');"
+						onclick="addTab('tabId_sr','角色管理','${pageContext.request.contextPath}/sysrole/page/role.jsp');"
 						href="#">角色管理</a></li> 
 				</ul>
 			</div>
 		</div>
 	</div>
 	<!-- 正中间panel -->
-	<div region="center" title="功能区">
-		<div class="easyui-tabs" id="centerTab" fit="true" border="false">
+	<div region="center">
+		<div class="easyui-tabs" id="centerTab" fit="true" border="false" toolPosition="right">
 		</div>
 	</div>
 </body>

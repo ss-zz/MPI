@@ -4,11 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -16,11 +12,8 @@ import org.springframework.stereotype.Repository;
 import com.sinosoft.mpi.model.MatchFieldCfg;
 import com.sinosoft.mpi.util.IDUtil;
 
-@Repository("MatchFieldCfgDao")
-public class MatchFieldCfgDao implements IMatchFieldCfgDao {
-
-	@Resource
-	private JdbcTemplate jdbcTemplate;
+@Repository
+public class MatchFieldCfgDao extends IBaseDao<MatchFieldCfg> {
 
 	@Override
 	public void add(final MatchFieldCfg entity) {
@@ -122,32 +115,4 @@ public class MatchFieldCfgDao implements IMatchFieldCfgDao {
 		return datas;
 	}
 
-	@Override
-	public int getCount(String sql) {
-		return getCount(sql, new Object[] {});
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return jdbcTemplate.queryForObject(sql, args, Integer.class);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		return jdbcTemplate.queryForList(sql, args);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
-		return jdbcTemplate.queryForList(sql);
-	}
-
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	@Override
-	public JdbcTemplate getJdbcTemplate() {
-		return this.jdbcTemplate;
-	}
 }

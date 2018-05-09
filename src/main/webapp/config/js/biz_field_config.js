@@ -6,13 +6,24 @@ $(function() {
 
 // 加载表格数据
 function loadTable() {
-	// 加载表格
+	// 加载表格-业务字段
 	$('#listTable').datagrid({
 		toolbar : [ {
-			text : '添加业务字段',
+			text : '添加字段',
 			iconCls : 'icon-add',
 			handler : function() {
 				openSavePage();
+			}
+		} ]
+	}).datagrid('acceptChanges');
+	
+	// 加载表格
+	$('#listTableChushai').datagrid({
+		toolbar : [ {
+			text : '添加组',
+			iconCls : 'icon-add',
+			handler : function() {
+				openAddGroup();
 			}
 		} ]
 	}).datagrid('acceptChanges');

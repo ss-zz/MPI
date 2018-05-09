@@ -4,21 +4,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
 import com.sinosoft.mpi.model.ProfessionCode;
 
-@Repository("professionCodeDao")
-public class ProfessionCodeDao implements IProfessionCodeDao {
-
-	@Resource
-	private JdbcTemplate jdbcTemplate;
+@Repository
+public class ProfessionCodeDao extends IBaseDao<ProfessionCode> {
 
 	@Override
 	public void add(final ProfessionCode entity) {
@@ -88,31 +81,4 @@ public class ProfessionCodeDao implements IProfessionCodeDao {
 		return datas;
 	}
 
-	@Override
-	public int getCount(String sql) {
-		return getCount(sql, new Object[] {});
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return jdbcTemplate.queryForObject(sql, args, Integer.class);
-	}
-
-	public JdbcTemplate getJdbcTemplate() {
-		return jdbcTemplate;
-	}
-
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		return jdbcTemplate.queryForList(sql, args);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
-		return jdbcTemplate.queryForList(sql);
-	}
 }

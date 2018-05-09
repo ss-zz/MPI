@@ -1,7 +1,7 @@
 package com.sinosoft.stringcomparison.metrics;
 
 /**
- * 全字符匹配
+ * 精确匹配算法
  */
 public class ExactDistanceMetric implements IDistanceMetric {
 
@@ -9,11 +9,10 @@ public class ExactDistanceMetric implements IDistanceMetric {
 	public double score(String left, String right) {
 		double result = 0;
 		if (left == null || right == null) {
-
-		} else {
-			if (left.equals(right)) {
-				result = 1;
-			}
+			return result;
+		}
+		if (left.equals(right)) {
+			result = 1;
 		}
 		return result;
 	}

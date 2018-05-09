@@ -23,12 +23,12 @@
 		</div>
 		<div>
 			<label for="key"><span class="star">*</span>唯一标识:</label>
-			<input class="easyui-validatebox" type="text" name="key" required="true" validType="key" value="${item.key }" />
+			<input class="easyui-textbox" name="key" required="true" validType="key" value="${item.key }" />
 			<span class="comment">与注册数据中属性保持一致，同一业务不能重复</span>
 		</div>
 		<div>
 			<label for="name"><span class="star">*</span>字段名:</label>
-			<input class="easyui-validatebox" type="text" name="name" required="true" value="${item.name }" />
+			<input class="easyui-textbox" type="text" name="name" required="true" value="${item.name }" />
 			<span class="comment">字段中文或英文名，仅用于展示</span>
 		</div>
 		<div>
@@ -39,7 +39,7 @@
 		</div>
 		<div>
 			<label for="comment">备注:</label>
-			<textarea class="easyui-validatebox" name="comment">${item.comment }</textarea>
+			<textarea class="easyui-textbox" multiline="true" name="comment">${item.comment }</textarea>
 		</div>
 		<div>
 			<label for="algorithm"><span class="star">*</span>算法:</label>
@@ -53,11 +53,11 @@
 		</div>
 		<div>
 			<label for="weight"><span class="star">*</span>权重:</label>
-			<input class="easyui-validatebox" type="text" name="weight" required="true" validType="decimal" value="${item.weight }" />
+			<input class="easyui-textbox" name="weight" required="true" validType="decimal" value="${item.weight }" />
 		</div>
 		<div>
 			<label for="rank">顺序:</label>
-			<input class="easyui-validatebox" type="text" name="rank" validType="integer" value="${item.rank }" />
+			<input class="easyui-textbox" name="rank" validType="integer" value="${item.rank }" />
 			<span class="comment">仅用于展示位置不同</span>
 		</div>
 		<div>

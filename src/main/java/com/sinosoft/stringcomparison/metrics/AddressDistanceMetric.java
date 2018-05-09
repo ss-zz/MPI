@@ -1,9 +1,9 @@
 package com.sinosoft.stringcomparison.metrics;
 
+/**
+ * 地址匹配算法-未完成
+ */
 public class AddressDistanceMetric implements IDistanceMetric {
-
-	private String name = "address";
-	private String nameCn = "地址";
 
 	@Override
 	public double score(String left, String right) {
@@ -12,11 +12,11 @@ public class AddressDistanceMetric implements IDistanceMetric {
 
 	@Override
 	public String getName() {
-		return this.name;
+		return "address";
 	}
 
 	public String getNameCn() {
-		return nameCn;
+		return "地址";
 	}
 
 }

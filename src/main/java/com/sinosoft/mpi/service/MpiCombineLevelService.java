@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.IMpiCombineLevelDao;
+import com.sinosoft.mpi.dao.MpiCombineLevelDao;
 import com.sinosoft.mpi.model.MpiCombineLevel;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
@@ -17,7 +17,7 @@ import com.sinosoft.mpi.util.PageInfo;
 public class MpiCombineLevelService implements IMpiCombineLevelService {
 
 	@Resource
-	IMpiCombineLevelDao mpiCombineLevelDao;
+	MpiCombineLevelDao mpiCombineLevelDao;
 
 	@Override
 	public void save(MpiCombineLevel t) {

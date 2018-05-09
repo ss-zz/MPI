@@ -1,20 +1,38 @@
+// 扩展校验规则
+$.extend($.fn.validatebox.defaults.rules, {
+	roleName : {
+		validator : function(value, param) {
+			if (value.length > 16 || value.length < 4) {
+				return false;
+			}
+			var result = $.ajax({
+				url : param[0],
+				data : {
+					"roleName":value
+				},
+				type : 'post',
+				dataType : 'json',
+				async : false,
+				cache : false
+			}).responseText;
+			if (result == 'false') {
+				return false;
+			} else {
+				return true;
+			}
+		},
+		message : '角色名已存在或过短!(5-16位)'
+	}
+});
+
 $(function() {
 	// 加载表格数据
 	ajaxTable();
 	
-	// 设置分页条属性
-	var p = $('#listTable').datagrid('getPager');
-    $(p).pagination({
-        beforePageText: '第',
-        afterPageText: '页    共 {pages} 页',    
-        displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',   
-        pageSize:10,
-        pageList:[10,20,50,100]
-    });
 	// 初始化弹出层
-    setWindow_view();
-    setDialog_add();
-    setDialog_edit();
+	setWindow_view();
+	setDialog_add();
+	setDialog_edit();
 });
 
 
@@ -39,13 +57,9 @@ function ajaxTable() {
 				openDialog_edit();
 			}	
 		}],
-        singleSelect:true,//单选
-        pagination:true,//分页
-		loadMsg : '数据加载中,请稍后...',
+		pagination:true,//分页
 		onLoadError : function() {
 			alert('数据加载失败!');
-		},
-		queryParams : {// 查询条件
 		},
 		onClickRow : function(rowIndex, rowData) {
 			// 取消选择某行后高亮
@@ -73,7 +87,8 @@ function reloadTable() {
  * @param row 行值
  */
 function buildViewUserLink(val,row){
-	return '<a href="#" onclick="ajaxUserTable(\''+val+'\');">查看用户</a>';
+	console.dir(row);
+	return '<a href="#" onclick="ajaxUserTable(\''+val+'\',\'' + row.roleName + '\');">查看用户</a>';
 }
 
 
@@ -81,18 +96,18 @@ function buildViewUserLink(val,row){
  * 初始化用户列表显示窗口
  */
 function setWindow_view(){
-    $('#window_view_user').window({  
-        width:800,  
-        height:500,  
-        modal:true, // 模态
-        closed:true, // 初始关闭
-        collapsible:false, // 不可卷起
-        minimizable:false, // 不可最小化
-        maximizable:true, // 可以最大化
-        closable:true, //可以关闭
-        draggable:false, // 不可拖拽
-        resizable:false // 不可改变大小        
-    });     
+	$('#window_view_user').window({  
+		width:800,
+		height:500,
+		modal:true, // 模态
+		closed:true, // 初始关闭
+		collapsible:false, // 不可卷起
+		minimizable:false, // 不可最小化
+		maximizable:true, // 可以最大化
+		closable:true, //可以关闭
+		draggable:false, // 不可拖拽
+		resizable:false // 不可改变大小
+	});
 }
 
 function closeWindow_view(){
@@ -104,16 +119,13 @@ function closeWindow_view(){
  * 初始化用户列表
  * @param roleId 角色id
  */
-function ajaxUserTable(roleId) {
+function ajaxUserTable(roleId, roleName) {
+	$("#window_view_user").window('setTitle', '角色【'+roleName+'】用户列表');
+	$("#window_view_user").window('open');
 	$("#current_sysrole_id").val(roleId);
 	// 加载表格
 	$('#userListTable').datagrid({
-        singleSelect:true,//单选
-        pagination:true,//分页
-		loadMsg : '数据加载中,请稍后...',
-		onLoadError : function() {
-			alert('数据加载失败!');
-		},
+		pagination:true,//分页
 		queryParams : {// 查询条件
 			"sysRoleId":roleId
 		},
@@ -126,10 +138,8 @@ function ajaxUserTable(roleId) {
 			if (value != null) {
 				alert("错误消息:" + value);
 			}
-			$("#window_view_user").window('open');
 		}
 	}).datagrid('acceptChanges');
-	
 	
 }
 
@@ -205,12 +215,9 @@ function addData() {
 		type : 'POST',
 		dataType : "json",
 		data : {
-	       "roleName":$("#add_roleName").val()
-	    },
-		url : root + '/role/role.ac?method=add',// 请求的action路径
-		error : function() {// 请求失败处理函数
-			alert('请求失败');
+			"roleName":$("#add_roleName").val()
 		},
+		url : root + '/role/role.ac?method=add',// 请求的action路径
 		success : function(data) {
 			var messgage = "添加成功!";
 			if (data == null) {// 未返回任何消息表示添加成功
@@ -241,36 +248,36 @@ function setDialog_edit() {
 }
 // 打开对话框
 function openDialog_edit() {
-    editReset();
-    
+	editReset();
+	
 	var row = $('#listTable').datagrid('getSelected');
-    if(row==undefined || row==null){
-        alert("请选择要修改的角色!");
-        return;
-    }       
-    var roleId = row.sysRoleId; 
-    $.ajax({
-        async : false,
-        cache : false,
-        type : 'POST',
-        dataType : "json",
-        data : {
-            "sysRoleId":roleId
-        },
-        url : root + '/role/role.ac?method=load',// 请求的action路径
-        error : function() {// 请求失败处理函数
-            alert('请求失败');
-        },
-        success : function(data) {
-            if (data == null) {// 未返回任何消息表示添加成功
-                alert('请求失败');
-            }else{
-			    $("#edit_roleName").val(data.roleName);
-			    $("#edit_roleId").val(data.sysRoleId);
-            }
-        }
-    });
-    $('#edit').dialog('open');
+	if(row==undefined || row==null){
+		alert("请选择要修改的角色!");
+		return;
+	}	   
+	var roleId = row.sysRoleId; 
+	$.ajax({
+		async : false,
+		cache : false,
+		type : 'POST',
+		dataType : "json",
+		data : {
+			"sysRoleId":roleId
+		},
+		url : root + '/role/role.ac?method=load',// 请求的action路径
+		error : function() {// 请求失败处理函数
+			alert('请求失败');
+		},
+		success : function(data) {
+			if (data == null) {// 未返回任何消息表示添加成功
+				alert('请求失败');
+			}else{
+				$("#edit_roleName").val(data.roleName);
+				$("#edit_roleId").val(data.sysRoleId);
+			}
+		}
+	});
+	$('#edit').dialog('open');
 }
 // 关闭对话框
 function closeDialog_edit() {
@@ -278,8 +285,8 @@ function closeDialog_edit() {
 }
 // 根据用户id查询用户的信息
 function editReset() {
-    $("#edit_roleName").val("");
-    $("#edit_roleId").val("");
+	$("#edit_roleName").val("");
+	$("#edit_roleId").val("");
 }
 // 执行用户编辑操作
 function editData() {
@@ -305,7 +312,7 @@ function editData() {
 		dataType : "json",
 		data : {
 			"sysRoleId":$("#edit_roleId").val(),
-			"roleName":$("#edit_roleName").val(),        
+			"roleName":$("#edit_roleName").val(),
 		},
 		url : root + '/role/role.ac?method=edit',// 请求的action路径
 		error : function() {// 请求失败处理函数
@@ -323,29 +330,3 @@ function editData() {
 		}
 	});
 }
-
-$.extend($.fn.validatebox.defaults.rules, {
-	roleName : {
-		validator : function(value, param) {
-			if (value.length > 16 || value.length < 4) {
-				return false;
-			}
-			var result = $.ajax({
-						url : param[0],
-						data : {
-                            "roleName":value
-                        },
-						type : 'post',
-						dataType : 'json',
-						async : false,
-						cache : false
-					}).responseText;
-			if (result == 'false') {
-				return false;
-			} else {
-				return true;
-			}
-		},
-		message : '角色名已存在或过短!(5-16位)'
-	}
-});

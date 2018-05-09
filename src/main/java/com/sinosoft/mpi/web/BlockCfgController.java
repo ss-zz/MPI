@@ -6,8 +6,6 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +22,10 @@ import com.sinosoft.mpi.model.PersonPropertiesDesc;
 import com.sinosoft.mpi.service.IBlockCfgService;
 import com.sinosoft.mpi.util.PageInfo;
 
+import net.sf.json.JSONObject;
+
 /**
- * 匹配配置页面控制器
+ * 初筛配置页面控制器
  */
 @Controller
 @RequestMapping("/cfg/block.ac")

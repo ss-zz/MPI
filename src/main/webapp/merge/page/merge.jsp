@@ -8,7 +8,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/merge/js/merge.js"></script>
 </head>
 <body>
-<div id="showSummary" class="easyui-panel" title="当前选中" >
+<div id="showSummary" class="easyui-panel" title="已选中居民" >
 	<table style="width: 100%; text-align: center;">
 		<tr>
 			<th></th>
@@ -42,11 +42,12 @@
 		</tr>
 	</table>
 </div>
+
 <br/>
-<br/>
-<table>
+
+<table style="width: 100%;">
 	<tr>
-		<td style="width: 48%;">
+		<td style="width: 50%;">
 			<!-- 表格 -->
 			<table 	id="surviveTable"
 					title="目标居民"
@@ -75,7 +76,7 @@
 					&nbsp;&nbsp;<a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="resetSurviveTable();">重置</a>
 				</div>
 				<div>
-					<a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="selectSurvivePerson();">选择目标用户</a>
+					<a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="selectSurvivePerson();">选择目标居民</a>
 				</div>
 			</div>
 		</td>

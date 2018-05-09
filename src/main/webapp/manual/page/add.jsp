@@ -8,17 +8,9 @@
 </head>
 <body>
 <!-- 表格 -->
-<table 	id="listTable"
+<table id="listTable"
 		title="需手工合并居民信息"  
-		border="0"
-		cellspacing="0"
-		cellpadding="0"
 		idField="MAN_OP_ID" 
-		remoteSort="false" 
-		singleSelect="false"
-		fitColumns="true"
-		showFooter="false"
-		striped="true"
 		url="${pageContext.request.contextPath}/manual/manual.ac?method=query" >
 	<thead>
 		<tr align="center">

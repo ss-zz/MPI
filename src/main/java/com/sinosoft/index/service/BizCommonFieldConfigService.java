@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.index.dao.BizCommonFieldConfigRepository;
-import com.sinosoft.index.model.BizCommonFieldConfigModel;
+import com.sinosoft.index.entity.BizCommonFieldConfig;
+import com.sinosoft.index.exception.ServiceException;
 
 /**
  * 主索引通用业务字段配置服务
@@ -25,7 +26,7 @@ public class BizCommonFieldConfigService {
 	 * 
 	 * @return
 	 */
-	public List<BizCommonFieldConfigModel> getAll() {
+	public List<BizCommonFieldConfig> getAll() {
 		return bizCommonFieldConfigRepository.findAll();
 	}
 
@@ -35,7 +36,7 @@ public class BizCommonFieldConfigService {
 	 * @param id
 	 * @return
 	 */
-	public BizCommonFieldConfigModel getById(String id) {
+	public BizCommonFieldConfig getById(String id) {
 		return bizCommonFieldConfigRepository.findOne(id);
 	}
 
@@ -47,19 +48,28 @@ public class BizCommonFieldConfigService {
 	 * @return 字段是否存在
 	 */
 	public boolean isExist(String key) {
-		return bizCommonFieldConfigRepository.countByKey(key) == 0 ? false : true;
+		return bizCommonFieldConfigRepository.countByFieldName(key) == 0 ? false : true;
 	}
 
 	/**
-	 * 保存业务字段配置
+	 * 保存通用业务字段配置
 	 * 
-	 * @param bizFieldConfig
-	 *            业务字段配置
+	 * @param bizCommonFieldConfig
+	 *            通用业务字段配置
 	 * @return
+	 * @throws ServiceException
+	 *             业务异常
 	 */
-	public String save(BizCommonFieldConfigModel bizFieldConfig) {
-		BizCommonFieldConfigModel ret = bizCommonFieldConfigRepository.save(bizFieldConfig);
-		return ret.getId();
+	public String save(BizCommonFieldConfig bizCommonFieldConfig) throws ServiceException {
+		if (bizCommonFieldConfig == null) {
+			return null;
+		}
+		if (bizCommonFieldConfig.getId() == null) {// 新增
+			if (isExist(bizCommonFieldConfig.getFieldName())) {
+				throw new ServiceException("通用业务字段唯一标识已存在");
+			}
+		}
+		return bizCommonFieldConfigRepository.save(bizCommonFieldConfig).getId();
 	}
 
 	/**

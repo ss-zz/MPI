@@ -25,12 +25,7 @@
 </head>
 <body>
 <!-- 表格 -->
-<table 	class="easyui-treegrid"
-		id="listTable" 		
-		border="0"
-		cellspacing="0"
-		cellpadding="0"		
-		></table>
+<table class="easyui-treegrid" id="listTable"></table>
 
 <!-- 搜索工具条 -->
 <div id="listTable_tb" style="padding:5px;height:auto">

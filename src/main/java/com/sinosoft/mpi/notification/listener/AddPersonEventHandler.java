@@ -6,13 +6,14 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import com.sinosoft.block.service.IBlockService;
 import com.sinosoft.match.model.Record;
 import com.sinosoft.match.model.RecordPair;
 import com.sinosoft.match.service.IMatchService;
 import com.sinosoft.mpi.context.Constant;
-import com.sinosoft.mpi.dao.IIdentifierDomainDao;
+import com.sinosoft.mpi.dao.IdentifierDomainDao;
 import com.sinosoft.mpi.model.IdentifierDomain;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.ManOpPerson;
@@ -37,6 +38,8 @@ import com.sinosoft.mpi.util.NumberUtils;
 /**
  * 添加人员事件处理
  */
+
+@Component
 public class AddPersonEventHandler implements IEventHandler {
 	private static Logger logger = Logger.getLogger(AddPersonEventHandler.class);
 	@Resource
@@ -69,7 +72,7 @@ public class AddPersonEventHandler implements IEventHandler {
 	@Resource
 	private IPersonIndexUpdateService personIndexUpdateService;
 	@Resource
-	private IIdentifierDomainDao identifierDomainDao;
+	private IdentifierDomainDao identifierDomainDao;
 
 	@Resource
 	private MpiAbstService mpiAbstService;
@@ -198,50 +201,6 @@ public class AddPersonEventHandler implements IEventHandler {
 		IndexIdentifierRel rel = new IndexIdentifierRel();
 		rel.setMPI_PK(index.getMPI_PK());
 		indexIdentifierRelService.save(rel);
-	}
-
-	public void setBlockService(IBlockService blockService) {
-		this.blockService = blockService;
-	}
-
-	public void setMatchServcie(IMatchService matchServcie) {
-		this.matchServcie = matchServcie;
-	}
-
-	public void setPersonIndexService(IPersonIndexService personIndexService) {
-		this.personIndexService = personIndexService;
-	}
-
-	public void setPersonInfoService(IPersonInfoService personInfoService) {
-		this.personInfoService = personInfoService;
-	}
-
-	public void setIndexIdentifierRelService(IIndexIdentifierRelService indexIdentifierRelService) {
-		this.indexIdentifierRelService = indexIdentifierRelService;
-	}
-
-	public void setPersonIdxLogService(IPersonIdxLogService personIdxLogService) {
-		this.personIdxLogService = personIdxLogService;
-	}
-
-	public void setMatchResultService(IMatchResultService matchResultService) {
-		this.matchResultService = matchResultService;
-	}
-
-	public void setManOpPersonService(IManOpPersonService manOpPersonService) {
-		this.manOpPersonService = manOpPersonService;
-	}
-
-	public void setBookLogService(IBookLogService bookLogService) {
-		this.bookLogService = bookLogService;
-	}
-
-	public void setPersonIndexUpdateService(IPersonIndexUpdateService personIndexUpdateService) {
-		this.personIndexUpdateService = personIndexUpdateService;
-	}
-
-	public void setIdentifierDomainDao(IIdentifierDomainDao identifierDomainDao) {
-		this.identifierDomainDao = identifierDomainDao;
 	}
 
 }

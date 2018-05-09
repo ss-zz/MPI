@@ -6,7 +6,7 @@ import java.util.Collection;
 import com.sinosoft.stringcomparison.model.DistanceMetricType;
 
 /**
- * 字符比较接口
+ * 字符比较/算法接口
  */
 public interface IStringComparisonService {
 

@@ -1,17 +1,13 @@
 $(function() {
 	// 加载表格数据
-	//ajaxTable();
 	$('#listTable').treegrid({
 		title : '主索引记录',
-		toolbar:"#listTable_tb",
-		singleSelect:false,//单选
-		pagination:true,//分页
-		loadMsg:'数据加载中,请稍后...',
-		idField:"ROW_ID",
-		treeField:"NAME",
-		remoteSort:false, 
-		showFooter:false,
-		striped:true,
+		toolbar: "#listTable_tb",
+		loadMsg: '数据加载中,请稍后...',
+		idField: "ROW_ID",
+		singleSelect:false,
+		treeField: "NAME",
+		fitColunms: true,
 		columns:[[  
 			{field:'ck',checkbox:true},  
 			{field:'NAME_CN',title:'姓名',width:150,formatter:buildViewLink},
@@ -19,23 +15,11 @@ $(function() {
 			{field:'BIRTH_DATE',title:'出生日期',width:150},
 			{field:'ID_NO',title:'身份证号',width:200},
 			{field:'PERSON_TEL_NO',title:'电话号码',width:100},
-			//{field:'DOMAIN_DESC',title:'数据来源',width:100},
 			{field:'PERSON_COUNT',title:'关联居民数',width:200,formatter:buildRemoveLink},
 			{field:'OPERATION',title:'操作',width:115,formatter:spileIndex}
-		]],
-		onClickRow:function(index, row){
-		}
+		]]
 	});
 	
-
-	var p = $('#listTable').treegrid('getPager');
-	$(p).pagination({
-		beforePageText : '第',
-		afterPageText : '页	共 {pages} 页',
-		displayMsg : '当前显示 {from} - {to} 条记录   共 {total} 条记录',
-		pageSize : 10,
-		pageList : [ 10, 20, 50, 100 ]
-	});
 });
 
 function d_close(){
@@ -50,6 +34,7 @@ function split_close(){
 	$.messager.alert('消息','拆分成功');
 }
 
+// 合并主索引
 function mergeIndex(){
 	var row = $('#listTable').treegrid('getSelections');
 	var text = '人工主索引信息合并';
@@ -62,26 +47,25 @@ function mergeIndex(){
 		if(str.length > 0){
 			$.messager.confirm('消息 ',str,function(r){
 				if (r){
-					
 					$("#dialog").dialog({
 						title:text,
 						width:1000,
 						height:450,
 						modal:true,
-				   		content : '<iframe name="'+text+'" id="tabId_IndexView" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
+						content : '<iframe name="'+text+'" id="tabId_IndexView" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
 					});
 					$("#dialog").dialog("open"); // 打开dialog
 				}
 			});
 		}else{
-					$("#dialog").dialog({
-						title:text,
-						width:1000,
-						height:450,
-						modal:true,
-				   		content : '<iframe name="'+text+'" id="tabId_IndexView" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-					});
-					$("#dialog").dialog("open"); // 打开dialog
+			$("#dialog").dialog({
+				title:text,
+				width:1000,
+				height:450,
+				modal:true,
+				content : '<iframe name="'+text+'" id="tabId_IndexView" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
+			});
+			$("#dialog").dialog("open"); // 打开dialog
 		}
 		
 	}else{
@@ -105,70 +89,10 @@ function spile_Index(id){
 			width:1000,
 			height:450,
 			modal:true,
-	   		content : '<iframe name="'+text+'" id="tabId_SplitIndexView" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
+				content : '<iframe name="'+text+'" id="tabId_SplitIndexView" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
 		});
 		$("#dialog_split").dialog("open"); // 打开dialog
 }
-
-//合并居民主索引
-/*function mergeIndex(num){
-	var row = $('#listTable').treegrid('getSelections');
-	var text;
-	var retiredPk;
-	var survivingPk;
-	
-	if(row.length == 2){
-		if(num == null){
-			text = '确定合并主索引？	被合并主索引：【'+ row[0].NAME_CN+'】	目标主索引：【'+row[1].NAME_CN+'】'+'<a href=\"#\" onclick=\"mergeIndex(0);\">调换</a>';
-			retiredPk = row[0].MPI_PK
-			survivingPk = row[1].MPI_PK
-		}
-		if(num == 0){
-			text = '确定合并主索引？	被合并主索引：【'+ row[1].NAME_CN+'】	目标主索引：【'+row[0].NAME_CN+'】'+'<a href=\"#\" onclick=\"mergeIndex(1);\">调换</a>';
-			retiredPk = row[1].MPI_PK
-			survivingPk = row[0].MPI_PK
-			$(".messager-body").window('close');
-		}else{
-			text = '确定合并主索引？	被合并主索引：【'+ row[0].NAME_CN+'】	目标主索引：【'+row[1].NAME_CN+'】'+'<a href=\"#\" onclick=\"mergeIndex(0);\">调换</a>';
-			retiredPk = row[0].MPI_PK
-			survivingPk = row[1].MPI_PK
-			$(".messager-body").window('close');
-		}
-		$.messager.confirm('消息 ',text,function(r){
-			if (r){
-				$.ajax({
-					async : false,
-					cache : false,
-					type : 'POST',
-					dataType : "json",
-					data : {
-						"retiredPk":retiredPk,
-						"survivingPk":survivingPk
-					},
-					url : root + '/index/index.ac?method=merge',// 请求的action路径
-					error : function() {// 请求失败处理函数
-						alert('请求失败');
-					},
-					success : function(data) {
-						var messgage = "主索引合并拆分!";
-						if (data == null) {// 未返回任何消息表示添加成功
-							// 刷新表格
-							reloadTable();
-						} else if (data.errorMsg != null) {// 返回异常信息
-							messgage = data.errorMsg;
-						}
-						$.messager.alert('消息',messgage);
-					}
-				});	
-			
-			}
-		});
-	}else{
-		$.messager.alert('消息','合并失败！请选出需要合并的两个主索引！');
-	}
-}*/
-
-
 
 //锁定按钮
 function lockBtn(btn){
@@ -186,24 +110,13 @@ function unlockBtn(btn,handler){
  * 加载表格数据
  */
 function ajaxTable() {
-	/*var args = {};
-	if (params != undefined && $.isPlainObject(params))
-		args = params;*/
 	// 加载表格
 	$('#listTable').treegrid({
 		title : '主索引记录查询',
 		toolbar:"#listTable_tb",
-		singleSelect:true,//单选
-		pagination:true,//分页
-		loadMsg:'数据加载中,请稍后...',
 		iconCls:"icon-edit",
-		width:"98%",
 		idField:"ROW_ID",
 		treeField:"NAME",
-		remoteSort:false, 
-		showFooter:false,
-		striped:true,
-		//queryParams : args,
 		url: root + "/query/query.ac",	
 		columns:[[  
 			{field:'NAME_CN',title:'姓名',width:150,formatter:buildViewLink},
@@ -211,18 +124,8 @@ function ajaxTable() {
 			{field:'BIRTH_DATE',title:'出生日期',width:150},
 			{field:'ID_NO',title:'身份证号',width:200},
 			{field:'PERSON_TEL_NO',title:'电话号码',width:100},
-			//{field:'DOMAIN_DESC',title:'数据来源',width:100},
 			{field:'PERSON_COUNT',title:'关联居民数',width:200,formatter:buildRemoveLink}
 		]],
-		onLoadError : function() {
-			alert('数据加载失败!');
-		},
-		onLoadSuccess : function(data) {
-			var value = $('#listTable').treegrid('getData')['errorMsg'];
-			if (value != null) {
-				alert("错误消息:" + value);
-			}
-		},
 		onBeforeLoad : function(row, param) {
 			if (row) {
 				$(this).treegrid('options').url =  root + '/query/query.ac?method=listPerson&indexId='+row.INDEX_ID;
@@ -239,6 +142,7 @@ function ajaxTable() {
 					"GENDER_CD" : personSex
 				};
 			}
+			return true;
 		},
 		onContextMenu : function(e, row) {
 			e.preventDefault();
@@ -250,7 +154,6 @@ function ajaxTable() {
 
 function buildViewLink(val , row){
 	var type = row.ROW_TYPE;
-	//alert(type);
 	var id = row.ROW_ID;
 	if(type == 1){
 		return '<a href="#" onclick="unify_viewIndex(\''+id+'\',\''+val+'\')">'+val+'</a>';
@@ -318,7 +221,7 @@ function splitPersonToExistIndex(personId,indexId){
 				parent.$('#centerTab').tabs('select',title);
 				break;
 			}
-		}   
+		}
 	}	
 }
 
@@ -368,16 +271,14 @@ function searchListTable() {
 	var id_no = $("#search_personIdno").val();
 	var birthdate = $("#search_personBirthdate").datebox('getValue');
 	var mergeStatus = $('#search_mergeStatus').combobox('getValue'); 
-/*	var personSex = $("#search_personSex").combobox('getValue');*/
 	$("#listTable").treegrid({
 		queryParams : {
 			"NAME_CN" : personName,
 			"ID_NO":id_no,
 			"BIRTH_DATE":birthdate,
-			"STATE":mergeStatus
-		/*	"GENDER_DN" : personSex
-			
-		*/
+			"STATE":mergeStatus,
+			page: 1,
+			rows: 10
 		},
 		url: root + "/query/query.ac",
 	});
@@ -389,5 +290,4 @@ function searchReset() {
 	$("#search_personName").val('');
 	$("#search_personIdno").val('');
 	$("#search_personBirthdate").datebox('getValue');
-/*	$("#search_personSex").combobox('setValue', '');*/
 }

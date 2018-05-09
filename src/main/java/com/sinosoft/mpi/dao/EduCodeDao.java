@@ -4,21 +4,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
 import com.sinosoft.mpi.model.EduCode;
 
-@Repository("eduCodeDao")
-public class EduCodeDao implements IEduCodeDao {
-
-	@Resource
-	private JdbcTemplate jdbcTemplate;
+@Repository
+public class EduCodeDao extends IBaseDao<EduCode> {
 
 	@Override
 	public void add(final EduCode entity) {
@@ -78,17 +71,7 @@ public class EduCodeDao implements IEduCodeDao {
 
 	@Override
 	public List<EduCode> find(String sql, Object[] args) {
-		/*
-		 * List<EduCode> datas = jdbcTemplate.query(sql, args, new RowMapper<EduCode>()
-		 * {
-		 * 
-		 * @Override public EduCode mapRow(ResultSet rs, int row) throws SQLException {
-		 * EduCode result = new EduCode(); result.setCodeId(rs.getString("CODE_ID"));
-		 * result.setCodeName(rs.getString("CODE_NAME")); return result; } }); return
-		 * datas;
-		 */
 		return new ArrayList<EduCode>();
-
 	}
 
 	@Override
@@ -98,31 +81,4 @@ public class EduCodeDao implements IEduCodeDao {
 		return datas;
 	}
 
-	@Override
-	public int getCount(String sql) {
-		return getCount(sql, new Object[] {});
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return jdbcTemplate.queryForObject(sql, args, Integer.class);
-	}
-
-	public JdbcTemplate getJdbcTemplate() {
-		return jdbcTemplate;
-	}
-
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		return jdbcTemplate.queryForList(sql, args);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
-		return jdbcTemplate.queryForList(sql);
-	}
 }

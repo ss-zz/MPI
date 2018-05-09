@@ -10,9 +10,9 @@ body {
 </style>
 
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/easyui/jquery-1.7.1.min.js"></script>
+	src="${pageContext.request.contextPath}/js/easyui/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/js/easyui/themes/default/easyui.css">
+	href="${pageContext.request.contextPath}/js/easyui/themes/material-teal/easyui.css">
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/js/easyui/themes/icon.css">
 <link rel="stylesheet" type="text/css"
@@ -27,7 +27,11 @@ body {
 	
 	// 显示ajax错误信息
 	function showAjaxErrorMsg(msg){
-		$.messager.alert('消息', msg, 'error');
+		if (self != top) {
+			parent.window.$.messager.alert('消息', msg, 'error');
+		}else{
+			window.$.messager.alert('消息', msg, 'error');
+		}
 	}
 	
 	// jquery全局异常处理
@@ -72,6 +76,15 @@ body {
 				default:
 			}
 		},
+		dataFilter: function(data, type){// 结果数据过滤
+			if(!data) return data;
+			var jsonData = eval('(' + data + ')');
+			if(jsonData && jsonData.ERROR_MSG){// 显示公共错误信息
+				showAjaxErrorMsg(jsonData.ERROR_MSG);
+			}else{
+				return data;
+			}
+		}
 	})
 	
 	$(function(){
@@ -80,6 +93,15 @@ body {
 		$.fn.datagrid.defaults.singleSelect = true;
 		$.fn.datagrid.defaults.fitColumns = true;
 		$.fn.datagrid.defaults.striped = true;
+		$.fn.datagrid.defaults.showFooter = false;
+		$.fn.datagrid.defaults.pagination = true;
+		$.fn.datagrid.defaults.loadMsg = '数据加载中,请稍后...';
+		
+		$.fn.treegrid.defaults.pagination = true;
+		
+		$.fn.form.defaults.iframe = false;
+		$.fn.form.defaults.ajax = true;
+		
 	})
 	
 	// 扩展easyui校验
@@ -233,5 +255,19 @@ body {
 	function createTabContent(tabId, url){
 		return '<iframe name="'+ ('iframe_' + tabId) + '" id="'+ tabId + '" src="' + url + '" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>';
 	}
+	
+	// 覆盖默认的alert弹出框
+	function alert(info){
+		$.messager.alert('提示', info);
+	}
+	
+	// 转换函数数据
+	var SELECT_FUNS = [{
+		clazz: 'com.sinosoft.block.fun.ID15Function',
+		desc: '身份证18位转15位'
+	},{
+		clazz: 'com.sinosoft.block.fun.ID18Function',
+		desc: '身份证15位转18位'
+	}];
 	
 </script>

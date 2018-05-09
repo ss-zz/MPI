@@ -6,19 +6,15 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.sinosoft.mpi.model.PersonInfo;
 
-@Repository("personInfoDao")
-public class PersonInfoDao implements IPersonInfoDao {
-	@Resource
-	private JdbcTemplate jdbcTemplate;
+@Repository
+public class PersonInfoDao extends IBaseDao<PersonInfo> {
+
 	static final String PERSONTABLE = "mpi_person_info";
 	static final String PERSONTABLEHISTORY = "mpi_personinfo_history";
 
@@ -920,7 +916,6 @@ public class PersonInfoDao implements IPersonInfoDao {
 	}
 
 	// 根据机构号和ID查询
-	@Override
 	public PersonInfo findByOrgId(PersonInfo entity) {
 		// lpk 2013年4月16日9:25:51
 		String type = entity.getTYPE();
@@ -946,15 +941,13 @@ public class PersonInfoDao implements IPersonInfoDao {
 		return result;
 	}
 
-	@Override
+	/**
+	 * 根据id查询域信息
+	 * 
+	 * @param entity
+	 * @return
+	 */
 	public PersonInfo findWithDomainInfoById(PersonInfo entity) {
-		/*
-		 * String sql = " select a.*,c.domain_id,c.unique_sign,c.domain_desc from " +
-		 * " mpi_person_info a left join mpi_index_identifier_rel b on a.person_id = b.person_id "
-		 * +
-		 * " left join mpi_identifier_domain c on b.domain_id = c.domain_id where a.field_pk = ? "
-		 * ;
-		 */
 		String sql = " select a.*,c.domain_id,c.unique_sign,c.domain_desc from "
 				+ " mpi_person_info a left join mpi_index_identifier_rel b on a.field_pk = b.field_pk "
 				+ " left join mpi_identifier_domain c on b.domain_id = c.domain_id where a.field_pk = ? ";
@@ -1205,44 +1198,13 @@ public class PersonInfoDao implements IPersonInfoDao {
 		return datas;
 	}
 
-	@Override
-	public int getCount(String sql) {
-		return getCount(sql, new Object[] {});
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return jdbcTemplate.queryForObject(sql, args, Integer.class);
-	}
-
-	public JdbcTemplate getJdbcTemplate() {
-		return jdbcTemplate;
-	}
-
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		return jdbcTemplate.queryForList(sql, args);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
-		return jdbcTemplate.queryForList(sql);
-	}
-
-	@Override
 	public List<PersonInfo> findWithDomainInfo(String sql, Object[] args) {
 		List<PersonInfo> datas = jdbcTemplate.query(sql, args, new PersonRowMapper() {
 			@Override
 			public PersonInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 				PersonInfo p = super.mapRow(rs, rowNum);
-				// p.setDOMAINUNIQUESIGN(rs.getString("UNIQUE_SIGN"));
 				return p;
 			}
-
 		});
 		return datas;
 	}
@@ -1273,7 +1235,6 @@ public class PersonInfoDao implements IPersonInfoDao {
 		}
 	}
 
-	@Override
 	public PersonInfo findByPK(String fieldpk) {
 		String sql = " select * from mpi_person_info where field_pk = ?";
 		List<PersonInfo> datas = find(sql, new Object[] { fieldpk });
@@ -1284,7 +1245,6 @@ public class PersonInfoDao implements IPersonInfoDao {
 		return result;
 	}
 
-	@Override
 	public void addHistory(final PersonInfo entity) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("insert into ").append(PERSONTABLEHISTORY).append("( register_org_code,")
@@ -1574,7 +1534,6 @@ public class PersonInfoDao implements IPersonInfoDao {
 		});
 	}
 
-	@Override
 	public Map<String, Object> findById(String person_id, String org_code) {
 		return null;
 	}

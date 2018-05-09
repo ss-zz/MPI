@@ -8,64 +8,6 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/indexlog/js/view.js"></script>
 <title>索引日志明细</title>
-<style>
-.myTable {
-	border-collapse: collapse;
-	border-left: 1px solid #ccc;
-	border-top: 1px solid #ccc; 
-	color: #333;
-}
-
-.myTable caption {
-	font-size: 1.1em;
-	font-weight: bold;
-	letter-spacing: -1px;
-	margin-bottom: 10px;
-	padding: 5px;
-	text-align: left;
-}
-
-.myTable a {
-	text-decoration: none;
-	border-bottom: 1px dotted #f60;
-	color: #f60;
-	font-weight: bold;
-}
-
-.myTable a:hover {
-	text-decoration: none;
-	color: #fff;
-	background: #f60;
-}
-
-.myTable tr th a {
-	color: #369;
-	border-bottom: 1px dotted #369;
-}
-
-.myTable tr th a:hover {
-	color: #fff;
-	background: #369;
-}
-
-.myTable thead tr th {
-	text-transform: uppercase;
-	background: #e2e2e2;
-}
-
-.myTable td, table th {
-	border-right: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-	padding: 5px;
-	line-height: 1.8em;
-	font-size: 0.8em;
-	vertical-align: top;
-}
-
-.myTable tr.odd th, table tr.odd td {
-	background: #efefef;
-}
-</style>
 </head>
 <body>
 	<div>
@@ -74,6 +16,7 @@
 	</div>
 	<!-- 顶头表格 所有类型均有 -->
 	<table class="myTable">
+		<caption>主索引日志处理详情</caption>
 		<tr>
 			<td>处理类型:<span id="show_log_opType"></span></td>
 			<td>处理方式:<span id="show_log_opStyle"></span></td>
@@ -85,7 +28,7 @@
 			<td>处理人:${log.opUserId }</td>
 		</tr>
 	</table>
-	<hr />
+	<br />
 	<c:if test="${log.opType == 2 }">
 		<c:if test="${log.opStyle == 3 || log.opStyle == 6 }">
 			<h3>
@@ -153,6 +96,12 @@
 	<table class="myTable">
 		<caption>
 			主索引信息对比情况(匹配结果:<span id="show_log_opStyle_1"></span>)
+			<span style="float: right;">
+				<c:if test="${log.opType == 1 }">
+				最终形成的主索引:
+				<a href="javascript:Void(0);" onclick="unify_viewIndex('${index.MPI_PK }','${index.NAME_CN }')">${index.NAME_CN}</a>
+				</c:if>
+			</span>
 		</caption>
 		<thead>
 			<tr>
@@ -175,13 +124,5 @@
 		</tbody>
 	</table>
 	<br />
-	<br />
-	<c:if test="${log.opType == 1 }">
-		<h3>
-			最终形成的主索引:<a href="javascript:Void(0);"
-				onclick="unify_viewIndex('${index.MPI_PK }','${index.NAME_CN }')">${index.NAME_CN
-				}</a>
-		</h3>
-	</c:if>
 </body>
 </html>

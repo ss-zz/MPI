@@ -30,7 +30,7 @@ import com.sinosoft.stringcomparison.config.StringComparisionConfig;
 import com.sinosoft.stringcomparison.model.DistanceMetricType;
 
 /**
- * 匹配配置页面控制器
+ * 匹配配置控制器
  */
 @Controller
 @RequestMapping("/cfg/match.ac")

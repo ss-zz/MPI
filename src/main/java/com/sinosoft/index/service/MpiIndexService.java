@@ -3,11 +3,12 @@ package com.sinosoft.index.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.index.dao.MpiIndexRepository;
-import com.sinosoft.index.model.MpiIndexModel;
+import com.sinosoft.index.entity.MpiIndex;
 
 /**
  * mpi 主索引服务-index
@@ -18,8 +19,12 @@ import com.sinosoft.index.model.MpiIndexModel;
 @Service
 public class MpiIndexService {
 
+	private static final String TABLE_NAME = "mpi-index";
+
 	@Autowired
 	MpiIndexRepository mpiIndexRepository;
+	@Autowired
+	MongoTemplate mongoTemplate;
 
 	/**
 	 * 保存数据
@@ -27,8 +32,8 @@ public class MpiIndexService {
 	 * @param o
 	 *            保存对象
 	 */
-	public void saveIndex(MpiIndexModel index) {
-		mpiIndexRepository.save(index);
+	public MpiIndex saveIndex(MpiIndex index) {
+		return mpiIndexRepository.save(index);
 	}
 
 	/**
@@ -38,8 +43,8 @@ public class MpiIndexService {
 	 *            查询条件
 	 * @return 结果集
 	 */
-	public List<MpiIndexModel> findIndex(Query q) {
-		return null;
+	public List<MpiIndex> findIndex(Query q) {
+		return mongoTemplate.find(q, MpiIndex.class, TABLE_NAME);
 	}
 
 }

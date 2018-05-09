@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.sshl.dao.IDataUploadDetailDao;
+import com.sinosoft.mpi.sshl.dao.impl.DataUploadDetailDao;
 import com.sinosoft.mpi.sshl.model.DataUploadDetail;
 import com.sinosoft.mpi.sshl.service.IDataUploadDetailService;
 import com.sinosoft.mpi.util.CodeConvertUtils;
@@ -20,7 +20,7 @@ public class DataUploadDetailService implements IDataUploadDetailService {
 	private Logger logger = Logger.getLogger(DataUploadDetailService.class);
 
 	@Resource
-	private IDataUploadDetailDao dataUploadDetailDao;
+	private DataUploadDetailDao dataUploadDetailDao;
 
 	@Override
 	public void save(DataUploadDetail t) {

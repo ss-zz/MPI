@@ -7,11 +7,10 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.ISysRoleDao;
-import com.sinosoft.mpi.dao.ISysUserDao;
+import com.sinosoft.mpi.dao.SysRoleDao;
+import com.sinosoft.mpi.dao.SysUserDao;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.SysRole;
 import com.sinosoft.mpi.model.SysUser;
@@ -21,9 +20,9 @@ import com.sinosoft.mpi.util.PageInfo;
 public class SysUserService implements ISysUserService {
 	private Logger logger = Logger.getLogger(SysUserService.class);
 	@Resource
-	private ISysUserDao sysUserDao;
+	private SysUserDao sysUserDao;
 	@Resource
-	private ISysRoleDao sysRoleDao;
+	private SysRoleDao sysRoleDao;
 
 	@Override
 	public void save(SysUser t) {
@@ -104,22 +103,6 @@ public class SysUserService implements ISysUserService {
 			result = list.get(0);
 		}
 		return result;
-	}
-
-	public ISysUserDao getSysUserDao() {
-		return sysUserDao;
-	}
-
-	public void setSysUserDao(ISysUserDao sysUserDao) {
-		this.sysUserDao = sysUserDao;
-	}
-
-	public ISysRoleDao getSysRoleDao() {
-		return sysRoleDao;
-	}
-
-	public void setSysRoleDao(ISysRoleDao sysRoleDao) {
-		this.sysRoleDao = sysRoleDao;
 	}
 
 	@Override

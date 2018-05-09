@@ -17,7 +17,6 @@ Date.prototype.formatDate = function(format) {
 		"s+" : this.getSeconds(), //second  
 		"q+" : Math.floor((this.getMonth() + 3) / 3), //quarter  
 		"S" : this.getMilliseconds()
-	//millisecond  
 	};
 	if (/(y+)/.test(format))
 		format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
@@ -39,16 +38,6 @@ $(function() {
 	init_timeInput();
 	// 加载表格数据
 	ajaxTable();
-	
-	var p = $('#listTable').datagrid('getPager');
-	$(p).pagination({
-		beforePageText : '第',
-		afterPageText : '页    共 {pages} 页',
-		displayMsg : '当前显示 {from} - {to} 条记录   共 {total} 条记录',
-		pageSize : 10,
-		pageList : [ 10, 20, 50, 100 ]
-	});
-	
 
 });
 
@@ -57,30 +46,30 @@ $(function() {
  */
 function init_timeInput(){
 	var option = {  
-		    showSeconds:true,
-		    editable:false,
-		    formatter:function(date){
-		    	return date.formatDate("yyyy-MM-dd hh:mm:ss");
-		    },
-		    parser:function(dateStr){
-		    	if(dateStr == undefined || dateStr==null || dateStr=="")
-		    		return new Date();
-		        var regexDT = /(\d{4})-?(\d{2})?-?(\d{2})?\s?(\d{2})?:?(\d{2})?:?(\d{2})?/g;  
-		        var matchs = regexDT.exec(dateStr);  
-		        var date = new Array();  
-		        for (var i = 1; i < matchs.length; i++) {  
-		            if (matchs[i]!=undefined) {  
-		                date[i] = matchs[i];  
-		            } else {  
-		                if (i<=3) {  
-		                    date[i] = '01';  
-		                } else {  
-		                    date[i] = '00';  
-		                }  
-		            }  
-		        }  
-		        return new Date(date[1], date[2]-1, date[3], date[4], date[5],date[6]); 	    	
-		    }
+			showSeconds:true,
+			editable:false,
+			formatter:function(date){
+				return date.formatDate("yyyy-MM-dd hh:mm:ss");
+			},
+			parser:function(dateStr){
+				if(dateStr == undefined || dateStr==null || dateStr=="")
+					return new Date();
+				var regexDT = /(\d{4})-?(\d{2})?-?(\d{2})?\s?(\d{2})?:?(\d{2})?:?(\d{2})?/g;  
+				var matchs = regexDT.exec(dateStr);  
+				var date = new Array();  
+				for (var i = 1; i < matchs.length; i++) {  
+					if (matchs[i]!=undefined) {  
+						date[i] = matchs[i];  
+					} else {  
+						if (i<=3) {  
+							date[i] = '01';  
+						} else {  
+							date[i] = '00';  
+						}  
+					}  
+				}  
+				return new Date(date[1], date[2]-1, date[3], date[4], date[5],date[6]);
+			}
 		};
 	
 	$('#search_optime_begin').datetimebox(option); 	
@@ -100,12 +89,6 @@ function ajaxTable() {
 		toolbar : "#listTable_tb",
 		singleSelect : true,//单选
 		pagination : true,//分页
-		loadMsg : '数据加载中,请稍后...',
-		onLoadError : function() {
-			alert('数据加载失败!');
-		},
-		queryParams : {// 查询条件
-		},
 		onClickRow : function(rowIndex, rowData) {
 			// 取消选择某行后高亮
 			$('#listTable').datagrid('unselectRow', rowIndex);
@@ -129,34 +112,34 @@ function buildMatchUrl(val, row) {
 
 function viewMatch(logId){
 	var url = root+'/indexlog/il.ac?method=view&logId='+logId;
-    var tabId = "tabId_logDetailView";
-    var title = "索引日志处理详情";
-    var name = 'iframe_'+tabId; 
-    //如果当前id的tab不存在则创建一个tab
-    if(parent.$("#"+tabId).html()==null){
-        parent.$('#centerTab').tabs('add',{
-            title: title,         
-            closable:true,
-            cache : false,
-            //注：使用iframe即可防止同一个页面出现js和css冲突的问题
-            content : '<iframe name="'+name+'" id="'+tabId+'" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-        });
-    }else{
-        var tabs = parent.$('#centerTab').tabs('tabs');
-        for(var i = 0 ; i < tabs.length ; i++){
-            var tab = tabs[i];
-            if(tab.panel("options").title == title){
-                parent.$('#centerTab').tabs('update',{
-                    tab: tab,
-                    options:{
-                        content : '<iframe name="'+name+'" id="'+tabId+'" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-                    }
-                });
-                parent.$('#centerTab').tabs('select',title);
-                break;
-            }
-        }   
-    }
+	var tabId = "tabId_logDetailView";
+	var title = "索引日志处理详情";
+	var name = 'iframe_'+tabId; 
+	//如果当前id的tab不存在则创建一个tab
+	if(parent.$("#"+tabId).html()==null){
+		parent.$('#centerTab').tabs('add',{
+			title: title,		 
+			closable:true,
+			cache : false,
+			//注：使用iframe即可防止同一个页面出现js和css冲突的问题
+			content : '<iframe name="'+name+'" id="'+tabId+'" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
+		});
+	}else{
+		var tabs = parent.$('#centerTab').tabs('tabs');
+		for(var i = 0 ; i < tabs.length ; i++){
+			var tab = tabs[i];
+			if(tab.panel("options").title == title){
+				parent.$('#centerTab').tabs('update',{
+					tab: tab,
+					options:{
+						content : '<iframe name="'+name+'" id="'+tabId+'" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
+					}
+				});
+				parent.$('#centerTab').tabs('select',title);
+				break;
+			}
+		}
+	}
 }
 
 // 构建操作类型描述

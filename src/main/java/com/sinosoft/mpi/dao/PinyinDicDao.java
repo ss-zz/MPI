@@ -8,13 +8,12 @@ import javax.annotation.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-@Repository("pinyinDicDao")
-public class PinyinDicDao implements IPinyinDicDao {
+@Repository
+public class PinyinDicDao {
 
 	@Resource
 	private JdbcTemplate jdbcTemplate;
 
-	@Override
 	public boolean isOverPinYinTimes(String pinyinStr) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(" select * from PINYIN_KIND t where t.PINYINKEY=?");
@@ -33,11 +32,6 @@ public class PinyinDicDao implements IPinyinDicDao {
 		return false;
 	}
 
-	{
-
-	}
-
-	@Override
 	public void updatePinyinTimes(String pinyinString) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("select count(*) from PINYIN_KIND t where t.PINYINKEY=? ");

@@ -10,7 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.ISysRoleDao;
+import com.sinosoft.mpi.dao.SysRoleDao;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.SysRole;
 import com.sinosoft.mpi.util.PageInfo;
@@ -20,7 +20,7 @@ public class SysRoleService implements ISysRoleService {
 	private Logger logger = Logger.getLogger(SysRoleService.class);
 
 	@Resource
-	private ISysRoleDao sysRoleDao;
+	private SysRoleDao sysRoleDao;
 
 	@Override
 	public void save(SysRole t) {
@@ -106,14 +106,6 @@ public class SysRoleService implements ISysRoleService {
 			int count = sysRoleDao.getCount(sql.toString(), args.toArray());
 			return count == 0;
 		}
-	}
-
-	public ISysRoleDao getSysRoleDao() {
-		return sysRoleDao;
-	}
-
-	public void setSysRoleDao(ISysRoleDao sysRoleDao) {
-		this.sysRoleDao = sysRoleDao;
 	}
 
 }

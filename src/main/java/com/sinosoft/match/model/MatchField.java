@@ -9,16 +9,16 @@ public class MatchField implements Serializable {
 
 	private static final long serialVersionUID = 1244105837650056756L;
 
+	// 字段名
 	private String fieldName;
 	// 协议匹配度
 	private float agreementProbability;
 	// 不匹配度
 	private float disagreementProbability;
-	// 比较函数的标志
+	// 比较函数的标志/算法
 	private String comparatorFunction;
 	// 匹配门槛
 	private float matchThreshold;
-
 	// 该属性的权重
 	private float weight;
 	// 描述lable

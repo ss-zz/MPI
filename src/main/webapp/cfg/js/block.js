@@ -36,17 +36,10 @@ function ajaxTable() {
 	$('#listTable').datagrid({
 		toolbar:[
 		{
-			text : '添加',
+			text : '添加初筛配置',
 			iconCls : 'icon-add',
 			handler : function(){
 				openAddPage();	
-			}
-		},
-		{
-			text : '查看当前初筛配置',
-			iconCls : 'icon-search',
-			handler : function(){
-				openCurrentPage();	
 			}
 		}],
 		singleSelect:true,//单选

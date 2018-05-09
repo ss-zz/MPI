@@ -11,18 +11,19 @@
 </head>
 <body>
 	<div class="ToolTip_Form" id="table_add">
-		<input type="button" value="重置" id="resetBtn" onclick="resetAllData()" />&nbsp;&nbsp;
-		<input type="button" value="保存" id="saveBtn" onclick="saveMatchCfg()" />&nbsp;&nbsp;
-		<input type="button" value="返回" id="gobackBtn" onclick="goBackClose()" /><br/><br/>	
+		<div class="easyui-panel" style="padding:5px; margin-bottom: 10px;">
+			<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-back'" id="gobackBtn" onclick="goBackClose()">返回</a>
+			<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" id="saveBtn" onclick="saveMatchCfg()">保存</a>
+			<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reload'" id="resetBtn" onclick="resetAllData()">重置</a>
+		</div>
 		<fieldset>
 			<legend>整体匹配设定</legend>
 				<label for="add_agreeThreshold">完全匹配值:</label><input type="text" class="easyui-validatebox" id="add_agreeThreshold" maxlength="10" required="true" validType="decimalValid"/>
 				<label for="add_matchThreshold">可能匹配值:</label><input type="text" class="easyui-validatebox" id="add_matchThreshold" maxlength="10" required="true" validType="decimalValid"/>
 				<label for="add_configDesc">匹配设定描述:</label><input type="text" class="easyui-validatebox" id="add_configDesc" maxlength="100" required="true"/>
 		</fieldset><br/>
-		<label for="add_fieldSelect">选择字段:</label><select id="add_fieldSelect"></select>
-		<input type="button" value="添加字段配置" onclick="addFieldCfg()" /><br/>
-		<div id="field_cfg_div"></div>			
+		<label for="add_fieldSelect">请选择匹配字段:</label><select id="add_fieldSelect" onchange="addFieldCfg()"></select>
+		<div id="field_cfg_div"></div>
 	</div>
 </body>
 </html>

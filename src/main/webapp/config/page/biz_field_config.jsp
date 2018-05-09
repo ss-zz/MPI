@@ -16,13 +16,36 @@
 		<span>${itemBiz.comment }</span>
 	</div>
 
+	<br/>
 	<!-- 表格 -->
-	<table id="listTable" 
-		title="【${itemBiz.name }】业务字段配置" 
+	<table id="listTable"
+		title="业务字段配置"
+		style="height: 250px;"
 		url="${pageContext.request.contextPath}/mgr/bizfieldconfig/findByBizConfigId/${itemBiz.id}">
 		<thead>
 			<tr align="center">
 				<th field="key" width=100>唯一标识</th>
+				<th field="name" width=100>字段名</th>
+				<th field="algorithm" width=100>算法</th>
+				<th field="rank" width=100>顺序</th>
+				<th field="weight" width=100>权重</th>
+				<th field="bizCommonFieldConfigId" width=100>通用字段</th>
+				<th field="comment" width=100>备注</th>
+				<th field="id" width="150" formatter="buildOptLink">操作</th>
+			</tr>
+		</thead>
+	</table>
+	
+	<br/>
+	<!-- 表格 -->
+	<table id="listTableChushai"
+		class="easyui-datagrid"
+		title="初筛配置"
+		style="height: 250px;"
+		url="${pageContext.request.contextPath}/mgr/bizfieldconfig/findByBizConfigId/${itemBiz.id}">
+		<thead>
+			<tr align="center">
+				<th data-options="field:'key'" width=100>唯一标识</th>
 				<th field="name" width=100>字段名</th>
 				<th field="comment" width=100>备注</th>
 				<th field="algorithm" width=100>算法</th>
@@ -33,5 +56,6 @@
 			</tr>
 		</thead>
 	</table>
+	
 </body>
 </html>

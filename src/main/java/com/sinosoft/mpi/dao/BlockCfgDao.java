@@ -4,24 +4,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import com.sinosoft.mpi.exception.BaseBussinessException;
 import com.sinosoft.mpi.model.BlockCfg;
 import com.sinosoft.mpi.util.IDUtil;
 
-@Repository("blockCfgDao")
-public class BlockCfgDao implements IBlockCfgDao {
-
-	@Resource
-	private JdbcTemplate jdbcTemplate;
+/**
+ * 初筛配置管理
+ */
+@Component
+public class BlockCfgDao extends IBaseDao<BlockCfg> {
 
 	@Override
 	public void add(final BlockCfg entity) {
@@ -48,7 +44,6 @@ public class BlockCfgDao implements IBlockCfgDao {
 				ps.setString(1, entity.getBolckId());
 			}
 		});
-
 	}
 
 	@Override
@@ -97,7 +92,6 @@ public class BlockCfgDao implements IBlockCfgDao {
 				result.setState(rs.getString("STATE"));
 				return result;
 			}
-
 		});
 		return datas;
 	}
@@ -109,31 +103,11 @@ public class BlockCfgDao implements IBlockCfgDao {
 		return datas;
 	}
 
-	@Override
-	public int getCount(String sql) {
-		return getCount(sql, new Object[] {});
-	}
-
-	@Override
-	public int getCount(String sql, Object[] args) {
-		return jdbcTemplate.queryForObject(sql, args, Integer.class);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		return jdbcTemplate.queryForList(sql, args);
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
-		return jdbcTemplate.queryForList(sql);
-	}
-
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	@Override
+	/**
+	 * 根据配置id使配置生效
+	 * 
+	 * @param cfgId
+	 */
 	public void effect(final String cfgId) {
 		String countSql = "select count(*) from MPI_BLOCK_CFG where BOLCK_ID=? ";
 		int count = getCount(countSql, new Object[] { cfgId });
@@ -154,8 +128,4 @@ public class BlockCfgDao implements IBlockCfgDao {
 
 	}
 
-	@Override
-	public JdbcTemplate getJdbcTemplate() {
-		return this.jdbcTemplate;
-	}
 }

@@ -24,13 +24,13 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.context.QueryConditionType;
-import com.sinosoft.mpi.dao.IBookLogDao;
-import com.sinosoft.mpi.dao.IIndexIdentifierRelDao;
-import com.sinosoft.mpi.dao.IMpiCombineLevelDao;
-import com.sinosoft.mpi.dao.IPersonIdxLogDao;
-import com.sinosoft.mpi.dao.IPersonIndexDao;
-import com.sinosoft.mpi.dao.IPersonInfoDao;
+import com.sinosoft.mpi.dao.BookLogDao;
+import com.sinosoft.mpi.dao.IndexIdentifierRelDao;
 import com.sinosoft.mpi.dao.IndexOperateDao;
+import com.sinosoft.mpi.dao.MpiCombineLevelDao;
+import com.sinosoft.mpi.dao.PersonIdxLogDao;
+import com.sinosoft.mpi.dao.PersonIndexDao;
+import com.sinosoft.mpi.dao.PersonInfoDao;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.IndexOperate;
@@ -46,21 +46,21 @@ import com.sinosoft.mpi.util.SqlUtils;
 public class PersonIndexService implements IPersonIndexService {
 	private Logger logger = Logger.getLogger(PersonIndexService.class);
 	@Resource
-	private IPersonIndexDao personIndexDao;
+	private PersonIndexDao personIndexDao;
 	@Resource
-	private IIndexIdentifierRelDao indexIdentifierRelDao;
+	private IndexIdentifierRelDao indexIdentifierRelDao;
 	@Resource
-	private IPersonInfoDao personInfoDao;
+	private PersonInfoDao personInfoDao;
 	@Resource
-	private IBookLogService bookLogService;
+	private BookLogService bookLogService;
 	@Resource
-	private IPersonIndexUpdateService personIndexUpdateService;
+	private PersonIndexUpdateService personIndexUpdateService;
 	@Resource
-	private IMpiCombineLevelDao mpiCombineLevelDao;
+	private MpiCombineLevelDao mpiCombineLevelDao;
 	@Resource
-	private IBookLogDao bookLogDao;
+	private BookLogDao bookLogDao;
 	@Resource
-	private IPersonIdxLogDao personIdxLogDao;
+	private PersonIdxLogDao personIdxLogDao;
 	@Resource
 	private JdbcTemplate jdbcTemplate;
 	@Resource
@@ -104,10 +104,6 @@ public class PersonIndexService implements IPersonIndexService {
 		t = personIndexDao.findById(t);
 		logger.debug("Load PersonIndex:indexId=" + id + ",result=" + t);
 		return t;
-	}
-
-	public IPersonIndexDao getPersonIndexDao() {
-		return personIndexDao;
 	}
 
 	@Override
@@ -552,65 +548,11 @@ public class PersonIndexService implements IPersonIndexService {
 		PersonIndex idx = person.personInfoToPersonIndex();
 		idx.setMPI_PK(mpi_pk);
 		personIndexDao.update(idx);
-		logger.debug("执行更新索引信息:PersonInfo[" + person + "],mpi_pk[" + mpi_pk + "]");
 	}
 
 	@Override
 	public void update(PersonIndex t) {
 		personIndexDao.update(t);
-		logger.debug("Update PersonIndex:" + t);
-	}
-
-	public void setPersonIndexDao(IPersonIndexDao personIndexDao) {
-		this.personIndexDao = personIndexDao;
-	}
-
-	public IIndexIdentifierRelDao getIndexIdentifierRelDao() {
-		return indexIdentifierRelDao;
-	}
-
-	public void setIndexIdentifierRelDao(IIndexIdentifierRelDao indexIdentifierRelDao) {
-		this.indexIdentifierRelDao = indexIdentifierRelDao;
-	}
-
-	public IPersonInfoDao getPersonInfoDao() {
-		return personInfoDao;
-	}
-
-	public void setPersonInfoDao(IPersonInfoDao personInfoDao) {
-		this.personInfoDao = personInfoDao;
-	}
-
-	public IBookLogService getBookLogService() {
-		return bookLogService;
-	}
-
-	public void setBookLogService(IBookLogService bookLogService) {
-		this.bookLogService = bookLogService;
-	}
-
-	public IPersonIndexUpdateService getPersonIndexUpdateService() {
-		return personIndexUpdateService;
-	}
-
-	public void setPersonIndexUpdateService(IPersonIndexUpdateService personIndexUpdateService) {
-		this.personIndexUpdateService = personIndexUpdateService;
-	}
-
-	public IMpiCombineLevelDao getMpiCombineLevelDao() {
-		return mpiCombineLevelDao;
-	}
-
-	public void setMpiCombineLevelDao(IMpiCombineLevelDao mpiCombineLevelDao) {
-		this.mpiCombineLevelDao = mpiCombineLevelDao;
-	}
-
-	public IBookLogDao getBookLogDao() {
-		return bookLogDao;
-	}
-
-	public void setBookLogDao(IBookLogDao bookLogDao) {
-		this.bookLogDao = bookLogDao;
 	}
 
 }

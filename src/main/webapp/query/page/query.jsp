@@ -7,15 +7,6 @@
 <%@include file="/common/page/master.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/query/js/query.js"></script>
 <style type="text/css">
-.mytable {
-	border-collapse:collapse;
-	border: 1px #CCCCCC dotted ;
-	margin: 0px;
-}
-.mytable tr td {
-	border: 1px #CCCCCC dotted ;
-	margin: 0px;
-}
 .tree-folder{
 	background:url('${pageContext.request.contextPath}/images/index_0.png') no-repeat !important;
 }
@@ -28,46 +19,42 @@
 </style>
 </head>
 <body>
-<!-- 表格 -->
-<table class="easyui-treegrid"
-		id="listTable"
-		border="0"
-		fitColumns="true"
-		cellspacing="0"
-		cellpadding="0"
-		></table>
 
-<!-- 搜索工具条 -->
-<div id="listTable_tb" style="padding:5px;height:auto">
-	<div>
-	  <tr>
-		<td>索引姓名:</td>
-		<td><input type="text" class="combo-text" id="search_personName"></td>
-		<td>身份证号码:</td>
-		<td><input type="text" class="combo-text" id="search_personIdno"></td>
-	 </tr>
-	 <tr>
-	 <td>出生日期:</td>
-		<td><input class="easyui-datebox" id="search_personBirthdate" readonly="true"   style="width:150px"></td>
-		</tr>
-	<tr>
-	 <td>合并状态:</td>
-		<td>	<select id="search_mergeStatus" class="easyui-combobox" name="dept" style="width:166px;" editable="false">
-					<option value="-1">请选择</option>
-					<option value="0">未合并</option>
-					<option value="1">已合并</option>
-				</select>
-		</td>
-	 
-		</tr>
+	<!-- 表格 -->
+	<table id="listTable"></table>
+	
+	<!-- 搜索工具条 -->
+	<div id="listTable_tb">
+		<table style="width: 100%;">
+			<tr>
+				<td>索引姓名: <input type="text" class="combo-text" id="search_personName"></td>
+				<td>身份证号码: <input type="text" class="combo-text" id="search_personIdno"></td>
+				<td>出生日期: <input class="easyui-datebox" id="search_personBirthdate" style="width:150px"></td>
+			</tr>
+			<tr>
+				<td>合并状态:
+					<select id="search_mergeStatus" class="easyui-combobox" name="dept" style="width:166px;" editable="false">
+						<option value="-1">请选择</option>
+						<option value="0">未合并</option>
+						<option value="1">已合并</option>
+					</select>
+				</td>
+				<td>
+					<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchListTable();">搜索</a>
+					<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchReset();">重置</a>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td colspan="3">&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="mergeIndex()">合并主索引</a> 
+				</td>
+			</tr>
+		</table>
 	</div>
-			<div>
-				<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="mergeIndex()">合并主索引</a> 
-						<a href="#" class="easyui-linkbutton" style="float: right; margin-right: 40px;" iconCls="icon-search" onclick="searchReset();">重置</a>
-						<a href="#" class="easyui-linkbutton" style="float: right; margin-right: 10px;" iconCls="icon-search" onclick="searchListTable();">搜索</a>
-						
-			</div>
-</div>
 	<div id="dialog" class="easyui-dialog" closed="true"></div>
 	<div id="dialog_split" class="easyui-dialog" closed="true"></div>
 </body>

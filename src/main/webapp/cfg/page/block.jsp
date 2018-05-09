@@ -7,21 +7,18 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/cfg/js/block.js"></script>
 </head>
 <body>
+
+<a href="#" onclick="openCurrentPage();" class="easyui-linkbutton" data-options="selected:true">查看当前初筛配置</a>
+<br/>
+<br/>
 <!-- 表格 -->
 <table 	id="listTable"
-		title="初筛规则配置列表"
-		border="0"
-		cellspacing="0"
-		cellpadding="0"
+		title="配置列表"
 		idField="bolckId" 
-		remoteSort="false" 
-		singleSelect="false" 
-		showFooter="false"
-		striped="true"
 		url="${pageContext.request.contextPath}/cfg/block.ac" >
 	<thead>
 		<tr align="center">
-			<th field="blockDesc"  width="400">描述</th>
+			<th field="blockDesc"  width="400">配置描述</th>
 			<th field="createDate"  width="100">创建日期</th>
 			<th field="state"  width="50" formatter="buildState">状态</th>
 			<th field="bolckId"  width="150" formatter="buildOptLink">操作</th>
