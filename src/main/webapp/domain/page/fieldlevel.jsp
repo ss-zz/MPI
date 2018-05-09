@@ -4,28 +4,15 @@
 <html>
 <head>
 <%@include file="/common/page/master.jsp"%>
-<%-- <script type="text/javascript" src="${pageContext.request.contextPath}/domain/js/fieldlevel.js"></script> --%>
+<script type="text/javascript" src="${pageContext.request.contextPath}/domain/js/fieldlevel.js"></script>
 </head>
 
 <body>
 <!-- 表格 -->
-<%-- <table 	id="listTable"
-		title="域字段数据源级别"  
-		border="0"
-		cellspacing="0"
-		cellpadding="0"
-		iconCls="icon-edit" 
-		width="98%" 
-		idField="ID" 
-		remoteSort="false" 
-		singleSelect="false" 
-		showFooter="false"
-		striped="true"
-		url="${pageContext.request.contextPath}/domainsrclevel/srclevel.ac?method=toView&domainid=" > --%>
-<table id="tt" class="easyui-datagrid" style="width:650px;height:400px;">  
+<table id="tt" class="easyui-datagrid">
 	<thead>
 		<tr align="center">
-		    <th field="DOMAIN_ID"  width="100">域唯一标示符</th>
+			<th field="DOMAIN_ID"  width="100">域唯一标示符</th>
 			<th field="DOMAIN_DESC"  width="100">域描述</th>
 			<th field="FIELD_NAME"  width="100">字段名称</th>
 			<th field="FIELD_DESC"  width="100">字段描述</th>
@@ -36,16 +23,16 @@
 	<tbody>
 		<c:forEach items="${list}" var="list">
 			<tr>
-				<td>${list.DOMAIN_ID }</td>		
+				<td>${list.DOMAIN_ID }</td>
 				<td>${list.DOMAIN_DESC }</td>
 				<td>${list.FIELD_NAME }</td>
 				<td>${list.FIELD_DESC }</td>
 				<td>${list.FIELD_LEVEL }</td>
 				<td>${list.CREATE_DATE }</td>
 				<td>${list.DOMAIN_DESC }</td>
-			</tr>		
+			</tr>
 		</c:forEach>
-   </tbody>
+	</tbody>
 </table>
 
 </body>

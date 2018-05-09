@@ -93,6 +93,14 @@ $(document).ready(function(){
 		style="width: 180px; overflow: hidden; margin-top: 1px; border-left: 1px solid;">
 		<div class="easyui-accordion" data-options="fit:false,border:false">
 		
+			<div title="系统管理" data-options="collapsed:false,collapsible:false" class="myMenu">
+				<ul>
+					<li><a
+						onclick="addTab('tabId_id','业务系统维护','${pageContext.request.contextPath}/domain/page/domain.jsp');"
+						href="#">业务系统维护</a></li>
+				</ul>
+			</div>
+		
 			<div title="主索引管理" data-options="collapsed:false,collapsible:false" class="myMenu">
 				<ul>
 					<li><a
@@ -110,11 +118,6 @@ $(document).ready(function(){
 					<li><a
 						onclick="addTab('tabId_mc','主索引匹配规则管理','${pageContext.request.contextPath}/cfg/page/match.jsp');"
 						href="#">主索引匹配规则管理</a></li>
-					<!-- 
-					<li><a
-						onclick="addTab('tabId_id','身份域管理','${pageContext.request.contextPath}/domain/page/domain.jsp');"
-						href="#">身份域管理</a></li>
-					 -->
 				</ul>
 			</div>
 			

@@ -9,27 +9,18 @@
 <body>
 <!-- 表格 -->
 <table 	id="listTable"
-		title="居民身份域列表"  
-		border="0"
-		cellspacing="0"
-		cellpadding="0"
-		fitColumns="true"
-		idField="DOMAIN_ID" 
-		remoteSort="false" 
-		singleSelect="false" 
+		title="业务系统列表"
+		idField="DOMAIN_ID"
+		singleSelect="false"
 		showFooter="false"
-		striped="true"
 		url="${pageContext.request.contextPath}/domain/domain.ac?method=query" >
 	<thead>
 		<tr align="center">
 			<th field="ck" width="20" checkbox="true" width="20"></th>
-			<th field="UNIQUE_SIGN"  width="100">唯一标识</th>
-			<!-- <th field="DOMAIN_TYPE"  width="100">域类型</th> -->
-			<th field="DOMAIN_DESC"  width="100">域描述</th>	
-			<th field="PUSH_ADDR"  width="300">推送地址</th>
-			<th field="BOOK_TYPE"  width="100" formatter="convertBookType">订阅类型</th>	
-			<th field="DOMAIN_LEVEL"  width="100">域数据源级别</th>
-			<th field="DOMAIN_ID"  width="150" formatter="buildOptLink">操作</th>	
+			<th field="UNIQUE_SIGN" width="100">业务系统唯一标识</th>
+			<th field="DOMAIN_DESC" width="100">业务系统描述</th>	
+			<th field="DOMAIN_LEVEL" width="100">业务系统数据源级别</th>
+			<th field="DOMAIN_ID" width="150" formatter="buildOptLink">操作</th>	
 		</tr>
 	</thead>
 </table>
@@ -39,32 +30,17 @@
 	style="padding: 5px; width: 500px; height: 300px;">
 	<h5 id="add_message" style="color: red;"></h5>
 	<div class="ToolTip_Form" id="table_add" onkeydown="if(event.keyCode==13){addData();}">
-        <ul>
+		<ul>
 			<li>
-				<label>唯一标识：</label>
+				<label>业务系统唯一标识：</label>
 				<input type="text" class="easyui-validatebox" id="add_uniqueSign" maxlength="50" required="true" validType="uniqueSign['${pageContext.request.contextPath}/domain/domain.ac?method=test']"></input>
 			</li>
 			<li>
-				<label>域&nbsp;类&nbsp;型：</label>
-				<input type="text" class="easyui-validatebox" id="add_domainType" maxlength="50" required="true"></input>
-			</li>
-			<li>
-				<label>域&nbsp;描&nbsp;述：</label>
+				<label>业务系统描述：</label>
 				<input type="text" class="easyui-validatebox" id="add_domainDesc" maxlength="50" required="true"></input>
 			</li>
 			<li>
-				<label>推送地址：</label>
-				<input type="text" class="easyui-validatebox" id="add_pushAddr" maxlength="200"></input>
-			</li>
-			<li>
-				<label>订阅类型：</label>
-				<select id="add_bookType">
-					<option value="0">推送</option>
-					<option value="1">拉取</option>
-				</select>
-			</li>
-			<li>
-				<label>域数据源级别：</label>
+				<label>业务系统数据源级别：</label>
 				<input type="text" class="easyui-validatebox" id="add_domainLevel" required="true" maxlength="2" validType="isInteger"></input>
 			</li>
 			<li>
@@ -79,33 +55,18 @@
 	style="padding: 5px; width: 500px; height: 300px;">
 	<h5 id="edit_message" style="color: red;"></h5>
 	<div class="ToolTip_Form" id="table_edit" onkeydown="if(event.keyCode==13){editData();}">
-        <ul>
+	<ul>
 			<li>
-				<label>唯一标识：</label>
+				<label>业务系统唯一标识：</label>
 				<input type="hidden" id="edit_domainId" />
 				<input type="text" class="easyui-validatebox" id="edit_uniqueSign" maxlength="50" required="true" validType="uniqueSign['${pageContext.request.contextPath}/domain/domain.ac?method=test','#edit_domainId']"></input>
 			</li>
 			<li>
-				<label>域&nbsp;类&nbsp;型：</label>
-				<input type="text" class="easyui-validatebox" id="edit_domainType" maxlength="50" required="true"></input>
-			</li>
-			<li>
-				<label>域&nbsp;描&nbsp;述：</label>
+				<label>业务系统描述：</label>
 				<input type="text" class="easyui-validatebox" id="edit_domainDesc" maxlength="50" required="true"></input>
 			</li>
 			<li>
-				<label>推送地址：</label>
-				<input type="text" class="easyui-validatebox" id="edit_pushAddr" maxlength="200"></input>
-			</li>
-			<li>
-				<label>订阅类型：</label>
-				<select id="edit_bookType">
-					<option value="0">推送</option>
-					<option value="1">拉取</option>
-				</select>
-			</li>
-			<li>
-				<label>域数据源级别：</label>
+				<label>业务系统数据源级别：</label>
 				<input type="text" class="easyui-validatebox" id="edit_domainLevel" required="true" maxlength="2" validType="isInteger"></input>
 			</li>
 			<li>

@@ -39,8 +39,12 @@ import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.SqlUtils;
 
+/**
+ * 主索引人员服务
+ */
 @Service("personIndexService")
 public class PersonIndexService implements IPersonIndexService {
+
 	private Logger logger = Logger.getLogger(PersonIndexService.class);
 	@Resource
 	private PersonIndexDao personIndexDao;

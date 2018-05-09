@@ -18,6 +18,7 @@ import com.sinosoft.mpi.util.PageInfo;
 
 @Service("sysUserService")
 public class SysUserService implements ISysUserService {
+
 	private Logger logger = Logger.getLogger(SysUserService.class);
 	@Resource
 	private SysUserDao sysUserDao;
@@ -31,9 +32,14 @@ public class SysUserService implements ISysUserService {
 			throw new ValidationException("用户名:" + t.getUserName() + "已存在");
 		}
 		sysUserDao.add(t);
-		logger.debug("Add SysUser:" + t);
 	}
 
+	/**
+	 * 检查用户名是否存在
+	 * 
+	 * @param userName
+	 * @return 不存在-true 存在-false
+	 */
 	public boolean testUserName(String userName) {
 		if (StringUtils.isBlank(userName))
 			return false;
@@ -50,7 +56,6 @@ public class SysUserService implements ISysUserService {
 		tmp.setEmail(t.getEmail());
 		tmp.setSysRoleId(t.getSysRoleId());
 		sysUserDao.update(tmp);
-		logger.debug("Update SysUser:" + t);
 	}
 
 	@Override
@@ -64,7 +69,6 @@ public class SysUserService implements ISysUserService {
 		SysUser entity = new SysUser();
 		entity.setUserId(id);
 		entity = sysUserDao.findById(entity);
-		logger.debug("Load SysUser:userId=" + id + ",result=" + entity);
 		return entity;
 	}
 
@@ -75,11 +79,9 @@ public class SysUserService implements ISysUserService {
 		if (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(password)) {
 			// 根据用户名和密码作为条件查询用户数量
 			String sql = " select count(1) from mpi_sys_user where upper(user_name)=? and password=? and state=1 ";
-			logger.debug("Execute sql:[" + sql + "],params[" + userName + "," + password + "]");
 			int count = sysUserDao.getCount(sql, new Object[] { userName.toUpperCase(), password });
 			result = count > 0;
 		}
-		logger.debug("Auth SysUser(" + userName + "," + password + "),result is " + result);
 		return result;
 	}
 
@@ -88,15 +90,20 @@ public class SysUserService implements ISysUserService {
 		// XXX ben 实际应用的时候这里需要添加查询条件
 		String sql = " select * from mpi_sys_user where 1=1 ";
 		sql = page.buildPageSql(sql);
-		logger.debug("Execute sql:" + sql);
 		return sysUserDao.find(sql, new Object[] {});
 	}
 
+	/**
+	 * 根据用户获取该用户的系统角色
+	 * 
+	 * @param user
+	 *            系统用户(主键值必要属性)
+	 * @return
+	 */
 	@Override
 	public SysRole getSysRoleByUser(SysUser user) {
 		String sql = " select * from mpi_sys_role where sys_role_id in ( select "
-				+ "	sys_role_id from mpi_sys_user where user_id = ? ) ";
-		logger.debug("Execute sql:[" + sql + "],params[" + user.getUserId() + "]");
+				+ " sys_role_id from mpi_sys_user where user_id = ? ) ";
 		List<SysRole> list = sysRoleDao.find(sql, new Object[] { user.getUserId() });
 		SysRole result = null;
 		if (list != null && !list.isEmpty()) {
@@ -105,6 +112,9 @@ public class SysUserService implements ISysUserService {
 		return result;
 	}
 
+	/**
+	 * 列表页面查询结果
+	 */
 	@Override
 	public List<Map<String, Object>> findForList() {
 		String sql = "select u.user_id,u.name,u.user_name,u.email,r.role_name from mpi_sys_user u "
@@ -112,8 +122,12 @@ public class SysUserService implements ISysUserService {
 		return sysRoleDao.findForMap(sql);
 	}
 
+	/**
+	 * 列出所有系统角色
+	 */
 	@Override
 	public List<SysRole> findRoles() {
 		return sysRoleDao.find(" select * from mpi_sys_role where 1=1 ");
 	}
+
 }
