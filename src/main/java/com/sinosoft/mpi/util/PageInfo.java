@@ -1,9 +1,12 @@
 package com.sinosoft.mpi.util;
 
+import java.io.Serializable;
+
 /**
  * 简单通过当前页 还有页条数，算出开始条数到结束条数
  */
-public class PageInfo {
+@SuppressWarnings("serial")
+public class PageInfo implements Serializable{
 
 	private int currentPage;// 从0开始
 	private int limit;

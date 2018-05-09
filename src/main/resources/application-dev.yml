@@ -19,3 +19,6 @@ server:
 mq:
   host: 192.168.1.252
   port: 5672
+  
+# Ehcache缓存
+  

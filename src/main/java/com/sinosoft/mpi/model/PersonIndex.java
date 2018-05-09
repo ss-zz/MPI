@@ -1,10 +1,11 @@
 package com.sinosoft.mpi.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.sinosoft.mpi.annotation.PropertyDesc;
 
-public class PersonIndex {
+public class PersonIndex implements Serializable{
 
 	private String DOMAIN_LEVEL;
 
