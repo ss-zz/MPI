@@ -36,6 +36,9 @@ import com.sinosoft.mpi.util.NumberUtils;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.SqlUtils;
 
+/**
+ * 人员主索引日志服务
+ */
 @Service
 public class PersonIdxLogService {
 
@@ -54,6 +57,13 @@ public class PersonIdxLogService {
 	@Resource
 	private PersonIndexService personIndexService;
 
+	/**
+	 * 增加条件
+	 * 
+	 * @param t
+	 * @param sql
+	 * @param args
+	 */
 	private void addconditions(final PersonIdxLog t, final StringBuilder sql, final List<Object> args) {
 		SqlUtils.appendCondition(t.getOpType(), "a.op_type", sql, args, QueryConditionType.EQUAL);
 		SqlUtils.appendCondition(t.getOpStyle(), "a.op_style", sql, args, QueryConditionType.EQUAL);
@@ -66,6 +76,12 @@ public class PersonIdxLogService {
 
 	}
 
+	/**
+	 * 构建字段
+	 * 
+	 * @param obj
+	 * @return
+	 */
 	private List<MatchDetailForm> buildField(Object obj) {
 		List<PerInfoPropertiesDesc> fields = CacheManager.getAll(PerInfoPropertiesDesc.class);
 		List<MatchDetailForm> result = new ArrayList<MatchDetailForm>(fields.size());
@@ -84,6 +100,14 @@ public class PersonIdxLogService {
 		return result;
 	}
 
+	/**
+	 * 构建匹配字段
+	 * 
+	 * @param mr
+	 * @param person
+	 * @param index
+	 * @return
+	 */
 	private List<MatchDetailForm> buildFieldMatch(MatchResult mr, PersonInfo person, PersonIndex index) {
 		// 取得字段匹配串
 		String fieldMatchStr = mr.getFieldMatDegrees();
@@ -123,6 +147,13 @@ public class PersonIdxLogService {
 		return result;
 	}
 
+	/**
+	 * 构建所有字段
+	 * 
+	 * @param person
+	 * @param index
+	 * @return
+	 */
 	private List<MatchDetailForm> buildFullField(PersonInfo person, PersonIndex index) {
 		// personindex居民主索引
 		List<PersonPropertiesDesc> fields = CacheManager.getAll(PersonPropertiesDesc.class);
@@ -153,6 +184,13 @@ public class PersonIdxLogService {
 		return result;
 	}
 
+	/**
+	 * 构建查询条件
+	 * 
+	 * @param sql
+	 * @param p
+	 * @return
+	 */
 	private List<Object> buildQueryConditions(final StringBuilder sql, PersonInfo p) {
 		List<Object> args = new ArrayList<Object>();
 		SqlUtils.appendCondition(p.getID_NO(), "a.id_no", sql, args, QueryConditionType.EQUAL);
@@ -176,11 +214,22 @@ public class PersonIdxLogService {
 		return args;
 	}
 
+	/**
+	 * 删除
+	 * 
+	 * @param t
+	 */
 	public void delete(PersonIdxLog t) {
 		personIdxLogDao.deleteById(t);
-		logger.debug("delete PersonIdxLog,personIdxLogId=" + t.getPersonIdxLogId());
 	}
 
+	/**
+	 * 根据主键分页查询
+	 * 
+	 * @param field_pk
+	 * @param page
+	 * @return
+	 */
 	private List<MatchResult> findMatchResult(String field_pk, final PageInfo page) {
 		String sql = " select * from mpi_match_result where FIELD_PK=? order by match_degree desc ";
 		// 构建分页查询sql
@@ -188,16 +237,21 @@ public class PersonIdxLogService {
 		// 构建总数查询sql
 		String countSql = page.buildCountSql(sql);
 		// 查询总数
-		logger.debug("Execute sql:[" + countSql + "]\nparams:[" + field_pk + "]");
 		int count = matchResultDao.getCount(countSql, new Object[] { field_pk });
 		// 总数信息设置到分页信息内
 		page.setTotal(count);
 		// 分页查询数据
-		logger.debug("Execute sql:[" + pageSql + "]\nparams:[" + field_pk + "]");
 		List<MatchResult> list = matchResultDao.find(pageSql, new Object[] { field_pk });
 		return list;
 	}
 
+	/**
+	 * 根据主索引id和主键查询
+	 * 
+	 * @param mpi_pk
+	 * @param field_pk
+	 * @return
+	 */
 	private MatchResult findMatchResult(String mpi_pk, String field_pk) {
 		String sql = " select * from mpi_match_result where MPI_PK=? and FIELD_PK=? order by match_degree desc ";
 		List<MatchResult> list = matchResultDao.find(sql, new Object[] { mpi_pk, field_pk });
@@ -208,6 +262,15 @@ public class PersonIdxLogService {
 		return result;
 	}
 
+	/**
+	 * 根据人员id和主索引id列表查询
+	 * 
+	 * @param personId
+	 *            人员id
+	 * @param idxIds
+	 *            主索引id列表
+	 * @return
+	 */
 	private List<MatchResult> findMatchResult(String personId, String[] idxIds) {
 		StringBuilder sql = new StringBuilder(" select * from mpi_match_result where FIELD_PK=? and MPI_PK in ( ");
 		for (String mpiPk : idxIds) {
@@ -221,6 +284,12 @@ public class PersonIdxLogService {
 		return list;
 	}
 
+	/**
+	 * 根据主索引id查询
+	 * 
+	 * @param mpiPk
+	 * @return
+	 */
 	private PersonIndex findPersonIndex(String mpiPk) {
 		PersonIndex p = new PersonIndex();
 		p.setMPI_PK(mpiPk);
@@ -231,6 +300,12 @@ public class PersonIdxLogService {
 		return p;
 	}
 
+	/**
+	 * 根据人员id查询
+	 * 
+	 * @param personId
+	 * @return
+	 */
 	private PersonInfo findPersonInfo(String personId) {
 		PersonInfo p = new PersonInfo();
 		p.setFIELD_PK(personId);
@@ -241,19 +316,37 @@ public class PersonIdxLogService {
 		return p;
 	}
 
+	/**
+	 * 获取字段中文名
+	 * 
+	 * @param fieldName
+	 * @return
+	 */
 	private String getFieldCnName(String fieldName) {
 		PersonPropertiesDesc desc = CacheManager.get(PersonPropertiesDesc.class, fieldName);
 		return desc.getPropertyDesc();
 	}
 
+	/**
+	 * 根据id获取
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public PersonIdxLog getObject(String id) {
 		PersonIdxLog t = new PersonIdxLog();
 		t.setPersonIdxLogId(id);
 		t = personIdxLogDao.findById(t);
-		logger.debug("Load PersonIdxLog : personIdxLogId=" + id + ",result=" + t);
 		return t;
 	}
 
+	/**
+	 * 获取字段的属性值
+	 * 
+	 * @param obj
+	 * @param fieldName
+	 * @return
+	 */
 	private String getValue(Object obj, String fieldName) {
 		String result = null;
 		Object value = new Object();
@@ -273,6 +366,13 @@ public class PersonIdxLogService {
 		return result;
 	}
 
+	/**
+	 * 根据人员id和主索引id获取
+	 * 
+	 * @param personId
+	 * @param mpiPk
+	 * @return
+	 */
 	public List<MatchDetailForm> queryCompareData(String personId, String mpiPk) {
 		// 取得 居民
 		PersonInfo person = findPersonInfo(personId);
@@ -280,7 +380,6 @@ public class PersonIdxLogService {
 		PersonIndex index = findPersonIndex(mpiPk);
 		// 校验
 		if (person == null || index == null) {
-			logger.debug("无法取得相关信息:PersonInfo=" + person + ",\nPersonIndex=" + index);
 			throw new ValidationException("无法取得相关信息:PersonInfo=" + person + ",\nPersonIndex=" + index);
 		}
 		// 转码
@@ -292,6 +391,13 @@ public class PersonIdxLogService {
 		return list;
 	}
 
+	/**
+	 * 分页查询
+	 * 
+	 * @param t
+	 * @param page
+	 * @return
+	 */
 	public List<Map<String, Object>> queryForMapPage(PersonIdxLog t, PageInfo page) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(
@@ -307,25 +413,34 @@ public class PersonIdxLogService {
 		String countSql = page.buildCountSql(sql);
 		// 查询设置分页记录的总记录数
 		page.setTotal(personIdxLogDao.getCount(countSql, args.toArray()));
-		logger.debug("Execute sql:" + countSql);
 		// 添加排序sql
 		sql.append(" order by a.op_time desc ");
 		// 取得分页查询语句
 		String querySql = page.buildPageSql(sql);
-		logger.debug("Execute sql:" + querySql);
 		return personIdxLogDao.findForMap(querySql, args.toArray());
 	}
 
+	/**
+	 * 分页查询
+	 * 
+	 * @param t
+	 * @param page
+	 * @return
+	 */
 	public List<PersonIdxLog> queryForPage(PersonIdxLog t, PageInfo page) {
 		String sql = " select * from mpi_person_idx_log where 1=1 ";
 		String countSql = page.buildCountSql(sql);
 		page.setTotal(personIdxLogDao.getCount(countSql));
-		logger.debug("Execute sql:" + countSql);
 		sql = page.buildPageSql(sql);
-		logger.debug("Execute sql:" + sql);
 		return personIdxLogDao.find(sql, new Object[] {});
 	}
 
+	/**
+	 * 根据主索引id获取详情
+	 * 
+	 * @param mpiPk
+	 * @return
+	 */
 	public Map<String, Object> queryIndexDetail(String mpiPk) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		// 取得索引数据
@@ -341,6 +456,12 @@ public class PersonIdxLogService {
 		return result;
 	}
 
+	/**
+	 * 根据主索引id查询详情
+	 * 
+	 * @param mpiPk
+	 * @return
+	 */
 	public List<Map<String, Object>> queryIndexDetails(String mpiPk) {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		// 被合并的主索引集合
@@ -351,10 +472,15 @@ public class PersonIdxLogService {
 			map.put("fields", buildFieldByIndex(indexs.get(i)));
 			result.add(map);
 		}
-
 		return result;
 	}
 
+	/**
+	 * 根据主索引构建字段
+	 * 
+	 * @param obj
+	 * @return
+	 */
 	private List<MatchDetailForm> buildFieldByIndex(Object obj) {
 		List<PersonPropertiesDesc> fields = CacheManager.getAll(PersonPropertiesDesc.class);
 		List<MatchDetailForm> result = new ArrayList<MatchDetailForm>(fields.size());
@@ -373,14 +499,18 @@ public class PersonIdxLogService {
 		return result;
 	}
 
+	/**
+	 * 查询匹配数据
+	 * 
+	 * @param logId
+	 * @return
+	 */
 	public Map<String, Object> queryMatchDetail(String logId) {
 		// 校验数据
 		if (StringUtils.isBlank(logId)) {
 			throw new ValidationException("参数为空:logId=" + logId);
 		}
-
 		Map<String, Object> result = new HashMap<String, Object>();
-
 		// 取得 索引日志
 		PersonIdxLog log = getObject(logId);
 		if (log == null) {
@@ -442,6 +572,14 @@ public class PersonIdxLogService {
 		return result;
 	}
 
+	/**
+	 * 查询匹配数据-分页
+	 * 
+	 * @param personId
+	 * @param start
+	 * @param end
+	 * @return
+	 */
 	public List<Map<String, Object>> queryMatchDetailPage(String personId, int start, int end) {
 
 		// 创建分页信息,每次查询出一条匹配记录
@@ -470,12 +608,18 @@ public class PersonIdxLogService {
 		return result;
 	}
 
+	/**
+	 * 查询匹配详情-根据人员id和主索引id列表
+	 * 
+	 * @param personId
+	 * @param idxIds
+	 * @return
+	 */
 	public List<Map<String, Object>> queryMatchDetailPageByIdxIds(String personId, String[] idxIds) {
 
 		// 取得匹配数据
 		List<MatchResult> mrs = findMatchResult(personId, idxIds);
 		if (mrs == null || mrs.isEmpty()) {
-			logger.debug("无法取得相关信息:MatchResult[]=" + mrs);
 			throw new ValidationException("无法取得相关信息:MatchResult[]=" + mrs);
 		}
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>(mrs.size());
@@ -483,7 +627,6 @@ public class PersonIdxLogService {
 			// 取得索引数据
 			PersonIndex index = findPersonIndex(mr.getMpiPk());
 			if (index == null) {
-				logger.debug("无法取得相关信息:PersonIndex=" + index);
 				throw new ValidationException("无法取得相关信息:PersonIndex=" + index);
 			}
 			Map<String, Object> map = new HashMap<String, Object>(2);
@@ -496,28 +639,50 @@ public class PersonIdxLogService {
 		return result;
 	}
 
+	/**
+	 * 根据人员id查询匹配的主索引列表
+	 * 
+	 * @param personId
+	 * @return
+	 */
 	public List<Map<String, Object>> queryMatchIndex(String personId) {
 		String sql = " select b.mpi_pk,b.name_cn,b.id_no,a.match_degree from mpi_match_result a left join "
 				+ " mpi_person_index b on a.mpi_pk = b.mpi_pk where a.field_pk = ? order by a.match_degree desc ";
 		List<Map<String, Object>> result = matchResultDao.findForMap(sql, new Object[] { personId });
-		logger.debug("Execute sql[" + sql + "],params[" + personId + "]");
 		return result;
 	}
 
+	/**
+	 * 根据人员id查询匹配数
+	 * 
+	 * @param personId
+	 * @return
+	 */
 	public int queryMatchIndexCount(String personId) {
 		String sql = " select count(*) from mpi_match_result where FIELD_PK=? ";
 		return matchResultDao.getCount(sql, new Object[] { personId });
 	}
 
+	/**
+	 * 根据人员id查询操作日志列表
+	 * 
+	 * @param personId
+	 * @return
+	 */
 	public List<Map<String, Object>> queryOpLogByPersonId(String personId) {
 		String sql = "select a.person_idx_log_id row_id,2 row_type,a.index_id,a.op_type optype,a.op_style,a.op_time domain_desc,b.name,b.gender_cd, "
 				+ " b.birth_date,b.id_no,b.person_tel_no,'open' \"state\",b.nh_card,'' opcount "
 				+ " from mpi_person_idx_log a left join mpi_person_index b on a.index_id = b.index_id where 1=1 and a.mpi_person_id = ? "
 				+ " order by a.op_time desc ";
-		logger.debug("Execute sql:[" + sql + "],params:[" + personId + "]");
 		return personIdxLogDao.findForMap(sql, new Object[] { personId });
 	}
 
+	/**
+	 * 根据人员id查询详情
+	 * 
+	 * @param personId
+	 * @return
+	 */
 	public Map<String, Object> queryPersonDetail(String personId) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		// 取得居民数据
@@ -528,12 +693,18 @@ public class PersonIdxLogService {
 			CodeConvertUtils.convert(person);
 			fieldList = buildField(person);
 		}
-
 		result.put("data", person);
 		result.put("fields", fieldList);
 		return result;
 	}
 
+	/**
+	 * 查询人员-分页
+	 * 
+	 * @param t
+	 * @param page
+	 * @return
+	 */
 	public List<Map<String, Object>> queryPersonForMapPage(PersonInfo t, PageInfo page) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(
@@ -551,10 +722,20 @@ public class PersonIdxLogService {
 		return personIdxLogDao.findForMap(querySql, args.toArray());
 	}
 
+	/**
+	 * 保存
+	 * 
+	 * @param t
+	 */
 	public void save(PersonIdxLog t) {
 		personIdxLogDao.add(t);
 	}
 
+	/**
+	 * 更新
+	 * 
+	 * @param t
+	 */
 	public void update(PersonIdxLog t) {
 		personIdxLogDao.update(t);
 	}

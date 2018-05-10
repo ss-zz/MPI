@@ -15,6 +15,9 @@ import com.sinosoft.mpi.model.SysRole;
 import com.sinosoft.mpi.model.SysUser;
 import com.sinosoft.mpi.util.PageInfo;
 
+/**
+ * 系统用户服务
+ */
 @Service
 public class SysUserService {
 
@@ -23,6 +26,11 @@ public class SysUserService {
 	@Resource
 	private SysRoleDao sysRoleDao;
 
+	/**
+	 * 保存
+	 * 
+	 * @param t
+	 */
 	public void save(SysUser t) {
 		if (!testUserName(t.getUserName())) {
 			throw new ValidationException("用户名:" + t.getUserName() + "已存在");
@@ -41,10 +49,14 @@ public class SysUserService {
 			return false;
 		int i = sysUserDao.getCount(" select count(*) from mpi_sys_user where upper(user_name) = ?",
 				new Object[] { userName.toUpperCase() });
-
 		return i == 0;
 	}
 
+	/**
+	 * 更新用户
+	 * 
+	 * @param t
+	 */
 	public void update(SysUser t) {
 		SysUser tmp = sysUserDao.findById(t);
 		tmp.setName(t.getName());
@@ -53,10 +65,21 @@ public class SysUserService {
 		sysUserDao.update(tmp);
 	}
 
+	/**
+	 * 删除用户
+	 * 
+	 * @param t
+	 */
 	public void delete(SysUser t) {
 		sysUserDao.deleteById(t);
 	}
 
+	/**
+	 * 根据id获取详情
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public SysUser getObject(String id) {
 		SysUser entity = new SysUser();
 		entity.setUserId(id);
@@ -64,6 +87,13 @@ public class SysUserService {
 		return entity;
 	}
 
+	/**
+	 * 验证用户名密码
+	 * 
+	 * @param userName
+	 * @param password
+	 * @return
+	 */
 	public boolean auth(String userName, String password) {
 		boolean result = false;
 		// 用户名&密码不为空的时候才去数据库查询验证
@@ -76,6 +106,13 @@ public class SysUserService {
 		return result;
 	}
 
+	/**
+	 * 分页查询用户
+	 * 
+	 * @param t
+	 * @param page
+	 * @return
+	 */
 	public List<SysUser> queryForPage(SysUser t, PageInfo page) {
 		String sql = " select * from mpi_sys_user where 1=1 ";
 		sql = page.buildPageSql(sql);

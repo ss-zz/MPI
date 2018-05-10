@@ -23,7 +23,7 @@ import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 
 /**
- * 过滤服务
+ * 人员初筛服务
  */
 @Service
 public class BlockService {
@@ -37,7 +37,6 @@ public class BlockService {
 	 * @param record
 	 *            人员信息
 	 * @return 初筛结果集
-	 * @see com.sinosoft.block.service.IBlockService#findCandidates(com.sinosoft.match.model.Record)
 	 */
 	public List<Record<PersonIndex>> findCandidates(Record<PersonInfo> record) {
 		List<Record<PersonIndex>> result = new ArrayList<Record<PersonIndex>>();

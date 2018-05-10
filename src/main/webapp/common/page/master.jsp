@@ -36,6 +36,7 @@ body {
 	
 	// jquery全局异常处理
 	$.ajaxSetup({
+		cache: false,
 		error: function(jqXHR, textStatus, errorThrown){
 			var status = 0;
 			switch (jqXHR.status) {
@@ -101,6 +102,10 @@ body {
 		
 		$.fn.form.defaults.iframe = false;
 		$.fn.form.defaults.ajax = true;
+		
+		$.fn.dialog.defaults.modal = true;
+		
+		$.fn.window.defaults.modal = true;
 		
 	})
 	

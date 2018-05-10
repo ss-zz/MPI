@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
-import com.sinosoft.index.service.MpiMqMessageHandler;
+import com.sinosoft.mpi.mq.handler.PersonHandler;
 
 /**
  * mq消息队列配置
@@ -158,7 +158,7 @@ public class MqConfig {
 	 * @return
 	 */
 	@Bean("listenerAdapterIndex")
-	MessageListenerAdapter listenerAdapterIndex(MpiMqMessageHandler handler) {
+	MessageListenerAdapter listenerAdapterIndex(PersonHandler handler) {
 		MessageListenerAdapter adapter = new MessageListenerAdapter(handler, "handleMessage");
 		adapter.setResponseExchange(env.getProperty(MQ_EXCHANGE_NAME));
 		return adapter;

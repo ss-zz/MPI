@@ -1,40 +1,32 @@
 package com.sinosoft.mpi.web;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.form.MatchDetailForm;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
-import com.sinosoft.mpi.model.SexCode;
 import com.sinosoft.mpi.service.PersonIdxLogService;
 import com.sinosoft.mpi.service.PersonIndexService;
 import com.sinosoft.mpi.service.PersonInfoService;
 import com.sinosoft.mpi.util.CodeConvertUtils;
-import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.PageInfo;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * 索引查询
@@ -42,8 +34,6 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping("/query/query.ac")
 public class IndexQueryController {
-
-	private Logger logger = Logger.getLogger(IndexQueryController.class);
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder, WebRequest request) {
@@ -64,27 +54,18 @@ public class IndexQueryController {
 
 	/**
 	 * 查询显示索引记录
-	 * 
-	 * @throws IOException
 	 */
 	@RequestMapping
-	public String listIndex(PageInfo page, PersonIndex index, HttpServletResponse response) throws IOException {
-		List<Map<String, Object>> list = null;
-		try {
-			list = personIndexService.queryForSplitPage(index, page);
-			// 时间转化
-			converDateCode(list);
-		} catch (Throwable e) {
-			logger.error("查询索引日志时出错", e);
-		}
-		JSONObject datas = new JSONObject();
+	@ResponseBody
+	public Map<String, Object> listIndex(PageInfo page, PersonIndex index) {
+		Map<String, Object> datas = new HashMap<>();
+		List<Map<String, Object>> list = personIndexService.queryForSplitPage(index, page);
+		converDateCode(list);
 		// 设置总共有多少条记录
 		datas.put(Constant.PAGE_TOTAL, page.getTotal());
 		// 设置当前页的数据
 		datas.put(Constant.PAGE_ROWS, list);
-		response.setCharacterEncoding(Constant.ENCODING_UTF8);
-		response.getWriter().print(datas.toString());
-		return null;
+		return datas;
 	}
 
 	/*
@@ -108,28 +89,17 @@ public class IndexQueryController {
 
 	/**
 	 * 查询显示索引记录
-	 * 
-	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=queryIdx")
-	public String queryIndex(PageInfo page, PersonIndex index, String fromIndexId, HttpServletResponse response)
-			throws IOException {
-		List<Map<String, Object>> list = null;
-		try {
-			list = personIndexService.queryForSplitPage(index, fromIndexId, page);
-			// 转换编码
-			converCode(list);
-		} catch (Throwable e) {
-			logger.error("查询索引日志时出错", e);
-		}
-		JSONObject datas = new JSONObject();
+	@ResponseBody
+	public Map<String, Object> queryIndex(PageInfo page, PersonIndex index, String fromIndexId) {
+		Map<String, Object> datas = new HashMap<>();
+		List<Map<String, Object>> list = personIndexService.queryForSplitPage(index, fromIndexId, page);
 		// 设置总共有多少条记录
 		datas.put(Constant.PAGE_TOTAL, page.getTotal());
 		// 设置当前页的数据
 		datas.put(Constant.PAGE_ROWS, list);
-		response.setCharacterEncoding(Constant.ENCODING_UTF8);
-		response.getWriter().print(datas.toString());
-		return null;
+		return datas;
 	}
 
 	/**
@@ -163,42 +133,11 @@ public class IndexQueryController {
 
 	/**
 	 * 查询显示索引关联的居民记录
-	 * 
-	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=listPerson")
-	public String listPerson(String indexId, HttpServletResponse response) throws IOException {
-		List<Map<String, Object>> list = null;
-		try {
-			list = personInfoService.queryForPersonByIndexId(indexId);
-			// 转换编码
-			converCode(list);
-		} catch (Throwable e) {
-			logger.error("查询索引日志时出错", e);
-		}
-		JSONArray datas = JSONArray.fromObject(list);
-		response.setCharacterEncoding(Constant.ENCODING_UTF8);
-		response.getWriter().print(datas.toString());
-		return null;
-	}
-
-	private void converCode(final List<Map<String, Object>> list) {
-		// 转换编码数据
-		for (Map<String, Object> map : list) {
-			String sexCode = (String) map.get("GENDER_CD");
-			if (StringUtils.isNotBlank(sexCode)) {
-				String sexName = CacheManager.getCodeName(SexCode.class, sexCode);
-				if (StringUtils.isNotBlank(sexName)) {
-					map.put("sexName", sexName);
-				}
-			}
-			java.sql.Timestamp BIRTH_DATE = (java.sql.Timestamp) map.get("BIRTH_DATE");
-			if (BIRTH_DATE != null) {
-				// 将TIMESTAMP.DATE 转成UTIL.DATE
-				java.util.Date date = new java.util.Date(BIRTH_DATE.getTime());
-				map.put("BIRTH_DATE", DateUtil.getDate(date));
-			}
-		}
+	@ResponseBody
+	public List<Map<String, Object>> listPerson(String indexId) {
+		return personInfoService.queryForPersonByIndexId(indexId);
 	}
 
 }

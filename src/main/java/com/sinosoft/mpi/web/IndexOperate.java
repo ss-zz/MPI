@@ -1,31 +1,22 @@
 package com.sinosoft.mpi.web;
 
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sinosoft.mpi.dao.PersonIndexDao;
-import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.service.PersonIdxLogService;
 import com.sinosoft.mpi.service.PersonIndexService;
-
-import net.sf.json.JSONArray;
 
 /**
  * 主索引操作
@@ -33,8 +24,6 @@ import net.sf.json.JSONArray;
 @Controller
 @RequestMapping("/index/index.ac")
 public class IndexOperate {
-
-	private Logger logger = Logger.getLogger(IndexQueryController.class);
 
 	@Resource
 	private PersonIndexService personIndexService;
@@ -48,26 +37,16 @@ public class IndexOperate {
 
 	/**
 	 * 人工合并主主索引
-	 * 
-	 * @return
 	 */
 	@RequestMapping(params = "method=merge")
 	@ResponseBody
 	public Map<String, Object> mergeIndex(String retiredPk, String survivingPk) {
-		try {
-			personIndexService.mergeIndex(retiredPk, survivingPk);
-		} catch (ValidationException e) {// 验证异常
-			logger.error("合并用户时发生错误", e);
-		} catch (Exception e) {
-			logger.error("系统错误,无法完成合并主索引操作", e);
-		}
+		personIndexService.mergeIndex(retiredPk, survivingPk);
 		return new HashMap<>();
 	}
 
 	/**
 	 * 人工合并主索引-查看居民详情
-	 * 
-	 * @throws IOException
 	 */
 	@RequestMapping(params = "method=indexDetail")
 	public String personDetail(String retiredPk, String survivingPk, ModelMap modelMap) {
@@ -109,12 +88,10 @@ public class IndexOperate {
 
 	/**
 	 * 绑定主索引combobox -lose
-	 * 
-	 * @return
 	 */
-	@ResponseBody
 	@RequestMapping(params = "method=indexSplitCombox")
-	public String findBeMergeIndexCombox(String splitPk, HttpServletResponse response) {
+	@ResponseBody
+	public List<Map<String, Object>> findBeMergeIndexCombox(String splitPk) {
 		List<PersonIndex> personIndexs = personIndexService.findPersonIndexBysplitIndex(splitPk);
 		String mpi_pk = "";
 		for (int i = 0; i < personIndexs.size(); i++) {
@@ -130,19 +107,7 @@ public class IndexOperate {
 		sb.append("             FROM mpi_person_index T											");
 		sb.append("           WHERE T.MPI_PK in (" + mpi_pk + ") ");
 		sb.append(" )) V");
-		RowMapper<Map<String, String>> mp = new RowMapper<Map<String, String>>() {
-			@Override
-			public Map<String, String> mapRow(ResultSet rs, int row) throws SQLException {
-				Map<String, String> m = new HashMap<String, String>();
-				m.put("ORGCODE", rs.getString("ORGCODE"));
-				m.put("ORGNAME", rs.getString("ORGNAME"));
-				return m;
-			}
-		};
-		// 查询数据
-		List<Map<String, String>> list = jdbcTemplate.query(sb.toString(), mp);
-		JSONArray json = JSONArray.fromObject(list);
-		return json.toString();
+		return jdbcTemplate.queryForList(sb.toString());
 	}
 
 	/**
@@ -156,16 +121,11 @@ public class IndexOperate {
 	 *            原主索引
 	 * @return
 	 */
-	@ResponseBody
 	@RequestMapping(params = "method=execSlipt")
-	public String execSlipt(String splitPK, String formerPK) {
-		try {
-			personIndexService.splitIndex(splitPK, formerPK);
-		} catch (ValidationException e) {// 验证异常
-			logger.error("合并用户时发生错误", e);
-		} catch (Exception e) {
-			logger.error("系统错误,无法完成合并主索引操作", e);
-		}
-		return null;
+	@ResponseBody
+	public Map<String, Object> execSlipt(String splitPK, String formerPK) {
+		personIndexService.splitIndex(splitPK, formerPK);
+		return new HashMap<>();
 	}
+
 }

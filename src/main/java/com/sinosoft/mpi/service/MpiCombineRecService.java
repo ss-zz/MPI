@@ -1,44 +1,36 @@
 package com.sinosoft.mpi.service;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.dao.MpiCombineRecDao;
 import com.sinosoft.mpi.model.MpiCombineRec;
-import com.sinosoft.mpi.util.PageInfo;
 
+/**
+ * 人员合并源服务
+ */
 @Service
 public class MpiCombineRecService {
 
 	@Resource
 	MpiCombineRecDao mpiCombineRecDao;
 
+	/**
+	 * 保存
+	 */
 	public void save(MpiCombineRec t) {
 		mpiCombineRecDao.add(t);
 	}
 
-	public void update(MpiCombineRec t) {
-
-	}
-
-	public void delete(MpiCombineRec t) {
-
-	}
-
-	public MpiCombineRec getObject(String id) {
-		return null;
-	}
-
-	public List<MpiCombineRec> queryForPage(MpiCombineRec t, PageInfo page) {
-		return null;
-	}
-
+	/**
+	 * 根据合并号查询
+	 * 
+	 * @param combineNo
+	 * @return
+	 */
 	public MpiCombineRec queryByCombineNo(Long combineNo) {
-		MpiCombineRec t = mpiCombineRecDao.find(combineNo);
-		return t;
+		return mpiCombineRecDao.find(combineNo);
 	}
 
 }

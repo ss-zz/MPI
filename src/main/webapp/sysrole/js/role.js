@@ -9,11 +9,7 @@ $.extend($.fn.validatebox.defaults.rules, {
 				url : param[0],
 				data : {
 					"roleName":value
-				},
-				type : 'post',
-				dataType : 'json',
-				async : false,
-				cache : false
+				}
 			}).responseText;
 			if (result == 'false') {
 				return false;
@@ -58,13 +54,6 @@ function ajaxTable() {
 			}	
 		}],
 		pagination:true,//分页
-		onLoadError : function() {
-			alert('数据加载失败!');
-		},
-		onClickRow : function(rowIndex, rowData) {
-			// 取消选择某行后高亮
-			$('#listTable').datagrid('unselectRow', rowIndex);
-		},
 		onLoadSuccess : function() {
 			var value = $('#listTable').datagrid('getData')['errorMsg'];
 			if (value != null) {
@@ -87,7 +76,6 @@ function reloadTable() {
  * @param row 行值
  */
 function buildViewUserLink(val,row){
-	console.dir(row);
 	return '<a href="#" onclick="ajaxUserTable(\''+val+'\',\'' + row.roleName + '\');">查看用户</a>';
 }
 
@@ -96,17 +84,10 @@ function buildViewUserLink(val,row){
  * 初始化用户列表显示窗口
  */
 function setWindow_view(){
-	$('#window_view_user').window({  
+	$('#window_view_user').window({
 		width:800,
 		height:500,
-		modal:true, // 模态
-		closed:true, // 初始关闭
-		collapsible:false, // 不可卷起
-		minimizable:false, // 不可最小化
-		maximizable:true, // 可以最大化
-		closable:true, //可以关闭
-		draggable:false, // 不可拖拽
-		resizable:false // 不可改变大小
+		closed: true
 	});
 }
 
@@ -125,13 +106,9 @@ function ajaxUserTable(roleId, roleName) {
 	$("#current_sysrole_id").val(roleId);
 	// 加载表格
 	$('#userListTable').datagrid({
-		pagination:true,//分页
+		pagination: true,//分页
 		queryParams : {// 查询条件
 			"sysRoleId":roleId
-		},
-		onClickRow : function(rowIndex, rowData) {
-			// 取消选择某行后高亮
-			$('#userListTable').datagrid('unselectRow', rowIndex);
 		},
 		onLoadSuccess : function() {
 			var value = $('#userListTable').datagrid('getData')['errorMsg'];
@@ -159,10 +136,7 @@ function reloadUserTable() {
 function setDialog_add() {
 	$('#add').dialog({
 		title : '系统角色添加',
-		modal : true, // 模式窗口：窗口背景不可操作
-		collapsible : true, // 可折叠，点击窗口右上角折叠图标将内容折叠起来
-		resizable : true, // 可拖动边框大小
-		closed:true, // 初始关闭
+		closed: true,
 		onClose : function() { // 继承自panel的关闭事件
 			addReset();
 		}
@@ -210,14 +184,10 @@ function addData() {
 	}
 
 	$.ajax({
-		async : false,
-		cache : false,
-		type : 'POST',
-		dataType : "json",
+		url : root + '/role/role.ac?method=add',// 请求的action路径
 		data : {
 			"roleName":$("#add_roleName").val()
 		},
-		url : root + '/role/role.ac?method=add',// 请求的action路径
 		success : function(data) {
 			var messgage = "添加成功!";
 			if (data == null) {// 未返回任何消息表示添加成功
@@ -237,10 +207,7 @@ function addData() {
 function setDialog_edit() {
 	$('#edit').dialog({
 		title : '系统角色编辑',
-		modal : true, // 模式窗口：窗口背景不可操作
-		collapsible : true, // 可折叠，点击窗口右上角折叠图标将内容折叠起来
-		resizable : true, // 可拖动边框大小
-		closed:true, // 初始关闭
+		closed: true,
 		onClose : function() { // 继承自panel的关闭事件
 			editReset();
 		}
@@ -254,19 +221,12 @@ function openDialog_edit() {
 	if(row==undefined || row==null){
 		alert("请选择要修改的角色!");
 		return;
-	}	   
+	}
 	var roleId = row.sysRoleId; 
 	$.ajax({
-		async : false,
-		cache : false,
-		type : 'POST',
-		dataType : "json",
+		url : root + '/role/role.ac?method=load',// 请求的action路径
 		data : {
 			"sysRoleId":roleId
-		},
-		url : root + '/role/role.ac?method=load',// 请求的action路径
-		error : function() {// 请求失败处理函数
-			alert('请求失败');
 		},
 		success : function(data) {
 			if (data == null) {// 未返回任何消息表示添加成功
@@ -306,17 +266,10 @@ function editData() {
 	}
 
 	$.ajax({
-		async : false,
-		cache : false,
-		type : 'POST',
-		dataType : "json",
+		url : root + '/role/role.ac?method=edit',// 请求的action路径
 		data : {
 			"sysRoleId":$("#edit_roleId").val(),
 			"roleName":$("#edit_roleName").val(),
-		},
-		url : root + '/role/role.ac?method=edit',// 请求的action路径
-		error : function() {// 请求失败处理函数
-			alert('请求失败');
 		},
 		success : function(data) {
 			var messgage = "修改成功!";

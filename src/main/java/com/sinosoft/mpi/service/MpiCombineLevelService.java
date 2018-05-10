@@ -8,49 +8,43 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.dao.MpiCombineLevelDao;
-import com.sinosoft.mpi.model.MpiCombineLevel;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
-import com.sinosoft.mpi.util.PageInfo;
 
+/**
+ * 人员合并级别服务
+ *
+ */
 @Service
 public class MpiCombineLevelService {
 
 	@Resource
 	MpiCombineLevelDao mpiCombineLevelDao;
 
-	public void save(MpiCombineLevel t) {
-
-	}
-
-	public void update(MpiCombineLevel t) {
-
-	}
-
-	public void delete(MpiCombineLevel t) {
-
-	}
-
-	public MpiCombineLevel getObject(String id) {
-		return null;
-	}
-
-	public List<MpiCombineLevel> queryForPage(MpiCombineLevel t, PageInfo page) {
-		return null;
-	}
-
 	/**
-	 * @param args
+	 * 新数据来源字段级别
+	 * 
+	 * @param personindex
+	 * @param combono
+	 * @param domainLevel
+	 * @param srcLevelcolmap
 	 */
-	public static void main(String[] args) {
-
-	}
-
 	public void batchAddLevel(PersonIndex personindex, Long combono, Short domainLevel,
 			List<Map<String, Object>> srcLevelcolmap) {
 		mpiCombineLevelDao.batchAddLevel(personindex, combono, domainLevel, srcLevelcolmap);
 	}
 
+	/**
+	 * 合并字段级别信息
+	 * 
+	 * @param personindex
+	 * @param personinfo
+	 * @param combono
+	 * @param domainLevel
+	 * @param orgincolLevellist
+	 * @param srcLevelcollist
+	 * @return
+	 */
 	public PersonIndex compareBatchAdd(PersonIndex personindex, PersonInfo personinfo, Long combono, Short domainLevel,
 			List<Map<String, Object>> orgincolLevellist, List<Map<String, Object>> srcLevelcollist) {
 		return mpiCombineLevelDao.compareBatchAdd(personindex, personinfo, combono, domainLevel, orgincolLevellist,

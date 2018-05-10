@@ -14,7 +14,7 @@ import com.sinosoft.mpi.model.BlockCfg;
 import com.sinosoft.mpi.model.BlockGroup;
 
 /**
- * 从配置文件block-config.xml加载初筛配置
+ * 人员初筛配置加载
  */
 public class BlockConfig {
 

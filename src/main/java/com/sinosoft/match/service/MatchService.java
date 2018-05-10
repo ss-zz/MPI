@@ -33,7 +33,7 @@ public class MatchService {
 	 * 
 	 * @param leftRecord
 	 * @param rightRecord
-	 * @return
+	 * @return 匹配情况
 	 */
 	public RecordPair match(Record<PersonInfo> leftRecord, Record<PersonIndex> rightRecord) {
 		RecordPair pair = new RecordPair(leftRecord, rightRecord);
@@ -41,7 +41,6 @@ public class MatchService {
 		this.scoreRecordPair(pair);
 		// 计算合并匹配度
 		this.calculateWeight(pair);
-
 		return pair;
 	}
 
@@ -51,7 +50,7 @@ public class MatchService {
 	 * @param leftRecord
 	 * @param rightRecords
 	 *            参与被匹配的集合
-	 * @return
+	 * @return 匹配结果
 	 */
 	public List<RecordPair> match(Record<PersonInfo> leftRecord, List<Record<PersonIndex>> rightRecords) {
 		List<RecordPair> result = new ArrayList<RecordPair>(0);
@@ -105,10 +104,9 @@ public class MatchService {
 	 * 
 	 * @param leftRecord
 	 * @param rightRecord
-	 * @return
+	 * @return 是否匹配
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public boolean isMatched(Record leftRecord, Record rightRecord) {
+	public boolean isMatched(Record<PersonInfo> leftRecord, Record<PersonIndex> rightRecord) {
 		return MatchConfig.getInstanse().getAgreementWeightThreshold() <= this.match(leftRecord, rightRecord)
 				.getWeight();
 	}
@@ -123,7 +121,7 @@ public class MatchService {
 		for (RecordPair pair : pairs) {
 			if (MatchConfig.getInstanse().getAgreementWeightThreshold() <= pair.getWeight()) {
 				return pair;
-			} else {// update 匹配值介于0.4-1.0之间 2013年5月14日
+			} else {
 				if (pair.getWeight() >= MatchConfig.getInstanse().getMatchWeightThreshold()) {
 					return pair;
 				}

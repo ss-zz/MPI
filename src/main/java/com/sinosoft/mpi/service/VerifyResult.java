@@ -1,5 +1,8 @@
 package com.sinosoft.mpi.service;
 
+/**
+ * 验证结果
+ */
 public class VerifyResult {
 
 	private Boolean success;

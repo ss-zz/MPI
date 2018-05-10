@@ -1,4 +1,4 @@
-package com.sinosoft.mpi.notification.event;
+package com.sinosoft.mpi.model;
 
 /**
  * 居民更新对索引的影响策略

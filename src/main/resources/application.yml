@@ -49,6 +49,8 @@ server:
 cxf:
   path: /ws
 
+# 居民更新对索引的影响策略:
+# UNUPDATE.不更新(默认) UPDATE.来就更新 UNUPDATE_MAN.不更新,添加事件,人为干预更新 UPDATE_LEVEL.根据数据级别进行更新 UPDATE_LEVEL_NEW.根据数据字段来源级别更新
 index:
   update:
     policy: UPDATE_LEVEL_NEW

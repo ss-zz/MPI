@@ -40,22 +40,20 @@ public class PersonHandler {
 				} else if (state == 2) {// 拆分
 					mpiPk = splitPersonandler.handleMessage(personinfo);
 				}
-				
-				if(mpiPk != null) {
+
+				if (mpiPk != null) {
 					// TODO 业务信息
-					
+
 				}
 
 			} else {
-				logger.error("错误的事件参数,参数应为Personinfo对象,但实际为" + obj);
-				throw new RuntimeException("错误的事件参数,参数应为Personinfo对象,但实际为" + obj);
+				throw new RuntimeException("错误的事件参数,参数应为PersonRegister对象,但实际为" + obj);
 			}
 		} catch (Exception e) {
 			String fieldPk = null;
 			if (obj != null && obj instanceof PersonInfo) {
 				fieldPk = ((PersonInfo) obj).getFIELD_PK();
 			}
-			logger.error("处理人员发生未知异常[" + fieldPk + "]:" + obj);
 			throw new RuntimeException("处理人员发生未知异常[" + fieldPk + "]:" + obj, e);
 		}
 	}

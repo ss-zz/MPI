@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.context.QueryConditionType;
-import com.sinosoft.mpi.dao.BookLogDao;
 import com.sinosoft.mpi.dao.IdentifierDomainDao;
 import com.sinosoft.mpi.dao.IndexIdentifierRelDao;
 import com.sinosoft.mpi.dao.ManOpPersonDao;
@@ -43,16 +42,18 @@ import com.sinosoft.mpi.util.NumberUtils;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.SqlUtils;
 
+/**
+ * 人员服务
+ */
 @Service
 public class PersonInfoService {
 
-	@Resource
-	private BookLogDao bookLogDao;
+	private Logger logger = Logger.getLogger(PersonInfoService.class);
+
 	@Resource
 	private IdentifierDomainDao identifierDomainDao;
 	@Resource
 	private IndexIdentifierRelDao indexIdentifierRelDao;
-	private Logger logger = Logger.getLogger(PersonInfoService.class);
 	@Resource
 	private ManOpPersonDao manOpPersonDao;
 	@Resource
@@ -72,6 +73,14 @@ public class PersonInfoService {
 	@Resource
 	private RabbitTemplate template;
 
+	/**
+	 * 人工干预生成新索引
+	 * 
+	 * @param opId
+	 *            操作id
+	 * @param personId
+	 *            居民id
+	 */
 	public void addNewIndex(String opId, String personId) {
 		// 取得人员
 		PersonInfo person = getObject(personId);
@@ -81,8 +90,6 @@ public class PersonInfoService {
 		if (person == null || pi == null) {
 			throw new ValidationException("无法取得相关信息:PersonInfo=" + person + ",\n PersonIdentifier=" + pi);
 		}
-		// 记录订阅日志
-		bookLogDao.autoFillAdd(pi.getPersonId());
 		indexIdentifierRelDao.deleteByFieldPK(pi.getIdentifierId());
 
 		// 新生成索引
@@ -95,9 +102,6 @@ public class PersonInfoService {
 		// 保存居民索引关系
 		saveIndexIdentifierRel(pi.getIdentifierId(), newIndex.getMPI_PK());
 
-		// 记录订阅日志
-		bookLogDao.autoFillAdd(pi.getPersonId(), newIndex.getMPI_PK(), Constant.BOOK_LOG_TYPE_ADD);
-
 		// 新建索引日志
 		saveIndexLog(person.getFIELD_PK(), newIndex.getMPI_PK(), "", Constant.IDX_LOG_TYPE_MODIFY,
 				Constant.IDX_LOG_STYLE_MAN_NEW, "新建主索引[" + newIndex.getNAME_CN() + "]");
@@ -106,12 +110,27 @@ public class PersonInfoService {
 		modifyManOpPerson(opId);
 	}
 
+	/**
+	 * 批量添加 居民信息
+	 * 
+	 * @param persons
+	 */
 	public void addPersonBatch(PersonInfo[] persons) {
 		for (PersonInfo p : persons) {
 			save(p);
 		}
 	}
 
+	/**
+	 * 手工添加居民信息到已存在索引
+	 * 
+	 * @param opId
+	 *            人工干预主键
+	 * @param personId
+	 *            居民主键
+	 * @param indexId
+	 *            索引主键
+	 */
 	public void addToIndex(String opId, String personId, String indexId) {
 		// 取得人员
 		PersonInfo person = getObject(personId);
@@ -124,14 +143,10 @@ public class PersonInfoService {
 			throw new ValidationException(
 					"无法取得相关信息:PersonInfo=" + person + ",\n PersonIdentifier=" + pi + ",\n PersonIndex=" + index);
 		}
-		// 记录订阅日志
-		bookLogDao.autoFillAdd(pi.getPersonId());
 		indexIdentifierRelDao.deleteByFieldPK(pi.getIdentifierId());
 
 		// 保存人员至索引
 		saveIndexIdentifierRel(pi.getIdentifierId(), index.getMPI_PK());
-		// 记录订阅日志
-		bookLogDao.autoFillAdd(pi.getPersonId(), index.getMPI_PK(), Constant.BOOK_LOG_TYPE_ADD);
 		// 取得匹配记录
 		MatchResult match = matchResultDao.findByPersonAndIndex(person.getFIELD_PK(), index.getMPI_PK());
 		// 新建索引日志 标识为2 手工合并
@@ -143,12 +158,17 @@ public class PersonInfoService {
 		modifyManOpPerson(opId);
 	}
 
+	/**
+	 * 构建查询条件
+	 * 
+	 * @param sql
+	 * @param p
+	 * @return
+	 */
 	private List<Object> buildQueryConditions(final StringBuilder sql, PersonInfo p) {
 		List<Object> args = new ArrayList<Object>();
 		SqlUtils.appendCondition(p.getGENDER_CD(), "a.gender_cd", sql, args, QueryConditionType.EQUAL);
 		SqlUtils.appendCondition(p.getID_NO(), "a.ID_NO", sql, args, QueryConditionType.EQUAL);
-		// SqlUtils.appendCondition(p.getCertNum(), "a.cert_num", sql, args,
-		// QueryConditionType.EQUAL);
 		SqlUtils.appendCondition(p.getMEDICAL_INSURANCE_NO(), "a.medical_insurance_no", sql, args,
 				QueryConditionType.EQUAL);
 		SqlUtils.appendCondition(p.getNH_CARD(), "a.nh_card", sql, args, QueryConditionType.EQUAL);
@@ -169,14 +189,28 @@ public class PersonInfoService {
 		return args;
 	}
 
+	/**
+	 * 删除
+	 * 
+	 * @param t
+	 */
 	public void delete(PersonInfo t) {
 		personInfoDao.deleteById(t);
 	}
 
-	private PersonInfo getByPersonIdentifier(IdentifierDomain domain, String PERSON_IDENTIFIER) {
+	/**
+	 * 根据域id和居民在该域的标识查找用户
+	 * 
+	 * @param domainId
+	 *            域id
+	 * @param identifier
+	 *            居民在该域的主键
+	 * @return nullable
+	 */
+	private PersonInfo getByPersonIdentifier(IdentifierDomain domainId, String identifier) {
 		String sql = "select * from mpi_person_info t where t.FIELD_PK in "
 				+ " ( select FIELD_PK from MPI_INDEX_IDENTIFIER_REL where PERSON_IDENTIFIER = ? and DOMAIN_ID = ? )";
-		List<PersonInfo> list = personInfoDao.find(sql, new Object[] { PERSON_IDENTIFIER, domain.getDOMAIN_ID() });
+		List<PersonInfo> list = personInfoDao.find(sql, new Object[] { identifier, domainId });
 		PersonInfo result = null;
 		if (list != null && !list.isEmpty()) {
 			result = list.get(0);
@@ -184,14 +218,32 @@ public class PersonInfoService {
 		return result;
 	}
 
+	/**
+	 * 根据域唯一标识和居民在该域的标识查找用户
+	 * 
+	 * @param domainUnique
+	 *            域唯一标识
+	 * @param identifier
+	 *            居民在该域的主键
+	 * @return nullable
+	 */
 	public PersonInfo getByPersonIdentifier(String domainUnique, String identifier) {
 		IdentifierDomain domain = identifierDomainDao.getByUniqueSign(domainUnique);
 		PersonInfo result = null;
 		if (domain != null)
-			result = getByPersonIdentifier(domain, identifier);
+			result = getByPersonIdentifier(domain.getDOMAIN_ID(), identifier);
 		return result;
 	}
 
+	/**
+	 * 根据域id和唯一标示查询人员信息
+	 * 
+	 * @param domainid
+	 *            域id
+	 * @param identifier
+	 *            唯一标识
+	 * @return
+	 */
 	public PersonInfo getByDomainid(String domainid, String identifier) {
 		IdentifierDomain domain = identifierDomainDao.findById(domainid);
 		PersonInfo result = null;
@@ -200,11 +252,22 @@ public class PersonInfoService {
 		return result;
 	}
 
+	/**
+	 * 根据id获取人员详情
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public PersonInfo getObject(String id) {
-		PersonInfo t = personInfoDao.findByPK(id);
-		return t;
+		return personInfoDao.findByPK(id);
 	}
 
+	/**
+	 * 根据id 查询居民信息(并附带域相关信息)
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public PersonInfo getObjectWithDomainInfo(String id) {
 		PersonInfo person = new PersonInfo();
 		person.setFIELD_PK(id);
@@ -214,7 +277,6 @@ public class PersonInfoService {
 
 	private PersonIdentifier getPersonIdentifierByPersonId(String personId) {
 		String sql = " select * from mpi_person_identifier where person_id = ? ";
-		logger.debug("Execute sql:[" + sql + "],parameters:[" + personId + "]");
 		List<PersonIdentifier> list = personIdentifierDao.find(sql, new Object[] { personId });
 		PersonIdentifier result = null;
 		if (list != null && !list.isEmpty()) {
@@ -230,6 +292,14 @@ public class PersonInfoService {
 		return result;
 	}
 
+	/**
+	 * 合并两个居民信息
+	 * 
+	 * @param retired
+	 *            要删除的居民信息
+	 * @param surviving
+	 *            要保留的居民信息
+	 */
 	public void mergePerson(PersonInfo retired, PersonInfo surviving) {
 		// 验证基本信息
 		try {
@@ -255,6 +325,12 @@ public class PersonInfoService {
 		mergePersonFlow(rp, sp);
 	}
 
+	/**
+	 * 批量合并 居民信息
+	 * 
+	 * @param retireds
+	 * @param surviving
+	 */
 	public void mergePersonBatch(PersonInfoSimple[] retireds, PersonInfoSimple surviving) {
 		for (PersonInfoSimple rp : retireds) {
 			mergePerson(rp.toPersonInfo(), surviving.toPersonInfo());
@@ -282,8 +358,6 @@ public class PersonInfoService {
 		if (riir != null) {
 			// 取得索引内容
 			PersonIndex rIdx = getPersonIndex(riir.getMPI_PK());
-			// 记录订阅日志
-			bookLogDao.autoFillAdd(rp.getFIELD_PK());
 			// 将 retired居民信息 解除索引关系 // 2018-01-09
 			// 原：indexIdentifierRelDao.deleteByFieldPK(sp.getFIELD_PK());
 			indexIdentifierRelDao.deleteByFieldPK(sp.getFIELD_PK());
@@ -296,8 +370,6 @@ public class PersonInfoService {
 		PersonIndex sIdx = getPersonIndex(siir.getMPI_PK());
 		// 2012年11月22日 lpk 将 retired居民信息 关联到 surviving关联的索引上
 		saveIndexRelByPer(riir.getFIELD_PK(), siir);
-		// 记录订阅日志
-		bookLogDao.autoFillAdd(rp.getFIELD_PK(), siir.getMPI_PK(), Constant.BOOK_LOG_TYPE_ADD);
 		// 索引log
 		saveIndexLog(rp.getFIELD_PK(), siir.getMPI_PK(), riir.getDOMAIN_ID(), Constant.IDX_LOG_TYPE_MODIFY,
 				Constant.IDX_LOG_STYLE_AUTO_MERGE, "[" + rp.getNAME_CN() + "]合并到主索引[" + sIdx.getNAME_CN() + "]");
@@ -305,6 +377,14 @@ public class PersonInfoService {
 		personIndexUpdateService.updateIndex(rp, siir.getMPI_PK());
 	}
 
+	/**
+	 * 页面来源合并居民
+	 * 
+	 * @param retiredPersonId
+	 *            被合并的居民
+	 * @param survivePersonId
+	 *            目标居民
+	 */
 	public void mergePersonFromPage(String retiredPersonId, String survivePersonId) {
 		PersonInfo survive = getObject(survivePersonId);
 		PersonInfo retired = getObject(retiredPersonId);
@@ -331,8 +411,16 @@ public class PersonInfoService {
 		manOpPersonDao.update(mop);
 	}
 
-	/*
-	 * 主索引信息合并页面首次查询
+	/**
+	 * 分页查询居民信息
+	 * 
+	 * @param t
+	 *            居民查询模板
+	 * @param isSurvive
+	 *            是否是选择目标居民
+	 * @param page
+	 *            分页信息
+	 * @return
 	 */
 	public List<Map<String, Object>> queryForMapPage(PersonInfo t, boolean isSurvive, PageInfo page) {
 		String domainId = t.getDOMAIN_ID();
@@ -370,12 +458,12 @@ public class PersonInfoService {
 	}
 
 	/**
-	 * 比较人员信息
-	 *
+	 * 取得居民信息对比数据
+	 * 
 	 * @param survivePersonId
-	 *            目标居民
+	 *            目标居民id
 	 * @param retiredPersonId
-	 *            被合并居民
+	 *            被合并居民id
 	 */
 	public Map<String, Object> queryComparePersonData(String survivePersonId, String retiredPersonId) {
 		// 取得两个居民信息
@@ -413,6 +501,12 @@ public class PersonInfoService {
 		return personInfoDao.find(sql, new Object[] {});
 	}
 
+	/**
+	 * 根据索引id查询其关联的居民数据
+	 * 
+	 * @param indexId
+	 * @return
+	 */
 	public List<Map<String, Object>> queryForPersonByIndexId(String indexId) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(
@@ -423,6 +517,15 @@ public class PersonInfoService {
 		return personIndexDao.findForMap(sql.toString(), new Object[] { indexId });
 	}
 
+	/**
+	 * 查找某索引下所有关联的居民数据
+	 * 
+	 * @param indexId
+	 *            索引id
+	 * @param page
+	 *            分页信息
+	 * @return
+	 */
 	public List<Map<String, Object>> queryForSplitPersonPage(String indexId, PageInfo page) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(" select a.person_id,b.identifier_id,a.name,a.sex,a.birth_date,a.id_no,a.phone_one ");
@@ -437,6 +540,13 @@ public class PersonInfoService {
 		return personIndexDao.findForMap(querySql, new Object[] { indexId });
 	}
 
+	/**
+	 * 根据居民属性查询居民信息
+	 * 
+	 * @param p
+	 *            居民信息
+	 * @return
+	 */
 	public List<PersonInfo> queryPersonByAttributes(PersonInfo p) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(" select a.*,b.person_identifier,c.unique_sign from mpi_person_info a left join ");
@@ -454,6 +564,13 @@ public class PersonInfoService {
 		return personInfoDao.findWithDomainInfo(sql.toString(), args.toArray());
 	}
 
+	/**
+	 * 根据 域唯一标识和域主键取得索引信息
+	 * 
+	 * @param p
+	 *            居民信息(需要包含域唯一标识和域主键)
+	 * @return
+	 */
 	public PersonIndex queryPersonIndexByPersonInfo(PersonInfo p) {
 		// lpk update 2013年5月9日
 		String type = p.getTYPE();
@@ -502,12 +619,24 @@ public class PersonInfoService {
 		return result;
 	}
 
+	/**
+	 * 根据索引id查询 所绑定的居民信息
+	 * 
+	 * @param indexId
+	 * @return
+	 */
 	public List<PersonInfo> queryPersonsByIndex(String indexId) {
 		String sql = "select a.*,b.person_identifier from mpi_person_info a left join "
 				+ " mpi_index_identifier_rel b on a.field_pk = b.field_pk where  b.mpi_pk = ?  ";
 		return personInfoDao.findWithDomainInfo(sql, new Object[] { indexId });
 	}
 
+	/**
+	 * 根据索引id和居民所在域唯一标识查询居民信息
+	 * 
+	 * @param indexId
+	 * @return
+	 */
 	public List<PersonInfo> queryPersonsByIndex(String indexId, String domainUniqueSign) {
 		String sql = "select a.*,b.person_identifier,c.unique_sign from mpi_person_info a left join "
 				+ " mpi_index_identifier_rel b on a.field_pk = b.field_pk left join mpi_identifier_domain c "
@@ -586,8 +715,6 @@ public class PersonInfoService {
 					t.setRELATION_PK(relationpk);
 					t.setFIELD_PK(relationpk);
 					personInfoDao.update(t);
-					// eventSender.fireEvent(EventType.UPDATE_PERSON, t);
-					logger.debug("更新记录");
 				} else {
 					logger.error("未找到要更新的居民信息,主键为" + t.getRELATION_PK() + " 域标识为" + t.getUNIQUE_SIGN());
 					throw new ValidationException(
@@ -597,8 +724,6 @@ public class PersonInfoService {
 				// 查看对应居民信息记录更新的居民信息的FIELD_PK;
 				// WHN update 2014年5月26日
 				if (t.getRELATION_PK() == null || "".equals(t.getRELATION_PK())) {
-					logger.debug("居民信息RelationPk=null,域标识为:" + t.getUNIQUE_SIGN() + ",居民健康档案号为:" + t.getHR_ID()
-							+ ",居民医疗服务编号为:" + t.getMEDICALSERVICE_NO() + ";RelationPk=null.");
 					throw new ValidationException("居民信息RelationPk=null ,域标识为:" + t.getUNIQUE_SIGN() + ",居民健康档案号为:"
 							+ t.getHR_ID() + ",居民医疗服务编号为:" + t.getMEDICALSERVICE_NO() + ".");
 				}
@@ -617,16 +742,12 @@ public class PersonInfoService {
 					t.setFIELD_PK(relationpk);
 					// 删除原始数据信息
 					personInfoDao.deleteById(t);
-
-					logger.debug("作废记录");
 				} else {
 					logger.error("未找到要作废的居民信息,主键为" + t.getRELATION_PK() + " 域标识为" + t.getUNIQUE_SIGN());
 					throw new ValidationException(
 							"未找到要更新的居民信息,主键为" + t.getRELATION_PK() + " 域标识为" + t.getUNIQUE_SIGN());
 				}
 			} else {
-				logger.debug("居民信息异常: State=" + t.getSTATE() + ";域标识为:" + t.getUNIQUE_SIGN() + ",居民健康档案号为:"
-						+ t.getHR_ID() + ",居民医疗服务编号为:" + t.getMEDICALSERVICE_NO() + ";");
 				throw new ValidationException("居民信息异常: State=" + t.getSTATE() + ";域标识为:" + t.getUNIQUE_SIGN()
 						+ ",居民健康档案号为:" + t.getHR_ID() + ",居民医疗服务编号为:" + t.getMEDICALSERVICE_NO() + ".");
 			}
@@ -669,7 +790,6 @@ public class PersonInfoService {
 		IndexIdentifierRel iir = new IndexIdentifierRel();
 		iir.setFIELD_PK(field_pk);
 		iir.setMPI_PK(sp.getMPI_PK());
-		// iir.setCOMBINE_NO(sp.getCOMBINE_NO());
 		iir.setCOMBINE_REC(sp.getCOMBINE_NO());
 		iir.setDOMAIN_ID(sp.getDOMAIN_ID());
 		iir.setPERSON_IDENTIFIER(sp.getPERSON_IDENTIFIER());
@@ -705,6 +825,14 @@ public class PersonInfoService {
 		personIdxLogDao.add(result);
 	}
 
+	/**
+	 * 拆分居民信息
+	 * 
+	 * @param indexId
+	 *            索引id
+	 * @param personId
+	 *            居民id
+	 */
 	public void splitPerson(String indexId, String personId) {
 		// 取得索引信息
 		PersonIndex index = getPersonIndex(indexId);
@@ -714,14 +842,10 @@ public class PersonInfoService {
 		PersonIdentifier pi = getPersonIdentifierByPersonId(personId);
 		// 验证数据
 		if (index == null || person == null || pi == null) {
-			logger.debug(
-					"拆分居民信息时数据验证失败:PersonIndex=" + index + ",\n PersonInfo=" + person + ",\n PersonIdentifier=" + pi);
 			throw new ValidationException(
 					"拆分居民信息时数据验证失败:PersonIndex=" + index + ",\n PersonInfo=" + person + ",\n PersonIdentifier=" + pi);
 		}
 
-		// 记录订阅日志
-		bookLogDao.autoFillAdd(personId);
 		// 删除旧关联信息
 		indexIdentifierRelDao.deleteByFieldPK(pi.getIdentifierId());
 		// 记录索引日志 操作为3-拆分
@@ -737,13 +861,21 @@ public class PersonInfoService {
 		personIndexDao.add(newIndex);
 		// 保存居民索引关系
 		saveIndexIdentifierRel(pi.getIdentifierId(), newIndex.getMPI_PK());
-		// 记录订阅日志
-		bookLogDao.autoFillAdd(person.getFIELD_PK(), newIndex.getMPI_PK(), Constant.BOOK_LOG_TYPE_ADD);
 		// 保存索引操作日志 新增
 		saveIndexLog(person.getFIELD_PK(), newIndex.getMPI_PK(), "", Constant.IDX_LOG_TYPE_MODIFY,
 				Constant.IDX_LOG_STYLE_MAN_NEW, "新建主索引[" + newIndex.getNAME_CN() + "]");
 	}
 
+	/**
+	 * 拆分索引至指定索引
+	 * 
+	 * @param indexId
+	 *            目标索引id
+	 * @param personId
+	 *            居民id
+	 * @param fromIndexId
+	 *            原索引id
+	 */
 	public void splitPersonToIndex(String indexId, String personId, String fromIndexId) {
 		// 取得索引信息
 		PersonIndex index = getPersonIndex(indexId);
@@ -759,8 +891,6 @@ public class PersonInfoService {
 			throw new ValidationException("拆分居民信息时数据验证失败:PersonIndex=[to:" + index + ",\nfrom:" + fromIndex
 					+ "],\n PersonInfo=" + person + ",\n PersonIdentifier=" + pi);
 		}
-		// 记录订阅日志
-		bookLogDao.autoFillAdd(personId);
 		// 删除旧关联信息
 		indexIdentifierRelDao.deleteByFieldPK(pi.getIdentifierId());
 		// 记录索引日志 操作为3-拆分
@@ -769,8 +899,6 @@ public class PersonInfoService {
 
 		// 保存居民索引关系
 		saveIndexIdentifierRel(pi.getIdentifierId(), indexId);
-		// 记录订阅日志
-		bookLogDao.autoFillAdd(person.getFIELD_PK(), indexId, Constant.BOOK_LOG_TYPE_ADD);
 		// 保存索引操作日志 新增
 		saveIndexLog(person.getFIELD_PK(), indexId, "", Constant.IDX_LOG_TYPE_MODIFY, Constant.IDX_LOG_STYLE_MAN_MERGE,
 				"[" + person.getNAME_CN() + "]合并到主索引[" + index.getNAME_CN() + "]");
@@ -801,6 +929,11 @@ public class PersonInfoService {
 		// eventSender.fireEvent(EventType.UPDATE_PERSON, pi);
 	}
 
+	/**
+	 * 批量更新 居民信息
+	 * 
+	 * @param persons
+	 */
 	public void updatePersonBatch(PersonInfo[] persons) {
 		for (PersonInfo p : persons) {
 			update(p);
@@ -852,6 +985,12 @@ public class PersonInfoService {
 		return personInfoDao.findById(relationpk, org_code);
 	}
 
+	/**
+	 * 根据居民唯一标识查询居民信息
+	 * 
+	 * @param fieldpk
+	 * @return
+	 */
 	public PersonInfo queryPersonsByFieldPK(String fieldpk) {
 		return personInfoDao.findByPK(fieldpk);
 	}

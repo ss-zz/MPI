@@ -1,4 +1,4 @@
-package com.sinosoft.config;
+package com.sinosoft.config.cache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +23,6 @@ public class CacheConfig {
 		List<String> clzNames = new ArrayList<>();
 
 		// clzNames.add("com.sinosoft.mpi.model.SexCode");
-		// clzNames.add("com.sinosoft.mpi.model.CertCode");
-		// clzNames.add("com.sinosoft.mpi.model.EduCode");
-		// clzNames.add("com.sinosoft.mpi.model.MarriageCode");
-		// clzNames.add("com.sinosoft.mpi.model.NationCode");
-		// clzNames.add("com.sinosoft.mpi.model.ProfessionCode");
-		clzNames.add("com.sinosoft.mpi.model.SexCode");
 
 		ge.setClzNames(clzNames.toArray(new String[0]));
 		return ge;

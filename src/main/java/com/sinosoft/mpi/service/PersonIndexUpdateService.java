@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -19,31 +18,38 @@ import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.MpiCombineRec;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
-import com.sinosoft.mpi.notification.event.UpdateStrategy;
+import com.sinosoft.mpi.model.UpdateStrategy;
 import com.sinosoft.mpi.util.NumberUtils;
 
+/**
+ * 人员主索引更新服务
+ */
 @Service
 public class PersonIndexUpdateService {
-	private static Logger logger = Logger.getLogger(PersonIndexUpdateService.class);
 
 	@Resource
-	private PersonIndexDao personIndexDao;
+	PersonIndexDao personIndexDao;
 	@Resource
-	private IdentifierDomainDao identifierDomainDao;
+	IdentifierDomainDao identifierDomainDao;
 	@Resource
 	IndexIdentifierRelDao indexIdentifierRelDao;
 	@Resource
 	MpiCombineRecDao mpiCombineRecDao;
 	@Resource
 	MpiCombineLevelDao mpiCombineLevelDao;
+	// 更新策略
 	@Value("${index.update.policy}")
-	private UpdateStrategy policy;
-
+	UpdateStrategy policy;
 	@Resource
-	private DomainSrcLevelService domainSrcLevelService;
+	DomainSrcLevelService domainSrcLevelService;
+	List<Map<String, Object>> orgincollevellist = null;
 
-	private List<Map<String, Object>> orgincollevellist = null;
-
+	/**
+	 * 更新索引信息
+	 * 
+	 * @param person
+	 * @param indexId
+	 */
 	public void updateIndex(PersonInfo person, String indexId) {
 
 		switch (policy) {
@@ -54,7 +60,6 @@ public class PersonIndexUpdateService {
 			updateIndexDirect(person, indexId);
 			break;
 		case UNUPDATE_MAN:
-			// TODO 人工更新 暂无实现
 			break;
 		case UPDATE_LEVEL:
 			updateIndexByLevel(person, indexId);
@@ -71,7 +76,6 @@ public class PersonIndexUpdateService {
 		PersonIndex idx = person.personInfoToPersonIndex();
 		idx.setMPI_PK(mpi_pk);
 		personIndexDao.update(idx);
-		logger.debug("执行更新索引信息:PersonInfo[" + person + "],mpi_pk[" + mpi_pk + "]");
 	}
 
 	/**
@@ -156,10 +160,13 @@ public class PersonIndexUpdateService {
 		return this.orgincollevellist;
 	}
 
-	public void setPolicy(UpdateStrategy policy) {
-		this.policy = policy;
-	}
-
+	/**
+	 * 更新索引
+	 * 
+	 * @param personindex
+	 * @param person
+	 * @return
+	 */
 	public PersonIndex updateIndex(PersonIndex personindex, PersonInfo person) {
 
 		switch (policy) {

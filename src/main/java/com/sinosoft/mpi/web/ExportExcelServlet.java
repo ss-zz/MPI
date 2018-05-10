@@ -60,7 +60,7 @@ public class ExportExcelServlet extends javax.servlet.http.HttpServlet implement
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		String title = "测试";
+		String title = "导出";
 		String gridJson = request.getParameter("gridjson"); // grid数据
 
 		// 生成excel

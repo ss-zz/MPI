@@ -7,51 +7,75 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.dao.ManOpPersonDao;
 import com.sinosoft.mpi.model.ManOpPerson;
 import com.sinosoft.mpi.util.PageInfo;
 
+/**
+ * 需要人工干预的居民服务
+ */
 @Service
 public class ManOpPersonService {
-
-	private Logger logger = Logger.getLogger(ManOpPersonService.class);
 
 	@Resource
 	private ManOpPersonDao manOpPersonDao;
 
+	/**
+	 * 保存
+	 */
 	public void save(ManOpPerson t) {
 		manOpPersonDao.add(t);
-		logger.debug("Add ManOpPerson:" + t);
 	}
 
+	/**
+	 * 更新
+	 */
 	public void update(ManOpPerson t) {
 		manOpPersonDao.update(t);
-		logger.debug("update ManOpPerson:" + t);
 	}
 
+	/**
+	 * 删除-根据id
+	 */
 	public void delete(ManOpPerson t) {
 		manOpPersonDao.deleteById(t);
-		logger.debug("delete ManOpPerson,manOpId=" + t.getMAN_OP_ID());
 	}
 
+	/**
+	 * 根据id获取
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public ManOpPerson getObject(String id) {
 		ManOpPerson t = new ManOpPerson();
 		t.setMAN_OP_ID(id);
 		t = manOpPersonDao.findById(t);
-		logger.debug("Load ManOpPerson:manOpId=" + id + ",result=" + t);
 		return t;
 	}
 
+	/**
+	 * 分页查询
+	 * 
+	 * @param t
+	 * @param page
+	 * @return
+	 */
 	public List<ManOpPerson> queryForPage(ManOpPerson t, PageInfo page) {
 		String sql = " select * from mpi_man_op_person where 1=1 ";
 		sql = page.buildPageSql(sql);
-		logger.debug("Execute sql:" + sql);
 		return manOpPersonDao.find(sql, new Object[] {});
 	}
 
+	/**
+	 * 分页查询
+	 * 
+	 * @param t
+	 * @param page
+	 * @return
+	 */
 	public List<Map<String, Object>> queryForMapPage(ManOpPerson t, PageInfo page) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(" select a.man_op_id,a.field_pk,a.man_op_status,a.man_op_time,b.name_CN,b.gender_cd ")
@@ -80,11 +104,9 @@ public class ManOpPersonService {
 		String countSql = page.buildCountSql(sql);
 		// 查询设置分页记录的总记录数
 		page.setTotal(manOpPersonDao.getCount(countSql, args.toArray()));
-		logger.debug("Execute sql:" + countSql);
 		// 取得分页查询语句
 		sql.append(" order by a.man_op_status asc, a.man_op_time desc ");
 		String querySql = page.buildPageSql(sql);
-		logger.debug("Execute sql:" + querySql);
 		return manOpPersonDao.findForMap(querySql, args.toArray());
 	}
 

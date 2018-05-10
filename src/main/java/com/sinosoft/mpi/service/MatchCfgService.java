@@ -6,7 +6,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.match.config.MatchConfig;
@@ -17,16 +16,20 @@ import com.sinosoft.mpi.model.MatchFieldCfg;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.PageInfo;
 
+/**
+ * 人员匹配配置服务
+ */
 @Service
 public class MatchCfgService {
-
-	private Logger logger = Logger.getLogger(MatchCfgService.class);
 
 	@Resource
 	private MatchCfgDao matchCfgDao;
 	@Resource
 	private MatchFieldCfgDao matchFieldCfgDao;
 
+	/**
+	 * 保存
+	 */
 	public void save(MatchCfg t) {
 		// 设置必要信息
 		t.setCreateDate(DateUtil.getTimeNow(new Date()));
@@ -34,25 +37,35 @@ public class MatchCfgService {
 		t.setState("0");
 		// 保存
 		matchCfgDao.add(t);
-		logger.debug("Add MatchCfg:" + t);
 		// 保存字段配置
 		for (MatchFieldCfg mfc : t.getMatchFieldCfgs()) {
 			mfc.setConfigId(t.getConfigId());
 			matchFieldCfgDao.add(mfc);
-			logger.debug("Add MatchFieldCfg:" + mfc);
 		}
 	}
 
+	/**
+	 * 更新
+	 * 
+	 * @param t
+	 */
 	public void update(MatchCfg t) {
 		matchCfgDao.update(t);
-		logger.debug("Update MatchCfg:" + t);
 	}
 
+	/**
+	 * 删除
+	 */
 	public void delete(MatchCfg t) {
 		matchCfgDao.deleteById(t);
-		logger.debug("Del MatchCfg:configId=" + t.getConfigId());
 	}
 
+	/**
+	 * 根据id获取
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public MatchCfg getObject(String id) {
 		MatchCfg t = new MatchCfg();
 		t.setConfigId(id);
@@ -62,7 +75,6 @@ public class MatchCfgService {
 			List<MatchFieldCfg> list = queryFieldCfg(id);
 			t.setMatchFieldCfgs(list);
 		}
-		logger.debug("Load MatchCfg:configId=" + id + ",result=" + t);
 		return t;
 	}
 
@@ -78,18 +90,27 @@ public class MatchCfgService {
 		return list;
 	}
 
+	/**
+	 * 分页查询
+	 * 
+	 * @param t
+	 * @param page
+	 * @return
+	 */
 	public List<MatchCfg> queryForPage(MatchCfg t, PageInfo page) {
 		String sql = " select * from mpi_match_cfg where 1=1 ";
 		String countSql = page.buildCountSql(sql);
 		page.setTotal(matchCfgDao.getCount(countSql, new Object[] {}));
-		logger.debug("Execute sql:[" + countSql + "],params[]");
 		String querySql = page.buildPageSql(sql);
-		logger.debug("Execute sql:[" + querySql + "],params[]");
 		return matchCfgDao.find(querySql, new Object[] {});
 	}
 
+	/**
+	 * 使配置生效
+	 * 
+	 * @param cfgId
+	 */
 	public void updateEffect(String cfgId) {
-
 		// 使id配置 生效
 		matchCfgDao.effect(cfgId);
 		MatchCfg cfg = getObject(cfgId);
@@ -104,15 +125,11 @@ public class MatchCfgService {
 	 */
 	public MatchCfg queryEffectCfg() {
 		String sql = " select * from mpi_match_cfg where state = '1' ";
-		MatchCfg result = null;
 		List<MatchCfg> list = matchCfgDao.find(sql);
-		if (list != null && !list.isEmpty()) {
-			result = list.get(0);
-		}
+		MatchCfg result = list != null && list.size() > 0 ? list.get(0) : null;
 		if (result != null) {
 			result.setMatchFieldCfgs(queryFieldCfg(result.getConfigId()));
 		}
-
 		return result;
 	}
 

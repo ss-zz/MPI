@@ -26,13 +26,8 @@ public class DomainSrcLevelDao extends IBaseDao<DomainSrcLevel> {
 
 	@Override
 	public List<Map<String, Object>> findForMap(String sql, Object[] args) {
-		return null;
-	}
-
-	@Override
-	public List<Map<String, Object>> findForMap(String sql) {
 		final List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-		jdbcTemplate.query(sql, new RowCallbackHandler() {
+		jdbcTemplate.query(sql, args, new RowCallbackHandler() {
 			@Override
 			public void processRow(ResultSet rs) throws SQLException {
 				Map<String, Object> row = new HashMap<String, Object>();
@@ -43,7 +38,11 @@ public class DomainSrcLevelDao extends IBaseDao<DomainSrcLevel> {
 			}
 		});
 		return result;
+	}
 
+	@Override
+	public List<Map<String, Object>> findForMap(String sql) {
+		return findForMap(sql, null);
 	}
 
 	public void effect(String id) {

@@ -20,6 +20,6 @@
 		<!-- 权重 -->
 		<xs:attribute name="weight" type="xs:float" />
 		<!-- 字段描述 -->
-		<xs:attribute name="desc" type="xs:string"/>
+		<xs:attribute name="desc" type="xs:string" />
 	</xs:complexType>
 </xs:schema>

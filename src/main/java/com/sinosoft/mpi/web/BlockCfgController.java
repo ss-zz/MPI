@@ -1,22 +1,20 @@
 package com.sinosoft.mpi.web;
 
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sinosoft.block.config.BlockConfig;
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
-import com.sinosoft.mpi.exception.BaseBussinessException;
-import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.BlockCfg;
 import com.sinosoft.mpi.model.PersonPropertiesDesc;
 import com.sinosoft.mpi.service.BlockCfgService;
@@ -30,7 +28,6 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping("/cfg/block.ac")
 public class BlockCfgController {
-	private Logger logger = Logger.getLogger(BlockCfgController.class);
 
 	@Resource
 	private BlockCfgService blockCfgService;
@@ -39,21 +36,15 @@ public class BlockCfgController {
 	 * 取得配置列表数据
 	 */
 	@RequestMapping
-	public String list(PageInfo page, BlockCfg t, HttpServletResponse response) throws IOException {
-		List<BlockCfg> list = null;
-		try {
-			list = blockCfgService.queryForPage(t, page);
-		} catch (Throwable e) {
-			logger.error("查询匹配配置的时候出现错误", e);
-		}
-		JSONObject datas = new JSONObject();
+	@ResponseBody
+	public Map<String, Object> list(PageInfo page, BlockCfg t) {
+		Map<String, Object> ret = new HashMap<>();
+		List<BlockCfg> list = blockCfgService.queryForPage(t, page);
 		// 设置总共有多少条记录
-		datas.put(Constant.PAGE_TOTAL, page.getTotal());
+		ret.put(Constant.PAGE_TOTAL, page.getTotal());
 		// 设置当前页的数据
-		datas.put(Constant.PAGE_ROWS, list);
-		response.setCharacterEncoding(Constant.ENCODING_UTF8);
-		response.getWriter().print(datas.toString());
-		return null;
+		ret.put(Constant.PAGE_ROWS, list);
+		return ret;
 	}
 
 	/**
@@ -66,24 +57,18 @@ public class BlockCfgController {
 		JSONObject datas = new JSONObject();
 		// 字段属性
 		datas.put("pList", pList);
-
 		ModelAndView mv = new ModelAndView("/cfg/page/block_add");
 		mv.addObject("selectJson", datas.toString());
 		return mv;
 	}
 
+	/**
+	 * 添加配置
+	 */
 	@RequestMapping(params = "method=add")
-	public String add(@RequestBody BlockCfg t, HttpServletResponse response) throws IOException {
-		response.setCharacterEncoding(Constant.ENCODING_UTF8);
-		try {
-			blockCfgService.save(t);
-		} catch (ValidationException e) {
-			response.getWriter().print(e.getMessage());
-		} catch (Throwable e) {
-			logger.error("添加匹配配置信息的时候出错!", e);
-			response.getWriter().print("添加匹配配置信息的时候出错!");
-		}
-		return null;
+	@ResponseBody
+	public void add(@RequestBody BlockCfg t) {
+		blockCfgService.save(t);
 	}
 
 	/**
@@ -93,7 +78,6 @@ public class BlockCfgController {
 	public ModelAndView toViewPage(String cfgId) {
 		// 取得配置信息
 		BlockCfg cfg = blockCfgService.getObject(cfgId);
-
 		ModelAndView mv = new ModelAndView("/cfg/page/block_view");
 		mv.addObject("cfg", cfg);
 		return mv;
@@ -103,17 +87,9 @@ public class BlockCfgController {
 	 * 使配置生效
 	 */
 	@RequestMapping(params = "method=effect")
-	public String effectCfg(String cfgId, HttpServletResponse response) throws IOException {
-		response.setCharacterEncoding(Constant.ENCODING_UTF8);
-		try {
-			blockCfgService.updateEffect(cfgId);
-		} catch (BaseBussinessException e) {
-			response.getWriter().print(e.getMessage());
-		} catch (Throwable e) {
-			logger.error("激活匹配配置时发生错误!", e);
-			response.getWriter().print("激活匹配配置时发生错误!");
-		}
-		return null;
+	@ResponseBody
+	public void effectCfg(String cfgId) {
+		blockCfgService.updateEffect(cfgId);
 	}
 
 	/**
@@ -121,12 +97,8 @@ public class BlockCfgController {
 	 */
 	@RequestMapping(params = "method=current")
 	public ModelAndView toCurrentViewPage() {
-
-		BlockConfig blockConfig = BlockConfig.getInstanse();
-		BlockCfg cfg = new BlockCfg(blockConfig);
-
 		ModelAndView mv = new ModelAndView("/cfg/page/current_block");
-		mv.addObject("cfg", cfg);
+		mv.addObject("cfg", new BlockCfg(BlockConfig.getInstanse()));
 		return mv;
 	}
 

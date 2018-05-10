@@ -8,9 +8,7 @@
 <body>
 	<!-- 对比情况 所有均显示 -->
 	<table class="myTable">
-		<caption>
-			主索引详情【${data.NAME_CN }】
-		</caption>
+		<caption>主索引详情【${data.NAME_CN }】</caption>
 		<thead>
 			<tr>
 				<th></th>
@@ -20,14 +18,15 @@
 		</thead>
 		<tbody>
 			<c:forEach items="${fields }" var="field" varStatus="s">
-			<tr>
-				<td>${s.count}</td>
-				<td>${field.fieldCnName}</td>
-				<td>${field.personValue}</td>
-			</tr>
+				<tr>
+					<td>${s.count}</td>
+					<td>${field.fieldCnName}</td>
+					<td>${field.personValue}</td>
+				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
-	<br/><br/>	
+	<br />
+	<br />
 </body>
 </html>

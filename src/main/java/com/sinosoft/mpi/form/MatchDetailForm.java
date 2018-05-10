@@ -8,11 +8,31 @@ import java.io.Serializable;
 public class MatchDetailForm implements Serializable {
 
 	private static final long serialVersionUID = 4816894582986450809L;
-	private String fieldName;// 字段名
-	private String fieldCnName;// 字段中文名
-	private String personValue;// 居民表中属性值
-	private String indexValue;// 索引表中的属性值
-	private String matchDegree;// 匹配度
+
+	/**
+	 * 字段名
+	 */
+	private String fieldName;
+
+	/**
+	 * 字段中文名
+	 */
+	private String fieldCnName;
+
+	/**
+	 * 居民表中属性值
+	 */
+	private String personValue;
+
+	/**
+	 * 索引表中的属性值
+	 */
+	private String indexValue;
+
+	/**
+	 * 匹配度
+	 */
+	private String matchDegree;
 
 	public String getFieldName() {
 		return fieldName;
