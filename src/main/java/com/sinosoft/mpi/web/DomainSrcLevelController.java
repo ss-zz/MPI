@@ -21,8 +21,6 @@ import com.sinosoft.mpi.service.DomainSrcLevelService;
 import com.sinosoft.mpi.service.IdentifierDomainService;
 import com.sinosoft.mpi.util.PageInfo;
 
-import net.sf.json.JSONObject;
-
 /**
  * 数据源级别控制器
  */
@@ -88,13 +86,13 @@ public class DomainSrcLevelController {
 		// 取得居民信息 字段描述
 		List<IdentifierDomain> domainlist = identifierDomainService.queryByDomianId(domainId);
 		List<PersonPropertiesDesc> pList = CacheManager.getAll(PersonPropertiesDesc.class);
-		JSONObject datas = new JSONObject();
+		Map<String, Object> datas = new HashMap<>();
 		// 字段属性
 		datas.put("pList", pList);
 		datas.put("domainList", domainlist);
 		datas.put("domainid", domainId);
 		ModelAndView mv = new ModelAndView("/srclevel/page/srclevel");
-		mv.addObject("selectJson", datas.toString());
+		mv.addObject("selectJson", datas);
 		return mv;
 	}
 

@@ -20,8 +20,6 @@ import com.sinosoft.mpi.model.PersonPropertiesDesc;
 import com.sinosoft.mpi.service.BlockCfgService;
 import com.sinosoft.mpi.util.PageInfo;
 
-import net.sf.json.JSONObject;
-
 /**
  * 初筛配置页面控制器
  */
@@ -52,13 +50,13 @@ public class BlockCfgController {
 	 */
 	@RequestMapping(params = "method=toAdd")
 	public ModelAndView toMatchCfgPage() {
+		Map<String, Object> datas = new HashMap<>();
 		// 取得居民信息 字段描述
 		List<PersonPropertiesDesc> pList = CacheManager.getAll(PersonPropertiesDesc.class);
-		JSONObject datas = new JSONObject();
 		// 字段属性
 		datas.put("pList", pList);
 		ModelAndView mv = new ModelAndView("/cfg/page/block_add");
-		mv.addObject("selectJson", datas.toString());
+		mv.addObject("selectJson", datas);
 		return mv;
 	}
 

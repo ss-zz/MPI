@@ -1,29 +1,30 @@
 package com.sinosoft.mpi.mq.handler;
 
-import javax.annotation.Resource;
-
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Service;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import com.sinosoft.config.MqConfig;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.register.PersonRegister;
 
 /**
- * 人员处理服务
- *
+ * 消息队列人员数据处理
  */
-@Service
+@Component
 public class PersonHandler {
 
 	private static Logger logger = Logger.getLogger(PersonHandler.class);
 
-	@Resource
+	@Autowired
 	AddPersonHandler addPersonHandler;
-	@Resource
+	@Autowired
 	UpdatePersonHandler updatePersonHandler;
-	@Resource
+	@Autowired
 	SplitPersonHandler splitPersonandler;
 
+	@RabbitListener(queues = MqConfig.MQ_QUEUE_NAME_INDEX)
 	public void handleMessage(Object obj) {
 		try {
 			logger.debug("处理人员对象=>" + obj.toString());

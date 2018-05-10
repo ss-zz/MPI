@@ -16,20 +16,16 @@ spring:
   # 资源文件
   resources:
     static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+  # 缓存
   cache:
     jcache:
       config:classpath:ehcache.xml
-## mq配置
-mq:
-  host: localhost
-  port: 5672
-  exchange:
-    name: mpi_exchange_index
-  queue:
-    index:
-      name: mpi_queue_index
-    result:
-      name: mpi_queue_result
+  # mq
+  rabbitmq:
+    host: localhost
+    port: 5672
+    listener:
+      auto-startup: true
 
 # 日志
 logging:
