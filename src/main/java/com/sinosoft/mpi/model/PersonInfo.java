@@ -6,9 +6,7 @@ import java.util.Date;
 import com.sinosoft.mpi.annotation.PropertyDesc;
 
 public class PersonInfo implements Serializable {
-	/**
-	* 
-	*/
+
 	private static final long serialVersionUID = -5771634326648400216L;
 
 	@PropertyDesc(name = "主键", column = "FIELD_PK")
