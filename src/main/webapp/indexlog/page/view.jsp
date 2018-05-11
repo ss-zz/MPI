@@ -33,32 +33,27 @@
 		<c:if test="${log.opStyle == 3 || log.opStyle == 6 }">
 			<h3>
 				主索引记录:<a href="javascript:Void(0);"
-					onclick="unify_viewIndex('${index.MPI_PK }','${index.NAME_CN }')">${index.NAME_CN
-					}</a>
+					onclick="unify_viewIndex('${index.MPI_PK }','${index.NAME_CN }')">${index.NAME_CN}</a>
 			</h3>
 			<h3>
 				拆分的个人信息记录:<a href="javascript:Void(0);"
-					onclick="unify_viewPerson('${person.FIELD_PK }','${person.NAME_CN }')">${person.NAME_CN
-					}</a>
+					onclick="unify_viewPerson('${person.FIELD_PK }','${person.NAME_CN }')">${person.NAME_CN}</a>
 			</h3>
 		</c:if>
 		<c:if test="${log.opStyle == 1 || log.opStyle == 4 }">
 			<h3>
 				合并后的主索引记录:<a href="javascript:Void(0);"
-					onclick="unify_viewIndex('${index.MPI_PK }','${index.NAME_CN }')">${index.NAME_CN
-					}</a>
+					onclick="unify_viewIndex('${index.MPI_PK }','${index.NAME_CN }')">${index.NAME_CN}</a>
 			</h3>
 			<h3>
-				合并的个人信息记录:<a href="javascript:Void(0);"
-					onclick="unify_viewPerson('${person.FIELD_PK }','${person.NAME_CN }')">${person.NAME_CN
-					}</a>
+				合并的个人信息记录: <a href="javascript:Void(0);"
+					onclick="unify_viewPerson('${person.FIELD_PK }','${person.NAME_CN }')">${person.NAME_CN}</a>
 			</h3>
 		</c:if>
 		<c:if test="${log.opStyle == 2 || log.opStyle == 5 }">
 			<h3>
 				新建的主索引记录:<a href="javascript:Void(0);"
-					onclick="unify_viewIndex('${index.MPI_PK }','${index.NAME_CN }')">${index.NAME_CN
-					}</a>
+					onclick="unify_viewIndex('${index.MPI_PK }','${index.NAME_CN }')">${index.NAME_CN}</a>
 			</h3>
 		</c:if>
 	</c:if>
@@ -95,11 +90,11 @@
 	<!-- 对比情况 所有均显示 -->
 	<table class="myTable">
 		<caption>
-			主索引信息对比情况(匹配结果:<span id="show_log_opStyle_1"></span>)
-			<span style="float: right;">
-				<c:if test="${log.opType == 1 }">
+			主索引信息对比情况(匹配结果:<span id="show_log_opStyle_1"></span>) <span
+				style="float: right;"> <c:if test="${log.opType == 1 }">
 				最终形成的主索引:
-				<a href="javascript:Void(0);" onclick="unify_viewIndex('${index.MPI_PK }','${index.NAME_CN }')">${index.NAME_CN}</a>
+				<a href="javascript:Void(0);"
+						onclick="unify_viewIndex('${index.MPI_PK }','${index.NAME_CN }')">${index.NAME_CN}</a>
 				</c:if>
 			</span>
 		</caption>

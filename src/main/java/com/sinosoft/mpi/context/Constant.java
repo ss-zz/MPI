@@ -1,5 +1,8 @@
 package com.sinosoft.mpi.context;
 
+/**
+ * 系统常量配置
+ */
 public class Constant {
 
 	public final static String PAGE_TOTAL = "total";
@@ -46,12 +49,4 @@ public class Constant {
 	 */
 	public final static String IDX_LOG_STYLE_MAN_REMOVE = "7";
 
-	/**
-	 * 订阅信息日志 绑定到索引
-	 */
-	public final static String BOOK_LOG_TYPE_ADD = "0";
-	/**
-	 * 订阅信息日志 与索引解除绑定
-	 */
-	public final static String BOOK_LOG_TYPE_RELEASE = "1";
 }

@@ -8,10 +8,18 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.model.PersonInfo;
 
-@Service("personInfoVerifier")
-public class PersonInfoVerifier implements IVerifier<PersonInfo> {
+/**
+ * 人员信息验证
+ */
+@Service
+public class PersonInfoVerifier {
 
-	@Override
+	/**
+	 * 验证人员信息
+	 * 
+	 * @param t
+	 * @return
+	 */
 	public VerifyResult verify(final PersonInfo t) {
 		boolean result = true;
 		StringBuilder sb = new StringBuilder();
@@ -44,11 +52,22 @@ public class PersonInfoVerifier implements IVerifier<PersonInfo> {
 		return ret;
 	}
 
+	/**
+	 * 验证空值
+	 * 
+	 * @param value
+	 * @return
+	 */
 	private boolean verifyBlankValue(String value) {
 		return !StringUtils.isBlank(value);
 	}
 
-	// lpk update 2013年5月9日 验证身份证
+	/**
+	 * 验证身份证
+	 * 
+	 * @param person
+	 * @return
+	 */
 	private boolean verifyIdNoValue(PersonInfo person) {
 		String value = person.getID_NO();
 		boolean result = true;
@@ -64,7 +83,12 @@ public class PersonInfoVerifier implements IVerifier<PersonInfo> {
 		return result;
 	}
 
-	// WHN update 2017年5月1日 验证居民健康卡号
+	/**
+	 * 验证居民健康卡号
+	 * 
+	 * @param person
+	 * @return
+	 */
 	private boolean verifyCardNoValue(PersonInfo person) {
 		String value = person.getCARD_NO();
 		boolean result = true;
@@ -81,7 +105,12 @@ public class PersonInfoVerifier implements IVerifier<PersonInfo> {
 		return result;
 	}
 
-	// update 2013年12月9日 验证新农合卡
+	/**
+	 * 验证新农合卡
+	 * 
+	 * @param person
+	 * @return
+	 */
 	public boolean verifyNhCard(PersonInfo person) {
 		String value = person.getNH_CARD();
 		boolean result = true;
@@ -92,7 +121,12 @@ public class PersonInfoVerifier implements IVerifier<PersonInfo> {
 		return result;
 	}
 
-	// lpk update 2013年12月9日 居民健康档案编号为17位
+	/**
+	 * 验证居民健康档案编号
+	 * 
+	 * @param person
+	 * @return
+	 */
 	public boolean verifyHRID(PersonInfo person) {
 		String value = person.getHR_ID();
 		boolean result = true;
@@ -102,7 +136,12 @@ public class PersonInfoVerifier implements IVerifier<PersonInfo> {
 		return result;
 	}
 
-	// lpk update 2013年12月9日 社会保障卡号
+	/**
+	 * 社会保障卡号
+	 * 
+	 * @param person
+	 * @return
+	 */
 	public boolean verifySSCID(PersonInfo person) {
 		String value = person.getSSCID();
 		boolean result = true;
@@ -111,4 +150,5 @@ public class PersonInfoVerifier implements IVerifier<PersonInfo> {
 		}
 		return result;
 	}
+
 }

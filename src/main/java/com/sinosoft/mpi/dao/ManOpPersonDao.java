@@ -12,9 +12,15 @@ import org.springframework.stereotype.Repository;
 import com.sinosoft.mpi.model.ManOpPerson;
 import com.sinosoft.mpi.util.IDUtil;
 
+/**
+ * 需要人工干预的居民服务
+ */
 @Repository
 public class ManOpPersonDao extends IBaseDao<ManOpPerson> {
 
+	/**
+	 * 新增
+	 */
 	@Override
 	public void add(final ManOpPerson entity) {
 		entity.setMAN_OP_ID(IDUtil.getUUID());

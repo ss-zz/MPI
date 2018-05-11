@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.context.QueryConditionType;
-import com.sinosoft.mpi.dao.BookLogDao;
 import com.sinosoft.mpi.dao.IndexIdentifierRelDao;
 import com.sinosoft.mpi.dao.IndexOperateDao;
 import com.sinosoft.mpi.dao.MpiCombineLevelDao;
@@ -41,10 +40,15 @@ import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.SqlUtils;
 
-@Service("personIndexService")
+/**
+ * 主索引人员服务
+ */
+@Service
 @CacheDefaults(cacheName = "peopleCache")
-public class PersonIndexService implements IPersonIndexService {
+public class PersonIndexService {
+
 	private Logger logger = Logger.getLogger(PersonIndexService.class);
+
 	@Resource
 	private PersonIndexDao personIndexDao;
 	@Resource
@@ -52,13 +56,9 @@ public class PersonIndexService implements IPersonIndexService {
 	@Resource
 	private PersonInfoDao personInfoDao;
 	@Resource
-	private BookLogService bookLogService;
-	@Resource
 	private PersonIndexUpdateService personIndexUpdateService;
 	@Resource
 	private MpiCombineLevelDao mpiCombineLevelDao;
-	@Resource
-	private BookLogDao bookLogDao;
 	@Resource
 	private PersonIdxLogDao personIdxLogDao;
 	@Resource
@@ -66,6 +66,13 @@ public class PersonIndexService implements IPersonIndexService {
 	@Resource
 	private IndexOperateDao indexOperateDao;
 
+	/**
+	 * 构建查询条件
+	 * 
+	 * @param sql
+	 * @param p
+	 * @return
+	 */
 	private List<Object> buildQueryConditions(final StringBuilder sql, PersonIndex p) {
 		List<Object> args = new ArrayList<Object>();
 		SqlUtils.appendCondition(p.getGENDER_CD(), "a.gender_cd", sql, args, QueryConditionType.EQUAL);
@@ -91,34 +98,51 @@ public class PersonIndexService implements IPersonIndexService {
 		return args;
 	}
 
-	@Override
+	/**
+	 * 删除
+	 * 
+	 * @param t
+	 */
 	public void delete(PersonIndex t) {
 		personIndexDao.deleteById(t);
-		logger.debug("Del PersonIndex:indexId=" + t.getMPI_PK());
 	}
 
-	@Override
+	/**
+	 * 根据id获取
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public PersonIndex getObject(String id) {
 		PersonIndex t = new PersonIndex();
 		t.setMPI_PK(id);
 		t = personIndexDao.findById(t);
-		logger.debug("Load PersonIndex:indexId=" + id + ",result=" + t);
 		return t;
 	}
 
-	@Override
+	/**
+	 * 分页查询
+	 * 
+	 * @param t
+	 * @param page
+	 * @return
+	 */
 	public List<PersonIndex> queryForPage(PersonIndex t, PageInfo page) {
 		String sql = " select * from mpi_person_index where 1=1 ";
 		sql = page.buildPageSql(sql);
-		logger.debug("Execute sql:[" + sql + "],params[]");
 		return personIndexDao.find(sql, new Object[] {});
 	}
-	
-	
-	@Override
+
+	/**
+	 * 分页查询
+	 * 
+	 * @param index
+	 * @param page
+	 * @return
+	 */
 	@CacheResult
 	public List<Map<String, Object>> queryForSplitPage(PersonIndex index, PageInfo page) {
-		
+
 		StringBuilder sql = new StringBuilder();
 		sql.append(
 				"select * from (select a.MPI_PK,a.MPI_PK row_id,1 row_type,a.name_cn,getCodeValue('GBT226112003',a.gender_cd) gender_cd,a.gender_dn,a.birth_date,a.id_no,a.person_tel_no,nvl(b.person_count,0) person_count, ");
@@ -128,7 +152,7 @@ public class PersonIndexService implements IPersonIndexService {
 		sql.append(" from mpi_person_index a left join ( select count(c.DOMAIN_ID) person_count,c.MPI_PK ");
 		sql.append(
 				" from mpi_index_identifier_rel c group by c.MPI_PK ) b on a.MPI_PK = b.MPI_PK where 1=1 and a.state != 1");
-		
+
 		// 添加查询条件
 		List<Object> args = buildQueryConditions(sql, index);
 		sql.append(" ) l ");
@@ -140,13 +164,17 @@ public class PersonIndexService implements IPersonIndexService {
 				sql.append(" where l.mergeStatus is not null");
 			}
 		}
-		// 添加排序条件
-		// sql.append(" order by nvl(b.person_count,0) desc ");
 
 		return querySplitData(page, sql, args);
 	}
 
-	@Override
+	/**
+	 * 分页查询
+	 * 
+	 * @param index
+	 * @param page
+	 * @return
+	 */
 	public List<Map<String, Object>> queryForSplitPage(PersonIndex index, String fromIndexId, PageInfo page) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(
@@ -158,30 +186,38 @@ public class PersonIndexService implements IPersonIndexService {
 		// 添加查询条件
 		List<Object> args = buildQueryConditions(sql, index);
 		args.add(0, fromIndexId);
-		// 添加排序条件
-		// sql.append(" order by nvl(b.person_count,0) desc ");
 
 		return querySplitData(page, sql, args);
 	}
 
+	/**
+	 * 分页查询
+	 * 
+	 * @param page
+	 * @param sql
+	 * @param args
+	 * @return
+	 */
 	private List<Map<String, Object>> querySplitData(PageInfo page, StringBuilder sql, List<Object> args) {
 		// 取得总数查询sql
 		String countSql = page.buildCountSql(sql);
 		// 查询设置分页记录的总记录数
 		page.setTotal(personIndexDao.getCount(countSql, args.toArray()));
-		logger.debug("Execute sql:" + countSql);
 		// 取得分页查询语句
 		String querySql = page.buildPageSql(sql);
-		logger.debug("Execute sql:" + querySql);
 		return personIndexDao.findForMap(querySql, args.toArray());
 	}
 
+	/**
+	 * 合并索引
+	 * 
+	 * @param retiredPk
+	 * @param survivingPk
+	 */
 	@SuppressWarnings("unchecked")
-	@Override
 	public void mergeIndex(String retiredPk, String survivingPk) {
 		// 非空验证
 		if (retiredPk.equals("") || survivingPk.equals("")) {
-			logger.debug("需要进行合并的主索引为空,无法继续进行合并");
 			throw new ValidationException("需要进行合并的主索引为空,无法继续进行合并");
 		}
 		@SuppressWarnings("rawtypes")
@@ -218,8 +254,6 @@ public class PersonIndexService implements IPersonIndexService {
 						// 原主索引居民信息原合并标识关系对象
 						IndexIdentifierRel riir = indexIdentifierRelDao.findByFieldPK(personInfo.getFIELD_PK());
 
-						// 记录订阅日志
-						bookLogDao.autoFillAdd(personInfo.getFIELD_PK());
 						// 将 被合并主索引下居民信息 解除索引关系
 						/* indexIdentifierRelDao.deleteByFieldPK(personInfo.getFIELD_PK()); */
 						// 添加解除索引log
@@ -273,8 +307,6 @@ public class PersonIndexService implements IPersonIndexService {
 								"[" + personInfo.getNAME_CN() + "]合并到主索引[" + surviving.getNAME_CN() + "]",
 								retired.getMPI_PK());
 
-						bookLogDao.autoFillAdd(personInfo.getFIELD_PK(), surviving.getMPI_PK(),
-								Constant.BOOK_LOG_TYPE_ADD);
 					}
 				}
 			}
@@ -375,12 +407,21 @@ public class PersonIndexService implements IPersonIndexService {
 		return surviving;
 	}
 
-	@Override
+	/**
+	 * 保存
+	 * 
+	 * @param t
+	 */
 	public void save(PersonIndex t) {
 		personIndexDao.add(t);
-		logger.debug("Add PersonIndex:" + t);
 	}
 
+	/**
+	 * 根据拆分索引id查询列表
+	 * 
+	 * @param splitIndex
+	 * @return
+	 */
 	public List<PersonIndex> findPersonIndexBysplitIndex(String splitIndex) {
 		List<PersonIndex> personIndexs = new ArrayList<PersonIndex>();
 		PersonIndex personIndex = new PersonIndex();
@@ -550,7 +591,11 @@ public class PersonIndexService implements IPersonIndexService {
 		personIndexDao.update(idx);
 	}
 
-	@Override
+	/**
+	 * 更新
+	 * 
+	 * @param t
+	 */
 	public void update(PersonIndex t) {
 		personIndexDao.update(t);
 	}

@@ -15,15 +15,9 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.sinosoft.mpi.cache.CacheManager;
-import com.sinosoft.mpi.model.CertCode;
-import com.sinosoft.mpi.model.EduCode;
 import com.sinosoft.mpi.model.IBaseCode;
-import com.sinosoft.mpi.model.MarriageCode;
-import com.sinosoft.mpi.model.NationCode;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
-import com.sinosoft.mpi.model.ProfessionCode;
-import com.sinosoft.mpi.model.SexCode;
 
 /**
  * 转换索引或居民 中的编码为描述
@@ -34,12 +28,6 @@ public class CodeConvertUtils {
 
 	static {
 		fieldMap = new HashMap<String, Class<? extends IBaseCode>>();
-		fieldMap.put("certType", CertCode.class);
-		fieldMap.put("eduLevelCode", EduCode.class);
-		fieldMap.put("maritalStatusCode", MarriageCode.class);
-		fieldMap.put("nationCode", NationCode.class);
-		fieldMap.put("jobCode", ProfessionCode.class);
-		fieldMap.put("sex", SexCode.class);
 	}
 
 	/**

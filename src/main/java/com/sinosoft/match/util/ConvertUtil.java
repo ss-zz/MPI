@@ -27,18 +27,15 @@ import org.apache.commons.logging.LogFactory;
 public final class ConvertUtil {
 	private static final Log log = LogFactory.getLog(ConvertUtil.class);
 
-	/**
-	 * Checkstyle rule: utility classes should not have public constructor
-	 */
 	private ConvertUtil() {
 	}
 
 	/**
-	 * Method to convert a ResourceBundle to a Map object.
+	 * 转换ResourceBundle为Map对象
 	 * 
 	 * @param rb
-	 *            a given resource bundle
-	 * @return Map a populated map
+	 *            被转换对象
+	 * @return map对象
 	 */
 	public static Map<String, String> convertBundleToMap(ResourceBundle rb) {
 		Map<String, String> map = new HashMap<String, String>();

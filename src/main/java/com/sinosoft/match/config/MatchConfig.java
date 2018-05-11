@@ -13,7 +13,7 @@ import com.sinosoft.mpi.model.MatchCfg;
 import com.sinosoft.mpi.model.MatchFieldCfg;
 
 /**
- * 匹配的配置
+ * 人员匹配的配置
  */
 public class MatchConfig {
 	private static MatchConfig config = new MatchConfig();

@@ -1,24 +1,23 @@
 ﻿### 开发环境
 
 spring:
-  datasource: ## 数据库
+   # 数据源
+  datasource:
     url: jdbc:oracle:thin:@192.168.1.254:1521:ORCL
     username: mpi
     password: embed
     driver-class-name: oracle.jdbc.driver.OracleDriver
-  data:
-    mongodb: # mongodb数据库
-      uri: mongodb://mpi:embed@192.168.1.254:27017/mpi
+  # mq
+  rabbitmq:
+    host: 192.168.1.252
+    port: 5672
+    listener:
+      auto-startup: false
+  # jpa
+  jpa:
+    show-sql: true
 
 # 服务器
 server:
   #端口
   port: 9201
-
-## mq配置
-mq:
-  host: 192.168.1.252
-  port: 5672
-  
-# Ehcache缓存
-  

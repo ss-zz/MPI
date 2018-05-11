@@ -36,31 +36,36 @@ body {
 	
 	// jquery全局异常处理
 	$.ajaxSetup({
+		cache: false,
 		error: function(jqXHR, textStatus, errorThrown){
 			var status = 0;
+			var message;
+			if(jqXHR.responseJSON && jqXHR.responseJSON.message){
+				message = jqXHR.responseJSON.message;
+			}
 			switch (jqXHR.status) {
 				case (500):
-					showAjaxErrorMsg('服务器异常');
+					showAjaxErrorMsg(message || '服务器异常');
 					break;
 				case (400):
-					showAjaxErrorMsg('参数异常');
+					showAjaxErrorMsg(message || '参数异常');
 					break;
 				case (401):
-					showAjaxErrorMsg('未授权');
+					showAjaxErrorMsg(message || '未授权');
 					break;
 				case (403):
-					showAjaxErrorMsg('无权访问');
+					showAjaxErrorMsg(message || '无权访问');
 					break;
 				case (404):
-					showAjaxErrorMsg('请求资源不存在');
+					showAjaxErrorMsg(message || '请求资源不存在');
 					break;
 				case (408):
-					showAjaxErrorMsg('请求超时');
+					showAjaxErrorMsg(message || '请求超时');
 					break;
 				case (0):
 					break;
 				default:
-					showAjaxErrorMsg('操作异常');
+					showAjaxErrorMsg(message || '操作异常');
 			}
 		},
 		complete: function(jqXHR, textStatus){
@@ -101,6 +106,10 @@ body {
 		
 		$.fn.form.defaults.iframe = false;
 		$.fn.form.defaults.ajax = true;
+		
+		$.fn.dialog.defaults.modal = true;
+		
+		$.fn.window.defaults.modal = true;
 		
 	})
 	

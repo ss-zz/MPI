@@ -12,6 +12,9 @@ import org.springframework.stereotype.Repository;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.util.IDUtil;
 
+/**
+ * 人员主索引dao
+ */
 @Repository
 public class PersonIndexDao extends IBaseDao<PersonIndex> {
 

@@ -5,21 +5,18 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.jws.WebService;
 
-import org.apache.log4j.Logger;
-
 import com.sinosoft.mpi.exception.BaseBussinessException;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.PersonInfoSimple;
-import com.sinosoft.mpi.service.IPersonInfoService;
+import com.sinosoft.mpi.service.PersonInfoService;
 
 @WebService(endpointInterface = "com.sinosoft.mpi.ws.IPersonQueryWS", serviceName = "PersonQueryWS")
 public class PersonQueryWS implements IPersonQueryWS {
-	private static Logger logger = Logger.getLogger(PersonQueryWS.class);
 
 	@Resource
-	private IPersonInfoService personInfoService;
+	private PersonInfoService personInfoService;
 
 	@Override
 	public QueryResult queryIndexByIdentifier(PersonInfoSimple simplePerson) {
@@ -31,7 +28,6 @@ public class PersonQueryWS implements IPersonQueryWS {
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());
 		} catch (Throwable e) {
-			logger.debug("查询索引信息时出现错误", e);
 			result.setSuccess(false);
 			result.setMsg("查询索引信息时出现错误");
 		}
@@ -46,11 +42,9 @@ public class PersonQueryWS implements IPersonQueryWS {
 			List<PersonInfo> list = personInfoService.queryPersonByAttributes(person);
 			result.setPersons(list.toArray(new PersonInfo[list.size()]));
 		} catch (BaseBussinessException e) {
-			logger.debug("查询结果过多,请增加条件缩小查询范围!", e);
 			result.setSuccess(false);
 			result.setMsg("查询结果过多,请增加条件缩小查询范围!");
 		} catch (Throwable e) {
-			logger.debug("根据居民信息查询居民数据时出现错误,params[PersonInfo=" + person + "]", e);
 			result.setSuccess(false);
 			result.setMsg("根据居民信息查询居民数据时出现错误,params[PersonInfo=" + person + "]");
 		}
@@ -65,7 +59,6 @@ public class PersonQueryWS implements IPersonQueryWS {
 			List<PersonInfo> list = personInfoService.queryPersonsByIndex(indexId);
 			result.setPersons(list.toArray(new PersonInfo[list.size()]));
 		} catch (Throwable e) {
-			logger.debug("根据索引信息查询居民数据时出现错误,params[indexId=" + indexId + "]", e);
 			result.setSuccess(false);
 			result.setMsg("根据索引信息查询居民数据时出现错误,params[indexId=" + indexId + "]");
 		}
@@ -80,8 +73,6 @@ public class PersonQueryWS implements IPersonQueryWS {
 			List<PersonInfo> list = personInfoService.queryPersonsByIndex(indexId, domainUniqueSign);
 			result.setPersons(list.toArray(new PersonInfo[list.size()]));
 		} catch (Throwable e) {
-			logger.debug("根据索引信息查询居民数据时出现错误,params[indexId=" + indexId + ",domainUniqueSign=" + domainUniqueSign + "]",
-					e);
 			result.setSuccess(false);
 			result.setMsg(
 					"根据索引信息查询居民数据时出现错误,params[indexId=" + indexId + ",domainUniqueSign=" + domainUniqueSign + "]");
@@ -90,7 +81,4 @@ public class PersonQueryWS implements IPersonQueryWS {
 		return result;
 	}
 
-	public void setPersonInfoService(IPersonInfoService personInfoService) {
-		this.personInfoService = personInfoService;
-	}
 }

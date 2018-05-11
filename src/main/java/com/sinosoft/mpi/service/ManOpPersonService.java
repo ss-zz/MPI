@@ -7,56 +7,75 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.dao.ManOpPersonDao;
 import com.sinosoft.mpi.model.ManOpPerson;
 import com.sinosoft.mpi.util.PageInfo;
 
-@Service("manOpPersonService")
-public class ManOpPersonService implements IManOpPersonService {
-	private Logger logger = Logger.getLogger(ManOpPersonService.class);
+/**
+ * 需要人工干预的居民服务
+ */
+@Service
+public class ManOpPersonService {
+
 	@Resource
 	private ManOpPersonDao manOpPersonDao;
 
-	@Override
+	/**
+	 * 保存
+	 */
 	public void save(ManOpPerson t) {
 		manOpPersonDao.add(t);
-		logger.debug("Add ManOpPerson:" + t);
 	}
 
-	@Override
+	/**
+	 * 更新
+	 */
 	public void update(ManOpPerson t) {
 		manOpPersonDao.update(t);
-		logger.debug("update ManOpPerson:" + t);
 	}
 
-	@Override
+	/**
+	 * 删除-根据id
+	 */
 	public void delete(ManOpPerson t) {
 		manOpPersonDao.deleteById(t);
-		logger.debug("delete ManOpPerson,manOpId=" + t.getMAN_OP_ID());
 	}
 
-	@Override
+	/**
+	 * 根据id获取
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public ManOpPerson getObject(String id) {
 		ManOpPerson t = new ManOpPerson();
 		t.setMAN_OP_ID(id);
 		t = manOpPersonDao.findById(t);
-		logger.debug("Load ManOpPerson:manOpId=" + id + ",result=" + t);
 		return t;
 	}
 
-	@Override
+	/**
+	 * 分页查询
+	 * 
+	 * @param t
+	 * @param page
+	 * @return
+	 */
 	public List<ManOpPerson> queryForPage(ManOpPerson t, PageInfo page) {
-		// XXX ben 实际应用的时候这里需要添加查询条件
 		String sql = " select * from mpi_man_op_person where 1=1 ";
 		sql = page.buildPageSql(sql);
-		logger.debug("Execute sql:" + sql);
 		return manOpPersonDao.find(sql, new Object[] {});
 	}
 
-	@Override
+	/**
+	 * 分页查询
+	 * 
+	 * @param t
+	 * @param page
+	 * @return
+	 */
 	public List<Map<String, Object>> queryForMapPage(ManOpPerson t, PageInfo page) {
 		StringBuilder sql = new StringBuilder();
 		sql.append(" select a.man_op_id,a.field_pk,a.man_op_status,a.man_op_time,b.name_CN,b.gender_cd ")
@@ -85,11 +104,9 @@ public class ManOpPersonService implements IManOpPersonService {
 		String countSql = page.buildCountSql(sql);
 		// 查询设置分页记录的总记录数
 		page.setTotal(manOpPersonDao.getCount(countSql, args.toArray()));
-		logger.debug("Execute sql:" + countSql);
 		// 取得分页查询语句
 		sql.append(" order by a.man_op_status asc, a.man_op_time desc ");
 		String querySql = page.buildPageSql(sql);
-		logger.debug("Execute sql:" + querySql);
 		return manOpPersonDao.findForMap(querySql, args.toArray());
 	}
 

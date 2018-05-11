@@ -1,33 +1,30 @@
 package com.sinosoft.mpi.web;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sinosoft.match.config.MatchConfig;
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
-import com.sinosoft.mpi.exception.BaseBussinessException;
-import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.MatchCfg;
 import com.sinosoft.mpi.model.MatchFieldCfg;
 import com.sinosoft.mpi.model.PersonPropertiesDesc;
-import com.sinosoft.mpi.service.IMatchCfgService;
+import com.sinosoft.mpi.service.MatchCfgService;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.stringcomparison.config.StringComparisionConfig;
 import com.sinosoft.stringcomparison.model.DistanceMetricType;
+
+import net.sf.json.JSONObject;
 
 /**
  * 匹配配置控制器
@@ -35,30 +32,23 @@ import com.sinosoft.stringcomparison.model.DistanceMetricType;
 @Controller
 @RequestMapping("/cfg/match.ac")
 public class MatchCfgController {
-	private Logger logger = Logger.getLogger(MatchCfgController.class);
 
 	@Resource
-	private IMatchCfgService matchCfgService;
+	private MatchCfgService matchCfgService;
 
 	/**
 	 * 取得配置列表数据
 	 */
 	@RequestMapping
-	public String list(PageInfo page, MatchCfg t, HttpServletResponse response) throws IOException {
-		List<MatchCfg> list = null;
-		try {
-			list = matchCfgService.queryForPage(t, page);
-		} catch (Throwable e) {
-			logger.error("查询匹配配置的时候出现错误", e);
-		}
-		JSONObject datas = new JSONObject();
+	@ResponseBody
+	public Map<String, Object> list(PageInfo page, MatchCfg t) {
+		Map<String, Object> datas = new HashMap<>();
+		List<MatchCfg> list = matchCfgService.queryForPage(t, page);
 		// 设置总共有多少条记录
 		datas.put(Constant.PAGE_TOTAL, page.getTotal());
 		// 设置当前页的数据
 		datas.put(Constant.PAGE_ROWS, list);
-		response.setCharacterEncoding(Constant.ENCODING_UTF8);
-		response.getWriter().print(datas.toString());
-		return null;
+		return datas;
 	}
 
 	/**
@@ -81,18 +71,13 @@ public class MatchCfgController {
 		return mv;
 	}
 
+	/**
+	 * 添加配置
+	 */
 	@RequestMapping(params = "method=add")
-	public String add(@RequestBody MatchCfg t, HttpServletResponse response) throws IOException {
-		response.setCharacterEncoding(Constant.ENCODING_UTF8);
-		try {
-			matchCfgService.save(t);
-		} catch (ValidationException e) {
-			response.getWriter().print(e.getMessage());
-		} catch (Throwable e) {
-			logger.error("添加匹配配置信息的时候出错!", e);
-			response.getWriter().print("添加匹配配置信息的时候出错!");
-		}
-		return null;
+	@ResponseBody
+	public void add(@RequestBody MatchCfg t) {
+		matchCfgService.save(t);
 	}
 
 	/**
@@ -121,17 +106,9 @@ public class MatchCfgController {
 	 * 使配置生效
 	 */
 	@RequestMapping(params = "method=effect")
-	public String effectCfg(String cfgId, HttpServletResponse response) throws IOException {
-		response.setCharacterEncoding(Constant.ENCODING_UTF8);
-		try {
-			matchCfgService.updateEffect(cfgId);
-		} catch (BaseBussinessException e) {
-			response.getWriter().print(e.getMessage());
-		} catch (Throwable e) {
-			logger.error("激活匹配配置时发生错误!", e);
-			response.getWriter().print("激活匹配配置时发生错误!");
-		}
-		return null;
+	@ResponseBody
+	public void effectCfg(String cfgId) {
+		matchCfgService.updateEffect(cfgId);
 	}
 
 	/**
@@ -157,7 +134,4 @@ public class MatchCfgController {
 		return mv;
 	}
 
-	public void setMatchCfgService(IMatchCfgService matchCfgService) {
-		this.matchCfgService = matchCfgService;
-	}
 }

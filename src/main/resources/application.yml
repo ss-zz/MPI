@@ -16,20 +16,26 @@ spring:
   # 资源文件
   resources:
     static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+  # 缓存
   cache:
     jcache:
       config:classpath:ehcache.xml
-## mq配置
-mq:
-  host: localhost
-  port: 5672
-  exchange:
-    name: mpi_exchange_index
-  queue:
-    index:
-      name: mpi_queue_index
-    result:
-      name: mpi_queue_result
+  # mq
+  rabbitmq:
+    host: localhost
+    port: 5672
+    listener:
+      auto-startup: true
+  # data
+  data:
+    jpa:
+      repositories:
+        enabled: true
+  # jpa
+  jpa:
+    generate-ddl: false
+    show-sql: false
+  
 
 # 日志
 logging:
@@ -49,6 +55,8 @@ server:
 cxf:
   path: /ws
 
+# 居民更新对索引的影响策略:
+# UNUPDATE.不更新(默认) UPDATE.来就更新 UNUPDATE_MAN.不更新,添加事件,人为干预更新 UPDATE_LEVEL.根据数据级别进行更新 UPDATE_LEVEL_NEW.根据数据字段来源级别更新
 index:
   update:
     policy: UPDATE_LEVEL_NEW

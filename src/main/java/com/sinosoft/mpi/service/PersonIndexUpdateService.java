@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -19,31 +18,38 @@ import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.MpiCombineRec;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
-import com.sinosoft.mpi.notification.event.UpdateStrategy;
+import com.sinosoft.mpi.model.UpdateStrategy;
 import com.sinosoft.mpi.util.NumberUtils;
 
-@Service("personIndexUpdateService")
-public class PersonIndexUpdateService implements IPersonIndexUpdateService {
-	private static Logger logger = Logger.getLogger(PersonIndexUpdateService.class);
+/**
+ * 人员主索引更新服务
+ */
+@Service
+public class PersonIndexUpdateService {
 
 	@Resource
-	private PersonIndexDao personIndexDao;
+	PersonIndexDao personIndexDao;
 	@Resource
-	private IdentifierDomainDao identifierDomainDao;
+	IdentifierDomainDao identifierDomainDao;
 	@Resource
 	IndexIdentifierRelDao indexIdentifierRelDao;
 	@Resource
 	MpiCombineRecDao mpiCombineRecDao;
 	@Resource
 	MpiCombineLevelDao mpiCombineLevelDao;
+	// 更新策略
 	@Value("${index.update.policy}")
-	private UpdateStrategy policy;
+	UpdateStrategy policy;
 	@Resource
-	private IDomainSrcLevelService domainSrcLevelService;
+	DomainSrcLevelService domainSrcLevelService;
+	List<Map<String, Object>> orgincollevellist = null;
 
-	private List<Map<String, Object>> orgincollevellist = null;
-
-	@Override
+	/**
+	 * 更新索引信息
+	 * 
+	 * @param person
+	 * @param indexId
+	 */
 	public void updateIndex(PersonInfo person, String indexId) {
 
 		switch (policy) {
@@ -54,7 +60,6 @@ public class PersonIndexUpdateService implements IPersonIndexUpdateService {
 			updateIndexDirect(person, indexId);
 			break;
 		case UNUPDATE_MAN:
-			// TODO 人工更新 暂无实现
 			break;
 		case UPDATE_LEVEL:
 			updateIndexByLevel(person, indexId);
@@ -71,7 +76,6 @@ public class PersonIndexUpdateService implements IPersonIndexUpdateService {
 		PersonIndex idx = person.personInfoToPersonIndex();
 		idx.setMPI_PK(mpi_pk);
 		personIndexDao.update(idx);
-		logger.debug("执行更新索引信息:PersonInfo[" + person + "],mpi_pk[" + mpi_pk + "]");
 	}
 
 	/**
@@ -81,15 +85,12 @@ public class PersonIndexUpdateService implements IPersonIndexUpdateService {
 	 * @param indexId
 	 */
 	private void updateIndexByLevel(PersonInfo person, String indexId) {
-		logger.debug("执行更新索引信息:PersonInfo[" + person + "],indexId[" + indexId + "]");
 		// 取得 索引
 		PersonIndex index = new PersonIndex();
 		index.setMPI_PK(indexId);
 		index = personIndexDao.findById(index);
-		logger.debug("更新前索引信息:PersonIndex[" + index + "]");
 		// 取得居民数据级别
 		IdentifierDomain domain = identifierDomainDao.getByPersonId(person.getFIELD_PK());
-		logger.debug("index_level[" + index.getDOMAIN_LEVEL() + "],source_level[" + domain.getDOMAIN_LEVEL() + "]");
 		int srcLevel = 0;
 		if (NumberUtils.isNumber(index.getDOMAIN_LEVEL())) {
 			srcLevel = Integer.parseInt(index.getDOMAIN_LEVEL());
@@ -104,7 +105,6 @@ public class PersonIndexUpdateService implements IPersonIndexUpdateService {
 			index.setMPI_PK(indexId);
 			index.setDOMAIN_LEVEL(domain.getDOMAIN_LEVEL());
 			personIndexDao.update(index);
-			logger.debug("更新后索引信息:PersonIndex[" + index + "]");
 		}
 	}
 
@@ -117,7 +117,6 @@ public class PersonIndexUpdateService implements IPersonIndexUpdateService {
 			// 合并信息入库（第一次入库也记录一次合并信息）
 			// 查询最新一次的合并记录
 			IndexIdentifierRel iirlatest = indexIdentifierRelDao.findByMpiPKByLatest(index.getMPI_PK());
-			logger.debug("合并的combine_no: " + iirlatest.getCOMBINE_NO());
 			IndexIdentifierRel iir = new IndexIdentifierRel();
 			iir.setCOMBINE_REC(iirlatest.getCOMBINE_NO());// 指代上一条的替换记录combine_rec
 			iir.setDOMAIN_ID(personinfo.getDOMAIN_ID());
@@ -161,11 +160,13 @@ public class PersonIndexUpdateService implements IPersonIndexUpdateService {
 		return this.orgincollevellist;
 	}
 
-	public void setPolicy(UpdateStrategy policy) {
-		this.policy = policy;
-	}
-
-	@Override
+	/**
+	 * 更新索引
+	 * 
+	 * @param personindex
+	 * @param person
+	 * @return
+	 */
 	public PersonIndex updateIndex(PersonIndex personindex, PersonInfo person) {
 
 		switch (policy) {
