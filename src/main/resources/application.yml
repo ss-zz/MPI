@@ -26,6 +26,16 @@ spring:
     port: 5672
     listener:
       auto-startup: true
+  # data
+  data:
+    jpa:
+      repositories:
+        enabled: true
+  # jpa
+  jpa:
+    generate-ddl: false
+    show-sql: false
+  
 
 # 日志
 logging:
