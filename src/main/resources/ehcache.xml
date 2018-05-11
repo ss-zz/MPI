@@ -30,7 +30,7 @@
 
   <cache alias="peopleCache" uses-template="heap-cache">
     <expiry>
-      <tti unit="seconds">5</tti>
+    	<tti unit="seconds">10</tti>
     </expiry>
   </cache>
 
