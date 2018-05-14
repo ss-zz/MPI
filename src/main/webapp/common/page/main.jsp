@@ -130,10 +130,10 @@ $(document).ready(function(){
 						onclick="addTab('tabId_biz_config','业务配置','${pageContext.request.contextPath}/config/page/biz_config.jsp');"
 						href="#">业务配置</a></li> --%>
 					<li><a
-						onclick="addTab('tabId_qi','业务查询','${pageContext.request.contextPath}/query/page/query.jsp');"
+						onclick="addTab('tabId_qi_biz','业务查询','${pageContext.request.contextPath}/biz/page/query.jsp');"
 						href="#">业务查询</a></li>
 					<li><a
-						onclick="addTab('tabId_bc','业务初筛规则管理','${pageContext.request.contextPath}/cfg/page/block.jsp');"
+						onclick="addTab('tabId_bc','业务初筛规则管理','${pageContext.request.contextPath}/biz/page/block.jsp');"
 						href="#">业务初筛规则管理</a></li>
 					<li><a
 						onclick="addTab('tabId_mc','业务匹配规则管理','${pageContext.request.contextPath}/cfg/page/match.jsp');"

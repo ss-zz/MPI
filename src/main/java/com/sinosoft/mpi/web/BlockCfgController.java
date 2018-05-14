@@ -95,7 +95,7 @@ public class BlockCfgController {
 	 */
 	@RequestMapping(params = "method=current")
 	public ModelAndView toCurrentViewPage() {
-		ModelAndView mv = new ModelAndView("/cfg/page/current_block");
+		ModelAndView mv = new ModelAndView("/biz/page/current_block");
 		mv.addObject("cfg", new BlockCfg(BlockConfig.getInstanse()));
 		return mv;
 	}

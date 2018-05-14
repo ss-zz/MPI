@@ -8,5 +8,5 @@ import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
  * 业务初筛dao
  */
 public interface MpiBizBlockCfgDao extends JpaRepository<MpiBizBlockCfg, String> {
-
+	
 }

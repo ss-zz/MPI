@@ -57,7 +57,7 @@ function reloadTable() {
 }
 
 // 查询
-function searchListTable() {   
+function searchListTable() {
 	// 查询的时候重置回第一页
 	$("#listTable").datagrid("options").pageNumber = 1; 
     
