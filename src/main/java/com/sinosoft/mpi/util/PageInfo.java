@@ -1,50 +1,37 @@
 package com.sinosoft.mpi.util;
 
-import java.io.Serializable;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 /**
  * 简单通过当前页 还有页条数，算出开始条数到结束条数
  */
-@SuppressWarnings("serial")
-public class PageInfo implements Serializable{
+public class PageInfo implements Pageable {
 
-	private int currentPage;// 从0开始
-	private int limit;
+	public static final int DEFAULT_FIRST_PAGE = 0;
+	public static final int DEFAULT_ROWS = 10;
+
 	private int page; // 前台传递来的分页参数 需要显示地几页
 	private int rows; // 前台传递来的参数 每页显示多少条
 	private int total; // 总数
 
 	public PageInfo() {
 		super();
+		this.page = DEFAULT_FIRST_PAGE;
+		this.rows = DEFAULT_ROWS;
 	}
 
-	public PageInfo(int currentPage, int limit) {
-		this.currentPage = currentPage;
-		this.limit = limit;
+	public PageInfo(int page, int rows) {
+		this.page = page;
+		this.rows = rows;
 	}
 
 	public int getStartRowNum() {
-		return currentPage * limit + 1;
+		return page * rows + 1;
 	}
 
 	public int getEndRowNum() {
-		return currentPage * limit + limit;
-	}
-
-	public int getCurrentPage() {
-		return currentPage;
-	}
-
-	public void setCurrentPage(int currentPage) {
-		this.currentPage = currentPage;
-	}
-
-	public int getLimit() {
-		return limit;
-	}
-
-	public void setLimit(int limit) {
-		this.limit = limit;
+		return page * rows + rows;
 	}
 
 	public int getPage() {
@@ -52,8 +39,7 @@ public class PageInfo implements Serializable{
 	}
 
 	public void setPage(int page) {
-		this.page = page;
-		this.currentPage = (page - 1) < 0 ? 0 : (page - 1);
+		this.page = page <= DEFAULT_FIRST_PAGE ? DEFAULT_FIRST_PAGE : page;
 	}
 
 	public int getRows() {
@@ -62,7 +48,6 @@ public class PageInfo implements Serializable{
 
 	public void setRows(int rows) {
 		this.rows = rows;
-		this.limit = rows;
 	}
 
 	public int getTotal() {
@@ -89,7 +74,7 @@ public class PageInfo implements Serializable{
 		} else {
 			lim = end - start + 1;
 		}
-		int curr = start / lim - (lim == 1 ? 1 : 0);
+		int curr = start / lim - (lim == 1 ? 1 : DEFAULT_FIRST_PAGE);
 		return new PageInfo(curr, lim);
 	}
 
@@ -117,5 +102,49 @@ public class PageInfo implements Serializable{
 		StringBuilder sb = new StringBuilder();
 		sb.append(" select count(1) from ( ").append(sql).append(" ) ");
 		return sb.toString();
+	}
+
+	@Override
+	public int getPageNumber() {
+		return this.page;
+	}
+
+	@Override
+	public int getPageSize() {
+		return this.rows;
+	}
+
+	@Override
+	public int getOffset() {
+		return this.page * this.rows;
+	}
+
+	@Override
+	public Sort getSort() {
+		return null;
+	}
+
+	@Override
+	public Pageable next() {
+		return new PageInfo(page + 1, rows);
+	}
+
+	@Override
+	public Pageable previousOrFirst() {
+		if (page <= DEFAULT_FIRST_PAGE) {
+			return new PageInfo(DEFAULT_FIRST_PAGE, rows);
+		} else {
+			return new PageInfo(page - 1, rows);
+		}
+	}
+
+	@Override
+	public Pageable first() {
+		return new PageInfo(DEFAULT_FIRST_PAGE, rows);
+	}
+
+	@Override
+	public boolean hasPrevious() {
+		return page <= DEFAULT_FIRST_PAGE ? false : true;
 	}
 }

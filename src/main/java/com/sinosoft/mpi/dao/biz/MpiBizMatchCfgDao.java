@@ -7,14 +7,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
+import com.sinosoft.mpi.model.biz.MpiBizMatchCfg;
 
 /**
  * 业务初筛配置dao
  */
-
-public interface MpiBizBlockCfgDao
-		extends JpaRepository<MpiBizBlockCfg, String>, JpaSpecificationExecutor<MpiBizBlockCfg> {
+public interface MpiBizMatchCfgDao
+		extends JpaRepository<MpiBizMatchCfg, String>, JpaSpecificationExecutor<MpiBizMatchCfg> {
 
 	/**
 	 * 查询所有生效的数据
@@ -22,8 +21,8 @@ public interface MpiBizBlockCfgDao
 	 * @param state
 	 * @return
 	 */
-	@Query("select cfg from  MpiBizBlockCfg cfg where cfg.state = '1' ")
-	List<MpiBizBlockCfg> findAllEffect();
+	@Query("select cfg from  MpiBizMatchCfg cfg where cfg.state = '1' ")
+	List<MpiBizMatchCfg> findAllEffect();
 
 	/**
 	 * 使所有配置失效
@@ -34,7 +33,7 @@ public interface MpiBizBlockCfgDao
 	 *            id
 	 */
 	@Modifying
-	@Query(value = "update MpiBizBlockCfg cfg set cfg.state = '0' ")
+	@Query(value = "update MpiBizMatchCfg cfg set cfg.state = '0' ")
 	void uneffectAll();
 
 	/**
@@ -46,7 +45,7 @@ public interface MpiBizBlockCfgDao
 	 *            id
 	 */
 	@Modifying
-	@Query(value = "update MpiBizBlockCfg cfg set cfg.state = '0' where  cfg.blockId = ?1  ")
+	@Query(value = "update MpiBizMatchCfg cfg set cfg.state = '0' where  cfg.configId = ?1  ")
 	void effect(String id);
 
 }

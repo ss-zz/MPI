@@ -5,15 +5,19 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.match.config.MatchConfig;
-import com.sinosoft.mpi.dao.MatchCfgDao;
-import com.sinosoft.mpi.dao.MatchFieldCfgDao;
-import com.sinosoft.mpi.model.MatchCfg;
-import com.sinosoft.mpi.model.MatchFieldCfg;
-import com.sinosoft.mpi.util.DateUtil;
+import com.sinosoft.bizmatch.config.BizMatchConfig;
+import com.sinosoft.mpi.dao.biz.MpiBizMatchCfgDao;
+import com.sinosoft.mpi.dao.biz.MpiBizMatchFieldCfgDao;
+import com.sinosoft.mpi.model.biz.MpiBizMatchCfg;
+import com.sinosoft.mpi.model.biz.MpiBizMatchFieldCfg;
 import com.sinosoft.mpi.util.PageInfo;
 
 /**
@@ -23,24 +27,24 @@ import com.sinosoft.mpi.util.PageInfo;
 public class BizMatchCfgService {
 
 	@Resource
-	private MatchCfgDao matchCfgDao;
+	MpiBizMatchCfgDao mpiBizMatchCfgDao;
 	@Resource
-	private MatchFieldCfgDao matchFieldCfgDao;
+	MpiBizMatchFieldCfgDao mpiBizMatchFieldCfgDao;
 
 	/**
 	 * 保存
 	 */
-	public void save(MatchCfg t) {
+	public void save(MpiBizMatchCfg t) {
 		// 设置必要信息
-		t.setCreateDate(DateUtil.getTimeNow(new Date()));
+		t.setCreateDate(new Date());
 		// 默认无效
 		t.setState("0");
 		// 保存
-		matchCfgDao.add(t);
+		mpiBizMatchCfgDao.save(t);
 		// 保存字段配置
-		for (MatchFieldCfg mfc : t.getMatchFieldCfgs()) {
+		for (MpiBizMatchFieldCfg mfc : t.getMatchFieldCfgs()) {
 			mfc.setConfigId(t.getConfigId());
-			matchFieldCfgDao.add(mfc);
+			mpiBizMatchFieldCfgDao.save(mfc);
 		}
 	}
 
@@ -49,15 +53,22 @@ public class BizMatchCfgService {
 	 * 
 	 * @param t
 	 */
-	public void update(MatchCfg t) {
-		matchCfgDao.update(t);
+	public MpiBizMatchCfg update(MpiBizMatchCfg t) {
+		return mpiBizMatchCfgDao.save(t);
 	}
 
 	/**
 	 * 删除
 	 */
-	public void delete(MatchCfg t) {
-		matchCfgDao.deleteById(t);
+	public void delete(MpiBizMatchCfg t) {
+		mpiBizMatchCfgDao.delete(t);
+	}
+
+	/**
+	 * 删除
+	 */
+	public void deleteById(String id) {
+		mpiBizMatchCfgDao.delete(id);
 	}
 
 	/**
@@ -66,13 +77,11 @@ public class BizMatchCfgService {
 	 * @param id
 	 * @return
 	 */
-	public MatchCfg getObject(String id) {
-		MatchCfg t = new MatchCfg();
-		t.setConfigId(id);
-		t = matchCfgDao.findById(t);
+	public MpiBizMatchCfg getObject(String id) {
+		MpiBizMatchCfg t = mpiBizMatchCfgDao.getOne(id);
 		if (t != null) {
 			// 取得 字段匹配详情
-			List<MatchFieldCfg> list = queryFieldCfg(id);
+			List<MpiBizMatchFieldCfg> list = queryFieldCfg(id);
 			t.setMatchFieldCfgs(list);
 		}
 		return t;
@@ -84,10 +93,8 @@ public class BizMatchCfgService {
 	 * @param configId
 	 *            匹配配置id
 	 */
-	private List<MatchFieldCfg> queryFieldCfg(String configId) {
-		String sql = " select * from mpi_match_field_cfg where config_id = ? ";
-		List<MatchFieldCfg> list = matchFieldCfgDao.find(sql, new Object[] { configId });
-		return list;
+	private List<MpiBizMatchFieldCfg> queryFieldCfg(String configId) {
+		return mpiBizMatchFieldCfgDao.findByConfigId(configId);
 	}
 
 	/**
@@ -97,36 +104,42 @@ public class BizMatchCfgService {
 	 * @param page
 	 * @return
 	 */
-	public List<MatchCfg> queryForPage(MatchCfg t, PageInfo page) {
-		String sql = " select * from mpi_match_cfg where 1=1 ";
-		String countSql = page.buildCountSql(sql);
-		page.setTotal(matchCfgDao.getCount(countSql, new Object[] {}));
-		String querySql = page.buildPageSql(sql);
-		return matchCfgDao.find(querySql, new Object[] {});
+	public List<MpiBizMatchCfg> queryForPage(final MpiBizMatchCfg t, PageInfo page) {
+		return mpiBizMatchCfgDao.findAll(new Specification<MpiBizMatchCfg>() {
+			@Override
+			public Predicate toPredicate(Root<MpiBizMatchCfg> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				if (t != null) {
+					return cb.and(cb.equal(root.get("state"), t.getState()));
+				}
+				return null;
+			}
+		}, page).getContent();
 	}
 
 	/**
 	 * 使配置生效
 	 * 
 	 * @param cfgId
+	 *            配置id
 	 */
 	public void updateEffect(String cfgId) {
-		// 使id配置 生效
-		matchCfgDao.effect(cfgId);
-		MatchCfg cfg = getObject(cfgId);
+		// 使所有失效
+		mpiBizMatchCfgDao.uneffectAll();
+		// 使目标生效
+		mpiBizMatchCfgDao.effect(cfgId);
+		MpiBizMatchCfg cfg = getObject(cfgId);
 		if (cfg != null) {
 			// 重新载入配置文件
-			MatchConfig.getInstanse().reloadCfg(cfg);
+			BizMatchConfig.getInstanse().reloadCfg(cfg);
 		}
 	}
 
 	/**
 	 * 查询生效的配置
 	 */
-	public MatchCfg queryEffectCfg() {
-		String sql = " select * from mpi_match_cfg where state = '1' ";
-		List<MatchCfg> list = matchCfgDao.find(sql);
-		MatchCfg result = list != null && list.size() > 0 ? list.get(0) : null;
+	public MpiBizMatchCfg queryEffectCfg() {
+		List<MpiBizMatchCfg> list = mpiBizMatchCfgDao.findAllEffect();
+		MpiBizMatchCfg result = list.size() > 0 ? list.get(0) : null;
 		if (result != null) {
 			result.setMatchFieldCfgs(queryFieldCfg(result.getConfigId()));
 		}
@@ -138,10 +151,10 @@ public class BizMatchCfgService {
 	 */
 	@PostConstruct
 	public void initMatchConfig() {
-		MatchCfg cfg = queryEffectCfg();
+		MpiBizMatchCfg cfg = queryEffectCfg();
 		if (cfg != null) {
 			// 重新载入配置文件
-			MatchConfig.getInstanse().reloadCfg(cfg);
+			BizMatchConfig.getInstanse().reloadCfg(cfg);
 		}
 	}
 }

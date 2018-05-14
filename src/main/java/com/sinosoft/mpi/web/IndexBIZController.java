@@ -43,7 +43,7 @@ public class IndexBIZController {
 	 */
 	@RequestMapping("/query")
 	@ResponseBody
-	public Map<String, Object> listIndex(PageInfo page, MpiBizIndex bizIndex) {
+	public Map<String, Object> listIndex(PageInfo page,MpiBizIndex  bizIndex) {
 		Map<String, Object> datas = new HashMap<>();
 		return datas;
 	}

@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Resource;
-
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.block.BlockException;
@@ -18,9 +17,9 @@ import com.sinosoft.block.fun.IBlockFuntion;
 import com.sinosoft.block.model.BlockField;
 import com.sinosoft.block.model.BlockRound;
 import com.sinosoft.match.model.Record;
-import com.sinosoft.mpi.dao.biz.BizIndexDao;
-import com.sinosoft.mpi.model.biz.BizIndex;
-import com.sinosoft.mpi.model.biz.BizInfo;
+import com.sinosoft.mpi.model.biz.MpiBizIndex;
+import com.sinosoft.mpi.model.biz.MpiBizInfo;
+import com.sinosoft.mpi.service.biz.BizIndexService;
 
 /**
  * 业务初筛服务
@@ -28,8 +27,8 @@ import com.sinosoft.mpi.model.biz.BizInfo;
 @Service
 public class BizBlockService {
 
-	@Resource
-	private BizIndexDao bizIndexDao;
+	@Autowired
+	BizIndexService bizIndexService;
 
 	/**
 	 * 获取初筛匹配的业务信息
@@ -38,8 +37,8 @@ public class BizBlockService {
 	 *            业务信息
 	 * @return 初筛结果集
 	 */
-	public List<Record<BizIndex>> findCandidates(Record<BizInfo> record) {
-		List<Record<BizIndex>> result = new ArrayList<Record<BizIndex>>();
+	public List<Record<MpiBizIndex>> findCandidates(Record<MpiBizInfo> record) {
+		List<Record<MpiBizIndex>> result = new ArrayList<Record<MpiBizIndex>>();
 		List<BlockRound> rounds = BlockConfig.getInstanse().getBlockRounds();
 		List<Object> args = new ArrayList<Object>();
 
@@ -93,9 +92,9 @@ public class BizBlockService {
 		sb.append(
 				" order by (select count(b.COMBINE_NO) from mpi_index_identifier_rel b where b.mpi_pk = a.mpi_pk ) desc ");
 		if (k != rounds.size()) {
-			List<BizIndex> indexes = bizIndexDao.find(sb.toString(), args.toArray());
-			for (BizIndex index : indexes) {
-				Record<BizIndex> indexRecord = new Record<BizIndex>(index);
+			List<MpiBizIndex> indexes = bizIndexService.find(sb.toString(), args.toArray());
+			for (MpiBizIndex index : indexes) {
+				Record<MpiBizIndex> indexRecord = new Record<MpiBizIndex>(index);
 				indexRecord.setRecordId(index.getId());// 主键标志
 				result.add(indexRecord);
 			}
@@ -113,7 +112,7 @@ public class BizBlockService {
 	 *            字段配置
 	 * @return 指定字段的值
 	 */
-	private Object foundArg(Record<BizInfo> record, BlockField field) {
+	private Object foundArg(Record<MpiBizInfo> record, BlockField field) {
 		Object result = null;
 		if (field.getFunName() == null || "".equals(field.getFunName().trim())) {
 			result = record.getAsString(field.getField());

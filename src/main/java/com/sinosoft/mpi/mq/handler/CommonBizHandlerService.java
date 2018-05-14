@@ -12,11 +12,10 @@ import com.sinosoft.bizmatch.service.BizMatchService;
 import com.sinosoft.match.model.Record;
 import com.sinosoft.match.model.RecordPairBiz;
 import com.sinosoft.mpi.context.Constant;
-import com.sinosoft.mpi.model.biz.BizIndex;
-import com.sinosoft.mpi.model.biz.BizInfo;
+import com.sinosoft.mpi.model.biz.MpiBizIndex;
+import com.sinosoft.mpi.model.biz.MpiBizInfo;
 import com.sinosoft.mpi.service.biz.BizIdxLogService;
 import com.sinosoft.mpi.service.biz.BizIndexService;
-import com.sinosoft.mpi.service.biz.BizIndexUpdateService;
 import com.sinosoft.mpi.util.NumberUtils;
 
 /**
@@ -33,8 +32,6 @@ public class CommonBizHandlerService {
 	BizBlockService bizBlockService;
 	@Resource
 	BizMatchService bizMatchServcie;
-	@Resource
-	BizIndexUpdateService bizIndexUpdateService;
 
 	/**
 	 * 保存业务信息
@@ -47,10 +44,10 @@ public class CommonBizHandlerService {
 	 *            主索引id
 	 * @return
 	 */
-	public String saveBizInfo(BizInfo bizInfo, String patientId, String mpiPk) {
-		Record<BizInfo> bizRecord = new Record<BizInfo>(bizInfo);
+	public String saveBizInfo(MpiBizInfo bizInfo, String patientId, String mpiPk) {
+		Record<MpiBizInfo> bizRecord = new Record<MpiBizInfo>(bizInfo);
 		bizRecord.setRecordId(bizInfo.getBizId());
-		List<Record<BizIndex>> records = bizBlockService.findCandidates(bizRecord);
+		List<Record<MpiBizIndex>> records = bizBlockService.findCandidates(bizRecord);
 		// 找出匹配情况。
 		List<RecordPairBiz> pairs = bizMatchServcie.match(bizRecord, records);
 
@@ -58,25 +55,27 @@ public class CommonBizHandlerService {
 		// 没有初步匹配者，直接添加索引。
 		if (records.size() == 0 || pairs.size() == 0) {
 			// 主索引信息入库
-			BizIndex index = addBizIndex(bizInfo);
+			MpiBizIndex index = addBizIndex(bizInfo);
 			return index.getId();
 		} else {
 			// 如果信息匹配结果，则使用相同次id
 			pair = bizMatchServcie.matchedPair(pairs);
 			if (pair != null) {
-				BizIndex bizIndex = pair.getRightRecord().getObject();
+				MpiBizIndex bizIndex = pair.getRightRecord().getObject();
+				Double weight = pair.getWeight();
 				// 添加索引操作日志
 				bizIdxLogService.saveIndexLog(bizInfo.getBizId(), bizIndex.getId(), bizInfo.getSystemId(),
-						Constant.IDX_LOG_TYPE_MATCH, Constant.IDX_LOG_STYLE_AUTO_MERGE,
-						"[" + bizInfo.getBizId() + "]合并到主索引[" + pair.getRightRecord().getObject().getBizId()
-								+ "],系统匹配度:" + NumberUtils.toPercentStr(pair.getWeight()));
+						Constant.IDX_LOG_TYPE_MATCH,
+						"[" + bizInfo.getBizId() + "]匹配到业务[" + pair.getRightRecord().getObject().getBizId() + "],系统匹配度:"
+								+ NumberUtils.toPercentStr(weight),
+						weight);
 				// 主索引信息入库
 				bizInfo.setBizSerialId(pair.getRightRecord().getObject().getBizSerialId());
-				BizIndex index = addBizIndex(bizInfo);
+				MpiBizIndex index = addBizIndex(bizInfo);
 				return index.getId();
 			} else {
 				// 主索引信息入库
-				BizIndex index = addBizIndex(bizInfo);
+				MpiBizIndex index = addBizIndex(bizInfo);
 				return index.getId();
 			}
 		}
@@ -89,15 +88,15 @@ public class CommonBizHandlerService {
 	 *            业务信息
 	 * @return 业务主索引信息
 	 */
-	private BizIndex addBizIndex(BizInfo bizInfo) {
-		BizIndex bizIndex = bizInfo.toIndex();
+	private MpiBizIndex addBizIndex(MpiBizInfo bizInfo) {
+		MpiBizIndex bizIndex = bizInfo.toIndex();
 		if (bizIndex.getBizSerialId() == null) {
 			bizIndex.setBizSerialId(UUID.randomUUID().toString());
 		}
 		bizIndexService.save(bizIndex);
 		// 添加索引操作日志
 		bizIdxLogService.saveIndexLog(bizInfo.getBizId(), bizIndex.getId(), bizInfo.getSystemId(),
-				Constant.IDX_LOG_TYPE_MATCH, Constant.IDX_LOG_STYLE_AUTO_NEW, "新建业务主索引:[" + bizIndex.getId() + "]");
+				Constant.IDX_LOG_TYPE_MATCH, "新建业务主索引:[" + bizIndex.getId() + "]", null);
 		return bizIndex;
 	}
 

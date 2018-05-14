@@ -7,18 +7,21 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
-import org.apache.log4j.Logger;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.block.config.BlockConfig;
+import com.sinosoft.bizblock.config.BizBlockConfig;
 import com.sinosoft.mpi.cache.CacheManager;
-import com.sinosoft.mpi.dao.BlockCfgDao;
-import com.sinosoft.mpi.dao.BlockGroupDao;
-import com.sinosoft.mpi.model.BlockCfg;
-import com.sinosoft.mpi.model.BlockGroup;
+import com.sinosoft.mpi.dao.biz.MpiBizBlockCfgDao;
+import com.sinosoft.mpi.dao.biz.MpiBizBlockGroupDao;
 import com.sinosoft.mpi.model.PersonPropertiesDesc;
-import com.sinosoft.mpi.util.DateUtil;
+import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
+import com.sinosoft.mpi.model.biz.MpiBizBlockGroup;
 import com.sinosoft.mpi.util.PageInfo;
 
 /**
@@ -27,24 +30,21 @@ import com.sinosoft.mpi.util.PageInfo;
 @Service
 public class BizBlockCfgService {
 
-	private Logger logger = Logger.getLogger(BizBlockCfgService.class);
-
 	@Resource
-	private BlockCfgDao blockCfgDao;
+	MpiBizBlockCfgDao mpiBizBlockCfgDao;
 	@Resource
-	private BlockGroupDao blockGroupDao;
+	MpiBizBlockGroupDao mpiBizBlockGroupDao;
 
 	/**
 	 * 保存配置信息
 	 */
-	public void save(BlockCfg t) {
-		t.setCreateDate(DateUtil.getTimeNow(new Date()));
+	public void save(MpiBizBlockCfg t) {
+		t.setCreateDate(new Date());
 		t.setState("0");
-		blockCfgDao.add(t);
+		mpiBizBlockCfgDao.save(t);
 		for (Integer key : t.getGroups().keySet()) {
-			saveBlockGroups(t.getGroups().get(key), t.getBolckId(), key);
+			saveBlockGroups(t.getGroups().get(key), t.getBlockId(), key);
 		}
-		logger.debug("Add BlockCfg:" + t);
 	}
 
 	/**
@@ -57,14 +57,14 @@ public class BizBlockCfgService {
 	 * @param groupSign
 	 *            组唯一标识
 	 */
-	private void saveBlockGroups(List<BlockGroup> list, String bolckId, Integer groupSign) {
-		for (BlockGroup t : list) {
+	private void saveBlockGroups(List<MpiBizBlockGroup> list, String bolckId, Integer groupSign) {
+		for (MpiBizBlockGroup t : list) {
 			PersonPropertiesDesc ppd = CacheManager.get(PersonPropertiesDesc.class, t.getPropertyName());
 			t.setDbField(ppd.getColumn());
 			t.setPropertyCnName(ppd.getPropertyDesc());
 			t.setBolckId(bolckId);
 			t.setGroupSign(groupSign);
-			blockGroupDao.add(t);
+			mpiBizBlockGroupDao.save(t);
 		}
 	}
 
@@ -74,8 +74,8 @@ public class BizBlockCfgService {
 	 * @param t
 	 *            数据对象
 	 */
-	public void update(BlockCfg t) {
-		blockCfgDao.update(t);
+	public MpiBizBlockCfg update(MpiBizBlockCfg t) {
+		return mpiBizBlockCfgDao.save(t);
 	}
 
 	/**
@@ -83,8 +83,17 @@ public class BizBlockCfgService {
 	 * 
 	 * @param t
 	 */
-	public void delete(BlockCfg t) {
-		blockCfgDao.deleteById(t);
+	public void delete(MpiBizBlockCfg t) {
+		mpiBizBlockCfgDao.delete(t);
+	}
+
+	/**
+	 * 删除
+	 * 
+	 * @param id
+	 */
+	public void deleteById(String id) {
+		mpiBizBlockCfgDao.delete(id);
 	}
 
 	/**
@@ -93,10 +102,8 @@ public class BizBlockCfgService {
 	 * @param id
 	 * @return
 	 */
-	public BlockCfg getObject(String id) {
-		BlockCfg t = new BlockCfg();
-		t.setBolckId(id);
-		t = blockCfgDao.findById(t);
+	public MpiBizBlockCfg getObject(String id) {
+		MpiBizBlockCfg t = mpiBizBlockCfgDao.findOne(id);
 		if (t != null) {
 			t.setGroups(queryFieldCfg(t));
 		}
@@ -110,12 +117,16 @@ public class BizBlockCfgService {
 	 * @param page
 	 * @return
 	 */
-	public List<BlockCfg> queryForPage(BlockCfg t, PageInfo page) {
-		String sql = " select * from MPI_BLOCK_CFG where 1=1 ";
-		String countSql = page.buildCountSql(sql);
-		page.setTotal(blockCfgDao.getCount(countSql, new Object[] {}));
-		String querySql = page.buildPageSql(sql);
-		return blockCfgDao.find(querySql, new Object[] {});
+	public List<MpiBizBlockCfg> queryForPage(final MpiBizBlockCfg t, PageInfo page) {
+		return mpiBizBlockCfgDao.findAll(new Specification<MpiBizBlockCfg>() {
+			@Override
+			public Predicate toPredicate(Root<MpiBizBlockCfg> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				if (t != null) {
+					return cb.and(cb.equal(root.get("state"), t.getState()));
+				}
+				return null;
+			}
+		}, page).getContent();
 	}
 
 	/**
@@ -125,25 +136,23 @@ public class BizBlockCfgService {
 	 *            配置id
 	 */
 	public void updateEffect(String cfgId) {
-		// 使id配置 生效
-		blockCfgDao.effect(cfgId);
-		BlockCfg cfg = getObject(cfgId);
+		// 使所有失效
+		mpiBizBlockCfgDao.uneffectAll();
+		// 使目标生效
+		mpiBizBlockCfgDao.effect(cfgId);
+		MpiBizBlockCfg cfg = getObject(cfgId);
 		if (cfg != null) {
 			// 重新载入配置文件
-			BlockConfig.getInstanse().reloadCfg(cfg);
+			BizBlockConfig.getInstanse().reloadCfg(cfg);
 		}
 	}
 
 	/**
 	 * 查询生效的配置
 	 */
-	public BlockCfg queryEffectCfg() {
-		String sql = " select * from MPI_BLOCK_CFG where state = '1' ";
-		BlockCfg result = null;
-		List<BlockCfg> list = blockCfgDao.find(sql);
-		if (list != null && !list.isEmpty()) {
-			result = list.get(0);
-		}
+	public MpiBizBlockCfg queryEffectCfg() {
+		List<MpiBizBlockCfg> list = mpiBizBlockCfgDao.findAllEffect();
+		MpiBizBlockCfg result = list.size() > 0 ? list.get(0) : null;
 		if (result != null) {
 			result.setGroups(queryFieldCfg(result));
 		}
@@ -152,14 +161,14 @@ public class BizBlockCfgService {
 
 	/**
 	 * 查询字段配置
+	 * 
 	 * @param cfg
 	 * @return
 	 */
-	private Map<Integer, List<BlockGroup>> queryFieldCfg(BlockCfg cfg) {
-		Map<Integer, List<BlockGroup>> result = new HashMap<Integer, List<BlockGroup>>(cfg.getGroupCount());
-		String sql = "select * from mpi_block_group where bolck_id=? and group_sign=?";
+	private Map<Integer, List<MpiBizBlockGroup>> queryFieldCfg(MpiBizBlockCfg cfg) {
+		Map<Integer, List<MpiBizBlockGroup>> result = new HashMap<Integer, List<MpiBizBlockGroup>>(cfg.getGroupCount());
 		for (int i = 0; i < cfg.getGroupCount(); i++) {
-			result.put(Integer.valueOf(i), blockGroupDao.find(sql, new Object[] { cfg.getBolckId(), i }));
+			result.put(i, mpiBizBlockGroupDao.findByBolckIdAndGroupSign(cfg.getBlockId(), i));
 		}
 		return result;
 	}
@@ -169,10 +178,10 @@ public class BizBlockCfgService {
 	 */
 	@PostConstruct
 	public void initMatchConfig() {
-		BlockCfg cfg = queryEffectCfg();
+		MpiBizBlockCfg cfg = queryEffectCfg();
 		if (cfg != null) {
 			// 重新载入配置文件
-			BlockConfig.getInstanse().reloadCfg(cfg);
+			BizBlockConfig.getInstanse().reloadCfg(cfg);
 		}
 	}
 }
