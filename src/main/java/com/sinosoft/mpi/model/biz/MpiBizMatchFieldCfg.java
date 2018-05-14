@@ -18,7 +18,7 @@ public class MpiBizMatchFieldCfg implements Serializable {
 	 * id
 	 */
 	@Id
-	@Column(name = "id", nullable = false)
+	@Column
 	@GeneratedValue
 	private String fieldCfgId;
 

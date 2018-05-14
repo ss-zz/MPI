@@ -21,7 +21,7 @@ public interface MpiBizBlockCfgDao
 	 * @param state
 	 * @return
 	 */
-	@Query("select * from  MpiBizBlockCfg cfg where cfg.state = '1' ")
+	@Query("select cfg from  MpiBizBlockCfg cfg where cfg.state = '1' ")
 	List<MpiBizBlockCfg> findAllEffect();
 
 	/**

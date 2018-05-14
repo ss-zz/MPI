@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.sinosoft.bizmatch.config.BizMatchConfig;
 import com.sinosoft.match.model.MatchField;
@@ -22,9 +23,8 @@ public class MpiBizMatchCfg implements Serializable {
 	 * id
 	 */
 	@Id
-	@Column(name = "id", nullable = false)
+	@Column
 	@GeneratedValue
-	/* 配置主键 配置主键 */
 	private String configId;
 
 	/* 配置描述 配置描述 */
@@ -43,6 +43,7 @@ public class MpiBizMatchCfg implements Serializable {
 	private String state;
 
 	/* 字段匹配信息 */
+	@Transient
 	private List<MpiBizMatchFieldCfg> matchFieldCfgs;
 
 	public MpiBizMatchCfg() {

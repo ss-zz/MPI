@@ -14,9 +14,11 @@ public interface MpiBizIdxLogDao extends JpaRepository<MpiBizIdxLog, String>, Jp
 
 	/**
 	 * 根据人员查询操作日志列表
-	 * @param personId 操作人员id
+	 * 
+	 * @param blUserId
+	 *            操作人员id
 	 * @return
 	 */
-	List<MpiBizIdxLog> findByOpUserId(String opUserId);
+	List<MpiBizIdxLog> findByBlUserId(String blUserId);
 
 }

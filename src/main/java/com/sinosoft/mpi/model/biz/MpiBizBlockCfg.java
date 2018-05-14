@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.sinosoft.bizblock.config.BizBlockConfig;
 import com.sinosoft.block.model.BlockField;
@@ -25,7 +26,7 @@ public class MpiBizBlockCfg implements Serializable {
 	 * id
 	 */
 	@Id
-	@Column(name = "id", nullable = false)
+	@Column
 	@GeneratedValue
 	private String blockId;
 
@@ -51,6 +52,7 @@ public class MpiBizBlockCfg implements Serializable {
 	private String state;
 
 	/* 字段匹配信息 */
+	@Transient
 	private Map<Integer, List<MpiBizBlockGroup>> groups;
 
 	public MpiBizBlockCfg() {

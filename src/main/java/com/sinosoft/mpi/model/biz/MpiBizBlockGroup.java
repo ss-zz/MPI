@@ -20,7 +20,7 @@ public class MpiBizBlockGroup implements Serializable {
 	 * id
 	 */
 	@Id
-	@Column(name = "id", nullable = false)
+	@Column
 	@GeneratedValue
 	/* 分组主键(GROUP_ID) 分组主键 */
 	private String groupId;

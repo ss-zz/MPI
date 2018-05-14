@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.dao.biz.MpiBizIdxLogDao;
 import com.sinosoft.mpi.model.biz.MpiBizIdxLog;
-import com.sinosoft.mpi.util.DateUtil;
 
 /**
  * 业务主索引日志服务
@@ -55,7 +54,7 @@ public class BizIdxLogService {
 	 * @return
 	 */
 	public List<MpiBizIdxLog> queryOpLogByPersonId(String personId) {
-		return bizIdxLogDao.findByOpUserId(personId);
+		return bizIdxLogDao.findByBlUserId(personId);
 	}
 
 	/**
@@ -79,29 +78,28 @@ public class BizIdxLogService {
 	/**
 	 * 新增主索引操作日志
 	 * 
-	 * @param person
-	 *            居民id
-	 * @param index
-	 *            索引id
+	 * @param srcBizId
+	 *            原始业务id
+	 * @param bizId
+	 *            新业务id
 	 * @param domainId
 	 *            域id
 	 * @param opType
 	 *            操作类型
-	 * @param opStyle
-	 *            操作方式
 	 * @param desc
 	 *            操作描述
+	 * @param weight
+	 *            匹配度
 	 */
-	public void saveIndexLog(String person, String index, String domainId, String opType, String opStyle, String desc) {
+	public void saveIndexLog(String srcBizId, String bizId, String domainId, String opType, String desc,
+			Double weight) {
 		MpiBizIdxLog result = new MpiBizIdxLog();
-		result.setOpType(opType);
-		result.setOpStyle(opStyle);
-		result.setOpTime(DateUtil.getTimeNow(new Date()));
-		result.setOpUserId("0");
-		result.setOpDesc(desc);
-		result.setInfoSour(domainId);
-		result.setMpipk(index);
-		result.setFieldpk(person);
+		result.setBlType(opType);
+		result.setBlTime(new Date());
+		result.setBlDesc(desc);
+		result.setBlInfoSour(domainId);
+		result.setBlBizId(bizId);
+		result.setBlMatched(weight == null ? null : String.valueOf(weight));
 		// 自动标志
 		save(result);
 	}
