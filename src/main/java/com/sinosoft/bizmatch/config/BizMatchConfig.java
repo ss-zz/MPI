@@ -9,8 +9,8 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import com.sinosoft.match.model.MatchField;
-import com.sinosoft.mpi.model.MatchCfg;
-import com.sinosoft.mpi.model.MatchFieldCfg;
+import com.sinosoft.mpi.model.biz.MpiBizMatchCfg;
+import com.sinosoft.mpi.model.biz.MpiBizMatchFieldCfg;
 
 /**
  * 人员匹配的配置
@@ -73,11 +73,11 @@ public class BizMatchConfig {
 		return matchFields;
 	}
 
-	public void reloadCfg(MatchCfg cfg) {
+	public void reloadCfg(MpiBizMatchCfg cfg) {
 		matchFields.clear();
 		this.agreementWeightThreshold = Float.parseFloat(cfg.getAgreeThreshold());
 		this.matchWeightThreshold = Float.parseFloat(cfg.getMatchThreshold());
-		for (MatchFieldCfg mfc : cfg.getMatchFieldCfgs()) {
+		for (MpiBizMatchFieldCfg mfc : cfg.getMatchFieldCfgs()) {
 			matchFields.add(mfc.toMatchField());
 		}
 	}

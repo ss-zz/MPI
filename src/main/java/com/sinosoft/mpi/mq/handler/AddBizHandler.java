@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.model.biz.BizInfo;
+import com.sinosoft.mpi.model.biz.MpiBizInfo;
 
 /**
  * 增加业务信息
@@ -26,7 +26,7 @@ public class AddBizHandler {
 	 *            主索引id
 	 * @return
 	 */
-	public String handleMessage(BizInfo bizInfo, String patientId, String mpiPk) {
+	public String handleMessage(MpiBizInfo bizInfo, String patientId, String mpiPk) {
 		return commonBizHandlerService.saveBizInfo(bizInfo, patientId, mpiPk);
 	}
 

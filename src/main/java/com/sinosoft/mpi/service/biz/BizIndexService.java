@@ -1,20 +1,21 @@
 package com.sinosoft.mpi.service.biz;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.cache.annotation.CacheDefaults;
-import javax.cache.annotation.CacheResult;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.biz.BizIdxLogDao;
-import com.sinosoft.mpi.dao.biz.BizIndexDao;
-import com.sinosoft.mpi.model.biz.BizIndex;
-import com.sinosoft.mpi.model.biz.BizInfo;
+import com.sinosoft.mpi.dao.biz.MpiBizIndexDao;
+import com.sinosoft.mpi.model.biz.MpiBizIndex;
+import com.sinosoft.mpi.model.biz.MpiBizInfo;
 import com.sinosoft.mpi.util.PageInfo;
 
 /**
@@ -24,35 +25,27 @@ import com.sinosoft.mpi.util.PageInfo;
 @CacheDefaults(cacheName = "bizCache")
 public class BizIndexService {
 
-	@Resource
-	private BizIndexDao bizIndexDao;
-	@Resource
-	private BizIndexUpdateService bizIndexUpdateService;
-	@Resource
-	private BizIdxLogDao bizIdxLogDao;
-	@Resource
-	private JdbcTemplate jdbcTemplate;
-
-	/**
-	 * 构建查询条件
-	 * 
-	 * @param sql
-	 * @param p
-	 * @return
-	 */
-	private List<Object> buildQueryConditions(final StringBuilder sql, BizIndex p) {
-		List<Object> args = new ArrayList<Object>();
-
-		return args;
-	}
+	@Autowired
+	private MpiBizIndexDao bizIndexDao;
+	@Autowired
+	JdbcTemplate jdbcTemplate;
 
 	/**
 	 * 删除
 	 * 
 	 * @param t
 	 */
-	public void delete(BizIndex t) {
-		bizIndexDao.deleteById(t);
+	public void delete(MpiBizIndex t) {
+		bizIndexDao.delete(t);
+	}
+
+	/**
+	 * 删除
+	 * 
+	 * @param id
+	 */
+	public void deleteById(String id) {
+		bizIndexDao.delete(id);
 	}
 
 	/**
@@ -61,11 +54,8 @@ public class BizIndexService {
 	 * @param id
 	 * @return
 	 */
-	public BizIndex getObject(String id) {
-		BizIndex t = new BizIndex();
-		t.setId(id);
-		t = bizIndexDao.findById(t);
-		return t;
+	public MpiBizIndex getObject(String id) {
+		return bizIndexDao.getOne(id);
 	}
 
 	/**
@@ -75,77 +65,16 @@ public class BizIndexService {
 	 * @param page
 	 * @return
 	 */
-	public List<BizIndex> queryForPage(BizIndex t, PageInfo page) {
-		String sql = " select * from mpi_person_index where 1=1 ";
-		sql = page.buildPageSql(sql);
-		return bizIndexDao.find(sql, new Object[] {});
-	}
-
-	/**
-	 * 分页查询
-	 * 
-	 * @param index
-	 * @param page
-	 * @return
-	 */
-	@CacheResult
-	public List<Map<String, Object>> queryForSplitPage(BizIndex index, PageInfo page) {
-
-		StringBuilder sql = new StringBuilder();
-		sql.append(
-				"select * from (select a.MPI_PK,a.MPI_PK row_id,1 row_type,a.name_cn,getCodeValue('GBT226112003',a.gender_cd) gender_cd,a.gender_dn,a.birth_date,a.id_no,a.person_tel_no,nvl(b.person_count,0) person_count, ");
-		sql.append(" decode(nvl(b.person_count,0),0,'open','closed') \"state\" ");
-		sql.append(
-				" ,(select distinct (g.mpi_pk) from mpi_index_operate g where g.op_style = 4 and g.mpi_pk = a.MPI_PK) mergeStatus");
-		sql.append(" from mpi_person_index a left join ( select count(c.DOMAIN_ID) person_count,c.MPI_PK ");
-		sql.append(
-				" from mpi_index_identifier_rel c group by c.MPI_PK ) b on a.MPI_PK = b.MPI_PK where 1=1 and a.state != 1");
-
-		// 添加查询条件
-		List<Object> args = buildQueryConditions(sql, index);
-		sql.append(" ) l ");
-
-		return querySplitData(page, sql, args);
-	}
-
-	/**
-	 * 分页查询
-	 * 
-	 * @param index
-	 * @param page
-	 * @return
-	 */
-	public List<Map<String, Object>> queryForSplitPage(BizIndex index, String fromIndexId, PageInfo page) {
-		StringBuilder sql = new StringBuilder();
-		sql.append(
-				" select a.index_id,a.index_id row_id,1 row_type,a.name,a.sex,a.birth_date,a.id_no,a.phone_one,nvl(b.person_count,0) person_count, ");
-		sql.append(" decode(nvl(b.person_count,0),0,'open','closed') \"state\" ");
-		sql.append(" from mpi_person_index a left join ( select count(c.identifier_id) person_count,c.index_id ");
-		sql.append(
-				" from mpi_index_identifier_rel c group by c.index_id ) b on a.index_id = b.index_id where 1=1 and a.index_id != ? ");
-		// 添加查询条件
-		List<Object> args = buildQueryConditions(sql, index);
-		args.add(0, fromIndexId);
-
-		return querySplitData(page, sql, args);
-	}
-
-	/**
-	 * 分页查询
-	 * 
-	 * @param page
-	 * @param sql
-	 * @param args
-	 * @return
-	 */
-	private List<Map<String, Object>> querySplitData(PageInfo page, StringBuilder sql, List<Object> args) {
-		// 取得总数查询sql
-		String countSql = page.buildCountSql(sql);
-		// 查询设置分页记录的总记录数
-		page.setTotal(bizIndexDao.getCount(countSql, args.toArray()));
-		// 取得分页查询语句
-		String querySql = page.buildPageSql(sql);
-		return bizIndexDao.findForMap(querySql, args.toArray());
+	public List<MpiBizIndex> queryForPage(final MpiBizIndex t, String fromIndexId, PageInfo page) {
+		return bizIndexDao.findAll(new Specification<MpiBizIndex>() {
+			@Override
+			public Predicate toPredicate(Root<MpiBizIndex> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				if (t != null) {
+					return cb.and(cb.equal(root.get("bizSerialId"), t.getBizSerialId()));
+				}
+				return null;
+			}
+		}, page).getContent();
 	}
 
 	/**
@@ -153,17 +82,16 @@ public class BizIndexService {
 	 * 
 	 * @param t
 	 */
-	public void save(BizIndex t) {
-		bizIndexDao.add(t);
+	public MpiBizIndex save(MpiBizIndex t) {
+		return bizIndexDao.save(t);
 	}
 
 	/**
 	 * 直接更新 索引信息
 	 */
-	public void updateIndexDirect(BizInfo person, String id) {
-		BizIndex idx = person.toIndex();
-		idx.setId(id);
-		bizIndexDao.update(idx);
+	public MpiBizIndex updateIndexDirect(MpiBizInfo person, String id) {
+		person.setId(id);
+		return bizIndexDao.save(person.toIndex());
 	}
 
 	/**
@@ -171,8 +99,19 @@ public class BizIndexService {
 	 * 
 	 * @param t
 	 */
-	public void update(BizIndex t) {
-		bizIndexDao.update(t);
+	public MpiBizIndex update(MpiBizIndex t) {
+		return bizIndexDao.save(t);
+	}
+
+	/**
+	 * 根据sql以及参数查询列表
+	 * 
+	 * @param sql
+	 * @param args
+	 * @return
+	 */
+	public List<MpiBizIndex> find(String sql, Object[] args) {
+		return jdbcTemplate.queryForList(sql, args, MpiBizIndex.class);
 	}
 
 }

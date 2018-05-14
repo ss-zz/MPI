@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 业务信息
  */
-public class BizInfo implements Serializable {
+public class MpiBizInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -95,9 +95,9 @@ public class BizInfo implements Serializable {
 		this.systemId = systemId;
 	}
 
-	public BizIndex toIndex() {
+	public MpiBizIndex toIndex() {
 		// TODO info 转 index
-		return new BizIndex();
+		return new MpiBizIndex();
 	}
 
 }

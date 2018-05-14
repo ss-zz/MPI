@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.sinosoft.config.MqConfig;
 import com.sinosoft.mpi.model.PersonInfo;
-import com.sinosoft.mpi.model.biz.BizInfo;
+import com.sinosoft.mpi.model.biz.MpiBizInfo;
 import com.sinosoft.mpi.model.register.PersonRegister;
 
 /**
@@ -45,11 +45,10 @@ public class PersonHandler {
 				}
 
 				if (state == 0) {// 新增
-					mpiPk = addPersonHandler.handleMessage(personInfo);
 					// 患者id
 					String patientId = personInfo.getFIELD_PK();
 					// 业务信息
-					BizInfo bizInfo = personRegister.getBizInfo();
+					MpiBizInfo bizInfo = personRegister.getBizInfo();
 					String ret = addBizHandler.handleMessage(bizInfo, patientId, mpiPk);
 					System.out.println("业务处理结果：" + ret);
 				}

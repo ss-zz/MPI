@@ -10,8 +10,8 @@ import org.dom4j.io.SAXReader;
 
 import com.sinosoft.block.model.BlockField;
 import com.sinosoft.block.model.BlockRound;
-import com.sinosoft.mpi.model.BlockCfg;
-import com.sinosoft.mpi.model.BlockGroup;
+import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
+import com.sinosoft.mpi.model.biz.MpiBizBlockGroup;
 
 /**
  * 业务初筛配置加载
@@ -85,12 +85,12 @@ public class BizBlockConfig {
 	 * 
 	 * @param cfg
 	 */
-	public void reloadCfg(BlockCfg cfg) {
+	public void reloadCfg(MpiBizBlockCfg cfg) {
 		blockRounds.clear();
 		for (Integer key : cfg.getGroups().keySet()) {
 			BlockRound br = new BlockRound();
 			br.setBlockFields(new ArrayList<BlockField>(cfg.getGroups().get(key).size()));
-			for (BlockGroup bg : cfg.getGroups().get(key)) {
+			for (MpiBizBlockGroup bg : cfg.getGroups().get(key)) {
 				br.getBlockFields().add(bg.toBlockField());
 			}
 			blockRounds.add(br);

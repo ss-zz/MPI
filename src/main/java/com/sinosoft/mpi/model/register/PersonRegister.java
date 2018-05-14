@@ -1,7 +1,7 @@
 package com.sinosoft.mpi.model.register;
 
 import com.sinosoft.mpi.model.PersonInfo;
-import com.sinosoft.mpi.model.biz.BizInfo;
+import com.sinosoft.mpi.model.biz.MpiBizInfo;
 
 /**
  * 人员注册
@@ -21,7 +21,7 @@ public class PersonRegister {
 	/**
 	 * 业务信息
 	 */
-	private BizInfo bizInfo;
+	private MpiBizInfo bizInfo;
 
 	public String getSystemKey() {
 		return systemKey;
@@ -39,11 +39,11 @@ public class PersonRegister {
 		this.personInfo = personInfo;
 	}
 
-	public BizInfo getBizInfo() {
+	public MpiBizInfo getBizInfo() {
 		return bizInfo;
 	}
 
-	public void setBizInfo(BizInfo bizInfo) {
+	public void setBizInfo(MpiBizInfo bizInfo) {
 		this.bizInfo = bizInfo;
 	}
 

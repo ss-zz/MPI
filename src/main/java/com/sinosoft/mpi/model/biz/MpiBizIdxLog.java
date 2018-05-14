@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 业务主索引操作日志
  */
-public class BizIdxLog implements Serializable {
+public class MpiBizIdxLog implements Serializable {
 
 	private static final long serialVersionUID = 6936464128927712060L;
 	private String personIdxLogId;// 主索引操作日志主键
@@ -157,7 +157,7 @@ public class BizIdxLog implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		BizIdxLog other = (BizIdxLog) obj;
+		MpiBizIdxLog other = (MpiBizIdxLog) obj;
 		if (mpipk == null) {
 			if (other.mpipk != null)
 				return false;
