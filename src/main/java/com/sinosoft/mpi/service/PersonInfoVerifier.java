@@ -33,16 +33,16 @@ public class PersonInfoVerifier {
 		if (!result) {
 			sb.append("健康卡号不等于15位或18位；");
 		}
-		result = result && verifyBlankValue(t.getNAME_CN());
+		result = result && verifyBlankValue(t.getNameCn());
 		if (!result) {
 			sb.append("中文名称信息为空；");
 		}
-		result = result && verifyBlankValue(t.getGENDER_CD());
+		result = result && verifyBlankValue(t.getGenderCd());
 		if (!result) {
 			sb.append("性别信息为空；");
 		}
 		// 验证域信息
-		result = result && verifyBlankValue(t.getUNIQUE_SIGN());
+		result = result && verifyBlankValue(t.getUniqueSign());
 		if (!result) {
 			sb.append("身份域信息为空；");
 		}
@@ -69,7 +69,7 @@ public class PersonInfoVerifier {
 	 * @return
 	 */
 	private boolean verifyIdNoValue(PersonInfo person) {
-		String value = person.getID_NO();
+		String value = person.getIdNo();
 		boolean result = true;
 		Pattern reg = Pattern.compile("^(\\d{15}|\\d{18}|\\d{17}[A-Za-z])$");
 		if (value != null) {
@@ -77,7 +77,7 @@ public class PersonInfoVerifier {
 			if (m.matches()) {
 
 			} else {
-				person.setID_NO(null);
+				person.setIdNo(null);
 			}
 		}
 		return result;
@@ -90,7 +90,7 @@ public class PersonInfoVerifier {
 	 * @return
 	 */
 	private boolean verifyCardNoValue(PersonInfo person) {
-		String value = person.getCARD_NO();
+		String value = person.getCardNo();
 		boolean result = true;
 		// 正则表达式:数字加字母不大于40个字符
 		Pattern reg = Pattern.compile("^[0-9A-Za-z]{1,40}$");
@@ -99,7 +99,7 @@ public class PersonInfoVerifier {
 			if (m.matches()) {
 
 			} else {
-				person.setCARD_NO(null);
+				person.setCardNo(null);
 			}
 		}
 		return result;
@@ -112,11 +112,10 @@ public class PersonInfoVerifier {
 	 * @return
 	 */
 	public boolean verifyNhCard(PersonInfo person) {
-		String value = person.getNH_CARD();
+		String value = person.getNhCard();
 		boolean result = true;
-		// Pattern reg = Pattern.compile("^\\d{16}$");
 		if (StringUtils.isBlank(value)) {// 为空
-			person.setNH_CARD(null);
+			person.setNhCard(null);
 		}
 		return result;
 	}
@@ -128,10 +127,10 @@ public class PersonInfoVerifier {
 	 * @return
 	 */
 	public boolean verifyHRID(PersonInfo person) {
-		String value = person.getHR_ID();
+		String value = person.getHrId();
 		boolean result = true;
 		if (StringUtils.isBlank(value)) {// 为空
-			person.setHR_ID(null);
+			person.setHrId(null);
 		}
 		return result;
 	}
@@ -143,10 +142,10 @@ public class PersonInfoVerifier {
 	 * @return
 	 */
 	public boolean verifySSCID(PersonInfo person) {
-		String value = person.getSSCID();
+		String value = person.getSscid();
 		boolean result = true;
 		if (StringUtils.isBlank(value)) {// 为空
-			person.setSSCID(null);
+			person.setSscid(null);
 		}
 		return result;
 	}

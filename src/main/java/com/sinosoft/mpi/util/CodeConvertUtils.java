@@ -15,9 +15,9 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.sinosoft.mpi.cache.CacheManager;
-import com.sinosoft.mpi.model.IBaseCode;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
+import com.sinosoft.mpi.model.code.IBaseCode;
 
 /**
  * 转换索引或居民 中的编码为描述

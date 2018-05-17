@@ -2,90 +2,138 @@ package com.sinosoft.mpi.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import org.hibernate.annotations.GenericGenerator;
+
+/**
+ * 域数据源级别
+ */
+@Entity(name = "MPI_DOMAIN_SRCLEVEL")
 public class DomainSrcLevel implements Serializable {
 
-	private static final long serialVersionUID = -2050100598477414203L;
+	private static final long serialVersionUID = 1L;
 
-	private String ID; // 主键
-	private String DOMAIN_ID; // 域主键
-	private String DOMAIN_DESC; // 域描述
-	private String DOMAIN_LEVEL; // 域数据源级别
-	private String FIELD_NAME; // 字段名称
-	private String FIELD_DESC; // 字段描述
-	private String FIELD_LEVEL; // 字段级别
-	private String CREATE_DATE; // 数据创建时间
-	private String UPDATE_DATE; // 数据更新时间
+	/**
+	 * 主键
+	 */
+	@Id
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GeneratedValue(generator = "system-uuid")
+	private String id;
 
-	public String getID() {
-		return ID;
+	/**
+	 * 域主键
+	 */
+	private String domainId;
+
+	/**
+	 * 域描述
+	 */
+	private String domainDesc;
+
+	/**
+	 * 域数据源级别
+	 */
+	private String domainLevel;
+
+	/**
+	 * 字段名称
+	 */
+	private String fieldName;
+
+	/**
+	 * 字段描述
+	 */
+	private String fieldDesc;
+
+	/**
+	 * 字段级别
+	 */
+	private String fieldLevel;
+
+	/**
+	 * 数据创建时间
+	 */
+	private String createDate;
+
+	/**
+	 * 数据更新时间
+	 */
+	private String updateDate;
+
+	public String getId() {
+		return id;
 	}
 
-	public void setID(String iD) {
-		ID = iD;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getDOMAIN_ID() {
-		return DOMAIN_ID;
+	public String getDomainId() {
+		return domainId;
 	}
 
-	public void setDOMAIN_ID(String dOMAIN_ID) {
-		DOMAIN_ID = dOMAIN_ID;
+	public void setDomainId(String domainId) {
+		this.domainId = domainId;
 	}
 
-	public String getDOMAIN_DESC() {
-		return DOMAIN_DESC;
+	public String getDomainDesc() {
+		return domainDesc;
 	}
 
-	public void setDOMAIN_DESC(String dOMAIN_DESC) {
-		DOMAIN_DESC = dOMAIN_DESC;
+	public void setDomainDesc(String domainDesc) {
+		this.domainDesc = domainDesc;
 	}
 
-	public String getDOMAIN_LEVEL() {
-		return DOMAIN_LEVEL;
+	public String getDomainLevel() {
+		return domainLevel;
 	}
 
-	public void setDOMAIN_LEVEL(String dOMAIN_LEVEL) {
-		DOMAIN_LEVEL = dOMAIN_LEVEL;
+	public void setDomainLevel(String domainLevel) {
+		this.domainLevel = domainLevel;
 	}
 
-	public String getFIELD_NAME() {
-		return FIELD_NAME;
+	public String getFieldName() {
+		return fieldName;
 	}
 
-	public void setFIELD_NAME(String fIELD_NAME) {
-		FIELD_NAME = fIELD_NAME;
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
 	}
 
-	public String getFIELD_DESC() {
-		return FIELD_DESC;
+	public String getFieldDesc() {
+		return fieldDesc;
 	}
 
-	public void setFIELD_DESC(String fIELD_DESC) {
-		FIELD_DESC = fIELD_DESC;
+	public void setFieldDesc(String fieldDesc) {
+		this.fieldDesc = fieldDesc;
 	}
 
-	public String getFIELD_LEVEL() {
-		return FIELD_LEVEL;
+	public String getFieldLevel() {
+		return fieldLevel;
 	}
 
-	public void setFIELD_LEVEL(String fIELD_LEVEL) {
-		FIELD_LEVEL = fIELD_LEVEL;
+	public void setFieldLevel(String fieldLevel) {
+		this.fieldLevel = fieldLevel;
 	}
 
-	public String getCREATE_DATE() {
-		return CREATE_DATE;
+	public String getCreateDate() {
+		return createDate;
 	}
 
-	public void setCREATE_DATE(String cREATE_DATE) {
-		CREATE_DATE = cREATE_DATE;
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
 	}
 
-	public String getUPDATE_DATE() {
-		return UPDATE_DATE;
+	public String getUpdateDate() {
+		return updateDate;
 	}
 
-	public void setUPDATE_DATE(String uPDATE_DATE) {
-		UPDATE_DATE = uPDATE_DATE;
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
 	}
 
 }

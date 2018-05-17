@@ -6,10 +6,10 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.SysRoleDao;
-import com.sinosoft.mpi.dao.SysUserDao;
+import com.sinosoft.mpi.dao.mpi.SysUserDao;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.SysRole;
 import com.sinosoft.mpi.model.SysUser;
@@ -22,9 +22,11 @@ import com.sinosoft.mpi.util.PageInfo;
 public class SysUserService {
 
 	@Resource
-	private SysUserDao sysUserDao;
+	SysUserDao sysUserDao;
 	@Resource
-	private SysRoleDao sysRoleDao;
+	SysRoleService sysRoleService;
+	@Resource
+	JdbcTemplate jdbcTemplate;
 
 	/**
 	 * 保存
@@ -35,7 +37,7 @@ public class SysUserService {
 		if (!testUserName(t.getUserName())) {
 			throw new ValidationException("用户名:" + t.getUserName() + "已存在");
 		}
-		sysUserDao.add(t);
+		sysUserDao.save(t);
 	}
 
 	/**
@@ -47,9 +49,7 @@ public class SysUserService {
 	public boolean testUserName(String userName) {
 		if (StringUtils.isBlank(userName))
 			return false;
-		int i = sysUserDao.getCount(" select count(*) from mpi_sys_user where upper(user_name) = ?",
-				new Object[] { userName.toUpperCase() });
-		return i == 0;
+		return sysUserDao.countByUserNameIgnoreCase(userName) == 0;
 	}
 
 	/**
@@ -58,11 +58,11 @@ public class SysUserService {
 	 * @param t
 	 */
 	public void update(SysUser t) {
-		SysUser tmp = sysUserDao.findById(t);
+		SysUser tmp = sysUserDao.findOne(t.getUserId());
 		tmp.setName(t.getName());
 		tmp.setEmail(t.getEmail());
 		tmp.setSysRoleId(t.getSysRoleId());
-		sysUserDao.update(tmp);
+		sysUserDao.save(tmp);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class SysUserService {
 	 * @param t
 	 */
 	public void delete(SysUser t) {
-		sysUserDao.deleteById(t);
+		sysUserDao.delete(t);
 	}
 
 	/**
@@ -81,10 +81,7 @@ public class SysUserService {
 	 * @return
 	 */
 	public SysUser getObject(String id) {
-		SysUser entity = new SysUser();
-		entity.setUserId(id);
-		entity = sysUserDao.findById(entity);
-		return entity;
+		return sysUserDao.findOne(id);
 	}
 
 	/**
@@ -98,10 +95,7 @@ public class SysUserService {
 		boolean result = false;
 		// 用户名&密码不为空的时候才去数据库查询验证
 		if (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(password)) {
-			// 根据用户名和密码作为条件查询用户数量
-			String sql = " select count(1) from mpi_sys_user where upper(user_name)=? and password=? and state=1 ";
-			int count = sysUserDao.getCount(sql, new Object[] { userName.toUpperCase(), password });
-			result = count > 0;
+			return sysUserDao.countByUserNameIgnoreCaseAndPasswordAndState(userName, password, "1") > 0;
 		}
 		return result;
 	}
@@ -114,9 +108,7 @@ public class SysUserService {
 	 * @return
 	 */
 	public List<SysUser> queryForPage(SysUser t, PageInfo page) {
-		String sql = " select * from mpi_sys_user where 1=1 ";
-		sql = page.buildPageSql(sql);
-		return sysUserDao.find(sql, new Object[] {});
+		return sysUserDao.findAll(page).getContent();
 	}
 
 	/**
@@ -129,12 +121,8 @@ public class SysUserService {
 	public SysRole getSysRoleByUser(SysUser user) {
 		String sql = " select * from mpi_sys_role where sys_role_id in ( select "
 				+ " sys_role_id from mpi_sys_user where user_id = ? ) ";
-		List<SysRole> list = sysRoleDao.find(sql, new Object[] { user.getUserId() });
-		SysRole result = null;
-		if (list != null && !list.isEmpty()) {
-			result = list.get(0);
-		}
-		return result;
+		List<SysRole> list = jdbcTemplate.queryForList(sql, new Object[] { user.getUserId() }, SysRole.class);
+		return list.size() > 0 ? list.get(0) : null;
 	}
 
 	/**
@@ -143,14 +131,7 @@ public class SysUserService {
 	public List<Map<String, Object>> findForList() {
 		String sql = "select u.user_id,u.name,u.user_name,u.email,r.role_name from mpi_sys_user u "
 				+ " left join mpi_sys_role r on u.sys_role_id = r.sys_role_id where 1=1 ";
-		return sysRoleDao.findForMap(sql);
-	}
-
-	/**
-	 * 列出所有系统角色
-	 */
-	public List<SysRole> findRoles() {
-		return sysRoleDao.find(" select * from mpi_sys_role where 1=1 ");
+		return jdbcTemplate.queryForList(sql);
 	}
 
 }

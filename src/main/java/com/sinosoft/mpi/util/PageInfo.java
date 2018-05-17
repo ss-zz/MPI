@@ -1,14 +1,18 @@
 package com.sinosoft.mpi.util;
 
+import java.io.Serializable;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 /**
  * 简单通过当前页 还有页条数，算出开始条数到结束条数
  */
-public class PageInfo implements Pageable {
+public class PageInfo implements Pageable, Serializable {
 
-	public static final int DEFAULT_FIRST_PAGE = 0;
+	private static final long serialVersionUID = 1L;
+
+	public static final int DEFAULT_FIRST_PAGE = 1;
 	public static final int DEFAULT_ROWS = 10;
 
 	private int page; // 前台传递来的分页参数 需要显示地几页
@@ -27,11 +31,11 @@ public class PageInfo implements Pageable {
 	}
 
 	public int getStartRowNum() {
-		return page * rows + 1;
+		return (page - 1) * rows + 1;
 	}
 
 	public int getEndRowNum() {
-		return page * rows + rows;
+		return (page - 1) * rows + rows;
 	}
 
 	public int getPage() {
@@ -116,7 +120,7 @@ public class PageInfo implements Pageable {
 
 	@Override
 	public int getOffset() {
-		return this.page * this.rows;
+		return (this.page - 1) * this.rows;
 	}
 
 	@Override

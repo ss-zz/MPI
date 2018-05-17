@@ -40,8 +40,7 @@ public class PersonInfoSimple implements Serializable {
 
 	public PersonInfo toPersonInfo() {
 		PersonInfo person = new PersonInfo();
-		person.setUNIQUE_SIGN(domainUniqueSign);
-		// person.setPERSON_ID(identifier);
+		person.setUniqueSign(domainUniqueSign);
 		return person;
 	}
 

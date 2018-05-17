@@ -13,8 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sinosoft.block.config.BlockConfig;
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.model.BlockCfg;
-import com.sinosoft.mpi.model.PersonPropertiesDesc;
 import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
+import com.sinosoft.mpi.model.code.PersonPropertiesDesc;
 import com.sinosoft.mpi.util.PageInfo;
 
 /**

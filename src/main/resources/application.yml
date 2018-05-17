@@ -35,7 +35,6 @@ spring:
   jpa:
     generate-ddl: false
     show-sql: false
-  
 
 # 日志
 logging:

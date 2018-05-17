@@ -6,7 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.MatchResultDao;
+import com.sinosoft.mpi.dao.mpi.MatchResultDao;
 import com.sinosoft.mpi.model.MatchResult;
 import com.sinosoft.mpi.util.PageInfo;
 
@@ -25,7 +25,7 @@ public class MatchResultService {
 	 * @param t
 	 */
 	public void save(MatchResult t) {
-		matchResultDao.add(t);
+		matchResultDao.save(t);
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class MatchResultService {
 	 * @param t
 	 */
 	public void update(MatchResult t) {
-		matchResultDao.update(t);
+		matchResultDao.save(t);
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class MatchResultService {
 	 * @param t
 	 */
 	public void delete(MatchResult t) {
-		matchResultDao.deleteById(t);
+		matchResultDao.delete(t);
 	}
 
 	/**
@@ -53,10 +53,7 @@ public class MatchResultService {
 	 * @return
 	 */
 	public MatchResult getObject(String id) {
-		MatchResult t = new MatchResult();
-		t.setMatchResultId(id);
-		t = matchResultDao.findById(t);
-		return t;
+		return matchResultDao.findOne(id);
 	}
 
 	/**
@@ -67,9 +64,7 @@ public class MatchResultService {
 	 * @return
 	 */
 	public List<MatchResult> queryForPage(MatchResult t, PageInfo page) {
-		String sql = " select * from mpi_match_result where 1=1 ";
-		sql = page.buildPageSql(sql);
-		return matchResultDao.find(sql, new Object[] {});
+		return matchResultDao.findAll(page).getContent();
 	}
 
 	/**
@@ -78,7 +73,7 @@ public class MatchResultService {
 	 * @param personID
 	 */
 	public void deleteByPersonID(String personID) {
-		matchResultDao.deleteByPersonID(personID);
+		matchResultDao.deleteByFieldPk(personID);
 	}
 
 }

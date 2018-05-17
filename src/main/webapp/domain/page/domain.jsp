@@ -10,17 +10,17 @@
 <!-- 表格 -->
 <table 	id="listTable"
 		title="业务系统列表"
-		idField="DOMAIN_ID"
+		idField="domainId"
 		singleSelect="false"
 		showFooter="false"
 		url="${pageContext.request.contextPath}/domain/domain.ac?method=query" >
 	<thead>
 		<tr align="center">
 			<th field="ck" width="20" checkbox="true" width="20"></th>
-			<th field="UNIQUE_SIGN" width="100">业务系统唯一标识</th>
-			<th field="DOMAIN_DESC" width="100">业务系统描述</th>	
-			<th field="DOMAIN_LEVEL" width="100">业务系统数据源级别</th>
-			<th field="DOMAIN_ID" width="150" formatter="buildOptLink">操作</th>	
+			<th field="uniqueSign" width="100">业务系统唯一标识</th>
+			<th field="domainDesc" width="100">业务系统描述</th>	
+			<th field="domainLevel" width="100">业务系统数据源级别</th>
+			<th field="domainId" width="150" formatter="buildOptLink">操作</th>	
 		</tr>
 	</thead>
 </table>

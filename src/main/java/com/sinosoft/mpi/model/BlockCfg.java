@@ -6,33 +6,54 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import com.sinosoft.block.config.BlockConfig;
 import com.sinosoft.block.model.BlockField;
 import com.sinosoft.block.model.BlockRound;
 
 /**
- * MPI_BLOCK_CFG (初筛规则)
+ * 初筛规则
  */
+@Entity(name = "MPI_BLOCK_CFG")
 public class BlockCfg implements Serializable {
 
-	private static final long serialVersionUID = 2056899759888616783L;
+	private static final long serialVersionUID = 1L;
 
-	/* 初筛主键(BOLCK_ID) 初筛主键 */
+	@Id
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GeneratedValue(generator = "system-uuid")
 	private String bolckId;
 
-	/* 初筛描述(BLOCK_DESC) 初筛描述 */
+	/**
+	 * 初筛描述
+	 */
 	private String blockDesc;
 
-	/* 分组数量(GROUP_COUNT) 分组数量 */
+	/**
+	 * 分组数量
+	 */
 	private Integer groupCount;
 
-	/* 创建日期(CREATE_DATE) 创建日期 */
+	/**
+	 * 创建日期
+	 */
 	private String createDate;
 
-	/* 生效状态(STATE) 0 - 无效 1 - 有效 */
+	/**
+	 * 生效状态(STATE) 0 - 无效 1 - 有效
+	 */
 	private String state;
 
-	/* 字段匹配信息 */
+	/**
+	 * 字段匹配信息
+	 */
+	@Transient
 	private Map<Integer, List<BlockGroup>> groups;
 
 	public BlockCfg() {
@@ -53,73 +74,42 @@ public class BlockCfg implements Serializable {
 		}
 	}
 
-	// =======================setter&getter
-	/**
-	 * 初筛主键(BOLCK_ID) 初筛主键
-	 **/
 	public String getBolckId() {
 		return bolckId;
 	}
 
-	/**
-	 * 初筛主键(BOLCK_ID) 初筛主键
-	 **/
 	public void setBolckId(String bolckId) {
 		this.bolckId = bolckId;
 	}
 
-	/**
-	 * 初筛描述(BLOCK_DESC) 初筛描述
-	 **/
 	public String getBlockDesc() {
 		return blockDesc;
 	}
 
-	/**
-	 * 初筛描述(BLOCK_DESC) 初筛描述
-	 **/
 	public void setBlockDesc(String blockDesc) {
 		this.blockDesc = blockDesc;
 	}
 
-	/**
-	 * 分组数量(GROUP_COUNT) 分组数量
-	 **/
 	public Integer getGroupCount() {
 		return groupCount;
 	}
 
-	/**
-	 * 分组数量(GROUP_COUNT) 分组数量
-	 **/
 	public void setGroupCount(Integer groupCount) {
 		this.groupCount = groupCount;
 	}
 
-	/**
-	 * 创建日期(CREATE_DATE) 创建日期
-	 **/
 	public String getCreateDate() {
 		return createDate;
 	}
 
-	/**
-	 * 创建日期(CREATE_DATE) 创建日期
-	 **/
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
-	/**
-	 * 生效状态(STATE) 0 - 无效 1 - 有效
-	 **/
 	public String getState() {
 		return state;
 	}
 
-	/**
-	 * 生效状态(STATE) 0 - 无效 1 - 有效
-	 **/
 	public void setState(String state) {
 		this.state = state;
 	}
@@ -130,61 +120,6 @@ public class BlockCfg implements Serializable {
 
 	public void setGroups(Map<Integer, List<BlockGroup>> groups) {
 		this.groups = groups;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((blockDesc == null) ? 0 : blockDesc.hashCode());
-		result = prime * result + ((bolckId == null) ? 0 : bolckId.hashCode());
-		result = prime * result + ((createDate == null) ? 0 : createDate.hashCode());
-		result = prime * result + ((groupCount == null) ? 0 : groupCount.hashCode());
-		result = prime * result + ((state == null) ? 0 : state.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		BlockCfg other = (BlockCfg) obj;
-		if (blockDesc == null) {
-			if (other.blockDesc != null)
-				return false;
-		} else if (!blockDesc.equals(other.blockDesc))
-			return false;
-		if (bolckId == null) {
-			if (other.bolckId != null)
-				return false;
-		} else if (!bolckId.equals(other.bolckId))
-			return false;
-		if (createDate == null) {
-			if (other.createDate != null)
-				return false;
-		} else if (!createDate.equals(other.createDate))
-			return false;
-		if (groupCount == null) {
-			if (other.groupCount != null)
-				return false;
-		} else if (!groupCount.equals(other.groupCount))
-			return false;
-		if (state == null) {
-			if (other.state != null)
-				return false;
-		} else if (!state.equals(other.state))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "BlockCfg [bolckId=" + bolckId + ", blockDesc=" + blockDesc + ", groupCount=" + groupCount
-				+ ", createDate=" + createDate + ", state=" + state + "]";
 	}
 
 }

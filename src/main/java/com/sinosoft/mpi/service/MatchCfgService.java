@@ -9,8 +9,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.match.config.MatchConfig;
-import com.sinosoft.mpi.dao.MatchCfgDao;
-import com.sinosoft.mpi.dao.MatchFieldCfgDao;
+import com.sinosoft.mpi.dao.mpi.MatchCfgDao;
+import com.sinosoft.mpi.dao.mpi.MatchFieldCfgDao;
 import com.sinosoft.mpi.model.MatchCfg;
 import com.sinosoft.mpi.model.MatchFieldCfg;
 import com.sinosoft.mpi.util.DateUtil;
@@ -36,11 +36,11 @@ public class MatchCfgService {
 		// 默认无效
 		t.setState("0");
 		// 保存
-		matchCfgDao.add(t);
+		matchCfgDao.save(t);
 		// 保存字段配置
 		for (MatchFieldCfg mfc : t.getMatchFieldCfgs()) {
 			mfc.setConfigId(t.getConfigId());
-			matchFieldCfgDao.add(mfc);
+			matchFieldCfgDao.save(mfc);
 		}
 	}
 
@@ -50,14 +50,14 @@ public class MatchCfgService {
 	 * @param t
 	 */
 	public void update(MatchCfg t) {
-		matchCfgDao.update(t);
+		matchCfgDao.save(t);
 	}
 
 	/**
 	 * 删除
 	 */
 	public void delete(MatchCfg t) {
-		matchCfgDao.deleteById(t);
+		matchCfgDao.delete(t);
 	}
 
 	/**
@@ -67,9 +67,7 @@ public class MatchCfgService {
 	 * @return
 	 */
 	public MatchCfg getObject(String id) {
-		MatchCfg t = new MatchCfg();
-		t.setConfigId(id);
-		t = matchCfgDao.findById(t);
+		MatchCfg t = matchCfgDao.findOne(id);
 		if (t != null) {
 			// 取得 字段匹配详情
 			List<MatchFieldCfg> list = queryFieldCfg(id);
@@ -85,9 +83,7 @@ public class MatchCfgService {
 	 *            匹配配置id
 	 */
 	private List<MatchFieldCfg> queryFieldCfg(String configId) {
-		String sql = " select * from mpi_match_field_cfg where config_id = ? ";
-		List<MatchFieldCfg> list = matchFieldCfgDao.find(sql, new Object[] { configId });
-		return list;
+		return matchFieldCfgDao.findByConfigId(configId);
 	}
 
 	/**
@@ -98,11 +94,7 @@ public class MatchCfgService {
 	 * @return
 	 */
 	public List<MatchCfg> queryForPage(MatchCfg t, PageInfo page) {
-		String sql = " select * from mpi_match_cfg where 1=1 ";
-		String countSql = page.buildCountSql(sql);
-		page.setTotal(matchCfgDao.getCount(countSql, new Object[] {}));
-		String querySql = page.buildPageSql(sql);
-		return matchCfgDao.find(querySql, new Object[] {});
+		return matchCfgDao.findAll(page).getContent();
 	}
 
 	/**
@@ -111,7 +103,7 @@ public class MatchCfgService {
 	 * @param cfgId
 	 */
 	public void updateEffect(String cfgId) {
-		// 使id配置 生效
+		matchCfgDao.uneffectAll();
 		matchCfgDao.effect(cfgId);
 		MatchCfg cfg = getObject(cfgId);
 		if (cfg != null) {
@@ -124,9 +116,8 @@ public class MatchCfgService {
 	 * 查询生效的配置
 	 */
 	public MatchCfg queryEffectCfg() {
-		String sql = " select * from mpi_match_cfg where state = '1' ";
-		List<MatchCfg> list = matchCfgDao.find(sql);
-		MatchCfg result = list != null && list.size() > 0 ? list.get(0) : null;
+		List<MatchCfg> list = matchCfgDao.findAllEffect();
+		MatchCfg result = list.size() > 0 ? list.get(0) : null;
 		if (result != null) {
 			result.setMatchFieldCfgs(queryFieldCfg(result.getConfigId()));
 		}

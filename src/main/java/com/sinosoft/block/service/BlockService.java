@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.block.BlockException;
@@ -18,7 +19,7 @@ import com.sinosoft.block.fun.IBlockFuntion;
 import com.sinosoft.block.model.BlockField;
 import com.sinosoft.block.model.BlockRound;
 import com.sinosoft.match.model.Record;
-import com.sinosoft.mpi.dao.PersonIndexDao;
+import com.sinosoft.mpi.dao.mpi.PersonIndexDao;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 
@@ -30,6 +31,8 @@ public class BlockService {
 
 	@Resource
 	private PersonIndexDao personIndexDao;
+	@Resource
+	JdbcTemplate jdbcTemplate;
 
 	/**
 	 * 获取初筛匹配的人员信息
@@ -93,10 +96,10 @@ public class BlockService {
 		sb.append(
 				" order by (select count(b.COMBINE_NO) from mpi_index_identifier_rel b where b.mpi_pk = a.mpi_pk ) desc ");
 		if (k != rounds.size()) {
-			List<PersonIndex> indexes = personIndexDao.find(sb.toString(), args.toArray());
+			List<PersonIndex> indexes = jdbcTemplate.queryForList(sb.toString(), args.toArray(), PersonIndex.class);
 			for (PersonIndex index : indexes) {
 				Record<PersonIndex> indexRecord = new Record<PersonIndex>(index);
-				indexRecord.setRecordId(index.getMPI_PK());// 主键标志
+				indexRecord.setRecordId(index.getMpiPk());// 主键标志
 				result.add(indexRecord);
 			}
 

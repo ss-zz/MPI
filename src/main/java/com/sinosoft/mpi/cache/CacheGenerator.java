@@ -10,11 +10,11 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 
 import com.sinosoft.mpi.annotation.PropertyDesc;
 import com.sinosoft.mpi.dao.IBaseDao;
-import com.sinosoft.mpi.model.IBaseCode;
-import com.sinosoft.mpi.model.PerInfoPropertiesDesc;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
-import com.sinosoft.mpi.model.PersonPropertiesDesc;
+import com.sinosoft.mpi.model.code.IBaseCode;
+import com.sinosoft.mpi.model.code.PerInfoPropertiesDesc;
+import com.sinosoft.mpi.model.code.PersonPropertiesDesc;
 import com.sinosoft.mpi.util.AppliationContextUtils;
 
 /**

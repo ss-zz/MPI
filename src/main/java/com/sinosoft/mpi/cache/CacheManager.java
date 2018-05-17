@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.sinosoft.mpi.model.IBaseCode;
+import com.sinosoft.mpi.model.code.IBaseCode;
 
 /**
  * 基础数据缓存操作类

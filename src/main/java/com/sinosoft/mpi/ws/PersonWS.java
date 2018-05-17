@@ -9,12 +9,14 @@ import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.PersonInfoSimple;
 import com.sinosoft.mpi.service.PersonInfoService;
+import com.sinosoft.mpi.ws.domain.DataResult;
 
 /**
  * 居民服务
  */
 @WebService(endpointInterface = "com.sinosoft.mpi.ws.IPersonWS", serviceName = "PersonWS")
 public class PersonWS implements IPersonWS {
+
 	private final static int MAX_DATA_LENGTH = 100;
 
 	private Logger logger = Logger.getLogger(PersonWS.class);
@@ -26,18 +28,18 @@ public class PersonWS implements IPersonWS {
 	 * 添加居民信息
 	 */
 	@Override
-	public DataResult addPerson(PersonInfo person) {
-		DataResult result = null;
+	public DataResult<Void> addPerson(PersonInfo person) {
+		DataResult<Void> result = null;
 		try {
 			personInfoService.save(person);
-			result = new DataResult(true,
-					"人员添加成功 pname = " + person.getNAME_CN() + " personId = " + person.getFIELD_PK());
+			result = new DataResult<Void>(true,
+					"人员添加成功 pname = " + person.getNameCn() + " personId = " + person.getFieldPk());
 		} catch (ValidationException e) { // 验证异常
 
-			result = new DataResult(false, e.getMessage());
+			result = new DataResult<Void>(false, e.getMessage());
 		} catch (Throwable e) { // 其他错误
 			logger.error("系统错误,无法完成添加居民信息操作", e);
-			result = new DataResult(false, "系统错误,无法完成添加居民信息操作");
+			result = new DataResult<Void>(false, "系统错误,无法完成添加居民信息操作");
 		}
 		return result;
 	}
@@ -46,18 +48,18 @@ public class PersonWS implements IPersonWS {
 	 * 批量添加居民信息
 	 */
 	@Override
-	public DataResult addPersonBatch(PersonInfo[] persons) {
+	public DataResult<Void> addPersonBatch(PersonInfo[] persons) {
 
-		DataResult result = null;
+		DataResult<Void> result = null;
 		try {
 			validDatasLength(persons.length);
 			personInfoService.addPersonBatch(persons);
-			result = new DataResult();
+			result = new DataResult<Void>();
 		} catch (ValidationException e) { // 验证异常
-			result = new DataResult(false, e.getMessage());
+			result = new DataResult<Void>(false, e.getMessage());
 		} catch (Throwable e) { // 其他错误
 			logger.error("系统错误,无法完成添加居民信息操作", e);
-			result = new DataResult(false, "系统错误,无法完成添加居民信息操作");
+			result = new DataResult<Void>(false, "系统错误,无法完成添加居民信息操作");
 		}
 		return result;
 	}
@@ -66,18 +68,18 @@ public class PersonWS implements IPersonWS {
 	 * 合并两个居民信息
 	 */
 	@Override
-	public DataResult mergePerson(PersonInfoSimple retired, PersonInfoSimple surviving) {
+	public DataResult<Void> mergePerson(PersonInfoSimple retired, PersonInfoSimple surviving) {
 		PersonInfo retiredPerson = retired.toPersonInfo();
 		PersonInfo survivingPerson = surviving.toPersonInfo();
-		DataResult result = null;
+		DataResult<Void> result = null;
 		try {
 			personInfoService.mergePerson(retiredPerson, survivingPerson);
-			result = new DataResult();
+			result = new DataResult<Void>();
 		} catch (ValidationException e) {// 验证异常
-			result = new DataResult(false, e.getMessage());
+			result = new DataResult<Void>(false, e.getMessage());
 		} catch (Exception e) {
 			logger.error("系统错误,无法完成合并居民信息操作", e);
-			result = new DataResult(false, "系统错误,无法完成合并居民信息操作");
+			result = new DataResult<Void>(false, "系统错误,无法完成合并居民信息操作");
 		}
 		return result;
 	}
@@ -86,17 +88,17 @@ public class PersonWS implements IPersonWS {
 	 * 匹配合并居民信息
 	 */
 	@Override
-	public DataResult mergePersonBatch(PersonInfoSimple[] retireds, PersonInfoSimple surviving) {
-		DataResult result = null;
+	public DataResult<Void> mergePersonBatch(PersonInfoSimple[] retireds, PersonInfoSimple surviving) {
+		DataResult<Void> result = null;
 		try {
 			validDatasLength(retireds.length);
 			personInfoService.mergePersonBatch(retireds, surviving);
-			result = new DataResult();
+			result = new DataResult<Void>();
 		} catch (ValidationException e) { // 验证异常
-			result = new DataResult(false, e.getMessage());
+			result = new DataResult<Void>(false, e.getMessage());
 		} catch (Throwable e) { // 其他错误
 			logger.error("系统错误,无法完成添加居民信息操作", e);
-			result = new DataResult(false, "系统错误,无法完成添加居民信息操作");
+			result = new DataResult<Void>(false, "系统错误,无法完成添加居民信息操作");
 		}
 		return result;
 	}
@@ -105,16 +107,16 @@ public class PersonWS implements IPersonWS {
 	 * 更新居民信息
 	 */
 	@Override
-	public DataResult updatePerson(PersonInfo person) {
-		DataResult result = null;
+	public DataResult<Void> updatePerson(PersonInfo person) {
+		DataResult<Void> result = null;
 		try {
 			personInfoService.update(person);
-			result = new DataResult();
+			result = new DataResult<Void>();
 		} catch (ValidationException e) {// 验证异常
-			result = new DataResult(false, e.getMessage());
+			result = new DataResult<Void>(false, e.getMessage());
 		} catch (Throwable e) { // 其他错误
 			logger.error("系统错误,无法完成更新居民信息操作", e);
-			result = new DataResult(false, "系统错误,无法完成更新居民信息操作");
+			result = new DataResult<Void>(false, "系统错误,无法完成更新居民信息操作");
 		}
 		return result;
 	}
@@ -123,18 +125,18 @@ public class PersonWS implements IPersonWS {
 	 * 匹配更新居民信息
 	 */
 	@Override
-	public DataResult updatePersonBatch(PersonInfo[] persons) {
-		DataResult result = null;
+	public DataResult<Void> updatePersonBatch(PersonInfo[] persons) {
+		DataResult<Void> result = null;
 		try {
 			// 校验数据数量
 			validDatasLength(persons.length);
 			personInfoService.updatePersonBatch(persons);
-			result = new DataResult();
+			result = new DataResult<Void>();
 		} catch (ValidationException e) { // 验证异常
-			result = new DataResult(false, e.getMessage());
+			result = new DataResult<Void>(false, e.getMessage());
 		} catch (Throwable e) { // 其他错误
 			logger.error("系统错误,无法完成添加居民信息操作", e);
-			result = new DataResult(false, "系统错误,无法完成添加居民信息操作");
+			result = new DataResult<Void>(false, "系统错误,无法完成添加居民信息操作");
 		}
 		return result;
 	}

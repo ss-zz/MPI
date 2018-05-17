@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<!-- 数据库驱动 -->
+	<classPathEntry
+		location="/Users/sinosoft/.m2/repository/ojdbc14.jar" />
+	
+	<context id="MyContext" targetRuntime="MyBatis3"
+		defaultModelType="flat">
+
+		<property name="autoDelimitKeywords" value="true" />
+		<property name="beginningDelimiter" value="`" />
+		<property name="endingDelimiter" value="`" />
+
+		<!-- generate entity时，生成hashcode和equals方法 -->
+		<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
+		<!-- generate entity时，生成serialVersionUID -->
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+
+		<!-- 注释 -->
+		<commentGenerator>
+			<property name="suppressDate" value="true" />
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<!-- 数据库连接 -->
+		<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+			connectionURL="jdbc:oracle:thin:@192.168.1.254:1521:ORCL" userId="mpi"
+			password="embed" />
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!-- java model -->
+		<javaModelGenerator targetPackage="com.sinosoft.linshi.entity.ge"
+			targetProject="MPI">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<!-- 全部表-单表请使用具体表名 -->
+		<table schema="mpi" tableName="%">
+			<!-- <generatedKey column="id" sqlStatement="Oracle" identity="true" />  -->
+		</table>
+
+	</context>
+</generatorConfiguration>

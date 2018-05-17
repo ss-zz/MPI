@@ -101,12 +101,12 @@ function addData() {
 		type : 'POST',
 		dataType : "json",
 		data : {
-			"DOMAIN_TYPE":$("#add_domainType").val(),
-			"DOMAIN_DESC":$("#add_domainDesc").val(),
-			"UNIQUE_SIGN":$("#add_uniqueSign").val(),
-			"PUSH_ADDR":$("#add_pushAddr").val(),
-			"BOOK_TYPE":$("#add_bookType").val(),
-			"DOMAIN_LEVEL":$("#add_domainLevel").val()
+			domainType:$("#add_domainType").val(),
+			domainDesc:$("#add_domainDesc").val(),
+			uniqueSign:$("#add_uniqueSign").val(),
+			pushAddr:$("#add_pushAddr").val(),
+			bookType:$("#add_bookType").val(),
+			domainLevel:$("#add_domainLevel").val()
 		},
 		url : root + '/domain/domain.ac?method=add',// 请求的action路径
 		success : function(data) {
@@ -139,27 +139,25 @@ function openDialog_edit() {
 		alert("请选择要修改的业务系统!");
 		return;
 	}	
-	var domainId = row.DOMAIN_ID;
+	var domainId = row.domainId;
 	$.ajax({
 		async : false,
 		cache : false,
 		type : 'POST',
 		dataType : "json",
-		data : {
-			"domainId":domainId
-		},
+		data : {domainId: domainId},
 		url : root + '/domain/domain.ac?method=load',// 请求的action路径
 		success : function(data) {
 			if (data == null) {// 未返回任何消息表示添加成功
 				alert('请求失败');
 			}else{
-				$("#edit_domainId").val(data.DOMAIN_ID);
-				$("#edit_domainType").val(data.DOMAIN_TYPE);
-				$("#edit_domainDesc").val(data.DOMAIN_DESC);
-				$("#edit_uniqueSign").val(data.UNIQUE_SIGN);
-				$("#edit_pushAddr").val(data.PUSH_ADDR);
-				$("#edit_bookType").val(data.BOOK_TYPE);
-				$("#edit_domainLevel").val(data.DOMAIN_LEVEL);
+				$("#edit_domainId").val(data.domainId);
+				$("#edit_domainType").val(data.domainType);
+				$("#edit_domainDesc").val(data.domainDesc);
+				$("#edit_uniqueSign").val(data.uniqueSign);
+				$("#edit_pushAddr").val(data.pushAddr);
+				$("#edit_bookType").val(data.bookType);
+				$("#edit_domainLevel").val(data.domainLevel);
 			}
 		}
 	});
@@ -202,13 +200,13 @@ function editData() {
 		type : 'POST',
 		dataType : "json",
 		data : {
-			"DOMAIN_ID":$("#edit_domainId").val(),
-			"DOMAIN_TYPE":$("#edit_domainType").val(),
-			"DOMAIN_DESC":$("#edit_domainDesc").val(),
-			"UNIQUE_SIGN":$("#edit_uniqueSign").val(),
-			"PUSH_ADDR":$("#edit_pushAddr").val(),
-			"BOOK_TYPE":$("#edit_bookType").val(),
-			"DOMAIN_LEVEL":$("#edit_domainLevel").val()
+			"domainId":$("#edit_domainId").val(),
+			"domainType":$("#edit_domainType").val(),
+			"domainDesc":$("#edit_domainDesc").val(),
+			"uniqueSign":$("#edit_uniqueSign").val(),
+			"pushAddr":$("#edit_pushAddr").val(),
+			"bookType":$("#edit_bookType").val(),
+			"domainLevel":$("#edit_domainLevel").val()
 		},
 		url : root + '/domain/domain.ac?method=edit',// 请求的action路径
 		error : function() {// 请求失败处理函数
@@ -235,15 +233,15 @@ function removeData(){
 		alert("请选择要删除的业务系统");
 		return;
 	}	 
-	var domainId = row.DOMAIN_ID;
-	if(confirm("确认要删除业务系统【"+row.DOMAIN_DESC+"】?")){
+	var domainId = row.domainId;
+	if(confirm("确认要删除业务系统【"+row.domainDesc+"】?")){
 		$.ajax({
 			async : false,
 			cache : false,
 			type : 'POST',
 			dataType : "json",
 			data : {
-				"DOMAIN_ID":domainId			
+				domainId: domainId
 			},
 			url : root + '/domain/domain.ac?method=del',// 请求的action路径
 			success : function(data) {
@@ -273,16 +271,16 @@ $.extend($.fn.validatebox.defaults.rules, {
 				domainId = $(param[1]).val();
 			}
 			var result = $.ajax({
-						url : param[0],
-						data : {
-							"DOMAIN_ID":domainId,
-							"UNIQUE_SIGN":value
-						},
-						type : 'post',
-						dataType : 'json',
-						async : false,
-						cache : false
-					}).responseText;
+				url : param[0],
+				data : {
+					domainId: domainId,
+					uniqueSign: value
+				},
+				type : 'post',
+				dataType : 'json',
+				async : false,
+				cache : false
+			}).responseText;
 			if (result == 'false') {
 				return false;
 			} else {
@@ -303,7 +301,7 @@ $.extend($.fn.validatebox.defaults.rules, {
 //创建操作连接
 function buildOptLink(val,row){
 	var link = '';
-	var unique_sign=row.UNIQUE_SIGN
+	var unique_sign = row.uniqueSign;
 	link +='<a href="#" onclick="openViewPage(\''+unique_sign+'\')">业务系统字段数据源级别</a>&nbsp;&nbsp;&nbsp;&nbsp;';
 	return link;
 }
@@ -313,8 +311,7 @@ function openAddPage(){
 		alert("请选择要配置的业务系统");
 		return;
 	}	
-	var domainId = row.UNIQUE_SIGN;
-	
+	var domainId = row.uniqueSign;
 	var url = root+'/domainsrclevel/srclevel.ac?method=toAdd&domainId='+domainId;
 	var name = 'iframe_tabId_srclevelAdd';	
 	//如果当前id的tab不存在则创建一个tab

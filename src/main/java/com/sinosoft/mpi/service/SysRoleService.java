@@ -1,15 +1,15 @@
 package com.sinosoft.mpi.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.SysRoleDao;
+import com.sinosoft.mpi.dao.mpi.SysRoleDao;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.SysRole;
 import com.sinosoft.mpi.util.PageInfo;
@@ -22,6 +22,8 @@ public class SysRoleService {
 
 	@Resource
 	private SysRoleDao sysRoleDao;
+	@Resource
+	JdbcTemplate jdbcTemplate;
 
 	/**
 	 * 保存
@@ -31,7 +33,7 @@ public class SysRoleService {
 	public void save(SysRole t) {
 		// 验证是否可用
 		if (testRoleName(t)) {
-			sysRoleDao.add(t);
+			sysRoleDao.save(t);
 		} else {
 			throw new ValidationException("角色添加失败，角色名:[" + t.getRoleName() + "]已存在");
 		}
@@ -45,7 +47,7 @@ public class SysRoleService {
 	public void update(SysRole t) {
 		// 验证是否可用
 		if (testRoleName(t)) {
-			sysRoleDao.update(t);
+			sysRoleDao.save(t);
 		} else {
 			throw new ValidationException("角色更新失败，角色名:[" + t.getRoleName() + "]已存在");
 		}
@@ -58,7 +60,7 @@ public class SysRoleService {
 	 * @param t
 	 */
 	public void delete(SysRole t) {
-		sysRoleDao.deleteById(t);
+		sysRoleDao.delete(t);
 	}
 
 	/**
@@ -68,10 +70,7 @@ public class SysRoleService {
 	 * @return
 	 */
 	public SysRole getObject(String id) {
-		SysRole role = new SysRole();
-		role.setSysRoleId(id);
-		role = sysRoleDao.findById(role);
-		return role;
+		return sysRoleDao.findOne(id);
 	}
 
 	/**
@@ -82,14 +81,7 @@ public class SysRoleService {
 	 * @return
 	 */
 	public List<SysRole> queryForPage(SysRole t, PageInfo page) {
-		String sql = " select * from mpi_sys_role where 1=1 ";
-		// 取得总条数sql
-		String countSql = page.buildCountSql(sql);
-		// 设置总条数
-		page.setTotal(sysRoleDao.getCount(countSql, new Object[] {}));
-		// 取得分页查询sql
-		String querySql = page.buildPageSql(sql);
-		return sysRoleDao.find(querySql, new Object[] {});
+		return sysRoleDao.findAll(page).getContent();
 	}
 
 	/**
@@ -105,9 +97,9 @@ public class SysRoleService {
 		// 总数查询sql
 		String countSql = page.buildCountSql(sql);
 		// 设置总数
-		page.setTotal(sysRoleDao.getCount(countSql, new Object[] { role.getSysRoleId() }));
+		page.setTotal(jdbcTemplate.queryForObject(countSql, new Object[] { role.getSysRoleId() }, Integer.class));
 		String querySql = page.buildPageSql(sql);
-		return sysRoleDao.findForMap(querySql, new Object[] { role.getSysRoleId() });
+		return jdbcTemplate.queryForList(querySql, new Object[] { role.getSysRoleId() });
 	}
 
 	/**
@@ -120,17 +112,21 @@ public class SysRoleService {
 		if (StringUtils.isBlank(role.getRoleName())) {
 			return false;
 		} else {
-			List<String> args = new ArrayList<String>(2);
-			StringBuilder sql = new StringBuilder("select count(1) from mpi_sys_role where role_name = ? ");
-			args.add(role.getRoleName());
+			int count = 0;
 			if (StringUtils.isNotBlank(role.getSysRoleId())) {
-				sql.append(" and sys_role_id != ? ");
-				args.add(role.getSysRoleId());
+				count = sysRoleDao.countByRoleNameAndSysRoleIdNot(role.getRoleName(), role.getSysRoleId());
+			} else {
+				count = sysRoleDao.countByRoleName(role.getRoleName());
 			}
-
-			int count = sysRoleDao.getCount(sql.toString(), args.toArray());
 			return count == 0;
 		}
+	}
+
+	/**
+	 * 获取所有系统角色
+	 */
+	public List<SysRole> findAll() {
+		return sysRoleDao.findAll();
 	}
 
 }

@@ -1,6033 +1,2343 @@
 package com.sinosoft.mpi.model;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.hibernate.annotations.GenericGenerator;
 
 import com.sinosoft.mpi.annotation.PropertyDesc;
 
+/**
+ * 主索引人员
+ */
+@Entity(name = "MPI_PERSON_INFO")
 public class PersonInfo implements Serializable {
 
-	private static final long serialVersionUID = -5771634326648400216L;
+	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GeneratedValue(generator = "system-uuid")
 	@PropertyDesc(name = "主键", column = "FIELD_PK")
-	private String FIELD_PK;
+	private String fieldPk;
 
 	@PropertyDesc(name = "注册机构代码", column = "REGISTER_ORG_CODE")
-	private String REGISTER_ORG_CODE;
+	private String registerOrgCode;
 
 	@PropertyDesc(name = "注册机构名称", column = "REGISTER_ORG_NAME")
-	private String REGISTER_ORG_NAME;
+	private String registerOrgName;
 
 	@PropertyDesc(name = "医疗服务编号", column = "MEDICALSERVICE_NO")
-	private String MEDICALSERVICE_NO;
+	private String medicalserviceNo;
 
+	/* 从姓名到精神病标志与mpiinfo信息一致>>> */
 	@PropertyDesc(name = "姓名", column = "NAME_CN")
-	private String NAME_CN;
+	private String nameCn;
 
 	@PropertyDesc(name = "英文姓名", column = "NAME_EN")
-	private String NAME_EN;
-
-	@PropertyDesc(name = "备注", column = "REMARK")
-	private String REMARK;
+	private String nameEn;
 
 	@PropertyDesc(name = "出生日期", column = "BIRTH_DATE")
-	private Date BIRTH_DATE;
+	private Date birthDate;
 
 	@PropertyDesc(name = "性别代码", column = "GENDER_CD")
-	private String GENDER_CD;
+	private String genderCd;
 
 	@PropertyDesc(name = "婚姻状况类别代码", column = "CARD_MARITAL_ST_CD")
-	private String CARD_MARITAL_ST_CD;
+	private String cardMaritalStCd;
 
 	@PropertyDesc(name = "标识号-类别代码", column = "ID_NO_CD")
-	private String ID_NO_CD;
+	private String idNoCd;
 
 	@PropertyDesc(name = "标识号-号码", column = "ID_NO")
-	private String ID_NO;
+	private String idNo;
 
 	@PropertyDesc(name = "医疗保险-类别代码", column = "MEDICARE_CD")
-	private String MEDICARE_CD;
+	private String medicareCd;
 
 	@PropertyDesc(name = "医疗保险-号码", column = "MEDICAL_INSURANCE_NO")
-	private String MEDICAL_INSURANCE_NO;
+	private String medicalInsuranceNo;
 
 	@PropertyDesc(name = "职业类别代码(国标)", column = "CARD_OCCU_TYPE_CD")
-	private String CARD_OCCU_TYPE_CD;
+	private String cardOccuTypeCd;
 
 	@PropertyDesc(name = "民族代码", column = "CARD_NATION_CD")
-	private String CARD_NATION_CD;
+	private String cardNationCd;
 
 	@PropertyDesc(name = "国籍代码", column = "NATIONALITY_CD")
-	private String NATIONALITY_CD;
+	private String nationalityCd;
 
 	@PropertyDesc(name = "行政区划代码", column = "AR_CD")
-	private String AR_CD;
+	private String arCd;
 
 	@PropertyDesc(name = "地址类别代码", column = "AD_CD")
-	private String AD_CD;
+	private String adCd;
 
 	@PropertyDesc(name = "地址-省（自治区、直辖市）", column = "PROVINCE_NAME")
-	private String PROVINCE_NAME;
+	private String provinceName;
 
 	@PropertyDesc(name = "地址-市（地区）", column = "CITY_NAME")
-	private String CITY_NAME;
+	private String cityName;
 
 	@PropertyDesc(name = "地址-县（区）", column = "AREA_NAME")
-	private String AREA_NAME;
+	private String areaName;
 
 	@PropertyDesc(name = "地址-乡（镇、街道办事处）", column = "STREET_ID")
-	private String STREET_ID;
+	private String streetId;
 
 	@PropertyDesc(name = "地址-村（街、路、弄等）", column = "VILLAGE_NAME")
-	private String VILLAGE_NAME;
+	private String villageName;
 
 	@PropertyDesc(name = "地址-门牌号码", column = "HOUSE_NO")
-	private String HOUSE_NO;
+	private String houseNo;
 
 	@PropertyDesc(name = "联系电话-类别代码", column = "TEL_TYPE_CD")
-	private String TEL_TYPE_CD;
+	private String telTypeCd;
 
 	@PropertyDesc(name = "联系电话-号码", column = "PERSON_TEL_NO")
-	private String PERSON_TEL_NO;
+	private String personTelNo;
 
 	@PropertyDesc(name = "联系人姓名", column = "LINKMAN_NAME")
-	private String LINKMAN_NAME;
+	private String linkmanName;
 
 	@PropertyDesc(name = "联系人关系代码", column = "LINKMAN_REL_CD")
-	private String LINKMAN_REL_CD;
+	private String linkmanRelCd;
 
 	@PropertyDesc(name = "标识号-类别代码（联系人）", column = "LM_ID_NO_CD")
-	private String LM_ID_NO_CD;
+	private String lmIdNoCd;
 
 	@PropertyDesc(name = "标识号-号码（联系人）", column = "LM_ID_NO")
-	private String LM_ID_NO;
+	private String lmIdNo;
 
 	@PropertyDesc(name = "城乡居民健康档案编号", column = "HR_ID")
-	private String HR_ID;
+	private String hrId;
 
 	@PropertyDesc(name = "邮政编码", column = "POST_CD")
-	private String POST_CD;
+	private String postCd;
 
 	@PropertyDesc(name = "ABO血型", column = "ABO_CD")
-	private String ABO_CD;
+	private String aboCd;
 
 	@PropertyDesc(name = "Rh血型", column = "RH_CD")
-	private String RH_CD;
+	private String rhCd;
 
-	@PropertyDesc(name = "1否2是3不详", column = "RH_NEG_CD")
-	private String RH_NEG_CD;
+	@PropertyDesc(name = "RH阴性代码", column = "RH_NEG_CD")
+	private String rhNegCd;
 
 	@PropertyDesc(name = "文化程度代码", column = "CARD_ED_BG_CD")
-	private String CARD_ED_BG_CD;
+	private String cardEdBgCd;
 
 	@PropertyDesc(name = "出生地", column = "BIRTH_PLACE")
-	private String BIRTH_PLACE;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.WORKING_UNIT_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String birthPlace;
+
 	@PropertyDesc(name = "工作单位名称", column = "WORKING_UNIT_NAME")
-	private String WORKING_UNIT_NAME;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.EMAIL_AD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String workingUnitName;
+
 	@PropertyDesc(name = "电子邮件地址", column = "EMAIL_AD")
-	private String EMAIL_AD;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.VETERANS_MILITARY_MARK
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String emailAd;
+
 	@PropertyDesc(name = "退伍军人标志", column = "VETERANS_MILITARY_MARK")
-	private Short VETERANS_MILITARY_MARK;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private Short veteransMilitaryMark;
+
 	@PropertyDesc(name = "卡号", column = "CARD_NO")
-	private String CARD_NO;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardNo;
+
 	@PropertyDesc(name = "卡类型", column = "CARD_CD")
-	private String CARD_CD;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_AREA
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardCd;
+
 	@PropertyDesc(name = "发卡地区", column = "CARD_AREA")
-	private String CARD_AREA;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.PATIENT_TYPE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardArea;
+
 	@PropertyDesc(name = "患者类型", column = "PATIENT_TYPE")
-	private String PATIENT_TYPE;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.m_PHONE_NUM
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String patientType;
+
 	@PropertyDesc(name = "手机号码", column = "m_PHONE_NUM")
-	private String m_PHONE_NUM;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.WORKING_UNIT_POST
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String mPhoneNum;
+
 	@PropertyDesc(name = "工作单位邮编", column = "WORKING_UNIT_POST")
-	private String WORKING_UNIT_POST;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.WORKING_UNIT_ADDR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String workingUnitPost;
+
 	@PropertyDesc(name = "工作单位地址", column = "WORKING_UNIT_ADDR")
-	private String WORKING_UNIT_ADDR;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.LIVING_ADDR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String workingUnitAddr;
+
 	@PropertyDesc(name = "居住地址", column = "LIVING_ADDR")
-	private String LIVING_ADDR;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.RPR_ADDR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String livingAddr;
+
 	@PropertyDesc(name = "户口地址", column = "RPR_ADDR")
-	private String RPR_ADDR;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.RPR_POST
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String rprAddr;
+
 	@PropertyDesc(name = "户口地址邮编", column = "RPR_POST")
-	private String RPR_POST;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.RPR_PHONE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String rprPost;
+
 	@PropertyDesc(name = "户口电话", column = "RPR_PHONE")
-	private String RPR_PHONE;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.LINKMAN_ADDR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String rprPhone;
+
 	@PropertyDesc(name = "联系人地址", column = "LINKMAN_ADDR")
-	private String LINKMAN_ADDR;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.LINKMAN_POST
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String linkmanAddr;
+
 	@PropertyDesc(name = "联系人邮编", column = "LINKMAN_POST")
-	private String LINKMAN_POST;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.LINKMAN_PHONE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String linkmanPost;
+
 	@PropertyDesc(name = "联系人电话", column = "LINKMAN_PHONE")
-	private String LINKMAN_PHONE;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.INSURE_TYPE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String linkmanPhone;
+
 	@PropertyDesc(name = "保险类型", column = "INSURE_TYPE")
-	private String INSURE_TYPE;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.MEDICAL_TREATMENT_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String insureType;
+
 	@PropertyDesc(name = "医疗待遇名称", column = "MEDICAL_TREATMENT_NAME")
-	private String MEDICAL_TREATMENT_NAME;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.MEDICAL_TREATMENT_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String medicalTreatmentName;
+
 	@PropertyDesc(name = "医疗待遇代码", column = "MEDICAL_TREATMENT_CD")
-	private String MEDICAL_TREATMENT_CD;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.REGISTER_DATE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String medicalTreatmentCd;
+
 	@PropertyDesc(name = "建档日期", column = "REGISTER_DATE")
-	private Date REGISTER_DATE;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.RECORDER_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private Date registerDate;
+
 	@PropertyDesc(name = "建档人员姓名", column = "RECORDER_NAME")
-	private String RECORDER_NAME;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.REGISTER_PERSON_CODE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String recorderName;
+
 	@PropertyDesc(name = "建档人员代码", column = "REGISTER_PERSON_CODE")
-	private String REGISTER_PERSON_CODE;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.SEND_TIME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String registerPersonCode;
+
 	@PropertyDesc(name = "上报日期", column = "SEND_TIME")
-	private Date SEND_TIME;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.SEND_ORG_CODE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private Date sendTime;
+
 	@PropertyDesc(name = "上报机构", column = "SEND_ORG_CODE")
-	private String SEND_ORG_CODE;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.SEND_SYSTEM
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String sendOrgCode;
+
 	@PropertyDesc(name = "上报系统", column = "SEND_SYSTEM")
-	private String SEND_SYSTEM;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.PROVIDER_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String sendSystem;
+
 	@PropertyDesc(name = "系统开发商", column = "PROVIDER_NAME")
-	private String PROVIDER_NAME;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.PROVIDER_ORG_CODE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String providerName;
+
 	@PropertyDesc(name = "开发商机构代码", column = "PROVIDER_ORG_CODE")
-	private String PROVIDER_ORG_CODE;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CREATETIME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String providerOrgCode;
+
 	@PropertyDesc(name = "创建日期", column = "CREATETIME")
-	private Date CREATETIME;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.LASTUPTIME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private Date createtime;
+
 	@PropertyDesc(name = "最终修改日期", column = "LASTUPTIME")
-	private Date LASTUPTIME;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.STATE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private Date lastuptime;
+
 	@PropertyDesc(name = "上传状态", column = "STATE")
-	private Short STATE;
+	private Short state;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.GENDER_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "性别代码的字典表代码", column = "GENDER_CS")
-	private String GENDER_CS;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.GENDER_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String genderCs;
+
 	@PropertyDesc(name = "性别代码的字典名称", column = "GENDER_CSN")
-	private String GENDER_CSN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.GENDER_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String genderCsn;
+
 	@PropertyDesc(name = "性别代码的字典版本", column = "GENDER_CSV")
-	private String GENDER_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.GENDER_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String genderCsv;
+
 	@PropertyDesc(name = "性别代码的值", column = "GENDER_DN")
-	private String GENDER_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_MARITAL_ST_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String genderDn;
+
 	@PropertyDesc(name = "婚姻状况的字典代码", column = "CARD_MARITAL_ST_CS")
-	private String CARD_MARITAL_ST_CS;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_MARITAL_ST_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardMaritalStCs;
+
 	@PropertyDesc(name = "婚姻状况的字典名称", column = "CARD_MARITAL_ST_CSN")
-	private String CARD_MARITAL_ST_CSN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_MARITAL_ST_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardMaritalStCsn;
+
 	@PropertyDesc(name = "婚姻状况的字典版本", column = "CARD_MARITAL_ST_CSV")
-	private String CARD_MARITAL_ST_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_MARITAL_ST_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardMaritalStCsv;
+
 	@PropertyDesc(name = "婚姻状况的值", column = "CARD_MARITAL_ST_DN")
-	private String CARD_MARITAL_ST_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.ID_NO_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardMaritalStDn;
+
 	@PropertyDesc(name = "身份证类别代码的字典代码", column = "ID_NO_CS")
-	private String ID_NO_CS;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.ID_NO_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String idNoCs;
+
 	@PropertyDesc(name = "身份证类别代码的字典名称", column = "ID_NO_CSN")
-	private String ID_NO_CSN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.ID_NO_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String idNoCsn;
+
 	@PropertyDesc(name = "身份证类别代码的字典版本", column = "ID_NO_CSV")
-	private String ID_NO_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.ID_NO_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String idNoCsv;
+
 	@PropertyDesc(name = "身份证类别代码的值", column = "ID_NO_DN")
-	private String ID_NO_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.MEDICARE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String idNoDn;
+
 	@PropertyDesc(name = "医疗保险-类别的字典代码", column = "MEDICARE_CS")
-	private String MEDICARE_CS;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.MEDICARE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String medicareCs;
+
 	@PropertyDesc(name = "医疗保险-类别的字典名称", column = "MEDICARE_CSN")
-	private String MEDICARE_CSN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.MEDICARE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String medicareCsn;
+
 	@PropertyDesc(name = "医疗保险-类别的字典版本", column = "MEDICARE_CSV")
-	private String MEDICARE_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.MEDICARE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String medicareCsv;
+
 	@PropertyDesc(name = "医疗保险-类别的值", column = "MEDICARE_DN")
-	private String MEDICARE_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.NH_CARD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String medicareDn;
+
 	@PropertyDesc(name = "新农合卡号", column = "NH_CARD")
-	private String NH_CARD;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.SSCID
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String nhCard;
+
 	@PropertyDesc(name = "社会保障卡号", column = "SSCID")
-	private String SSCID;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_OCCU_TYPE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String sscid;
+
 	@PropertyDesc(name = "职业类别的字典代码", column = "CARD_OCCU_TYPE_CS")
-	private String CARD_OCCU_TYPE_CS;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_OCCU_TYPE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardOccuTypeCs;
+
 	@PropertyDesc(name = "职业类别的字典名称", column = "CARD_OCCU_TYPE_CSN")
-	private String CARD_OCCU_TYPE_CSN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_OCCU_TYPE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardOccuTypeCsn;
+
 	@PropertyDesc(name = "职业类别的字典版本", column = "CARD_OCCU_TYPE_CSV")
-	private String CARD_OCCU_TYPE_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_OCCU_TYPE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardOccuTypeCsv;
+
 	@PropertyDesc(name = "职业类别的值", column = "CARD_OCCU_TYPE_DN")
-	private String CARD_OCCU_TYPE_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_NATION_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardOccuTypeDn;
+
 	@PropertyDesc(name = "民族的字典代码", column = "CARD_NATION_CS")
-	private String CARD_NATION_CS;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_NATION_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardNationCs;
+
 	@PropertyDesc(name = "民族的字典名称", column = "CARD_NATION_CSN")
-	private String CARD_NATION_CSN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_NATION_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardNationCsn;
+
 	@PropertyDesc(name = "民族的字典版本", column = "CARD_NATION_CSV")
-	private String CARD_NATION_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_NATION_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardNationCsv;
+
 	@PropertyDesc(name = "民族的值", column = "CARD_NATION_DN")
-	private String CARD_NATION_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.NATIONALITY_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String cardNationDn;
+
 	@PropertyDesc(name = "国籍的字典代码", column = "NATIONALITY_CS")
-	private String NATIONALITY_CS;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.NATIONALITY_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String nationalityCs;
+
 	@PropertyDesc(name = "国籍的字典名称", column = "NATIONALITY_CSN")
-	private String NATIONALITY_CSN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.NATIONALITY_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String nationalityCsn;
+
 	@PropertyDesc(name = "国籍的字典版本", column = "NATIONALITY_CSV")
-	private String NATIONALITY_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.NATIONALITY_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String nationalityCsv;
+
 	@PropertyDesc(name = "国籍的值", column = "NATIONALITY_DN")
-	private String NATIONALITY_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.AR_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String nationalityDn;
+
 	@PropertyDesc(name = "行政区划的字典代码", column = "AR_CS")
-	private String AR_CS;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.AR_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String arCs;
+
 	@PropertyDesc(name = "行政区划的字典名称", column = "AR_CSN")
-	private String AR_CSN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.AR_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String arCsn;
+
 	@PropertyDesc(name = "行政区划的字典版本", column = "AR_CSV")
-	private String AR_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.AR_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String arCsv;
+
 	@PropertyDesc(name = "行政区划的值", column = "AR_DN")
-	private String AR_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.AD_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String arDn;
+
 	@PropertyDesc(name = "地址类别的字典代码", column = "AD_CS")
-	private String AD_CS;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.AD_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String adCs;
+
 	@PropertyDesc(name = "地址类别的字典名称", column = "AD_CSN")
-	private String AD_CSN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.AD_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String adCsn;
+
 	@PropertyDesc(name = "地址类别的字典版本", column = "AD_CSV")
-	private String AD_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.AD_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String adCsv;
+
 	@PropertyDesc(name = "地址类别的值", column = "AD_DN")
-	private String AD_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.TEL_TYPE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String adDn;
+
 	@PropertyDesc(name = "联系电话类别的字典代码", column = "TEL_TYPE_CS")
-	private String TEL_TYPE_CS;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.TEL_TYPE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String telTypeCs;
+
 	@PropertyDesc(name = "联系电话类别的字典名称", column = "TEL_TYPE_CSN")
-	private String TEL_TYPE_CSN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.TEL_TYPE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String telTypeCsn;
+
 	@PropertyDesc(name = "联系电话类别的字典版本", column = "TEL_TYPE_CSV")
-	private String TEL_TYPE_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.TEL_TYPE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String telTypeCsv;
+
 	@PropertyDesc(name = "联系电话类别的值", column = "TEL_TYPE_DN")
-	private String TEL_TYPE_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.LINKMAN_REL_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String telTypeDn;
+
 	@PropertyDesc(name = "联系人关系的字典代码", column = "LINKMAN_REL_CS")
-	private String LINKMAN_REL_CS;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.LINKMAN_REL_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String linkmanRelCs;
+
 	@PropertyDesc(name = "联系人关系的字典名称", column = "LINKMAN_REL_CSN")
-	private String LINKMAN_REL_CSN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.LINKMAN_REL_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String linkmanRelCsn;
+
 	@PropertyDesc(name = "联系人关系的字典版本", column = "LINKMAN_REL_CSV")
-	private String LINKMAN_REL_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.LINKMAN_REL_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String linkmanRelCsv;
+
 	@PropertyDesc(name = "联系人关系的值", column = "LINKMAN_REL_DN")
-	private String LINKMAN_REL_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.LM_ID_NO_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String linkmanRelDn;
+
 	@PropertyDesc(name = "联系人身份证件类别的字典代码", column = "LM_ID_NO_CS")
-	private String LM_ID_NO_CS;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.LM_ID_NO_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String lmIdNoCs;
+
 	@PropertyDesc(name = "联系人身份证件类别的字典名称", column = "LM_ID_NO_CSN")
-	private String LM_ID_NO_CSN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.LM_ID_NO_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String lmIdNoCsn;
+
 	@PropertyDesc(name = "联系人身份证件类别的字典版本", column = "LM_ID_NO_CSV")
-	private String LM_ID_NO_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.LM_ID_NO_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String lmIdNoCsv;
+
 	@PropertyDesc(name = "联系人身份证件类别的值", column = "LM_ID_NO_DN")
-	private String LM_ID_NO_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.ABO_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String lmIdNoDn;
+
 	@PropertyDesc(name = "ABO血型的字典代码", column = "ABO_CS")
-	private String ABO_CS;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.ABO_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String aboCs;
+
 	@PropertyDesc(name = "ABO血型的字典名称", column = "ABO_CSN")
-	private String ABO_CSN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.ABO_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String aboCsn;
+
 	@PropertyDesc(name = "ABO血型的字典版本", column = "ABO_CSV")
-	private String ABO_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.ABO_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String aboCsv;
+
 	@PropertyDesc(name = "ABO血型的值", column = "ABO_DN")
-	private String ABO_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.RH_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String aboDn;
+
 	@PropertyDesc(name = "RH血型的字典代码", column = "RH_CS")
-	private String RH_CS;
+	private String rhCs;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.RH_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "RH血型的字典名称", column = "RH_CSN")
-	private String RH_CSN;
+	private String rhCsn;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.RH_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "RH血型的字典版本", column = "RH_CSV")
-	private String RH_CSV;
+	private String rhCsv;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.RH_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "RH血型的值", column = "RH_DN")
-	private String RH_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_ED_BG_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String rhDn;
+
 	@PropertyDesc(name = "学历代码的字典代码", column = "CARD_ED_BG_CS")
-	private String CARD_ED_BG_CS;
+	private String cardEdBgCs;
 
-	public Short getSRC_LEVEL() {
-		return SRC_LEVEL;
-	}
-
-	public void setSRC_LEVEL(Short sRC_LEVEL) {
-		SRC_LEVEL = sRC_LEVEL;
-	}
-
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_ED_BG_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "学历代码的字典名称", column = "CARD_ED_BG_CSN")
-	private String CARD_ED_BG_CSN;
+	private String cardEdBgCsn;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_ED_BG_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "学历代码的字典版本", column = "CARD_ED_BG_CSV")
-	private String CARD_ED_BG_CSV;
+	private String cardEdBgCsv;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_ED_BG_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "学历代码的值", column = "CARD_ED_BG_DN")
-	private String CARD_ED_BG_DN;
+	private String cardEdBgDn;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.BIRTH_PLACE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "出生地的字典代码", column = "BIRTH_PLACE_CS")
-	private String BIRTH_PLACE_CS;
+	private String birthPlaceCs;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.BIRTH_PLACE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "出生地的字典名称", column = "BIRTH_PLACE_CSN")
-	private String BIRTH_PLACE_CSN;
+	private String birthPlaceCsn;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.BIRTH_PLACE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "出生地的字典版本", column = "BIRTH_PLACE_CSV")
-	private String BIRTH_PLACE_CSV;
+	private String birthPlaceCsv;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.BIRTH_PLACE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "出生地的值", column = "BIRTH_PLACE_DN")
-	private String BIRTH_PLACE_DN;
+	private String birthPlaceDn;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.NATIVE_PROVINCE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "籍贯-省取值", column = "NATIVE_PROVINCE")
-	private String NATIVE_PROVINCE;
+	private String nativeProvince;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.NATIVE_PROVINCE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "籍贯-省的字典代码", column = "NATIVE_PROVINCE_CS")
-	private String NATIVE_PROVINCE_CS;
+	private String nativeProvinceCs;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.NATIVE_PROVINCE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "籍贯-省的字典名称", column = "NATIVE_PROVINCE_CSN")
-	private String NATIVE_PROVINCE_CSN;
+	private String nativeProvinceCsn;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.NATIVE_PROVINCE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "籍贯-省的字典版本", column = "NATIVE_PROVINCE_CSV")
-	private String NATIVE_PROVINCE_CSV;
+	private String nativeProvinceCsv;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.NATIVE_PROVINCE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "籍贯-省的值", column = "NATIVE_PROVINCE_DN")
-	private String NATIVE_PROVINCE_DN;
+	private String nativeProvinceDn;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.NATIVE_CITY_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "籍贯-市的字典代码", column = "NATIVE_CITY_CS")
-	private String NATIVE_CITY_CS;
+	private String nativeCityCs;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.NATIVE_CITY_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "籍贯-市的字典名称", column = "NATIVE_CITY_CSN")
-	private String NATIVE_CITY_CSN;
+	private String nativeCityCsn;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.NATIVE_CITY_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "籍贯-市的字典版本", column = "NATIVE_CITY_CSV")
-	private String NATIVE_CITY_CSV;
+	private String nativeCityCsv;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.NATIVE_CITY_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "籍贯-市的值", column = "NATIVE_CITY_DN")
-	private String NATIVE_CITY_DN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.VETERANS_MILITARY_VAULE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String nativeCityDn;
+
 	@PropertyDesc(name = "退伍军人标志的值", column = "VETERANS_MILITARY_VAULE")
-	private String VETERANS_MILITARY_VALUE;
+	private String veteransMilitaryValue;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "退伍军人标志的字典代码", column = "VETERANS_MILITARY_MARK_CS")
-	private String VETERANS_MILITARY_MARK_CS;
+	private String veteransMilitaryMarkCs;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "退伍军人标志的字典名称", column = "VETERANS_MILITARY_MARK_CSN")
-	private String VETERANS_MILITARY_MARK_CSN;
+	private String veteransMilitaryMarkCsn;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "退伍军人标志的字典版本", column = "VETERANS_MILITARY_MARK_CSV")
-	private String VETERANS_MILITARY_MARK_CSV;
+	private String veteransMilitaryMarkCsv;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "卡类型的字典代码", column = "CARD_CS")
-	private String CARD_CS;
+	private String cardCs;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "卡类型的字典名称", column = "CARD_CSN")
-	private String CARD_CSN;
+	private String cardCsn;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "卡类型的字典版本", column = "CARD_CSV")
-	private String CARD_CSV;
+	private String cardCsv;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "卡类型的值", column = "CARD_DN")
-	private String CARD_DN;
+	private String cardDn;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_AREA_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "发卡地区的字典代码", column = "CARD_AREA_CS")
-	private String CARD_AREA_CS;
+	private String cardAreaCs;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_AREA_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "发卡地区的字典名称", column = "CARD_AREA_CSN")
-	private String CARD_AREA_CSN;
+	private String cardAreaCsn;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_AREA_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "发卡地区的字典版本", column = "CARD_AREA_CSV")
-	private String CARD_AREA_CSV;
+	private String cardAreaCsv;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.CARD_AREA_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "发卡地区的值", column = "CARD_AREA_DN")
-	private String CARD_AREA_DN;
+	private String cardAreaDn;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.PATIENT_TYPE_VAULE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "患者类型的值", column = "PATIENT_TYPE_VALUE")
-	private String PATIENT_TYPE_VALUE;
+	private String patientTypeValue;
 
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.PATIENT_TYPE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
 	@PropertyDesc(name = "患者类型的字典代码", column = "PATIENT_TYPE_CS")
-	private String PATIENT_TYPE_CS;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.PATIENT_TYPE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String patientTypeCs;
+
 	@PropertyDesc(name = "患者类型的字典名称", column = "PATIENT_TYPE_CSN")
-	private String PATIENT_TYPE_CSN;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.PATIENT_TYPE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String patientTypeCsn;
+
 	@PropertyDesc(name = "患者类型的字典版本", column = "PATIENT_TYPE_CSV")
-	private String PATIENT_TYPE_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.PATIENT_TYPE_DESCR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String patientTypeCsv;
+
 	@PropertyDesc(name = "患者就诊类别描述", column = "PATIENT_TYPE_DESCR")
-	private String PATIENT_TYPE_DESCR;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.WORKING_TEL_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String patientTypeDescr;
+
 	@PropertyDesc(name = "工作单位电话号码", column = "WORKING_TEL_NO")
-	private String WORKING_TEL_NO;
-
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.MEDICAL_TREATMENT_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String workingTelNo;
 	@PropertyDesc(name = "医疗待遇的字典代码", column = "MEDICAL_TREATMENT_CS")
-	private String MEDICAL_TREATMENT_CS;
-
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.MEDICAL_TREATMENT_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String medicalTreatmentCs;
 	@PropertyDesc(name = "医疗待遇的字典名称", column = "MEDICAL_TREATMENT_CSN")
-	private String MEDICAL_TREATMENT_CSN;
-
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.MEDICAL_TREATMENT_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String medicalTreatmentCsn;
 	@PropertyDesc(name = "医疗待遇的字典版本", column = "MEDICAL_TREATMENT_CSV")
-	private String MEDICAL_TREATMENT_CSV;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.VERSION_NUM
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String medicalTreatmentCsv;
 	@PropertyDesc(name = "版本号", column = "VERSION_NUM")
-	private String VERSION_NUM;
-
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.RESPONS_DOC_CODE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String versionNum;
 	@PropertyDesc(name = "责任医师代码", column = "RESPONS_DOC_CODE")
-	private String RESPONS_DOC_CODE;
-
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.RESPONS_DOC_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String responsDocCode;
 	@PropertyDesc(name = "责任医师姓名", column = "RESPONS_DOC_NAME")
-	private String RESPONS_DOC_NAME;
-
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.OTHER_OCCC_DESCR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String responsDocName;
 	@PropertyDesc(name = "其他职业描述", column = "OTHER_OCCC_DESCR")
-	private String OTHER_OCCC_DESCR;
-
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.USUAL_TYPE_MARK
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
+	private String otherOcccDescr;
 	@PropertyDesc(name = "常住地址户籍标志", column = "USUAL_TYPE_MARK")
-	private Short USUAL_TYPE_MARK;
-	/**
-	 * This field was generated by MyBatis Generator. This field corresponds to the
-	 * database column MPI_PERSON_INFO.SRC_LEVEL
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	@PropertyDesc(name = "数据源级别", column = "SRC_LEVEL")
-	private Short SRC_LEVEL;
-
+	private Short usualTypeMark;
 	@PropertyDesc(name = "籍贯—市取值", column = "NATIVE_CITY")
-	private String NATIVE_CITY;
+	private String nativeCity;
+	@PropertyDesc(name = "病人 ID", column = "PATIENT_ID")
+	private String patientId;
+	@PropertyDesc(name = "药物过敏史标志", column = "DRUG_ALLERGY_MARK")
+	private String drugAllergyMark;
+	@PropertyDesc(name = "手术史标志", column = "OP_HISTORY_MARK")
+	private String opHistoryMark;
+	@PropertyDesc(name = "外伤史标志", column = "TRAUMA_HISTORY_MARK")
+	private String traumaHistoryMark;
+	@PropertyDesc(name = "输血史标志", column = "BLOOD_TRANSF_MARK")
+	private String bloodTransfMark;
+	@PropertyDesc(name = "残疾标志", column = "DISABILITY_MARK")
+	private String disabilityMark;
+	@PropertyDesc(name = "遗传性疾病史", column = "GENETIC_DISEASE_HISTORY")
+	private String geneticDiseaseHistory;
+	@PropertyDesc(name = "家庭厨房排风设施标志", column = "EXHAUST_FACILITY_MARK")
+	private String exhaustFacilityMark;
+	@PropertyDesc(name = "家庭厨房排风设施类别代码", column = "EXHAUST_FACILITY_TYPE_CODE")
+	private String exhaustFacilityTypeCode;
+	@PropertyDesc(name = "家庭燃料类型类别代码", column = "FUEL_TYPE_CODE")
+	private String fuelTypeCode;
+	@PropertyDesc(name = "家庭饮水类别代码", column = "WATER_TYPE_CODE")
+	private String waterTypeCode;
+	@PropertyDesc(name = "家庭厕所类别代码", column = "TOILET_TYPE_CODE")
+	private String toiletTypeCode;
+	@PropertyDesc(name = "家庭禽畜栏类别代码", column = "LIVESTOCK_PEN_TYPE_CODE")
+	private String livestockPenTypeCode;
+	@PropertyDesc(name = "手术史", column = "OPERATION_HISTORY")
+	private String operationHistory;
+	@PropertyDesc(name = "哮喘标志", column = "ASTHMA_MARK")
+	private String asthmaMark;
+	@PropertyDesc(name = "心脏病标志", column = "HEDRT_DIS_MARK")
+	private String hedrtDisMark;
+	@PropertyDesc(name = "心脑血管病标志", column = "CARDIOVASCULAR_CODE")
+	private String cardiovascularCode;
+	@PropertyDesc(name = "癫痫病标志", column = "EPILEPSY_MARK")
+	private String epilepsyMark;
+	@PropertyDesc(name = "凝血紊乱标志", column = "COAGULOPATHY_MARK")
+	private String coagulopathyMark;
+	@PropertyDesc(name = "糖尿病标志", column = "DIABETES_MARK")
+	private String diabetesMark;
+	@PropertyDesc(name = "青光眼标志", column = "GLAUCOMA_MARK")
+	private String glaucomaMark;
+	@PropertyDesc(name = "透析标志", column = "DIALYSIS_MARK")
+	private String dialysisMark;
+	@PropertyDesc(name = "器官移植标志", column = "ORGAN_TRANS_MARK")
+	private String organTransMark;
+	@PropertyDesc(name = "器官缺失标志", column = "ORGAN_DEFECT_MARK")
+	private String organDefectMark;
+	@PropertyDesc(name = "可装卸的义肢标志", column = "REMOVA_PRO_MARK")
+	private String removaProMark;
+	@PropertyDesc(name = "心脏起搏器标志", column = "CARDIAC_PAC_MARK")
+	private String cardiacPacMark;
+	@PropertyDesc(name = "其他医学警示名称", column = "ORTHER_MEDICAL_ALERT")
+	private String ortherMedicalAlert;
+	@PropertyDesc(name = "精神病标志", column = "PSYCHIATRIC_MARK")
+	private String psychiatricMark;
+	/* 从姓名到精神病标志与mpiinfo信息一致<<< */
+
+	@PropertyDesc(name = "备注", column = "REMARK")
+	private String remark;
+
+	@PropertyDesc(name = "数据源级别", column = "SRC_LEVEL")
+	private Short srcLevel;
+	@PropertyDesc(name = "数据源类型", column = "TYPE")
+	private String type;
+	@PropertyDesc(name = "原始主键", column = "RELATION_PK")
+	private String relationPk;
+	@PropertyDesc(name = "关联标识", column = "RELATION_TYPE")
+	private String relationType;
+
+	private String uploadState;
+	private Date uploadDate;
+	private String backups;
+	private Date dtCreate;
+	private String flag;
+	private String flagGa;
+	private Date dtUpdateGa;
 
 	// 扩展
-	private String DOMAIN_ID;
-
-	private String UNIQUE_SIGN;
-
-	private String DOMAIN_DESC;
-
-	/**
-	 * lpk update 2013年4月16日9:35:03
-	 */
-	@PropertyDesc(name = "数据源类型", column = "TYPE")
-	private String TYPE;
-	@PropertyDesc(name = "原始主键", column = "RELATION_PK")
-	private String RELATION_PK;
-	@PropertyDesc(name = "关联标识", column = "RELATION_TYPE")
-	private String RELATION_TYPE;
-
-	/*
-	 * 20170301 updated WHN
-	 */
-	@PropertyDesc(name = "病人 ID", column = "PATIENT_ID")
-	private String PATIENT_ID;
-	@PropertyDesc(name = "药物过敏史标志", column = "DRUG_ALLERGY_MARK")
-	private String DRUG_ALLERGY_MARK;
-	@PropertyDesc(name = "手术史标志", column = "OP_HISTORY_MARK")
-	private String OP_HISTORY_MARK;
-	@PropertyDesc(name = "外伤史标志", column = "TRAUMA_HISTORY_MARK")
-	private String TRAUMA_HISTORY_MARK;
-	@PropertyDesc(name = "输血史标志", column = "BLOOD_TRANSF_MARK")
-	private String BLOOD_TRANSF_MARK;
-	@PropertyDesc(name = "残疾标志", column = "DISABILITY_MARK")
-	private String DISABILITY_MARK;
-	@PropertyDesc(name = "遗传性疾病史", column = "GENETIC_DISEASE_HISTORY")
-	private String GENETIC_DISEASE_HISTORY;
-	@PropertyDesc(name = "家庭厨房排风设施标志", column = "EXHAUST_FACILITY_MARK")
-	private String EXHAUST_FACILITY_MARK;
-	@PropertyDesc(name = "家庭厨房排风设施类别代码", column = "EXHAUST_FACILITY_TYPE_CODE")
-	private String EXHAUST_FACILITY_TYPE_CODE;
-	@PropertyDesc(name = "家庭燃料类型类别代码", column = "FUEL_TYPE_CODE")
-	private String FUEL_TYPE_CODE;
-	@PropertyDesc(name = "家庭饮水类别代码", column = "WATER_TYPE_CODE")
-	private String WATER_TYPE_CODE;
-	@PropertyDesc(name = "家庭厕所类别代码", column = "TOILET_TYPE_CODE")
-	private String TOILET_TYPE_CODE;
-	@PropertyDesc(name = "家庭禽畜栏类别代码", column = "LIVESTOCK_PEN_TYPE_CODE")
-	private String LIVESTOCK_PEN_TYPE_CODE;
-	@PropertyDesc(name = "手术史", column = "OPERATION_HISTORY")
-	private String OPERATION_HISTORY;
-	@PropertyDesc(name = "哮喘标志", column = "ASTHMA_MARK")
-	private String ASTHMA_MARK;
-	@PropertyDesc(name = "心脏病标志", column = "HEDRT_DIS_MARK")
-	private String HEDRT_DIS_MARK;
-	@PropertyDesc(name = "心脑血管病标志", column = "CARDIOVASCULAR_CODE")
-	private String CARDIOVASCULAR_CODE;
-	@PropertyDesc(name = "癫痫病标志", column = "EPILEPSY_MARK")
-	private String EPILEPSY_MARK;
-	@PropertyDesc(name = "凝血紊乱标志", column = "COAGULOPATHY_MARK")
-	private String COAGULOPATHY_MARK;
-	@PropertyDesc(name = "糖尿病标志", column = "DIABETES_MARK")
-	private String DIABETES_MARK;
-	@PropertyDesc(name = "青光眼标志", column = "GLAUCOMA_MARK")
-	private String GLAUCOMA_MARK;
-	@PropertyDesc(name = "透析标志", column = "DIALYSIS_MARK")
-	private String DIALYSIS_MARK;
-	@PropertyDesc(name = "器官移植标志", column = "ORGAN_TRANS_MARK")
-	private String ORGAN_TRANS_MARK;
-	@PropertyDesc(name = "器官缺失标志", column = "ORGAN_DEFECT_MARK")
-	private String ORGAN_DEFECT_MARK;
-	@PropertyDesc(name = "可装卸的义肢标志", column = "REMOVA_PRO_MARK")
-	private String REMOVA_PRO_MARK;
-	@PropertyDesc(name = "心脏起搏器标志", column = "CARDIAC_PAC_MARK")
-	private String CARDIAC_PAC_MARK;
-	@PropertyDesc(name = "其他医学警示名称", column = "ORTHER_MEDICAL_ALERT")
-	private String ORTHER_MEDICAL_ALERT;
-	@PropertyDesc(name = "精神病标志", column = "PSYCHIATRIC_MARK")
-	private String PSYCHIATRIC_MARK;
+	@Transient
+	private String domainId;
+	@Transient
+	private String uniqueSign;
+	@Transient
+	private String domainDesc;
 
-	public void setTYPE(String tYPE) {
-		TYPE = tYPE;
+	public String getFieldPk() {
+		return fieldPk;
 	}
 
-	public String getTYPE() {
-		return TYPE;
+	public void setFieldPk(String fieldPk) {
+		this.fieldPk = fieldPk == null ? null : fieldPk.trim();
 	}
 
-	public String getRELATION_PK() {
-		return RELATION_PK;
+	public String getRegisterOrgCode() {
+		return registerOrgCode;
 	}
 
-	public void setRELATION_PK(String rELATION_PK) {
-		RELATION_PK = rELATION_PK;
+	public void setRegisterOrgCode(String registerOrgCode) {
+		this.registerOrgCode = registerOrgCode == null ? null : registerOrgCode.trim();
 	}
 
-	public String getRELATION_TYPE() {
-		return RELATION_TYPE;
+	public String getRegisterOrgName() {
+		return registerOrgName;
 	}
 
-	public void setRELATION_TYPE(String rELATION_TYPE) {
-		RELATION_TYPE = rELATION_TYPE;
+	public void setRegisterOrgName(String registerOrgName) {
+		this.registerOrgName = registerOrgName == null ? null : registerOrgName.trim();
 	}
 
-	public String getPATIENT_ID() {
-		return PATIENT_ID;
+	public String getMedicalserviceNo() {
+		return medicalserviceNo;
 	}
 
-	public void setPATIENT_ID(String pATIENT_ID) {
-		PATIENT_ID = pATIENT_ID;
+	public void setMedicalserviceNo(String medicalserviceNo) {
+		this.medicalserviceNo = medicalserviceNo == null ? null : medicalserviceNo.trim();
 	}
 
-	public String getDRUG_ALLERGY_MARK() {
-		return DRUG_ALLERGY_MARK;
+	public String getNameCn() {
+		return nameCn;
 	}
 
-	public void setDRUG_ALLERGY_MARK(String dRUG_ALLERGY_MARK) {
-		DRUG_ALLERGY_MARK = dRUG_ALLERGY_MARK;
+	public void setNameCn(String nameCn) {
+		this.nameCn = nameCn == null ? null : nameCn.trim();
 	}
 
-	public String getOP_HISTORY_MARK() {
-		return OP_HISTORY_MARK;
+	public String getNameEn() {
+		return nameEn;
 	}
 
-	public void setOP_HISTORY_MARK(String oP_HISTORY_MARK) {
-		OP_HISTORY_MARK = oP_HISTORY_MARK;
+	public void setNameEn(String nameEn) {
+		this.nameEn = nameEn == null ? null : nameEn.trim();
 	}
 
-	public String getTRAUMA_HISTORY_MARK() {
-		return TRAUMA_HISTORY_MARK;
+	public String getRemark() {
+		return remark;
 	}
 
-	public void setTRAUMA_HISTORY_MARK(String tRAUMA_HISTORY_MARK) {
-		TRAUMA_HISTORY_MARK = tRAUMA_HISTORY_MARK;
+	public void setRemark(String remark) {
+		this.remark = remark == null ? null : remark.trim();
 	}
 
-	public String getBLOOD_TRANSF_MARK() {
-		return BLOOD_TRANSF_MARK;
+	public Date getBirthDate() {
+		return birthDate;
 	}
 
-	public void setBLOOD_TRANSF_MARK(String bLOOD_TRANSF_MARK) {
-		BLOOD_TRANSF_MARK = bLOOD_TRANSF_MARK;
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
 	}
 
-	public String getDISABILITY_MARK() {
-		return DISABILITY_MARK;
+	public String getGenderCd() {
+		return genderCd;
 	}
 
-	public void setDISABILITY_MARK(String dISABILITY_MARK) {
-		DISABILITY_MARK = dISABILITY_MARK;
+	public void setGenderCd(String genderCd) {
+		this.genderCd = genderCd == null ? null : genderCd.trim();
 	}
 
-	public String getGENETIC_DISEASE_HISTORY() {
-		return GENETIC_DISEASE_HISTORY;
+	public String getCardMaritalStCd() {
+		return cardMaritalStCd;
 	}
 
-	public void setGENETIC_DISEASE_HISTORY(String gENETIC_DISEASE_HISTORY) {
-		GENETIC_DISEASE_HISTORY = gENETIC_DISEASE_HISTORY;
+	public void setCardMaritalStCd(String cardMaritalStCd) {
+		this.cardMaritalStCd = cardMaritalStCd == null ? null : cardMaritalStCd.trim();
 	}
 
-	public String getEXHAUST_FACILITY_MARK() {
-		return EXHAUST_FACILITY_MARK;
+	public String getIdNoCd() {
+		return idNoCd;
 	}
 
-	public void setEXHAUST_FACILITY_MARK(String eXHAUST_FACILITY_MARK) {
-		EXHAUST_FACILITY_MARK = eXHAUST_FACILITY_MARK;
+	public void setIdNoCd(String idNoCd) {
+		this.idNoCd = idNoCd == null ? null : idNoCd.trim();
 	}
 
-	public String getEXHAUST_FACILITY_TYPE_CODE() {
-		return EXHAUST_FACILITY_TYPE_CODE;
+	public String getIdNo() {
+		return idNo;
 	}
 
-	public void setEXHAUST_FACILITY_TYPE_CODE(String eXHAUST_FACILITY_TYPE_CODE) {
-		EXHAUST_FACILITY_TYPE_CODE = eXHAUST_FACILITY_TYPE_CODE;
+	public void setIdNo(String idNo) {
+		this.idNo = idNo == null ? null : idNo.trim();
 	}
 
-	public String getFUEL_TYPE_CODE() {
-		return FUEL_TYPE_CODE;
+	public String getMedicareCd() {
+		return medicareCd;
 	}
 
-	public void setFUEL_TYPE_CODE(String fUEL_TYPE_CODE) {
-		FUEL_TYPE_CODE = fUEL_TYPE_CODE;
+	public void setMedicareCd(String medicareCd) {
+		this.medicareCd = medicareCd == null ? null : medicareCd.trim();
 	}
 
-	public String getWATER_TYPE_CODE() {
-		return WATER_TYPE_CODE;
+	public String getMedicalInsuranceNo() {
+		return medicalInsuranceNo;
 	}
 
-	public void setWATER_TYPE_CODE(String wATER_TYPE_CODE) {
-		WATER_TYPE_CODE = wATER_TYPE_CODE;
+	public void setMedicalInsuranceNo(String medicalInsuranceNo) {
+		this.medicalInsuranceNo = medicalInsuranceNo == null ? null : medicalInsuranceNo.trim();
 	}
 
-	public String getTOILET_TYPE_CODE() {
-		return TOILET_TYPE_CODE;
+	public String getCardOccuTypeCd() {
+		return cardOccuTypeCd;
 	}
 
-	public void setTOILET_TYPE_CODE(String tOILET_TYPE_CODE) {
-		TOILET_TYPE_CODE = tOILET_TYPE_CODE;
+	public void setCardOccuTypeCd(String cardOccuTypeCd) {
+		this.cardOccuTypeCd = cardOccuTypeCd == null ? null : cardOccuTypeCd.trim();
 	}
 
-	public String getLIVESTOCK_PEN_TYPE_CODE() {
-		return LIVESTOCK_PEN_TYPE_CODE;
+	public String getCardNationCd() {
+		return cardNationCd;
 	}
 
-	public void setLIVESTOCK_PEN_TYPE_CODE(String lIVESTOCK_PEN_TYPE_CODE) {
-		LIVESTOCK_PEN_TYPE_CODE = lIVESTOCK_PEN_TYPE_CODE;
+	public void setCardNationCd(String cardNationCd) {
+		this.cardNationCd = cardNationCd == null ? null : cardNationCd.trim();
 	}
 
-	public String getOPERATION_HISTORY() {
-		return OPERATION_HISTORY;
+	public String getNationalityCd() {
+		return nationalityCd;
 	}
 
-	public void setOPERATION_HISTORY(String oPERATION_HISTORY) {
-		OPERATION_HISTORY = oPERATION_HISTORY;
+	public void setNationalityCd(String nationalityCd) {
+		this.nationalityCd = nationalityCd == null ? null : nationalityCd.trim();
 	}
 
-	public String getASTHMA_MARK() {
-		return ASTHMA_MARK;
+	public String getArCd() {
+		return arCd;
 	}
 
-	public void setASTHMA_MARK(String aSTHMA_MARK) {
-		ASTHMA_MARK = aSTHMA_MARK;
+	public void setArCd(String arCd) {
+		this.arCd = arCd == null ? null : arCd.trim();
 	}
 
-	public String getHEDRT_DIS_MARK() {
-		return HEDRT_DIS_MARK;
+	public String getAdCd() {
+		return adCd;
 	}
 
-	public void setHEDRT_DIS_MARK(String hEDRT_DIS_MARK) {
-		HEDRT_DIS_MARK = hEDRT_DIS_MARK;
+	public void setAdCd(String adCd) {
+		this.adCd = adCd == null ? null : adCd.trim();
 	}
 
-	public String getCARDIOVASCULAR_CODE() {
-		return CARDIOVASCULAR_CODE;
+	public String getProvinceName() {
+		return provinceName;
 	}
 
-	public void setCARDIOVASCULAR_CODE(String cARDIOVASCULAR_CODE) {
-		CARDIOVASCULAR_CODE = cARDIOVASCULAR_CODE;
+	public void setProvinceName(String provinceName) {
+		this.provinceName = provinceName == null ? null : provinceName.trim();
 	}
 
-	public String getEPILEPSY_MARK() {
-		return EPILEPSY_MARK;
+	public String getCityName() {
+		return cityName;
 	}
 
-	public void setEPILEPSY_MARK(String ePILEPSY_MARK) {
-		EPILEPSY_MARK = ePILEPSY_MARK;
+	public void setCityName(String cityName) {
+		this.cityName = cityName == null ? null : cityName.trim();
 	}
 
-	public String getCOAGULOPATHY_MARK() {
-		return COAGULOPATHY_MARK;
+	public String getAreaName() {
+		return areaName;
 	}
 
-	public void setCOAGULOPATHY_MARK(String cOAGULOPATHY_MARK) {
-		COAGULOPATHY_MARK = cOAGULOPATHY_MARK;
+	public void setAreaName(String areaName) {
+		this.areaName = areaName == null ? null : areaName.trim();
 	}
 
-	public String getDIABETES_MARK() {
-		return DIABETES_MARK;
+	public String getStreetId() {
+		return streetId;
 	}
 
-	public void setDIABETES_MARK(String dIABETES_MARK) {
-		DIABETES_MARK = dIABETES_MARK;
+	public void setStreetId(String streetId) {
+		this.streetId = streetId == null ? null : streetId.trim();
 	}
 
-	public String getGLAUCOMA_MARK() {
-		return GLAUCOMA_MARK;
+	public String getVillageName() {
+		return villageName;
 	}
 
-	public void setGLAUCOMA_MARK(String gLAUCOMA_MARK) {
-		GLAUCOMA_MARK = gLAUCOMA_MARK;
+	public void setVillageName(String villageName) {
+		this.villageName = villageName == null ? null : villageName.trim();
 	}
 
-	public String getDIALYSIS_MARK() {
-		return DIALYSIS_MARK;
+	public String getHouseNo() {
+		return houseNo;
 	}
 
-	public void setDIALYSIS_MARK(String dIALYSIS_MARK) {
-		DIALYSIS_MARK = dIALYSIS_MARK;
+	public void setHouseNo(String houseNo) {
+		this.houseNo = houseNo == null ? null : houseNo.trim();
 	}
 
-	public String getORGAN_TRANS_MARK() {
-		return ORGAN_TRANS_MARK;
+	public String getTelTypeCd() {
+		return telTypeCd;
 	}
 
-	public void setORGAN_TRANS_MARK(String oRGAN_TRANS_MARK) {
-		ORGAN_TRANS_MARK = oRGAN_TRANS_MARK;
+	public void setTelTypeCd(String telTypeCd) {
+		this.telTypeCd = telTypeCd == null ? null : telTypeCd.trim();
 	}
 
-	public String getORGAN_DEFECT_MARK() {
-		return ORGAN_DEFECT_MARK;
+	public String getPersonTelNo() {
+		return personTelNo;
 	}
 
-	public void setORGAN_DEFECT_MARK(String oRGAN_DEFECT_MARK) {
-		ORGAN_DEFECT_MARK = oRGAN_DEFECT_MARK;
+	public void setPersonTelNo(String personTelNo) {
+		this.personTelNo = personTelNo == null ? null : personTelNo.trim();
 	}
 
-	public String getREMOVA_PRO_MARK() {
-		return REMOVA_PRO_MARK;
+	public String getLinkmanName() {
+		return linkmanName;
 	}
 
-	public void setREMOVA_PRO_MARK(String rEMOVA_PRO_MARK) {
-		REMOVA_PRO_MARK = rEMOVA_PRO_MARK;
+	public void setLinkmanName(String linkmanName) {
+		this.linkmanName = linkmanName == null ? null : linkmanName.trim();
 	}
 
-	public String getCARDIAC_PAC_MARK() {
-		return CARDIAC_PAC_MARK;
+	public String getLinkmanRelCd() {
+		return linkmanRelCd;
 	}
 
-	public void setCARDIAC_PAC_MARK(String cARDIAC_PAC_MARK) {
-		CARDIAC_PAC_MARK = cARDIAC_PAC_MARK;
+	public void setLinkmanRelCd(String linkmanRelCd) {
+		this.linkmanRelCd = linkmanRelCd == null ? null : linkmanRelCd.trim();
 	}
 
-	public String getORTHER_MEDICAL_ALERT() {
-		return ORTHER_MEDICAL_ALERT;
+	public String getLmIdNoCd() {
+		return lmIdNoCd;
 	}
 
-	public void setORTHER_MEDICAL_ALERT(String oRTHER_MEDICAL_ALERT) {
-		ORTHER_MEDICAL_ALERT = oRTHER_MEDICAL_ALERT;
+	public void setLmIdNoCd(String lmIdNoCd) {
+		this.lmIdNoCd = lmIdNoCd == null ? null : lmIdNoCd.trim();
 	}
 
-	public String getPSYCHIATRIC_MARK() {
-		return PSYCHIATRIC_MARK;
+	public String getLmIdNo() {
+		return lmIdNo;
 	}
 
-	public void setPSYCHIATRIC_MARK(String pSYCHIATRIC_MARK) {
-		PSYCHIATRIC_MARK = pSYCHIATRIC_MARK;
+	public void setLmIdNo(String lmIdNo) {
+		this.lmIdNo = lmIdNo == null ? null : lmIdNo.trim();
 	}
 
-	public String getDOMAIN_ID() {
-		return DOMAIN_ID;
+	public String getHrId() {
+		return hrId;
 	}
 
-	public void setDOMAIN_ID(String dOMAIN_ID) {
-		DOMAIN_ID = dOMAIN_ID;
+	public void setHrId(String hrId) {
+		this.hrId = hrId == null ? null : hrId.trim();
 	}
 
-	public String getUNIQUE_SIGN() {
-		return UNIQUE_SIGN;
+	public String getPostCd() {
+		return postCd;
 	}
 
-	public void setUNIQUE_SIGN(String uNIQUE_SIGN) {
-		UNIQUE_SIGN = uNIQUE_SIGN;
+	public void setPostCd(String postCd) {
+		this.postCd = postCd == null ? null : postCd.trim();
 	}
 
-	public String getDOMAIN_DESC() {
-		return DOMAIN_DESC;
+	public String getAboCd() {
+		return aboCd;
 	}
 
-	public void setDOMAIN_DESC(String dOMAIN_DESC) {
-		DOMAIN_DESC = dOMAIN_DESC;
+	public void setAboCd(String aboCd) {
+		this.aboCd = aboCd == null ? null : aboCd.trim();
 	}
 
-	public String getNATIVE_CITY() {
-		return NATIVE_CITY;
+	public String getRhCd() {
+		return rhCd;
 	}
 
-	public void setNATIVE_CITY(String nATIVE_CITY) {
-		NATIVE_CITY = nATIVE_CITY;
+	public void setRhCd(String rhCd) {
+		this.rhCd = rhCd == null ? null : rhCd.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.REGISTER_ORG_CODE
-	 *
-	 * @return the value of MPI_PERSON_INFO.REGISTER_ORG_CODE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getREGISTER_ORG_CODE() {
-		return REGISTER_ORG_CODE;
+	public String getRhNegCd() {
+		return rhNegCd;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.REGISTER_ORG_CODE
-	 *
-	 * @param REGISTER_ORG_CODE
-	 *            the value for MPI_PERSON_INFO.REGISTER_ORG_CODE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setREGISTER_ORG_CODE(String REGISTER_ORG_CODE) {
-		this.REGISTER_ORG_CODE = REGISTER_ORG_CODE == null ? null : REGISTER_ORG_CODE.trim();
+	public void setRhNegCd(String rhNegCd) {
+		this.rhNegCd = rhNegCd == null ? null : rhNegCd.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.REGISTER_ORG_NAME
-	 *
-	 * @return the value of MPI_PERSON_INFO.REGISTER_ORG_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getREGISTER_ORG_NAME() {
-		return REGISTER_ORG_NAME;
+	public String getCardEdBgCd() {
+		return cardEdBgCd;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.REGISTER_ORG_NAME
-	 *
-	 * @param REGISTER_ORG_NAME
-	 *            the value for MPI_PERSON_INFO.REGISTER_ORG_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setREGISTER_ORG_NAME(String REGISTER_ORG_NAME) {
-		this.REGISTER_ORG_NAME = REGISTER_ORG_NAME == null ? null : REGISTER_ORG_NAME.trim();
+	public void setCardEdBgCd(String cardEdBgCd) {
+		this.cardEdBgCd = cardEdBgCd == null ? null : cardEdBgCd.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.MEDICALSERVICE_NO
-	 *
-	 * @return the value of MPI_PERSON_INFO.MEDICALSERVICE_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getMEDICALSERVICE_NO() {
-		return MEDICALSERVICE_NO;
+	public String getBirthPlace() {
+		return birthPlace;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.MEDICALSERVICE_NO
-	 *
-	 * @param MEDICALSERVICE_NO
-	 *            the value for MPI_PERSON_INFO.MEDICALSERVICE_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setMEDICALSERVICE_NO(String MEDICALSERVICE_NO) {
-		this.MEDICALSERVICE_NO = MEDICALSERVICE_NO == null ? null : MEDICALSERVICE_NO.trim();
+	public void setBirthPlace(String birthPlace) {
+		this.birthPlace = birthPlace == null ? null : birthPlace.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NAME
-	 *
-	 * @return the value of MPI_PERSON_INFO.NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNAME_CN() {
-		return NAME_CN;
+	public String getWorkingUnitName() {
+		return workingUnitName;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NAME
-	 *
-	 * @param NAME
-	 *            the value for MPI_PERSON_INFO.NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNAME_CN(String NAME_CN) {
-		this.NAME_CN = NAME_CN == null ? null : NAME_CN.trim();
+	public void setWorkingUnitName(String workingUnitName) {
+		this.workingUnitName = workingUnitName == null ? null : workingUnitName.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NAME_EN
-	 *
-	 * @return the value of MPI_PERSON_INFO.NAME_EN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNAME_EN() {
-		return NAME_EN;
+	public String getEmailAd() {
+		return emailAd;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NAME_EN
-	 *
-	 * @param NAME_EN
-	 *            the value for MPI_PERSON_INFO.NAME_EN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNAME_EN(String NAME_EN) {
-		this.NAME_EN = NAME_EN == null ? null : NAME_EN.trim();
+	public void setEmailAd(String emailAd) {
+		this.emailAd = emailAd == null ? null : emailAd.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.REMARK
-	 *
-	 * @return the value of MPI_PERSON_INFO.REMARK
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getREMARK() {
-		return REMARK;
+	public Short getVeteransMilitaryMark() {
+		return veteransMilitaryMark;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.REMARK
-	 *
-	 * @param REMARK
-	 *            the value for MPI_PERSON_INFO.REMARK
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setREMARK(String REMARK) {
-		this.REMARK = REMARK == null ? null : REMARK.trim();
+	public void setVeteransMilitaryMark(Short veteransMilitaryMark) {
+		this.veteransMilitaryMark = veteransMilitaryMark;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.BIRTH_DATE
-	 *
-	 * @return the value of MPI_PERSON_INFO.BIRTH_DATE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public Date getBIRTH_DATE() {
-		return BIRTH_DATE;
+	public String getCardNo() {
+		return cardNo;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.BIRTH_DATE
-	 *
-	 * @param BIRTH_DATE
-	 *            the value for MPI_PERSON_INFO.BIRTH_DATE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setBIRTH_DATE(Date BIRTH_DATE) {
-		this.BIRTH_DATE = BIRTH_DATE;
+	public void setCardNo(String cardNo) {
+		this.cardNo = cardNo == null ? null : cardNo.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.GENDER_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.GENDER_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getGENDER_CD() {
-		return GENDER_CD;
+	public String getCardCd() {
+		return cardCd;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.GENDER_CD
-	 *
-	 * @param GENDER_CD
-	 *            the value for MPI_PERSON_INFO.GENDER_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setGENDER_CD(String GENDER_CD) {
-		this.GENDER_CD = GENDER_CD == null ? null : GENDER_CD.trim();
+	public void setCardCd(String cardCd) {
+		this.cardCd = cardCd == null ? null : cardCd.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_MARITAL_ST_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_MARITAL_ST_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_MARITAL_ST_CD() {
-		return CARD_MARITAL_ST_CD;
+	public String getCardArea() {
+		return cardArea;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_MARITAL_ST_CD
-	 *
-	 * @param CARD_MARITAL_ST_CD
-	 *            the value for MPI_PERSON_INFO.CARD_MARITAL_ST_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_MARITAL_ST_CD(String CARD_MARITAL_ST_CD) {
-		this.CARD_MARITAL_ST_CD = CARD_MARITAL_ST_CD == null ? null : CARD_MARITAL_ST_CD.trim();
+	public void setCardArea(String cardArea) {
+		this.cardArea = cardArea == null ? null : cardArea.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.ID_NO_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.ID_NO_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getID_NO_CD() {
-		return ID_NO_CD;
+	public String getPatientType() {
+		return patientType;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.ID_NO_CD
-	 *
-	 * @param ID_NO_CD
-	 *            the value for MPI_PERSON_INFO.ID_NO_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setID_NO_CD(String ID_NO_CD) {
-		this.ID_NO_CD = ID_NO_CD == null ? null : ID_NO_CD.trim();
+	public void setPatientType(String patientType) {
+		this.patientType = patientType == null ? null : patientType.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.ID_NO
-	 *
-	 * @return the value of MPI_PERSON_INFO.ID_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getID_NO() {
-		return ID_NO;
+	public String getmPhoneNum() {
+		return mPhoneNum;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.ID_NO
-	 *
-	 * @param ID_NO
-	 *            the value for MPI_PERSON_INFO.ID_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setID_NO(String ID_NO) {
-		this.ID_NO = ID_NO == null ? null : ID_NO.trim();
+	public void setmPhoneNum(String mPhoneNum) {
+		this.mPhoneNum = mPhoneNum == null ? null : mPhoneNum.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.MEDICARE_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.MEDICARE_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getMEDICARE_CD() {
-		return MEDICARE_CD;
+	public String getWorkingUnitPost() {
+		return workingUnitPost;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.MEDICARE_CD
-	 *
-	 * @param MEDICARE_CD
-	 *            the value for MPI_PERSON_INFO.MEDICARE_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setMEDICARE_CD(String MEDICARE_CD) {
-		this.MEDICARE_CD = MEDICARE_CD == null ? null : MEDICARE_CD.trim();
+	public void setWorkingUnitPost(String workingUnitPost) {
+		this.workingUnitPost = workingUnitPost == null ? null : workingUnitPost.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.MEDICAL_INSURANCE_NO
-	 *
-	 * @return the value of MPI_PERSON_INFO.MEDICAL_INSURANCE_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getMEDICAL_INSURANCE_NO() {
-		return MEDICAL_INSURANCE_NO;
+	public String getWorkingUnitAddr() {
+		return workingUnitAddr;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.MEDICAL_INSURANCE_NO
-	 *
-	 * @param MEDICAL_INSURANCE_NO
-	 *            the value for MPI_PERSON_INFO.MEDICAL_INSURANCE_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setMEDICAL_INSURANCE_NO(String MEDICAL_INSURANCE_NO) {
-		this.MEDICAL_INSURANCE_NO = MEDICAL_INSURANCE_NO == null ? null : MEDICAL_INSURANCE_NO.trim();
+	public void setWorkingUnitAddr(String workingUnitAddr) {
+		this.workingUnitAddr = workingUnitAddr == null ? null : workingUnitAddr.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_OCCU_TYPE_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_OCCU_TYPE_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_OCCU_TYPE_CD() {
-		return CARD_OCCU_TYPE_CD;
+	public String getLivingAddr() {
+		return livingAddr;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_OCCU_TYPE_CD
-	 *
-	 * @param CARD_OCCU_TYPE_CD
-	 *            the value for MPI_PERSON_INFO.CARD_OCCU_TYPE_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_OCCU_TYPE_CD(String CARD_OCCU_TYPE_CD) {
-		this.CARD_OCCU_TYPE_CD = CARD_OCCU_TYPE_CD == null ? null : CARD_OCCU_TYPE_CD.trim();
+	public void setLivingAddr(String livingAddr) {
+		this.livingAddr = livingAddr == null ? null : livingAddr.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_NATION_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_NATION_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_NATION_CD() {
-		return CARD_NATION_CD;
+	public String getRprAddr() {
+		return rprAddr;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_NATION_CD
-	 *
-	 * @param CARD_NATION_CD
-	 *            the value for MPI_PERSON_INFO.CARD_NATION_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_NATION_CD(String CARD_NATION_CD) {
-		this.CARD_NATION_CD = CARD_NATION_CD == null ? null : CARD_NATION_CD.trim();
+	public void setRprAddr(String rprAddr) {
+		this.rprAddr = rprAddr == null ? null : rprAddr.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NATIONALITY_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.NATIONALITY_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNATIONALITY_CD() {
-		return NATIONALITY_CD;
+	public String getRprPost() {
+		return rprPost;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NATIONALITY_CD
-	 *
-	 * @param NATIONALITY_CD
-	 *            the value for MPI_PERSON_INFO.NATIONALITY_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNATIONALITY_CD(String NATIONALITY_CD) {
-		this.NATIONALITY_CD = NATIONALITY_CD == null ? null : NATIONALITY_CD.trim();
+	public void setRprPost(String rprPost) {
+		this.rprPost = rprPost == null ? null : rprPost.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.AR_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.AR_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getAR_CD() {
-		return AR_CD;
+	public String getRprPhone() {
+		return rprPhone;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.AR_CD
-	 *
-	 * @param AR_CD
-	 *            the value for MPI_PERSON_INFO.AR_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setAR_CD(String AR_CD) {
-		this.AR_CD = AR_CD == null ? null : AR_CD.trim();
+	public void setRprPhone(String rprPhone) {
+		this.rprPhone = rprPhone == null ? null : rprPhone.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.AD_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.AD_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getAD_CD() {
-		return AD_CD;
+	public String getLinkmanAddr() {
+		return linkmanAddr;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.AD_CD
-	 *
-	 * @param AD_CD
-	 *            the value for MPI_PERSON_INFO.AD_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setAD_CD(String AD_CD) {
-		this.AD_CD = AD_CD == null ? null : AD_CD.trim();
+	public void setLinkmanAddr(String linkmanAddr) {
+		this.linkmanAddr = linkmanAddr == null ? null : linkmanAddr.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.PROVINCE_NAME
-	 *
-	 * @return the value of MPI_PERSON_INFO.PROVINCE_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getPROVINCE_NAME() {
-		return PROVINCE_NAME;
+	public String getLinkmanPost() {
+		return linkmanPost;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.PROVINCE_NAME
-	 *
-	 * @param PROVINCE_NAME
-	 *            the value for MPI_PERSON_INFO.PROVINCE_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setPROVINCE_NAME(String PROVINCE_NAME) {
-		this.PROVINCE_NAME = PROVINCE_NAME == null ? null : PROVINCE_NAME.trim();
+	public void setLinkmanPost(String linkmanPost) {
+		this.linkmanPost = linkmanPost == null ? null : linkmanPost.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CITY_NAME
-	 *
-	 * @return the value of MPI_PERSON_INFO.CITY_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCITY_NAME() {
-		return CITY_NAME;
+	public String getLinkmanPhone() {
+		return linkmanPhone;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CITY_NAME
-	 *
-	 * @param CITY_NAME
-	 *            the value for MPI_PERSON_INFO.CITY_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCITY_NAME(String CITY_NAME) {
-		this.CITY_NAME = CITY_NAME == null ? null : CITY_NAME.trim();
+	public void setLinkmanPhone(String linkmanPhone) {
+		this.linkmanPhone = linkmanPhone == null ? null : linkmanPhone.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.AREA_NAME
-	 *
-	 * @return the value of MPI_PERSON_INFO.AREA_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getAREA_NAME() {
-		return AREA_NAME;
+	public String getInsureType() {
+		return insureType;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.AREA_NAME
-	 *
-	 * @param AREA_NAME
-	 *            the value for MPI_PERSON_INFO.AREA_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setAREA_NAME(String AREA_NAME) {
-		this.AREA_NAME = AREA_NAME == null ? null : AREA_NAME.trim();
+	public void setInsureType(String insureType) {
+		this.insureType = insureType == null ? null : insureType.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.STREET_ID
-	 *
-	 * @return the value of MPI_PERSON_INFO.STREET_ID
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getSTREET_ID() {
-		return STREET_ID;
+	public String getMedicalTreatmentName() {
+		return medicalTreatmentName;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.STREET_ID
-	 *
-	 * @param STREET_ID
-	 *            the value for MPI_PERSON_INFO.STREET_ID
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setSTREET_ID(String STREET_ID) {
-		this.STREET_ID = STREET_ID == null ? null : STREET_ID.trim();
+	public void setMedicalTreatmentName(String medicalTreatmentName) {
+		this.medicalTreatmentName = medicalTreatmentName == null ? null : medicalTreatmentName.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.VILLAGE_NAME
-	 *
-	 * @return the value of MPI_PERSON_INFO.VILLAGE_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getVILLAGE_NAME() {
-		return VILLAGE_NAME;
+	public String getMedicalTreatmentCd() {
+		return medicalTreatmentCd;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.VILLAGE_NAME
-	 *
-	 * @param VILLAGE_NAME
-	 *            the value for MPI_PERSON_INFO.VILLAGE_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setVILLAGE_NAME(String VILLAGE_NAME) {
-		this.VILLAGE_NAME = VILLAGE_NAME == null ? null : VILLAGE_NAME.trim();
+	public void setMedicalTreatmentCd(String medicalTreatmentCd) {
+		this.medicalTreatmentCd = medicalTreatmentCd == null ? null : medicalTreatmentCd.trim();
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.HOUSE_NO
-	 *
-	 * @return the value of MPI_PERSON_INFO.HOUSE_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getHOUSE_NO() {
-		return HOUSE_NO;
+	public Date getRegisterDate() {
+		return registerDate;
 	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.HOUSE_NO
-	 *
-	 * @param HOUSE_NO
-	 *            the value for MPI_PERSON_INFO.HOUSE_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setHOUSE_NO(String HOUSE_NO) {
-		this.HOUSE_NO = HOUSE_NO == null ? null : HOUSE_NO.trim();
-	}
+	public void setRegisterDate(Date registerDate) {
+		this.registerDate = registerDate;
+	}
+
+	public String getRecorderName() {
+		return recorderName;
+	}
+
+	public void setRecorderName(String recorderName) {
+		this.recorderName = recorderName == null ? null : recorderName.trim();
+	}
+
+	public String getRegisterPersonCode() {
+		return registerPersonCode;
+	}
+
+	public void setRegisterPersonCode(String registerPersonCode) {
+		this.registerPersonCode = registerPersonCode == null ? null : registerPersonCode.trim();
+	}
+
+	public Date getSendTime() {
+		return sendTime;
+	}
+
+	public void setSendTime(Date sendTime) {
+		this.sendTime = sendTime;
+	}
+
+	public String getSendOrgCode() {
+		return sendOrgCode;
+	}
+
+	public void setSendOrgCode(String sendOrgCode) {
+		this.sendOrgCode = sendOrgCode == null ? null : sendOrgCode.trim();
+	}
+
+	public String getSendSystem() {
+		return sendSystem;
+	}
+
+	public void setSendSystem(String sendSystem) {
+		this.sendSystem = sendSystem == null ? null : sendSystem.trim();
+	}
+
+	public String getProviderName() {
+		return providerName;
+	}
+
+	public void setProviderName(String providerName) {
+		this.providerName = providerName == null ? null : providerName.trim();
+	}
+
+	public String getProviderOrgCode() {
+		return providerOrgCode;
+	}
+
+	public void setProviderOrgCode(String providerOrgCode) {
+		this.providerOrgCode = providerOrgCode == null ? null : providerOrgCode.trim();
+	}
+
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
+
+	public Date getLastuptime() {
+		return lastuptime;
+	}
+
+	public void setLastuptime(Date lastuptime) {
+		this.lastuptime = lastuptime;
+	}
+
+	public Short getState() {
+		return state;
+	}
+
+	public void setState(Short state) {
+		this.state = state;
+	}
+
+	public String getGenderCs() {
+		return genderCs;
+	}
+
+	public void setGenderCs(String genderCs) {
+		this.genderCs = genderCs == null ? null : genderCs.trim();
+	}
+
+	public String getGenderCsn() {
+		return genderCsn;
+	}
+
+	public void setGenderCsn(String genderCsn) {
+		this.genderCsn = genderCsn == null ? null : genderCsn.trim();
+	}
+
+	public String getGenderCsv() {
+		return genderCsv;
+	}
+
+	public void setGenderCsv(String genderCsv) {
+		this.genderCsv = genderCsv == null ? null : genderCsv.trim();
+	}
+
+	public String getGenderDn() {
+		return genderDn;
+	}
+
+	public void setGenderDn(String genderDn) {
+		this.genderDn = genderDn == null ? null : genderDn.trim();
+	}
+
+	public String getCardMaritalStCs() {
+		return cardMaritalStCs;
+	}
+
+	public void setCardMaritalStCs(String cardMaritalStCs) {
+		this.cardMaritalStCs = cardMaritalStCs == null ? null : cardMaritalStCs.trim();
+	}
+
+	public String getCardMaritalStCsn() {
+		return cardMaritalStCsn;
+	}
+
+	public void setCardMaritalStCsn(String cardMaritalStCsn) {
+		this.cardMaritalStCsn = cardMaritalStCsn == null ? null : cardMaritalStCsn.trim();
+	}
+
+	public String getCardMaritalStCsv() {
+		return cardMaritalStCsv;
+	}
+
+	public void setCardMaritalStCsv(String cardMaritalStCsv) {
+		this.cardMaritalStCsv = cardMaritalStCsv == null ? null : cardMaritalStCsv.trim();
+	}
+
+	public String getCardMaritalStDn() {
+		return cardMaritalStDn;
+	}
+
+	public void setCardMaritalStDn(String cardMaritalStDn) {
+		this.cardMaritalStDn = cardMaritalStDn == null ? null : cardMaritalStDn.trim();
+	}
+
+	public String getIdNoCs() {
+		return idNoCs;
+	}
+
+	public void setIdNoCs(String idNoCs) {
+		this.idNoCs = idNoCs == null ? null : idNoCs.trim();
+	}
+
+	public String getIdNoCsn() {
+		return idNoCsn;
+	}
+
+	public void setIdNoCsn(String idNoCsn) {
+		this.idNoCsn = idNoCsn == null ? null : idNoCsn.trim();
+	}
+
+	public String getIdNoCsv() {
+		return idNoCsv;
+	}
+
+	public void setIdNoCsv(String idNoCsv) {
+		this.idNoCsv = idNoCsv == null ? null : idNoCsv.trim();
+	}
+
+	public String getIdNoDn() {
+		return idNoDn;
+	}
+
+	public void setIdNoDn(String idNoDn) {
+		this.idNoDn = idNoDn == null ? null : idNoDn.trim();
+	}
+
+	public String getMedicareCs() {
+		return medicareCs;
+	}
+
+	public void setMedicareCs(String medicareCs) {
+		this.medicareCs = medicareCs == null ? null : medicareCs.trim();
+	}
+
+	public String getMedicareCsn() {
+		return medicareCsn;
+	}
+
+	public void setMedicareCsn(String medicareCsn) {
+		this.medicareCsn = medicareCsn == null ? null : medicareCsn.trim();
+	}
+
+	public String getMedicareCsv() {
+		return medicareCsv;
+	}
+
+	public void setMedicareCsv(String medicareCsv) {
+		this.medicareCsv = medicareCsv == null ? null : medicareCsv.trim();
+	}
+
+	public String getMedicareDn() {
+		return medicareDn;
+	}
+
+	public void setMedicareDn(String medicareDn) {
+		this.medicareDn = medicareDn == null ? null : medicareDn.trim();
+	}
+
+	public String getNhCard() {
+		return nhCard;
+	}
+
+	public void setNhCard(String nhCard) {
+		this.nhCard = nhCard == null ? null : nhCard.trim();
+	}
+
+	public String getSscid() {
+		return sscid;
+	}
+
+	public void setSscid(String sscid) {
+		this.sscid = sscid == null ? null : sscid.trim();
+	}
+
+	public String getCardOccuTypeCs() {
+		return cardOccuTypeCs;
+	}
+
+	public void setCardOccuTypeCs(String cardOccuTypeCs) {
+		this.cardOccuTypeCs = cardOccuTypeCs == null ? null : cardOccuTypeCs.trim();
+	}
+
+	public String getCardOccuTypeCsn() {
+		return cardOccuTypeCsn;
+	}
+
+	public void setCardOccuTypeCsn(String cardOccuTypeCsn) {
+		this.cardOccuTypeCsn = cardOccuTypeCsn == null ? null : cardOccuTypeCsn.trim();
+	}
+
+	public String getCardOccuTypeCsv() {
+		return cardOccuTypeCsv;
+	}
+
+	public void setCardOccuTypeCsv(String cardOccuTypeCsv) {
+		this.cardOccuTypeCsv = cardOccuTypeCsv == null ? null : cardOccuTypeCsv.trim();
+	}
+
+	public String getCardOccuTypeDn() {
+		return cardOccuTypeDn;
+	}
+
+	public void setCardOccuTypeDn(String cardOccuTypeDn) {
+		this.cardOccuTypeDn = cardOccuTypeDn == null ? null : cardOccuTypeDn.trim();
+	}
+
+	public String getCardNationCs() {
+		return cardNationCs;
+	}
+
+	public void setCardNationCs(String cardNationCs) {
+		this.cardNationCs = cardNationCs == null ? null : cardNationCs.trim();
+	}
+
+	public String getCardNationCsn() {
+		return cardNationCsn;
+	}
+
+	public void setCardNationCsn(String cardNationCsn) {
+		this.cardNationCsn = cardNationCsn == null ? null : cardNationCsn.trim();
+	}
+
+	public String getCardNationCsv() {
+		return cardNationCsv;
+	}
+
+	public void setCardNationCsv(String cardNationCsv) {
+		this.cardNationCsv = cardNationCsv == null ? null : cardNationCsv.trim();
+	}
+
+	public String getCardNationDn() {
+		return cardNationDn;
+	}
+
+	public void setCardNationDn(String cardNationDn) {
+		this.cardNationDn = cardNationDn == null ? null : cardNationDn.trim();
+	}
+
+	public String getNationalityCs() {
+		return nationalityCs;
+	}
+
+	public void setNationalityCs(String nationalityCs) {
+		this.nationalityCs = nationalityCs == null ? null : nationalityCs.trim();
+	}
+
+	public String getNationalityCsn() {
+		return nationalityCsn;
+	}
+
+	public void setNationalityCsn(String nationalityCsn) {
+		this.nationalityCsn = nationalityCsn == null ? null : nationalityCsn.trim();
+	}
+
+	public String getNationalityCsv() {
+		return nationalityCsv;
+	}
+
+	public void setNationalityCsv(String nationalityCsv) {
+		this.nationalityCsv = nationalityCsv == null ? null : nationalityCsv.trim();
+	}
+
+	public String getNationalityDn() {
+		return nationalityDn;
+	}
+
+	public void setNationalityDn(String nationalityDn) {
+		this.nationalityDn = nationalityDn == null ? null : nationalityDn.trim();
+	}
+
+	public String getArCs() {
+		return arCs;
+	}
+
+	public void setArCs(String arCs) {
+		this.arCs = arCs == null ? null : arCs.trim();
+	}
+
+	public String getArCsn() {
+		return arCsn;
+	}
+
+	public void setArCsn(String arCsn) {
+		this.arCsn = arCsn == null ? null : arCsn.trim();
+	}
+
+	public String getArCsv() {
+		return arCsv;
+	}
+
+	public void setArCsv(String arCsv) {
+		this.arCsv = arCsv == null ? null : arCsv.trim();
+	}
+
+	public String getArDn() {
+		return arDn;
+	}
+
+	public void setArDn(String arDn) {
+		this.arDn = arDn == null ? null : arDn.trim();
+	}
+
+	public String getAdCs() {
+		return adCs;
+	}
+
+	public void setAdCs(String adCs) {
+		this.adCs = adCs == null ? null : adCs.trim();
+	}
+
+	public String getAdCsn() {
+		return adCsn;
+	}
+
+	public void setAdCsn(String adCsn) {
+		this.adCsn = adCsn == null ? null : adCsn.trim();
+	}
+
+	public String getAdCsv() {
+		return adCsv;
+	}
+
+	public void setAdCsv(String adCsv) {
+		this.adCsv = adCsv == null ? null : adCsv.trim();
+	}
+
+	public String getAdDn() {
+		return adDn;
+	}
+
+	public void setAdDn(String adDn) {
+		this.adDn = adDn == null ? null : adDn.trim();
+	}
+
+	public String getTelTypeCs() {
+		return telTypeCs;
+	}
+
+	public void setTelTypeCs(String telTypeCs) {
+		this.telTypeCs = telTypeCs == null ? null : telTypeCs.trim();
+	}
+
+	public String getTelTypeCsn() {
+		return telTypeCsn;
+	}
+
+	public void setTelTypeCsn(String telTypeCsn) {
+		this.telTypeCsn = telTypeCsn == null ? null : telTypeCsn.trim();
+	}
+
+	public String getTelTypeCsv() {
+		return telTypeCsv;
+	}
+
+	public void setTelTypeCsv(String telTypeCsv) {
+		this.telTypeCsv = telTypeCsv == null ? null : telTypeCsv.trim();
+	}
+
+	public String getTelTypeDn() {
+		return telTypeDn;
+	}
+
+	public void setTelTypeDn(String telTypeDn) {
+		this.telTypeDn = telTypeDn == null ? null : telTypeDn.trim();
+	}
+
+	public String getLinkmanRelCs() {
+		return linkmanRelCs;
+	}
+
+	public void setLinkmanRelCs(String linkmanRelCs) {
+		this.linkmanRelCs = linkmanRelCs == null ? null : linkmanRelCs.trim();
+	}
+
+	public String getLinkmanRelCsn() {
+		return linkmanRelCsn;
+	}
+
+	public void setLinkmanRelCsn(String linkmanRelCsn) {
+		this.linkmanRelCsn = linkmanRelCsn == null ? null : linkmanRelCsn.trim();
+	}
+
+	public String getLinkmanRelCsv() {
+		return linkmanRelCsv;
+	}
+
+	public void setLinkmanRelCsv(String linkmanRelCsv) {
+		this.linkmanRelCsv = linkmanRelCsv == null ? null : linkmanRelCsv.trim();
+	}
+
+	public String getLinkmanRelDn() {
+		return linkmanRelDn;
+	}
+
+	public void setLinkmanRelDn(String linkmanRelDn) {
+		this.linkmanRelDn = linkmanRelDn == null ? null : linkmanRelDn.trim();
+	}
+
+	public String getLmIdNoCs() {
+		return lmIdNoCs;
+	}
+
+	public void setLmIdNoCs(String lmIdNoCs) {
+		this.lmIdNoCs = lmIdNoCs == null ? null : lmIdNoCs.trim();
+	}
+
+	public String getLmIdNoCsn() {
+		return lmIdNoCsn;
+	}
+
+	public void setLmIdNoCsn(String lmIdNoCsn) {
+		this.lmIdNoCsn = lmIdNoCsn == null ? null : lmIdNoCsn.trim();
+	}
+
+	public String getLmIdNoCsv() {
+		return lmIdNoCsv;
+	}
+
+	public void setLmIdNoCsv(String lmIdNoCsv) {
+		this.lmIdNoCsv = lmIdNoCsv == null ? null : lmIdNoCsv.trim();
+	}
+
+	public String getLmIdNoDn() {
+		return lmIdNoDn;
+	}
+
+	public void setLmIdNoDn(String lmIdNoDn) {
+		this.lmIdNoDn = lmIdNoDn == null ? null : lmIdNoDn.trim();
+	}
+
+	public String getAboCs() {
+		return aboCs;
+	}
+
+	public void setAboCs(String aboCs) {
+		this.aboCs = aboCs == null ? null : aboCs.trim();
+	}
+
+	public String getAboCsn() {
+		return aboCsn;
+	}
+
+	public void setAboCsn(String aboCsn) {
+		this.aboCsn = aboCsn == null ? null : aboCsn.trim();
+	}
+
+	public String getAboCsv() {
+		return aboCsv;
+	}
+
+	public void setAboCsv(String aboCsv) {
+		this.aboCsv = aboCsv == null ? null : aboCsv.trim();
+	}
+
+	public String getAboDn() {
+		return aboDn;
+	}
+
+	public void setAboDn(String aboDn) {
+		this.aboDn = aboDn == null ? null : aboDn.trim();
+	}
+
+	public String getRhCs() {
+		return rhCs;
+	}
+
+	public void setRhCs(String rhCs) {
+		this.rhCs = rhCs == null ? null : rhCs.trim();
+	}
+
+	public String getRhCsn() {
+		return rhCsn;
+	}
+
+	public void setRhCsn(String rhCsn) {
+		this.rhCsn = rhCsn == null ? null : rhCsn.trim();
+	}
+
+	public String getRhCsv() {
+		return rhCsv;
+	}
+
+	public void setRhCsv(String rhCsv) {
+		this.rhCsv = rhCsv == null ? null : rhCsv.trim();
+	}
+
+	public String getRhDn() {
+		return rhDn;
+	}
+
+	public void setRhDn(String rhDn) {
+		this.rhDn = rhDn == null ? null : rhDn.trim();
+	}
+
+	public String getCardEdBgCs() {
+		return cardEdBgCs;
+	}
+
+	public void setCardEdBgCs(String cardEdBgCs) {
+		this.cardEdBgCs = cardEdBgCs == null ? null : cardEdBgCs.trim();
+	}
+
+	public String getCardEdBgCsn() {
+		return cardEdBgCsn;
+	}
+
+	public void setCardEdBgCsn(String cardEdBgCsn) {
+		this.cardEdBgCsn = cardEdBgCsn == null ? null : cardEdBgCsn.trim();
+	}
+
+	public String getCardEdBgCsv() {
+		return cardEdBgCsv;
+	}
+
+	public void setCardEdBgCsv(String cardEdBgCsv) {
+		this.cardEdBgCsv = cardEdBgCsv == null ? null : cardEdBgCsv.trim();
+	}
+
+	public String getCardEdBgDn() {
+		return cardEdBgDn;
+	}
+
+	public void setCardEdBgDn(String cardEdBgDn) {
+		this.cardEdBgDn = cardEdBgDn == null ? null : cardEdBgDn.trim();
+	}
+
+	public String getBirthPlaceCs() {
+		return birthPlaceCs;
+	}
+
+	public void setBirthPlaceCs(String birthPlaceCs) {
+		this.birthPlaceCs = birthPlaceCs == null ? null : birthPlaceCs.trim();
+	}
+
+	public String getBirthPlaceCsn() {
+		return birthPlaceCsn;
+	}
+
+	public void setBirthPlaceCsn(String birthPlaceCsn) {
+		this.birthPlaceCsn = birthPlaceCsn == null ? null : birthPlaceCsn.trim();
+	}
+
+	public String getBirthPlaceCsv() {
+		return birthPlaceCsv;
+	}
+
+	public void setBirthPlaceCsv(String birthPlaceCsv) {
+		this.birthPlaceCsv = birthPlaceCsv == null ? null : birthPlaceCsv.trim();
+	}
+
+	public String getBirthPlaceDn() {
+		return birthPlaceDn;
+	}
+
+	public void setBirthPlaceDn(String birthPlaceDn) {
+		this.birthPlaceDn = birthPlaceDn == null ? null : birthPlaceDn.trim();
+	}
+
+	public String getNativeProvince() {
+		return nativeProvince;
+	}
+
+	public void setNativeProvince(String nativeProvince) {
+		this.nativeProvince = nativeProvince == null ? null : nativeProvince.trim();
+	}
+
+	public String getNativeProvinceCs() {
+		return nativeProvinceCs;
+	}
+
+	public void setNativeProvinceCs(String nativeProvinceCs) {
+		this.nativeProvinceCs = nativeProvinceCs == null ? null : nativeProvinceCs.trim();
+	}
+
+	public String getNativeProvinceCsn() {
+		return nativeProvinceCsn;
+	}
+
+	public void setNativeProvinceCsn(String nativeProvinceCsn) {
+		this.nativeProvinceCsn = nativeProvinceCsn == null ? null : nativeProvinceCsn.trim();
+	}
+
+	public String getNativeProvinceCsv() {
+		return nativeProvinceCsv;
+	}
+
+	public void setNativeProvinceCsv(String nativeProvinceCsv) {
+		this.nativeProvinceCsv = nativeProvinceCsv == null ? null : nativeProvinceCsv.trim();
+	}
+
+	public String getNativeProvinceDn() {
+		return nativeProvinceDn;
+	}
+
+	public void setNativeProvinceDn(String nativeProvinceDn) {
+		this.nativeProvinceDn = nativeProvinceDn == null ? null : nativeProvinceDn.trim();
+	}
+
+	public String getNativeCity() {
+		return nativeCity;
+	}
+
+	public void setNativeCity(String nativeCity) {
+		this.nativeCity = nativeCity == null ? null : nativeCity.trim();
+	}
+
+	public String getNativeCityCs() {
+		return nativeCityCs;
+	}
+
+	public void setNativeCityCs(String nativeCityCs) {
+		this.nativeCityCs = nativeCityCs == null ? null : nativeCityCs.trim();
+	}
+
+	public String getNativeCityCsn() {
+		return nativeCityCsn;
+	}
+
+	public void setNativeCityCsn(String nativeCityCsn) {
+		this.nativeCityCsn = nativeCityCsn == null ? null : nativeCityCsn.trim();
+	}
+
+	public String getNativeCityCsv() {
+		return nativeCityCsv;
+	}
+
+	public void setNativeCityCsv(String nativeCityCsv) {
+		this.nativeCityCsv = nativeCityCsv == null ? null : nativeCityCsv.trim();
+	}
+
+	public String getNativeCityDn() {
+		return nativeCityDn;
+	}
+
+	public void setNativeCityDn(String nativeCityDn) {
+		this.nativeCityDn = nativeCityDn == null ? null : nativeCityDn.trim();
+	}
+
+	public String getVeteransMilitaryValue() {
+		return veteransMilitaryValue;
+	}
+
+	public void setVeteransMilitaryValue(String veteransMilitaryValue) {
+		this.veteransMilitaryValue = veteransMilitaryValue == null ? null : veteransMilitaryValue.trim();
+	}
+
+	public String getVeteransMilitaryMarkCs() {
+		return veteransMilitaryMarkCs;
+	}
+
+	public void setVeteransMilitaryMarkCs(String veteransMilitaryMarkCs) {
+		this.veteransMilitaryMarkCs = veteransMilitaryMarkCs == null ? null : veteransMilitaryMarkCs.trim();
+	}
+
+	public String getVeteransMilitaryMarkCsn() {
+		return veteransMilitaryMarkCsn;
+	}
+
+	public void setVeteransMilitaryMarkCsn(String veteransMilitaryMarkCsn) {
+		this.veteransMilitaryMarkCsn = veteransMilitaryMarkCsn == null ? null : veteransMilitaryMarkCsn.trim();
+	}
+
+	public String getVeteransMilitaryMarkCsv() {
+		return veteransMilitaryMarkCsv;
+	}
+
+	public void setVeteransMilitaryMarkCsv(String veteransMilitaryMarkCsv) {
+		this.veteransMilitaryMarkCsv = veteransMilitaryMarkCsv == null ? null : veteransMilitaryMarkCsv.trim();
+	}
+
+	public String getCardCs() {
+		return cardCs;
+	}
+
+	public void setCardCs(String cardCs) {
+		this.cardCs = cardCs == null ? null : cardCs.trim();
+	}
+
+	public String getCardCsn() {
+		return cardCsn;
+	}
+
+	public void setCardCsn(String cardCsn) {
+		this.cardCsn = cardCsn == null ? null : cardCsn.trim();
+	}
+
+	public String getCardCsv() {
+		return cardCsv;
+	}
+
+	public void setCardCsv(String cardCsv) {
+		this.cardCsv = cardCsv == null ? null : cardCsv.trim();
+	}
+
+	public String getCardDn() {
+		return cardDn;
+	}
+
+	public void setCardDn(String cardDn) {
+		this.cardDn = cardDn == null ? null : cardDn.trim();
+	}
+
+	public String getCardAreaCs() {
+		return cardAreaCs;
+	}
+
+	public void setCardAreaCs(String cardAreaCs) {
+		this.cardAreaCs = cardAreaCs == null ? null : cardAreaCs.trim();
+	}
+
+	public String getCardAreaCsn() {
+		return cardAreaCsn;
+	}
+
+	public void setCardAreaCsn(String cardAreaCsn) {
+		this.cardAreaCsn = cardAreaCsn == null ? null : cardAreaCsn.trim();
+	}
+
+	public String getCardAreaCsv() {
+		return cardAreaCsv;
+	}
+
+	public void setCardAreaCsv(String cardAreaCsv) {
+		this.cardAreaCsv = cardAreaCsv == null ? null : cardAreaCsv.trim();
+	}
+
+	public String getCardAreaDn() {
+		return cardAreaDn;
+	}
+
+	public void setCardAreaDn(String cardAreaDn) {
+		this.cardAreaDn = cardAreaDn == null ? null : cardAreaDn.trim();
+	}
+
+	public String getPatientTypeValue() {
+		return patientTypeValue;
+	}
+
+	public void setPatientTypeValue(String patientTypeValue) {
+		this.patientTypeValue = patientTypeValue == null ? null : patientTypeValue.trim();
+	}
+
+	public String getPatientTypeCs() {
+		return patientTypeCs;
+	}
+
+	public void setPatientTypeCs(String patientTypeCs) {
+		this.patientTypeCs = patientTypeCs == null ? null : patientTypeCs.trim();
+	}
+
+	public String getPatientTypeCsn() {
+		return patientTypeCsn;
+	}
+
+	public void setPatientTypeCsn(String patientTypeCsn) {
+		this.patientTypeCsn = patientTypeCsn == null ? null : patientTypeCsn.trim();
+	}
+
+	public String getPatientTypeCsv() {
+		return patientTypeCsv;
+	}
+
+	public void setPatientTypeCsv(String patientTypeCsv) {
+		this.patientTypeCsv = patientTypeCsv == null ? null : patientTypeCsv.trim();
+	}
+
+	public String getPatientTypeDescr() {
+		return patientTypeDescr;
+	}
+
+	public void setPatientTypeDescr(String patientTypeDescr) {
+		this.patientTypeDescr = patientTypeDescr == null ? null : patientTypeDescr.trim();
+	}
+
+	public String getWorkingTelNo() {
+		return workingTelNo;
+	}
+
+	public void setWorkingTelNo(String workingTelNo) {
+		this.workingTelNo = workingTelNo == null ? null : workingTelNo.trim();
+	}
+
+	public String getMedicalTreatmentCs() {
+		return medicalTreatmentCs;
+	}
+
+	public void setMedicalTreatmentCs(String medicalTreatmentCs) {
+		this.medicalTreatmentCs = medicalTreatmentCs == null ? null : medicalTreatmentCs.trim();
+	}
+
+	public String getMedicalTreatmentCsn() {
+		return medicalTreatmentCsn;
+	}
+
+	public void setMedicalTreatmentCsn(String medicalTreatmentCsn) {
+		this.medicalTreatmentCsn = medicalTreatmentCsn == null ? null : medicalTreatmentCsn.trim();
+	}
+
+	public String getMedicalTreatmentCsv() {
+		return medicalTreatmentCsv;
+	}
+
+	public void setMedicalTreatmentCsv(String medicalTreatmentCsv) {
+		this.medicalTreatmentCsv = medicalTreatmentCsv == null ? null : medicalTreatmentCsv.trim();
+	}
+
+	public String getVersionNum() {
+		return versionNum;
+	}
+
+	public void setVersionNum(String versionNum) {
+		this.versionNum = versionNum == null ? null : versionNum.trim();
+	}
+
+	public String getResponsDocCode() {
+		return responsDocCode;
+	}
+
+	public void setResponsDocCode(String responsDocCode) {
+		this.responsDocCode = responsDocCode == null ? null : responsDocCode.trim();
+	}
+
+	public String getResponsDocName() {
+		return responsDocName;
+	}
+
+	public void setResponsDocName(String responsDocName) {
+		this.responsDocName = responsDocName == null ? null : responsDocName.trim();
+	}
+
+	public String getOtherOcccDescr() {
+		return otherOcccDescr;
+	}
+
+	public void setOtherOcccDescr(String otherOcccDescr) {
+		this.otherOcccDescr = otherOcccDescr == null ? null : otherOcccDescr.trim();
+	}
+
+	public Short getUsualTypeMark() {
+		return usualTypeMark;
+	}
+
+	public void setUsualTypeMark(Short usualTypeMark) {
+		this.usualTypeMark = usualTypeMark;
+	}
+
+	public Short getSrcLevel() {
+		return srcLevel;
+	}
+
+	public void setSrcLevel(Short srcLevel) {
+		this.srcLevel = srcLevel;
+	}
+
+	public String getRelationPk() {
+		return relationPk;
+	}
+
+	public void setRelationPk(String relationPk) {
+		this.relationPk = relationPk == null ? null : relationPk.trim();
+	}
+
+	public String getRelationType() {
+		return relationType;
+	}
+
+	public void setRelationType(String relationType) {
+		this.relationType = relationType == null ? null : relationType.trim();
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type == null ? null : type.trim();
+	}
+
+	public String getUploadState() {
+		return uploadState;
+	}
+
+	public void setUploadState(String uploadState) {
+		this.uploadState = uploadState == null ? null : uploadState.trim();
+	}
+
+	public String getBackups() {
+		return backups;
+	}
+
+	public void setBackups(String backups) {
+		this.backups = backups == null ? null : backups.trim();
+	}
+
+	public Date getUploadDate() {
+		return uploadDate;
+	}
+
+	public void setUploadDate(Date uploadDate) {
+		this.uploadDate = uploadDate;
+	}
+
+	public Date getDtCreate() {
+		return dtCreate;
+	}
+
+	public void setDtCreate(Date dtCreate) {
+		this.dtCreate = dtCreate;
+	}
+
+	public String getPatientId() {
+		return patientId;
+	}
+
+	public void setPatientId(String patientId) {
+		this.patientId = patientId == null ? null : patientId.trim();
+	}
+
+	public String getDrugAllergyMark() {
+		return drugAllergyMark;
+	}
+
+	public void setDrugAllergyMark(String drugAllergyMark) {
+		this.drugAllergyMark = drugAllergyMark == null ? null : drugAllergyMark.trim();
+	}
+
+	public String getOpHistoryMark() {
+		return opHistoryMark;
+	}
+
+	public void setOpHistoryMark(String opHistoryMark) {
+		this.opHistoryMark = opHistoryMark == null ? null : opHistoryMark.trim();
+	}
+
+	public String getTraumaHistoryMark() {
+		return traumaHistoryMark;
+	}
+
+	public void setTraumaHistoryMark(String traumaHistoryMark) {
+		this.traumaHistoryMark = traumaHistoryMark == null ? null : traumaHistoryMark.trim();
+	}
+
+	public String getBloodTransfMark() {
+		return bloodTransfMark;
+	}
+
+	public void setBloodTransfMark(String bloodTransfMark) {
+		this.bloodTransfMark = bloodTransfMark == null ? null : bloodTransfMark.trim();
+	}
+
+	public String getDisabilityMark() {
+		return disabilityMark;
+	}
+
+	public void setDisabilityMark(String disabilityMark) {
+		this.disabilityMark = disabilityMark == null ? null : disabilityMark.trim();
+	}
+
+	public String getGeneticDiseaseHistory() {
+		return geneticDiseaseHistory;
+	}
+
+	public void setGeneticDiseaseHistory(String geneticDiseaseHistory) {
+		this.geneticDiseaseHistory = geneticDiseaseHistory == null ? null : geneticDiseaseHistory.trim();
+	}
+
+	public String getExhaustFacilityMark() {
+		return exhaustFacilityMark;
+	}
+
+	public void setExhaustFacilityMark(String exhaustFacilityMark) {
+		this.exhaustFacilityMark = exhaustFacilityMark == null ? null : exhaustFacilityMark.trim();
+	}
+
+	public String getExhaustFacilityTypeCode() {
+		return exhaustFacilityTypeCode;
+	}
+
+	public void setExhaustFacilityTypeCode(String exhaustFacilityTypeCode) {
+		this.exhaustFacilityTypeCode = exhaustFacilityTypeCode == null ? null : exhaustFacilityTypeCode.trim();
+	}
+
+	public String getFuelTypeCode() {
+		return fuelTypeCode;
+	}
+
+	public void setFuelTypeCode(String fuelTypeCode) {
+		this.fuelTypeCode = fuelTypeCode == null ? null : fuelTypeCode.trim();
+	}
+
+	public String getWaterTypeCode() {
+		return waterTypeCode;
+	}
+
+	public void setWaterTypeCode(String waterTypeCode) {
+		this.waterTypeCode = waterTypeCode == null ? null : waterTypeCode.trim();
+	}
+
+	public String getToiletTypeCode() {
+		return toiletTypeCode;
+	}
+
+	public void setToiletTypeCode(String toiletTypeCode) {
+		this.toiletTypeCode = toiletTypeCode == null ? null : toiletTypeCode.trim();
+	}
+
+	public String getLivestockPenTypeCode() {
+		return livestockPenTypeCode;
+	}
+
+	public void setLivestockPenTypeCode(String livestockPenTypeCode) {
+		this.livestockPenTypeCode = livestockPenTypeCode == null ? null : livestockPenTypeCode.trim();
+	}
+
+	public String getOperationHistory() {
+		return operationHistory;
+	}
+
+	public void setOperationHistory(String operationHistory) {
+		this.operationHistory = operationHistory == null ? null : operationHistory.trim();
+	}
+
+	public String getAsthmaMark() {
+		return asthmaMark;
+	}
+
+	public void setAsthmaMark(String asthmaMark) {
+		this.asthmaMark = asthmaMark == null ? null : asthmaMark.trim();
+	}
+
+	public String getHedrtDisMark() {
+		return hedrtDisMark;
+	}
+
+	public void setHedrtDisMark(String hedrtDisMark) {
+		this.hedrtDisMark = hedrtDisMark == null ? null : hedrtDisMark.trim();
+	}
+
+	public String getCardiovascularCode() {
+		return cardiovascularCode;
+	}
+
+	public void setCardiovascularCode(String cardiovascularCode) {
+		this.cardiovascularCode = cardiovascularCode == null ? null : cardiovascularCode.trim();
+	}
+
+	public String getEpilepsyMark() {
+		return epilepsyMark;
+	}
+
+	public void setEpilepsyMark(String epilepsyMark) {
+		this.epilepsyMark = epilepsyMark == null ? null : epilepsyMark.trim();
+	}
+
+	public String getCoagulopathyMark() {
+		return coagulopathyMark;
+	}
+
+	public void setCoagulopathyMark(String coagulopathyMark) {
+		this.coagulopathyMark = coagulopathyMark == null ? null : coagulopathyMark.trim();
+	}
+
+	public String getDiabetesMark() {
+		return diabetesMark;
+	}
+
+	public void setDiabetesMark(String diabetesMark) {
+		this.diabetesMark = diabetesMark == null ? null : diabetesMark.trim();
+	}
+
+	public String getGlaucomaMark() {
+		return glaucomaMark;
+	}
+
+	public void setGlaucomaMark(String glaucomaMark) {
+		this.glaucomaMark = glaucomaMark == null ? null : glaucomaMark.trim();
+	}
+
+	public String getDialysisMark() {
+		return dialysisMark;
+	}
+
+	public void setDialysisMark(String dialysisMark) {
+		this.dialysisMark = dialysisMark == null ? null : dialysisMark.trim();
+	}
+
+	public String getOrganTransMark() {
+		return organTransMark;
+	}
+
+	public void setOrganTransMark(String organTransMark) {
+		this.organTransMark = organTransMark == null ? null : organTransMark.trim();
+	}
+
+	public String getOrganDefectMark() {
+		return organDefectMark;
+	}
+
+	public void setOrganDefectMark(String organDefectMark) {
+		this.organDefectMark = organDefectMark == null ? null : organDefectMark.trim();
+	}
+
+	public String getRemovaProMark() {
+		return removaProMark;
+	}
+
+	public void setRemovaProMark(String removaProMark) {
+		this.removaProMark = removaProMark == null ? null : removaProMark.trim();
+	}
+
+	public String getCardiacPacMark() {
+		return cardiacPacMark;
+	}
+
+	public void setCardiacPacMark(String cardiacPacMark) {
+		this.cardiacPacMark = cardiacPacMark == null ? null : cardiacPacMark.trim();
+	}
+
+	public String getOrtherMedicalAlert() {
+		return ortherMedicalAlert;
+	}
+
+	public void setOrtherMedicalAlert(String ortherMedicalAlert) {
+		this.ortherMedicalAlert = ortherMedicalAlert == null ? null : ortherMedicalAlert.trim();
+	}
+
+	public String getPsychiatricMark() {
+		return psychiatricMark;
+	}
+
+	public void setPsychiatricMark(String psychiatricMark) {
+		this.psychiatricMark = psychiatricMark == null ? null : psychiatricMark.trim();
+	}
+
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
+
+	public String getFlagGa() {
+		return flagGa;
+	}
+
+	public void setFlagGa(String flagGa) {
+		this.flagGa = flagGa == null ? null : flagGa.trim();
+	}
+
+	public Date getDtUpdateGa() {
+		return dtUpdateGa;
+	}
+
+	public void setDtUpdateGa(Date dtUpdateGa) {
+		this.dtUpdateGa = dtUpdateGa;
+	}
+
+	public String getDomainId() {
+		return domainId;
+	}
+
+	public void setDomainId(String domainId) {
+		this.domainId = domainId;
+	}
+
+	public String getUniqueSign() {
+		return uniqueSign;
+	}
+
+	public void setUniqueSign(String uniqueSign) {
+		this.uniqueSign = uniqueSign;
+	}
+
+	public String getDomainDesc() {
+		return domainDesc;
+	}
+
+	public void setDomainDesc(String domainDesc) {
+		this.domainDesc = domainDesc;
+	}
 
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.TEL_TYPE_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.TEL_TYPE_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getTEL_TYPE_CD() {
-		return TEL_TYPE_CD;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.TEL_TYPE_CD
-	 *
-	 * @param TEL_TYPE_CD
-	 *            the value for MPI_PERSON_INFO.TEL_TYPE_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setTEL_TYPE_CD(String TEL_TYPE_CD) {
-		this.TEL_TYPE_CD = TEL_TYPE_CD == null ? null : TEL_TYPE_CD.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.PERSON_TEL_NO
-	 *
-	 * @return the value of MPI_PERSON_INFO.PERSON_TEL_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getPERSON_TEL_NO() {
-		return PERSON_TEL_NO;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.PERSON_TEL_NO
-	 *
-	 * @param PERSON_TEL_NO
-	 *            the value for MPI_PERSON_INFO.PERSON_TEL_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setPERSON_TEL_NO(String PERSON_TEL_NO) {
-		this.PERSON_TEL_NO = PERSON_TEL_NO == null ? null : PERSON_TEL_NO.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LINKMAN_NAME
-	 *
-	 * @return the value of MPI_PERSON_INFO.LINKMAN_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLINKMAN_NAME() {
-		return LINKMAN_NAME;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LINKMAN_NAME
-	 *
-	 * @param LINKMAN_NAME
-	 *            the value for MPI_PERSON_INFO.LINKMAN_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLINKMAN_NAME(String LINKMAN_NAME) {
-		this.LINKMAN_NAME = LINKMAN_NAME == null ? null : LINKMAN_NAME.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LINKMAN_REL_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.LINKMAN_REL_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLINKMAN_REL_CD() {
-		return LINKMAN_REL_CD;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LINKMAN_REL_CD
-	 *
-	 * @param LINKMAN_REL_CD
-	 *            the value for MPI_PERSON_INFO.LINKMAN_REL_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLINKMAN_REL_CD(String LINKMAN_REL_CD) {
-		this.LINKMAN_REL_CD = LINKMAN_REL_CD == null ? null : LINKMAN_REL_CD.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LM_ID_NO_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.LM_ID_NO_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLM_ID_NO_CD() {
-		return LM_ID_NO_CD;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LM_ID_NO_CD
-	 *
-	 * @param LM_ID_NO_CD
-	 *            the value for MPI_PERSON_INFO.LM_ID_NO_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLM_ID_NO_CD(String LM_ID_NO_CD) {
-		this.LM_ID_NO_CD = LM_ID_NO_CD == null ? null : LM_ID_NO_CD.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LM_ID_NO
-	 *
-	 * @return the value of MPI_PERSON_INFO.LM_ID_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLM_ID_NO() {
-		return LM_ID_NO;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LM_ID_NO
-	 *
-	 * @param LM_ID_NO
-	 *            the value for MPI_PERSON_INFO.LM_ID_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLM_ID_NO(String LM_ID_NO) {
-		this.LM_ID_NO = LM_ID_NO == null ? null : LM_ID_NO.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.HR_ID
-	 *
-	 * @return the value of MPI_PERSON_INFO.HR_ID
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getHR_ID() {
-		return HR_ID;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.HR_ID
-	 *
-	 * @param HR_ID
-	 *            the value for MPI_PERSON_INFO.HR_ID
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setHR_ID(String HR_ID) {
-		this.HR_ID = HR_ID == null ? null : HR_ID.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.POST_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.POST_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getPOST_CD() {
-		return POST_CD;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.POST_CD
-	 *
-	 * @param POST_CD
-	 *            the value for MPI_PERSON_INFO.POST_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setPOST_CD(String POST_CD) {
-		this.POST_CD = POST_CD == null ? null : POST_CD.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.ABO_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.ABO_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getABO_CD() {
-		return ABO_CD;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.ABO_CD
-	 *
-	 * @param ABO_CD
-	 *            the value for MPI_PERSON_INFO.ABO_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setABO_CD(String ABO_CD) {
-		this.ABO_CD = ABO_CD == null ? null : ABO_CD.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.RH_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.RH_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getRH_CD() {
-		return RH_CD;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.RH_CD
-	 *
-	 * @param RH_CD
-	 *            the value for MPI_PERSON_INFO.RH_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setRH_CD(String RH_CD) {
-		this.RH_CD = RH_CD == null ? null : RH_CD.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.RH_NEG_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.RH_NEG_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getRH_NEG_CD() {
-		return RH_NEG_CD;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.RH_NEG_CD
-	 *
-	 * @param RH_NEG_CD
-	 *            the value for MPI_PERSON_INFO.RH_NEG_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setRH_NEG_CD(String RH_NEG_CD) {
-		this.RH_NEG_CD = RH_NEG_CD == null ? null : RH_NEG_CD.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_ED_BG_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_ED_BG_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_ED_BG_CD() {
-		return CARD_ED_BG_CD;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_ED_BG_CD
-	 *
-	 * @param CARD_ED_BG_CD
-	 *            the value for MPI_PERSON_INFO.CARD_ED_BG_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_ED_BG_CD(String CARD_ED_BG_CD) {
-		this.CARD_ED_BG_CD = CARD_ED_BG_CD == null ? null : CARD_ED_BG_CD.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.BIRTH_PLACE
-	 *
-	 * @return the value of MPI_PERSON_INFO.BIRTH_PLACE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getBIRTH_PLACE() {
-		return BIRTH_PLACE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.BIRTH_PLACE
-	 *
-	 * @param BIRTH_PLACE
-	 *            the value for MPI_PERSON_INFO.BIRTH_PLACE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setBIRTH_PLACE(String BIRTH_PLACE) {
-		this.BIRTH_PLACE = BIRTH_PLACE == null ? null : BIRTH_PLACE.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.WORKING_UNIT_NAME
-	 *
-	 * @return the value of MPI_PERSON_INFO.WORKING_UNIT_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getWORKING_UNIT_NAME() {
-		return WORKING_UNIT_NAME;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.WORKING_UNIT_NAME
-	 *
-	 * @param WORKING_UNIT_NAME
-	 *            the value for MPI_PERSON_INFO.WORKING_UNIT_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setWORKING_UNIT_NAME(String WORKING_UNIT_NAME) {
-		this.WORKING_UNIT_NAME = WORKING_UNIT_NAME == null ? null : WORKING_UNIT_NAME.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.EMAIL_AD
-	 *
-	 * @return the value of MPI_PERSON_INFO.EMAIL_AD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getEMAIL_AD() {
-		return EMAIL_AD;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.EMAIL_AD
-	 *
-	 * @param EMAIL_AD
-	 *            the value for MPI_PERSON_INFO.EMAIL_AD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setEMAIL_AD(String EMAIL_AD) {
-		this.EMAIL_AD = EMAIL_AD == null ? null : EMAIL_AD.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.VETERANS_MILITARY_MARK
-	 *
-	 * @return the value of MPI_PERSON_INFO.VETERANS_MILITARY_MARK
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public Short getVETERANS_MILITARY_MARK() {
-		return VETERANS_MILITARY_MARK;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.VETERANS_MILITARY_MARK
-	 *
-	 * @param VETERANS_MILITARY_MARK
-	 *            the value for MPI_PERSON_INFO.VETERANS_MILITARY_MARK
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setVETERANS_MILITARY_MARK(Short VETERANS_MILITARY_MARK) {
-		this.VETERANS_MILITARY_MARK = VETERANS_MILITARY_MARK == null ? null : VETERANS_MILITARY_MARK;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_NO
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_NO() {
-		return CARD_NO;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_NO
-	 *
-	 * @param CARD_NO
-	 *            the value for MPI_PERSON_INFO.CARD_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_NO(String CARD_NO) {
-		this.CARD_NO = CARD_NO == null ? null : CARD_NO.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_CD() {
-		return CARD_CD;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_CD
-	 *
-	 * @param CARD_CD
-	 *            the value for MPI_PERSON_INFO.CARD_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_CD(String CARD_CD) {
-		this.CARD_CD = CARD_CD == null ? null : CARD_CD.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_AREA
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_AREA
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_AREA() {
-		return CARD_AREA;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_AREA
-	 *
-	 * @param CARD_AREA
-	 *            the value for MPI_PERSON_INFO.CARD_AREA
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_AREA(String CARD_AREA) {
-		this.CARD_AREA = CARD_AREA == null ? null : CARD_AREA.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.PATIENT_TYPE
-	 *
-	 * @return the value of MPI_PERSON_INFO.PATIENT_TYPE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getPATIENT_TYPE() {
-		return PATIENT_TYPE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.PATIENT_TYPE
-	 *
-	 * @param PATIENT_TYPE
-	 *            the value for MPI_PERSON_INFO.PATIENT_TYPE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setPATIENT_TYPE(String PATIENT_TYPE) {
-		this.PATIENT_TYPE = PATIENT_TYPE == null ? null : PATIENT_TYPE.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.WORKING_UNIT_POST
-	 *
-	 * @return the value of MPI_PERSON_INFO.WORKING_UNIT_POST
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getWORKING_UNIT_POST() {
-		return WORKING_UNIT_POST;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.WORKING_UNIT_POST
-	 *
-	 * @param WORKING_UNIT_POST
-	 *            the value for MPI_PERSON_INFO.WORKING_UNIT_POST
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setWORKING_UNIT_POST(String WORKING_UNIT_POST) {
-		this.WORKING_UNIT_POST = WORKING_UNIT_POST == null ? null : WORKING_UNIT_POST.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.WORKING_UNIT_ADDR
-	 *
-	 * @return the value of MPI_PERSON_INFO.WORKING_UNIT_ADDR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getWORKING_UNIT_ADDR() {
-		return WORKING_UNIT_ADDR;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.WORKING_UNIT_ADDR
-	 *
-	 * @param WORKING_UNIT_ADDR
-	 *            the value for MPI_PERSON_INFO.WORKING_UNIT_ADDR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setWORKING_UNIT_ADDR(String WORKING_UNIT_ADDR) {
-		this.WORKING_UNIT_ADDR = WORKING_UNIT_ADDR == null ? null : WORKING_UNIT_ADDR.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LIVING_ADDR
-	 *
-	 * @return the value of MPI_PERSON_INFO.LIVING_ADDR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLIVING_ADDR() {
-		return LIVING_ADDR;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LIVING_ADDR
-	 *
-	 * @param LIVING_ADDR
-	 *            the value for MPI_PERSON_INFO.LIVING_ADDR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLIVING_ADDR(String LIVING_ADDR) {
-		this.LIVING_ADDR = LIVING_ADDR == null ? null : LIVING_ADDR.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.RPR_ADDR
-	 *
-	 * @return the value of MPI_PERSON_INFO.RPR_ADDR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getRPR_ADDR() {
-		return RPR_ADDR;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.RPR_ADDR
-	 *
-	 * @param RPR_ADDR
-	 *            the value for MPI_PERSON_INFO.RPR_ADDR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setRPR_ADDR(String RPR_ADDR) {
-		this.RPR_ADDR = RPR_ADDR == null ? null : RPR_ADDR.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.RPR_POST
-	 *
-	 * @return the value of MPI_PERSON_INFO.RPR_POST
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getRPR_POST() {
-		return RPR_POST;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.RPR_POST
-	 *
-	 * @param RPR_POST
-	 *            the value for MPI_PERSON_INFO.RPR_POST
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setRPR_POST(String RPR_POST) {
-		this.RPR_POST = RPR_POST == null ? null : RPR_POST.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.RPR_PHONE
-	 *
-	 * @return the value of MPI_PERSON_INFO.RPR_PHONE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getRPR_PHONE() {
-		return RPR_PHONE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.RPR_PHONE
-	 *
-	 * @param RPR_PHONE
-	 *            the value for MPI_PERSON_INFO.RPR_PHONE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setRPR_PHONE(String RPR_PHONE) {
-		this.RPR_PHONE = RPR_PHONE == null ? null : RPR_PHONE.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LINKMAN_ADDR
-	 *
-	 * @return the value of MPI_PERSON_INFO.LINKMAN_ADDR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLINKMAN_ADDR() {
-		return LINKMAN_ADDR;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LINKMAN_ADDR
-	 *
-	 * @param LINKMAN_ADDR
-	 *            the value for MPI_PERSON_INFO.LINKMAN_ADDR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLINKMAN_ADDR(String LINKMAN_ADDR) {
-		this.LINKMAN_ADDR = LINKMAN_ADDR == null ? null : LINKMAN_ADDR.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LINKMAN_POST
-	 *
-	 * @return the value of MPI_PERSON_INFO.LINKMAN_POST
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLINKMAN_POST() {
-		return LINKMAN_POST;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LINKMAN_POST
-	 *
-	 * @param LINKMAN_POST
-	 *            the value for MPI_PERSON_INFO.LINKMAN_POST
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLINKMAN_POST(String LINKMAN_POST) {
-		this.LINKMAN_POST = LINKMAN_POST == null ? null : LINKMAN_POST.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LINKMAN_PHONE
-	 *
-	 * @return the value of MPI_PERSON_INFO.LINKMAN_PHONE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLINKMAN_PHONE() {
-		return LINKMAN_PHONE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LINKMAN_PHONE
-	 *
-	 * @param LINKMAN_PHONE
-	 *            the value for MPI_PERSON_INFO.LINKMAN_PHONE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLINKMAN_PHONE(String LINKMAN_PHONE) {
-		this.LINKMAN_PHONE = LINKMAN_PHONE == null ? null : LINKMAN_PHONE.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.INSURE_TYPE
-	 *
-	 * @return the value of MPI_PERSON_INFO.INSURE_TYPE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getINSURE_TYPE() {
-		return INSURE_TYPE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.INSURE_TYPE
-	 *
-	 * @param INSURE_TYPE
-	 *            the value for MPI_PERSON_INFO.INSURE_TYPE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setINSURE_TYPE(String INSURE_TYPE) {
-		this.INSURE_TYPE = INSURE_TYPE == null ? null : INSURE_TYPE.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.MEDICAL_TREATMENT_NAME
-	 *
-	 * @return the value of MPI_PERSON_INFO.MEDICAL_TREATMENT_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getMEDICAL_TREATMENT_NAME() {
-		return MEDICAL_TREATMENT_NAME;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.MEDICAL_TREATMENT_NAME
-	 *
-	 * @param MEDICAL_TREATMENT_NAME
-	 *            the value for MPI_PERSON_INFO.MEDICAL_TREATMENT_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setMEDICAL_TREATMENT_NAME(String MEDICAL_TREATMENT_NAME) {
-		this.MEDICAL_TREATMENT_NAME = MEDICAL_TREATMENT_NAME == null ? null : MEDICAL_TREATMENT_NAME.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.MEDICAL_TREATMENT_CD
-	 *
-	 * @return the value of MPI_PERSON_INFO.MEDICAL_TREATMENT_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getMEDICAL_TREATMENT_CD() {
-		return MEDICAL_TREATMENT_CD;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.MEDICAL_TREATMENT_CD
-	 *
-	 * @param MEDICAL_TREATMENT_CD
-	 *            the value for MPI_PERSON_INFO.MEDICAL_TREATMENT_CD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setMEDICAL_TREATMENT_CD(String MEDICAL_TREATMENT_CD) {
-		this.MEDICAL_TREATMENT_CD = MEDICAL_TREATMENT_CD == null ? null : MEDICAL_TREATMENT_CD.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.REGISTER_DATE
-	 *
-	 * @return the value of MPI_PERSON_INFO.REGISTER_DATE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public Date getREGISTER_DATE() {
-		return REGISTER_DATE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.REGISTER_DATE
-	 *
-	 * @param REGISTER_DATE
-	 *            the value for MPI_PERSON_INFO.REGISTER_DATE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setREGISTER_DATE(Date REGISTER_DATE) {
-		this.REGISTER_DATE = REGISTER_DATE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.RECORDER_NAME
-	 *
-	 * @return the value of MPI_PERSON_INFO.RECORDER_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getRECORDER_NAME() {
-		return RECORDER_NAME;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.RECORDER_NAME
-	 *
-	 * @param RECORDER_NAME
-	 *            the value for MPI_PERSON_INFO.RECORDER_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setRECORDER_NAME(String RECORDER_NAME) {
-		this.RECORDER_NAME = RECORDER_NAME == null ? null : RECORDER_NAME;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.REGISTER_PERSON_CODE
-	 *
-	 * @return the value of MPI_PERSON_INFO.REGISTER_PERSON_CODE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getREGISTER_PERSON_CODE() {
-		return REGISTER_PERSON_CODE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.REGISTER_PERSON_CODE
-	 *
-	 * @param REGISTER_PERSON_CODE
-	 *            the value for MPI_PERSON_INFO.REGISTER_PERSON_CODE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setREGISTER_PERSON_CODE(String REGISTER_PERSON_CODE) {
-		this.REGISTER_PERSON_CODE = REGISTER_PERSON_CODE == null ? null : REGISTER_PERSON_CODE.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.SEND_TIME
-	 *
-	 * @return the value of MPI_PERSON_INFO.SEND_TIME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public Date getSEND_TIME() {
-		return SEND_TIME;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.SEND_TIME
-	 *
-	 * @param SEND_TIME
-	 *            the value for MPI_PERSON_INFO.SEND_TIME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setSEND_TIME(Date SEND_TIME) {
-		this.SEND_TIME = SEND_TIME;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.SEND_ORG_CODE
-	 *
-	 * @return the value of MPI_PERSON_INFO.SEND_ORG_CODE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getSEND_ORG_CODE() {
-		return SEND_ORG_CODE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.SEND_ORG_CODE
-	 *
-	 * @param SEND_ORG_CODE
-	 *            the value for MPI_PERSON_INFO.SEND_ORG_CODE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setSEND_ORG_CODE(String SEND_ORG_CODE) {
-		this.SEND_ORG_CODE = SEND_ORG_CODE == null ? null : SEND_ORG_CODE.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.SEND_SYSTEM
-	 *
-	 * @return the value of MPI_PERSON_INFO.SEND_SYSTEM
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getSEND_SYSTEM() {
-		return SEND_SYSTEM;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.SEND_SYSTEM
-	 *
-	 * @param SEND_SYSTEM
-	 *            the value for MPI_PERSON_INFO.SEND_SYSTEM
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setSEND_SYSTEM(String SEND_SYSTEM) {
-		this.SEND_SYSTEM = SEND_SYSTEM == null ? null : SEND_SYSTEM.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.PROVIDER_NAME
-	 *
-	 * @return the value of MPI_PERSON_INFO.PROVIDER_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getPROVIDER_NAME() {
-		return PROVIDER_NAME;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.PROVIDER_NAME
-	 *
-	 * @param PROVIDER_NAME
-	 *            the value for MPI_PERSON_INFO.PROVIDER_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setPROVIDER_NAME(String PROVIDER_NAME) {
-		this.PROVIDER_NAME = PROVIDER_NAME == null ? null : PROVIDER_NAME.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.PROVIDER_ORG_CODE
-	 *
-	 * @return the value of MPI_PERSON_INFO.PROVIDER_ORG_CODE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getPROVIDER_ORG_CODE() {
-		return PROVIDER_ORG_CODE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.PROVIDER_ORG_CODE
-	 *
-	 * @param PROVIDER_ORG_CODE
-	 *            the value for MPI_PERSON_INFO.PROVIDER_ORG_CODE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setPROVIDER_ORG_CODE(String PROVIDER_ORG_CODE) {
-		this.PROVIDER_ORG_CODE = PROVIDER_ORG_CODE == null ? null : PROVIDER_ORG_CODE.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CREATETIME
-	 *
-	 * @return the value of MPI_PERSON_INFO.CREATETIME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public Date getCREATETIME() {
-		return CREATETIME;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CREATETIME
-	 *
-	 * @param CREATETIME
-	 *            the value for MPI_PERSON_INFO.CREATETIME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCREATETIME(Date CREATETIME) {
-		this.CREATETIME = CREATETIME;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LASTUPTIME
-	 *
-	 * @return the value of MPI_PERSON_INFO.LASTUPTIME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public Date getLASTUPTIME() {
-		return LASTUPTIME;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LASTUPTIME
-	 *
-	 * @param LASTUPTIME
-	 *            the value for MPI_PERSON_INFO.LASTUPTIME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLASTUPTIME(Date LASTUPTIME) {
-		this.LASTUPTIME = LASTUPTIME;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.STATE
-	 *
-	 * @return the value of MPI_PERSON_INFO.STATE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public Short getSTATE() {
-		return STATE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.STATE
-	 *
-	 * @param STATE
-	 *            the value for MPI_PERSON_INFO.STATE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setSTATE(Short STATE) {
-		this.STATE = STATE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.FIELD_PK
-	 *
-	 * @return the value of MPI_PERSON_INFO.FIELD_PK
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getFIELD_PK() {
-		return FIELD_PK;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.FIELD_PK
-	 *
-	 * @param FIELD_PK
-	 *            the value for MPI_PERSON_INFO.FIELD_PK
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setFIELD_PK(String FIELD_PK) {
-		this.FIELD_PK = FIELD_PK == null ? null : FIELD_PK.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.GENDER_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.GENDER_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getGENDER_CS() {
-		return GENDER_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.GENDER_CS
-	 *
-	 * @param GENDER_CS
-	 *            the value for MPI_PERSON_INFO.GENDER_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setGENDER_CS(String GENDER_CS) {
-		this.GENDER_CS = GENDER_CS == null ? null : GENDER_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.GENDER_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.GENDER_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getGENDER_CSN() {
-		return GENDER_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.GENDER_CSN
-	 *
-	 * @param GENDER_CSN
-	 *            the value for MPI_PERSON_INFO.GENDER_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setGENDER_CSN(String GENDER_CSN) {
-		this.GENDER_CSN = GENDER_CSN == null ? null : GENDER_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.GENDER_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.GENDER_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getGENDER_CSV() {
-		return GENDER_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.GENDER_CSV
-	 *
-	 * @param GENDER_CSV
-	 *            the value for MPI_PERSON_INFO.GENDER_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setGENDER_CSV(String GENDER_CSV) {
-		this.GENDER_CSV = GENDER_CSV == null ? null : GENDER_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.GENDER_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.GENDER_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getGENDER_DN() {
-		return GENDER_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.GENDER_DN
-	 *
-	 * @param GENDER_DN
-	 *            the value for MPI_PERSON_INFO.GENDER_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setGENDER_DN(String GENDER_DN) {
-		this.GENDER_DN = GENDER_DN == null ? null : GENDER_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_MARITAL_ST_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_MARITAL_ST_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_MARITAL_ST_CS() {
-		return CARD_MARITAL_ST_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_MARITAL_ST_CS
-	 *
-	 * @param CARD_MARITAL_ST_CS
-	 *            the value for MPI_PERSON_INFO.CARD_MARITAL_ST_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_MARITAL_ST_CS(String CARD_MARITAL_ST_CS) {
-		this.CARD_MARITAL_ST_CS = CARD_MARITAL_ST_CS == null ? null : CARD_MARITAL_ST_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_MARITAL_ST_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_MARITAL_ST_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_MARITAL_ST_CSN() {
-		return CARD_MARITAL_ST_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_MARITAL_ST_CSN
-	 *
-	 * @param CARD_MARITAL_ST_CSN
-	 *            the value for MPI_PERSON_INFO.CARD_MARITAL_ST_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_MARITAL_ST_CSN(String CARD_MARITAL_ST_CSN) {
-		this.CARD_MARITAL_ST_CSN = CARD_MARITAL_ST_CSN == null ? null : CARD_MARITAL_ST_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_MARITAL_ST_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_MARITAL_ST_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_MARITAL_ST_CSV() {
-		return CARD_MARITAL_ST_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_MARITAL_ST_CSV
-	 *
-	 * @param CARD_MARITAL_ST_CSV
-	 *            the value for MPI_PERSON_INFO.CARD_MARITAL_ST_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_MARITAL_ST_CSV(String CARD_MARITAL_ST_CSV) {
-		this.CARD_MARITAL_ST_CSV = CARD_MARITAL_ST_CSV == null ? null : CARD_MARITAL_ST_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_MARITAL_ST_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_MARITAL_ST_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_MARITAL_ST_DN() {
-		return CARD_MARITAL_ST_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_MARITAL_ST_DN
-	 *
-	 * @param CARD_MARITAL_ST_DN
-	 *            the value for MPI_PERSON_INFO.CARD_MARITAL_ST_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_MARITAL_ST_DN(String CARD_MARITAL_ST_DN) {
-		this.CARD_MARITAL_ST_DN = CARD_MARITAL_ST_DN == null ? null : CARD_MARITAL_ST_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.ID_NO_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.ID_NO_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getID_NO_CS() {
-		return ID_NO_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.ID_NO_CS
-	 *
-	 * @param ID_NO_CS
-	 *            the value for MPI_PERSON_INFO.ID_NO_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setID_NO_CS(String ID_NO_CS) {
-		this.ID_NO_CS = ID_NO_CS == null ? null : ID_NO_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.ID_NO_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.ID_NO_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getID_NO_CSN() {
-		return ID_NO_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.ID_NO_CSN
-	 *
-	 * @param ID_NO_CSN
-	 *            the value for MPI_PERSON_INFO.ID_NO_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setID_NO_CSN(String ID_NO_CSN) {
-		this.ID_NO_CSN = ID_NO_CSN == null ? null : ID_NO_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.ID_NO_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.ID_NO_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getID_NO_CSV() {
-		return ID_NO_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.ID_NO_CSV
-	 *
-	 * @param ID_NO_CSV
-	 *            the value for MPI_PERSON_INFO.ID_NO_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setID_NO_CSV(String ID_NO_CSV) {
-		this.ID_NO_CSV = ID_NO_CSV == null ? null : ID_NO_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.ID_NO_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.ID_NO_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getID_NO_DN() {
-		return ID_NO_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.ID_NO_DN
-	 *
-	 * @param ID_NO_DN
-	 *            the value for MPI_PERSON_INFO.ID_NO_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setID_NO_DN(String ID_NO_DN) {
-		this.ID_NO_DN = ID_NO_DN == null ? null : ID_NO_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.MEDICARE_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.MEDICARE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getMEDICARE_CS() {
-		return MEDICARE_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.MEDICARE_CS
-	 *
-	 * @param MEDICARE_CS
-	 *            the value for MPI_PERSON_INFO.MEDICARE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setMEDICARE_CS(String MEDICARE_CS) {
-		this.MEDICARE_CS = MEDICARE_CS == null ? null : MEDICARE_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.MEDICARE_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.MEDICARE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getMEDICARE_CSN() {
-		return MEDICARE_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.MEDICARE_CSN
-	 *
-	 * @param MEDICARE_CSN
-	 *            the value for MPI_PERSON_INFO.MEDICARE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setMEDICARE_CSN(String MEDICARE_CSN) {
-		this.MEDICARE_CSN = MEDICARE_CSN == null ? null : MEDICARE_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.MEDICARE_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.MEDICARE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getMEDICARE_CSV() {
-		return MEDICARE_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.MEDICARE_CSV
-	 *
-	 * @param MEDICARE_CSV
-	 *            the value for MPI_PERSON_INFO.MEDICARE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setMEDICARE_CSV(String MEDICARE_CSV) {
-		this.MEDICARE_CSV = MEDICARE_CSV == null ? null : MEDICARE_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.MEDICARE_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.MEDICARE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getMEDICARE_DN() {
-		return MEDICARE_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.MEDICARE_DN
-	 *
-	 * @param MEDICARE_DN
-	 *            the value for MPI_PERSON_INFO.MEDICARE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setMEDICARE_DN(String MEDICARE_DN) {
-		this.MEDICARE_DN = MEDICARE_DN == null ? null : MEDICARE_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NH_CARD
-	 *
-	 * @return the value of MPI_PERSON_INFO.NH_CARD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNH_CARD() {
-		return NH_CARD;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NH_CARD
-	 *
-	 * @param NH_CARD
-	 *            the value for MPI_PERSON_INFO.NH_CARD
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNH_CARD(String NH_CARD) {
-		this.NH_CARD = NH_CARD == null ? null : NH_CARD.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.SSCID
-	 *
-	 * @return the value of MPI_PERSON_INFO.SSCID
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getSSCID() {
-		return SSCID;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.SSCID
-	 *
-	 * @param SSCID
-	 *            the value for MPI_PERSON_INFO.SSCID
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setSSCID(String SSCID) {
-		this.SSCID = SSCID == null ? null : SSCID.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_OCCU_TYPE_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_OCCU_TYPE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_OCCU_TYPE_CS() {
-		return CARD_OCCU_TYPE_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_OCCU_TYPE_CS
-	 *
-	 * @param CARD_OCCU_TYPE_CS
-	 *            the value for MPI_PERSON_INFO.CARD_OCCU_TYPE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_OCCU_TYPE_CS(String CARD_OCCU_TYPE_CS) {
-		this.CARD_OCCU_TYPE_CS = CARD_OCCU_TYPE_CS == null ? null : CARD_OCCU_TYPE_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_OCCU_TYPE_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_OCCU_TYPE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_OCCU_TYPE_CSN() {
-		return CARD_OCCU_TYPE_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_OCCU_TYPE_CSN
-	 *
-	 * @param CARD_OCCU_TYPE_CSN
-	 *            the value for MPI_PERSON_INFO.CARD_OCCU_TYPE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_OCCU_TYPE_CSN(String CARD_OCCU_TYPE_CSN) {
-		this.CARD_OCCU_TYPE_CSN = CARD_OCCU_TYPE_CSN == null ? null : CARD_OCCU_TYPE_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_OCCU_TYPE_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_OCCU_TYPE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_OCCU_TYPE_CSV() {
-		return CARD_OCCU_TYPE_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_OCCU_TYPE_CSV
-	 *
-	 * @param CARD_OCCU_TYPE_CSV
-	 *            the value for MPI_PERSON_INFO.CARD_OCCU_TYPE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_OCCU_TYPE_CSV(String CARD_OCCU_TYPE_CSV) {
-		this.CARD_OCCU_TYPE_CSV = CARD_OCCU_TYPE_CSV == null ? null : CARD_OCCU_TYPE_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_OCCU_TYPE_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_OCCU_TYPE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_OCCU_TYPE_DN() {
-		return CARD_OCCU_TYPE_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_OCCU_TYPE_DN
-	 *
-	 * @param CARD_OCCU_TYPE_DN
-	 *            the value for MPI_PERSON_INFO.CARD_OCCU_TYPE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_OCCU_TYPE_DN(String CARD_OCCU_TYPE_DN) {
-		this.CARD_OCCU_TYPE_DN = CARD_OCCU_TYPE_DN == null ? null : CARD_OCCU_TYPE_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_NATION_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_NATION_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_NATION_CS() {
-		return CARD_NATION_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_NATION_CS
-	 *
-	 * @param CARD_NATION_CS
-	 *            the value for MPI_PERSON_INFO.CARD_NATION_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_NATION_CS(String CARD_NATION_CS) {
-		this.CARD_NATION_CS = CARD_NATION_CS == null ? null : CARD_NATION_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_NATION_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_NATION_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_NATION_CSN() {
-		return CARD_NATION_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_NATION_CSN
-	 *
-	 * @param CARD_NATION_CSN
-	 *            the value for MPI_PERSON_INFO.CARD_NATION_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_NATION_CSN(String CARD_NATION_CSN) {
-		this.CARD_NATION_CSN = CARD_NATION_CSN == null ? null : CARD_NATION_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_NATION_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_NATION_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_NATION_CSV() {
-		return CARD_NATION_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_NATION_CSV
-	 *
-	 * @param CARD_NATION_CSV
-	 *            the value for MPI_PERSON_INFO.CARD_NATION_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_NATION_CSV(String CARD_NATION_CSV) {
-		this.CARD_NATION_CSV = CARD_NATION_CSV == null ? null : CARD_NATION_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_NATION_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_NATION_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_NATION_DN() {
-		return CARD_NATION_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_NATION_DN
-	 *
-	 * @param CARD_NATION_DN
-	 *            the value for MPI_PERSON_INFO.CARD_NATION_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_NATION_DN(String CARD_NATION_DN) {
-		this.CARD_NATION_DN = CARD_NATION_DN == null ? null : CARD_NATION_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NATIONALITY_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.NATIONALITY_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNATIONALITY_CS() {
-		return NATIONALITY_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NATIONALITY_CS
-	 *
-	 * @param NATIONALITY_CS
-	 *            the value for MPI_PERSON_INFO.NATIONALITY_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNATIONALITY_CS(String NATIONALITY_CS) {
-		this.NATIONALITY_CS = NATIONALITY_CS == null ? null : NATIONALITY_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NATIONALITY_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.NATIONALITY_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNATIONALITY_CSN() {
-		return NATIONALITY_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NATIONALITY_CSN
-	 *
-	 * @param NATIONALITY_CSN
-	 *            the value for MPI_PERSON_INFO.NATIONALITY_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNATIONALITY_CSN(String NATIONALITY_CSN) {
-		this.NATIONALITY_CSN = NATIONALITY_CSN == null ? null : NATIONALITY_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NATIONALITY_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.NATIONALITY_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNATIONALITY_CSV() {
-		return NATIONALITY_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NATIONALITY_CSV
-	 *
-	 * @param NATIONALITY_CSV
-	 *            the value for MPI_PERSON_INFO.NATIONALITY_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNATIONALITY_CSV(String NATIONALITY_CSV) {
-		this.NATIONALITY_CSV = NATIONALITY_CSV == null ? null : NATIONALITY_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NATIONALITY_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.NATIONALITY_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNATIONALITY_DN() {
-		return NATIONALITY_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NATIONALITY_DN
-	 *
-	 * @param NATIONALITY_DN
-	 *            the value for MPI_PERSON_INFO.NATIONALITY_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNATIONALITY_DN(String NATIONALITY_DN) {
-		this.NATIONALITY_DN = NATIONALITY_DN == null ? null : NATIONALITY_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.AR_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.AR_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getAR_CS() {
-		return AR_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.AR_CS
-	 *
-	 * @param AR_CS
-	 *            the value for MPI_PERSON_INFO.AR_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setAR_CS(String AR_CS) {
-		this.AR_CS = AR_CS == null ? null : AR_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.AR_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.AR_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getAR_CSN() {
-		return AR_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.AR_CSN
-	 *
-	 * @param AR_CSN
-	 *            the value for MPI_PERSON_INFO.AR_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setAR_CSN(String AR_CSN) {
-		this.AR_CSN = AR_CSN == null ? null : AR_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.AR_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.AR_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getAR_CSV() {
-		return AR_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.AR_CSV
-	 *
-	 * @param AR_CSV
-	 *            the value for MPI_PERSON_INFO.AR_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setAR_CSV(String AR_CSV) {
-		this.AR_CSV = AR_CSV == null ? null : AR_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.AR_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.AR_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getAR_DN() {
-		return AR_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.AR_DN
-	 *
-	 * @param AR_DN
-	 *            the value for MPI_PERSON_INFO.AR_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setAR_DN(String AR_DN) {
-		this.AR_DN = AR_DN == null ? null : AR_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.AD_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.AD_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getAD_CS() {
-		return AD_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.AD_CS
-	 *
-	 * @param AD_CS
-	 *            the value for MPI_PERSON_INFO.AD_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setAD_CS(String AD_CS) {
-		this.AD_CS = AD_CS == null ? null : AD_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.AD_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.AD_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getAD_CSN() {
-		return AD_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.AD_CSN
-	 *
-	 * @param AD_CSN
-	 *            the value for MPI_PERSON_INFO.AD_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setAD_CSN(String AD_CSN) {
-		this.AD_CSN = AD_CSN == null ? null : AD_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.AD_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.AD_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getAD_CSV() {
-		return AD_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.AD_CSV
-	 *
-	 * @param AD_CSV
-	 *            the value for MPI_PERSON_INFO.AD_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setAD_CSV(String AD_CSV) {
-		this.AD_CSV = AD_CSV == null ? null : AD_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.AD_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.AD_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getAD_DN() {
-		return AD_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.AD_DN
-	 *
-	 * @param AD_DN
-	 *            the value for MPI_PERSON_INFO.AD_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setAD_DN(String AD_DN) {
-		this.AD_DN = AD_DN == null ? null : AD_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.TEL_TYPE_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.TEL_TYPE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getTEL_TYPE_CS() {
-		return TEL_TYPE_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.TEL_TYPE_CS
-	 *
-	 * @param TEL_TYPE_CS
-	 *            the value for MPI_PERSON_INFO.TEL_TYPE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setTEL_TYPE_CS(String TEL_TYPE_CS) {
-		this.TEL_TYPE_CS = TEL_TYPE_CS == null ? null : TEL_TYPE_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.TEL_TYPE_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.TEL_TYPE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getTEL_TYPE_CSN() {
-		return TEL_TYPE_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.TEL_TYPE_CSN
-	 *
-	 * @param TEL_TYPE_CSN
-	 *            the value for MPI_PERSON_INFO.TEL_TYPE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setTEL_TYPE_CSN(String TEL_TYPE_CSN) {
-		this.TEL_TYPE_CSN = TEL_TYPE_CSN == null ? null : TEL_TYPE_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.TEL_TYPE_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.TEL_TYPE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getTEL_TYPE_CSV() {
-		return TEL_TYPE_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.TEL_TYPE_CSV
-	 *
-	 * @param TEL_TYPE_CSV
-	 *            the value for MPI_PERSON_INFO.TEL_TYPE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setTEL_TYPE_CSV(String TEL_TYPE_CSV) {
-		this.TEL_TYPE_CSV = TEL_TYPE_CSV == null ? null : TEL_TYPE_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.TEL_TYPE_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.TEL_TYPE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getTEL_TYPE_DN() {
-		return TEL_TYPE_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.TEL_TYPE_DN
-	 *
-	 * @param TEL_TYPE_DN
-	 *            the value for MPI_PERSON_INFO.TEL_TYPE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setTEL_TYPE_DN(String TEL_TYPE_DN) {
-		this.TEL_TYPE_DN = TEL_TYPE_DN == null ? null : TEL_TYPE_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LINKMAN_REL_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.LINKMAN_REL_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLINKMAN_REL_CS() {
-		return LINKMAN_REL_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LINKMAN_REL_CS
-	 *
-	 * @param LINKMAN_REL_CS
-	 *            the value for MPI_PERSON_INFO.LINKMAN_REL_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLINKMAN_REL_CS(String LINKMAN_REL_CS) {
-		this.LINKMAN_REL_CS = LINKMAN_REL_CS == null ? null : LINKMAN_REL_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LINKMAN_REL_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.LINKMAN_REL_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLINKMAN_REL_CSN() {
-		return LINKMAN_REL_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LINKMAN_REL_CSN
-	 *
-	 * @param LINKMAN_REL_CSN
-	 *            the value for MPI_PERSON_INFO.LINKMAN_REL_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLINKMAN_REL_CSN(String LINKMAN_REL_CSN) {
-		this.LINKMAN_REL_CSN = LINKMAN_REL_CSN == null ? null : LINKMAN_REL_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LINKMAN_REL_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.LINKMAN_REL_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLINKMAN_REL_CSV() {
-		return LINKMAN_REL_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LINKMAN_REL_CSV
-	 *
-	 * @param LINKMAN_REL_CSV
-	 *            the value for MPI_PERSON_INFO.LINKMAN_REL_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLINKMAN_REL_CSV(String LINKMAN_REL_CSV) {
-		this.LINKMAN_REL_CSV = LINKMAN_REL_CSV == null ? null : LINKMAN_REL_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LINKMAN_REL_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.LINKMAN_REL_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLINKMAN_REL_DN() {
-		return LINKMAN_REL_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LINKMAN_REL_DN
-	 *
-	 * @param LINKMAN_REL_DN
-	 *            the value for MPI_PERSON_INFO.LINKMAN_REL_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLINKMAN_REL_DN(String LINKMAN_REL_DN) {
-		this.LINKMAN_REL_DN = LINKMAN_REL_DN == null ? null : LINKMAN_REL_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LM_ID_NO_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.LM_ID_NO_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLM_ID_NO_CS() {
-		return LM_ID_NO_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LM_ID_NO_CS
-	 *
-	 * @param LM_ID_NO_CS
-	 *            the value for MPI_PERSON_INFO.LM_ID_NO_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLM_ID_NO_CS(String LM_ID_NO_CS) {
-		this.LM_ID_NO_CS = LM_ID_NO_CS == null ? null : LM_ID_NO_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LM_ID_NO_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.LM_ID_NO_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLM_ID_NO_CSN() {
-		return LM_ID_NO_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LM_ID_NO_CSN
-	 *
-	 * @param LM_ID_NO_CSN
-	 *            the value for MPI_PERSON_INFO.LM_ID_NO_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLM_ID_NO_CSN(String LM_ID_NO_CSN) {
-		this.LM_ID_NO_CSN = LM_ID_NO_CSN == null ? null : LM_ID_NO_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LM_ID_NO_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.LM_ID_NO_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLM_ID_NO_CSV() {
-		return LM_ID_NO_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LM_ID_NO_CSV
-	 *
-	 * @param LM_ID_NO_CSV
-	 *            the value for MPI_PERSON_INFO.LM_ID_NO_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLM_ID_NO_CSV(String LM_ID_NO_CSV) {
-		this.LM_ID_NO_CSV = LM_ID_NO_CSV == null ? null : LM_ID_NO_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.LM_ID_NO_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.LM_ID_NO_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getLM_ID_NO_DN() {
-		return LM_ID_NO_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.LM_ID_NO_DN
-	 *
-	 * @param LM_ID_NO_DN
-	 *            the value for MPI_PERSON_INFO.LM_ID_NO_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setLM_ID_NO_DN(String LM_ID_NO_DN) {
-		this.LM_ID_NO_DN = LM_ID_NO_DN == null ? null : LM_ID_NO_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.ABO_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.ABO_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getABO_CS() {
-		return ABO_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.ABO_CS
-	 *
-	 * @param ABO_CS
-	 *            the value for MPI_PERSON_INFO.ABO_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setABO_CS(String ABO_CS) {
-		this.ABO_CS = ABO_CS == null ? null : ABO_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.ABO_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.ABO_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getABO_CSN() {
-		return ABO_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.ABO_CSN
-	 *
-	 * @param ABO_CSN
-	 *            the value for MPI_PERSON_INFO.ABO_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setABO_CSN(String ABO_CSN) {
-		this.ABO_CSN = ABO_CSN == null ? null : ABO_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.ABO_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.ABO_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getABO_CSV() {
-		return ABO_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.ABO_CSV
-	 *
-	 * @param ABO_CSV
-	 *            the value for MPI_PERSON_INFO.ABO_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setABO_CSV(String ABO_CSV) {
-		this.ABO_CSV = ABO_CSV == null ? null : ABO_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.ABO_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.ABO_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getABO_DN() {
-		return ABO_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.ABO_DN
-	 *
-	 * @param ABO_DN
-	 *            the value for MPI_PERSON_INFO.ABO_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setABO_DN(String ABO_DN) {
-		this.ABO_DN = ABO_DN == null ? null : ABO_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.RH_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.RH_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getRH_CS() {
-		return RH_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.RH_CS
-	 *
-	 * @param RH_CS
-	 *            the value for MPI_PERSON_INFO.RH_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setRH_CS(String RH_CS) {
-		this.RH_CS = RH_CS == null ? null : RH_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.RH_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.RH_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getRH_CSN() {
-		return RH_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.RH_CSN
-	 *
-	 * @param RH_CSN
-	 *            the value for MPI_PERSON_INFO.RH_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setRH_CSN(String RH_CSN) {
-		this.RH_CSN = RH_CSN == null ? null : RH_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.RH_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.RH_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getRH_CSV() {
-		return RH_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.RH_CSV
-	 *
-	 * @param RH_CSV
-	 *            the value for MPI_PERSON_INFO.RH_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setRH_CSV(String RH_CSV) {
-		this.RH_CSV = RH_CSV == null ? null : RH_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.RH_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.RH_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getRH_DN() {
-		return RH_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.RH_DN
-	 *
-	 * @param RH_DN
-	 *            the value for MPI_PERSON_INFO.RH_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setRH_DN(String RH_DN) {
-		this.RH_DN = RH_DN == null ? null : RH_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_ED_BG_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_ED_BG_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_ED_BG_CS() {
-		return CARD_ED_BG_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_ED_BG_CS
-	 *
-	 * @param CARD_ED_BG_CS
-	 *            the value for MPI_PERSON_INFO.CARD_ED_BG_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_ED_BG_CS(String CARD_ED_BG_CS) {
-		this.CARD_ED_BG_CS = CARD_ED_BG_CS == null ? null : CARD_ED_BG_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_ED_BG_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_ED_BG_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_ED_BG_CSN() {
-		return CARD_ED_BG_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_ED_BG_CSN
-	 *
-	 * @param CARD_ED_BG_CSN
-	 *            the value for MPI_PERSON_INFO.CARD_ED_BG_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_ED_BG_CSN(String CARD_ED_BG_CSN) {
-		this.CARD_ED_BG_CSN = CARD_ED_BG_CSN == null ? null : CARD_ED_BG_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_ED_BG_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_ED_BG_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_ED_BG_CSV() {
-		return CARD_ED_BG_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_ED_BG_CSV
-	 *
-	 * @param CARD_ED_BG_CSV
-	 *            the value for MPI_PERSON_INFO.CARD_ED_BG_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_ED_BG_CSV(String CARD_ED_BG_CSV) {
-		this.CARD_ED_BG_CSV = CARD_ED_BG_CSV == null ? null : CARD_ED_BG_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_ED_BG_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_ED_BG_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_ED_BG_DN() {
-		return CARD_ED_BG_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_ED_BG_DN
-	 *
-	 * @param CARD_ED_BG_DN
-	 *            the value for MPI_PERSON_INFO.CARD_ED_BG_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_ED_BG_DN(String CARD_ED_BG_DN) {
-		this.CARD_ED_BG_DN = CARD_ED_BG_DN == null ? null : CARD_ED_BG_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.BIRTH_PLACE_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.BIRTH_PLACE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getBIRTH_PLACE_CS() {
-		return BIRTH_PLACE_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.BIRTH_PLACE_CS
-	 *
-	 * @param BIRTH_PLACE_CS
-	 *            the value for MPI_PERSON_INFO.BIRTH_PLACE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setBIRTH_PLACE_CS(String BIRTH_PLACE_CS) {
-		this.BIRTH_PLACE_CS = BIRTH_PLACE_CS == null ? null : BIRTH_PLACE_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.BIRTH_PLACE_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.BIRTH_PLACE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getBIRTH_PLACE_CSN() {
-		return BIRTH_PLACE_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.BIRTH_PLACE_CSN
-	 *
-	 * @param BIRTH_PLACE_CSN
-	 *            the value for MPI_PERSON_INFO.BIRTH_PLACE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setBIRTH_PLACE_CSN(String BIRTH_PLACE_CSN) {
-		this.BIRTH_PLACE_CSN = BIRTH_PLACE_CSN == null ? null : BIRTH_PLACE_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.BIRTH_PLACE_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.BIRTH_PLACE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getBIRTH_PLACE_CSV() {
-		return BIRTH_PLACE_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.BIRTH_PLACE_CSV
-	 *
-	 * @param BIRTH_PLACE_CSV
-	 *            the value for MPI_PERSON_INFO.BIRTH_PLACE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setBIRTH_PLACE_CSV(String BIRTH_PLACE_CSV) {
-		this.BIRTH_PLACE_CSV = BIRTH_PLACE_CSV == null ? null : BIRTH_PLACE_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.BIRTH_PLACE_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.BIRTH_PLACE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getBIRTH_PLACE_DN() {
-		return BIRTH_PLACE_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.BIRTH_PLACE_DN
-	 *
-	 * @param BIRTH_PLACE_DN
-	 *            the value for MPI_PERSON_INFO.BIRTH_PLACE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setBIRTH_PLACE_DN(String BIRTH_PLACE_DN) {
-		this.BIRTH_PLACE_DN = BIRTH_PLACE_DN == null ? null : BIRTH_PLACE_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NATIVE_PROVINCE
-	 *
-	 * @return the value of MPI_PERSON_INFO.NATIVE_PROVINCE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNATIVE_PROVINCE() {
-		return NATIVE_PROVINCE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NATIVE_PROVINCE
-	 *
-	 * @param NATIVE_PROVINCE
-	 *            the value for MPI_PERSON_INFO.NATIVE_PROVINCE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNATIVE_PROVINCE(String NATIVE_PROVINCE) {
-		this.NATIVE_PROVINCE = NATIVE_PROVINCE == null ? null : NATIVE_PROVINCE.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NATIVE_PROVINCE_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.NATIVE_PROVINCE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNATIVE_PROVINCE_CS() {
-		return NATIVE_PROVINCE_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NATIVE_PROVINCE_CS
-	 *
-	 * @param NATIVE_PROVINCE_CS
-	 *            the value for MPI_PERSON_INFO.NATIVE_PROVINCE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNATIVE_PROVINCE_CS(String NATIVE_PROVINCE_CS) {
-		this.NATIVE_PROVINCE_CS = NATIVE_PROVINCE_CS == null ? null : NATIVE_PROVINCE_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NATIVE_PROVINCE_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.NATIVE_PROVINCE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNATIVE_PROVINCE_CSN() {
-		return NATIVE_PROVINCE_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NATIVE_PROVINCE_CSN
-	 *
-	 * @param NATIVE_PROVINCE_CSN
-	 *            the value for MPI_PERSON_INFO.NATIVE_PROVINCE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNATIVE_PROVINCE_CSN(String NATIVE_PROVINCE_CSN) {
-		this.NATIVE_PROVINCE_CSN = NATIVE_PROVINCE_CSN == null ? null : NATIVE_PROVINCE_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NATIVE_PROVINCE_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.NATIVE_PROVINCE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNATIVE_PROVINCE_CSV() {
-		return NATIVE_PROVINCE_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NATIVE_PROVINCE_CSV
-	 *
-	 * @param NATIVE_PROVINCE_CSV
-	 *            the value for MPI_PERSON_INFO.NATIVE_PROVINCE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNATIVE_PROVINCE_CSV(String NATIVE_PROVINCE_CSV) {
-		this.NATIVE_PROVINCE_CSV = NATIVE_PROVINCE_CSV == null ? null : NATIVE_PROVINCE_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NATIVE_PROVINCE_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.NATIVE_PROVINCE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNATIVE_PROVINCE_DN() {
-		return NATIVE_PROVINCE_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NATIVE_PROVINCE_DN
-	 *
-	 * @param NATIVE_PROVINCE_DN
-	 *            the value for MPI_PERSON_INFO.NATIVE_PROVINCE_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNATIVE_PROVINCE_DN(String NATIVE_PROVINCE_DN) {
-		this.NATIVE_PROVINCE_DN = NATIVE_PROVINCE_DN == null ? null : NATIVE_PROVINCE_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NATIVE_CITY_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.NATIVE_CITY_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNATIVE_CITY_CS() {
-		return NATIVE_CITY_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NATIVE_CITY_CS
-	 *
-	 * @param NATIVE_CITY_CS
-	 *            the value for MPI_PERSON_INFO.NATIVE_CITY_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNATIVE_CITY_CS(String NATIVE_CITY_CS) {
-		this.NATIVE_CITY_CS = NATIVE_CITY_CS == null ? null : NATIVE_CITY_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NATIVE_CITY_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.NATIVE_CITY_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNATIVE_CITY_CSN() {
-		return NATIVE_CITY_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NATIVE_CITY_CSN
-	 *
-	 * @param NATIVE_CITY_CSN
-	 *            the value for MPI_PERSON_INFO.NATIVE_CITY_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNATIVE_CITY_CSN(String NATIVE_CITY_CSN) {
-		this.NATIVE_CITY_CSN = NATIVE_CITY_CSN == null ? null : NATIVE_CITY_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NATIVE_CITY_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.NATIVE_CITY_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNATIVE_CITY_CSV() {
-		return NATIVE_CITY_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NATIVE_CITY_CSV
-	 *
-	 * @param NATIVE_CITY_CSV
-	 *            the value for MPI_PERSON_INFO.NATIVE_CITY_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNATIVE_CITY_CSV(String NATIVE_CITY_CSV) {
-		this.NATIVE_CITY_CSV = NATIVE_CITY_CSV == null ? null : NATIVE_CITY_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.NATIVE_CITY_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.NATIVE_CITY_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getNATIVE_CITY_DN() {
-		return NATIVE_CITY_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.NATIVE_CITY_DN
-	 *
-	 * @param NATIVE_CITY_DN
-	 *            the value for MPI_PERSON_INFO.NATIVE_CITY_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setNATIVE_CITY_DN(String NATIVE_CITY_DN) {
-		this.NATIVE_CITY_DN = NATIVE_CITY_DN == null ? null : NATIVE_CITY_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.VETERANS_MILITARY_VAULE
-	 *
-	 * @return the value of MPI_PERSON_INFO.VETERANS_MILITARY_VAULE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getVETERANS_MILITARY_VALUE() {
-		return VETERANS_MILITARY_VALUE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.VETERANS_MILITARY_VAULE
-	 *
-	 * @param VETERANS_MILITARY_VAULE
-	 *            the value for MPI_PERSON_INFO.VETERANS_MILITARY_VAULE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setVETERANS_MILITARY_VALUE(String VETERANS_MILITARY_VALUE) {
-		this.VETERANS_MILITARY_VALUE = VETERANS_MILITARY_VALUE == null ? null : VETERANS_MILITARY_VALUE.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getVETERANS_MILITARY_MARK_CS() {
-		return VETERANS_MILITARY_MARK_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CS
-	 *
-	 * @param VETERANS_MILITARY_MARK_CS
-	 *            the value for MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setVETERANS_MILITARY_MARK_CS(String VETERANS_MILITARY_MARK_CS) {
-		this.VETERANS_MILITARY_MARK_CS = VETERANS_MILITARY_MARK_CS == null ? null : VETERANS_MILITARY_MARK_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getVETERANS_MILITARY_MARK_CSN() {
-		return VETERANS_MILITARY_MARK_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CSN
-	 *
-	 * @param VETERANS_MILITARY_MARK_CSN
-	 *            the value for MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setVETERANS_MILITARY_MARK_CSN(String VETERANS_MILITARY_MARK_CSN) {
-		this.VETERANS_MILITARY_MARK_CSN = VETERANS_MILITARY_MARK_CSN == null ? null : VETERANS_MILITARY_MARK_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getVETERANS_MILITARY_MARK_CSV() {
-		return VETERANS_MILITARY_MARK_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CSV
-	 *
-	 * @param VETERANS_MILITARY_MARK_CSV
-	 *            the value for MPI_PERSON_INFO.VETERANS_MILITARY_MARK_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setVETERANS_MILITARY_MARK_CSV(String VETERANS_MILITARY_MARK_CSV) {
-		this.VETERANS_MILITARY_MARK_CSV = VETERANS_MILITARY_MARK_CSV == null ? null : VETERANS_MILITARY_MARK_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_CS() {
-		return CARD_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_CS
-	 *
-	 * @param CARD_CS
-	 *            the value for MPI_PERSON_INFO.CARD_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_CS(String CARD_CS) {
-		this.CARD_CS = CARD_CS == null ? null : CARD_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_CSN() {
-		return CARD_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_CSN
-	 *
-	 * @param CARD_CSN
-	 *            the value for MPI_PERSON_INFO.CARD_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_CSN(String CARD_CSN) {
-		this.CARD_CSN = CARD_CSN == null ? null : CARD_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_CSV() {
-		return CARD_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_CSV
-	 *
-	 * @param CARD_CSV
-	 *            the value for MPI_PERSON_INFO.CARD_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_CSV(String CARD_CSV) {
-		this.CARD_CSV = CARD_CSV == null ? null : CARD_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_DN() {
-		return CARD_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_DN
-	 *
-	 * @param CARD_DN
-	 *            the value for MPI_PERSON_INFO.CARD_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_DN(String CARD_DN) {
-		this.CARD_DN = CARD_DN == null ? null : CARD_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_AREA_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_AREA_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_AREA_CS() {
-		return CARD_AREA_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_AREA_CS
-	 *
-	 * @param CARD_AREA_CS
-	 *            the value for MPI_PERSON_INFO.CARD_AREA_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_AREA_CS(String CARD_AREA_CS) {
-		this.CARD_AREA_CS = CARD_AREA_CS == null ? null : CARD_AREA_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_AREA_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_AREA_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_AREA_CSN() {
-		return CARD_AREA_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_AREA_CSN
-	 *
-	 * @param CARD_AREA_CSN
-	 *            the value for MPI_PERSON_INFO.CARD_AREA_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_AREA_CSN(String CARD_AREA_CSN) {
-		this.CARD_AREA_CSN = CARD_AREA_CSN == null ? null : CARD_AREA_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_AREA_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_AREA_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_AREA_CSV() {
-		return CARD_AREA_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_AREA_CSV
-	 *
-	 * @param CARD_AREA_CSV
-	 *            the value for MPI_PERSON_INFO.CARD_AREA_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_AREA_CSV(String CARD_AREA_CSV) {
-		this.CARD_AREA_CSV = CARD_AREA_CSV == null ? null : CARD_AREA_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.CARD_AREA_DN
-	 *
-	 * @return the value of MPI_PERSON_INFO.CARD_AREA_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getCARD_AREA_DN() {
-		return CARD_AREA_DN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.CARD_AREA_DN
-	 *
-	 * @param CARD_AREA_DN
-	 *            the value for MPI_PERSON_INFO.CARD_AREA_DN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setCARD_AREA_DN(String CARD_AREA_DN) {
-		this.CARD_AREA_DN = CARD_AREA_DN == null ? null : CARD_AREA_DN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.PATIENT_TYPE_VAULE
-	 *
-	 * @return the value of MPI_PERSON_INFO.PATIENT_TYPE_VAULE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getPATIENT_TYPE_VALUE() {
-		return PATIENT_TYPE_VALUE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.PATIENT_TYPE_VAULE
-	 *
-	 * @param PATIENT_TYPE_VAULE
-	 *            the value for MPI_PERSON_INFO.PATIENT_TYPE_VAULE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setPATIENT_TYPE_VALUE(String PATIENT_TYPE_VALUE) {
-		this.PATIENT_TYPE_VALUE = PATIENT_TYPE_VALUE == null ? null : PATIENT_TYPE_VALUE.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.PATIENT_TYPE_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.PATIENT_TYPE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getPATIENT_TYPE_CS() {
-		return PATIENT_TYPE_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.PATIENT_TYPE_CS
-	 *
-	 * @param PATIENT_TYPE_CS
-	 *            the value for MPI_PERSON_INFO.PATIENT_TYPE_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setPATIENT_TYPE_CS(String PATIENT_TYPE_CS) {
-		this.PATIENT_TYPE_CS = PATIENT_TYPE_CS == null ? null : PATIENT_TYPE_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.PATIENT_TYPE_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.PATIENT_TYPE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getPATIENT_TYPE_CSN() {
-		return PATIENT_TYPE_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.PATIENT_TYPE_CSN
-	 *
-	 * @param PATIENT_TYPE_CSN
-	 *            the value for MPI_PERSON_INFO.PATIENT_TYPE_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setPATIENT_TYPE_CSN(String PATIENT_TYPE_CSN) {
-		this.PATIENT_TYPE_CSN = PATIENT_TYPE_CSN == null ? null : PATIENT_TYPE_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.PATIENT_TYPE_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.PATIENT_TYPE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getPATIENT_TYPE_CSV() {
-		return PATIENT_TYPE_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.PATIENT_TYPE_CSV
-	 *
-	 * @param PATIENT_TYPE_CSV
-	 *            the value for MPI_PERSON_INFO.PATIENT_TYPE_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setPATIENT_TYPE_CSV(String PATIENT_TYPE_CSV) {
-		this.PATIENT_TYPE_CSV = PATIENT_TYPE_CSV == null ? null : PATIENT_TYPE_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.PATIENT_TYPE_DESCR
-	 *
-	 * @return the value of MPI_PERSON_INFO.PATIENT_TYPE_DESCR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getPATIENT_TYPE_DESCR() {
-		return PATIENT_TYPE_DESCR;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.PATIENT_TYPE_DESCR
-	 *
-	 * @param PATIENT_TYPE_DESCR
-	 *            the value for MPI_PERSON_INFO.PATIENT_TYPE_DESCR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setPATIENT_TYPE_DESCR(String PATIENT_TYPE_DESCR) {
-		this.PATIENT_TYPE_DESCR = PATIENT_TYPE_DESCR == null ? null : PATIENT_TYPE_DESCR.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.WORKING_TEL_NO
-	 *
-	 * @return the value of MPI_PERSON_INFO.WORKING_TEL_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getWORKING_TEL_NO() {
-		return WORKING_TEL_NO;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.WORKING_TEL_NO
-	 *
-	 * @param WORKING_TEL_NO
-	 *            the value for MPI_PERSON_INFO.WORKING_TEL_NO
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setWORKING_TEL_NO(String WORKING_TEL_NO) {
-		this.WORKING_TEL_NO = WORKING_TEL_NO == null ? null : WORKING_TEL_NO.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.MEDICAL_TREATMENT_CS
-	 *
-	 * @return the value of MPI_PERSON_INFO.MEDICAL_TREATMENT_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getMEDICAL_TREATMENT_CS() {
-		return MEDICAL_TREATMENT_CS;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.MEDICAL_TREATMENT_CS
-	 *
-	 * @param MEDICAL_TREATMENT_CS
-	 *            the value for MPI_PERSON_INFO.MEDICAL_TREATMENT_CS
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setMEDICAL_TREATMENT_CS(String MEDICAL_TREATMENT_CS) {
-		this.MEDICAL_TREATMENT_CS = MEDICAL_TREATMENT_CS == null ? null : MEDICAL_TREATMENT_CS.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.MEDICAL_TREATMENT_CSN
-	 *
-	 * @return the value of MPI_PERSON_INFO.MEDICAL_TREATMENT_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getMEDICAL_TREATMENT_CSN() {
-		return MEDICAL_TREATMENT_CSN;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.MEDICAL_TREATMENT_CSN
-	 *
-	 * @param MEDICAL_TREATMENT_CSN
-	 *            the value for MPI_PERSON_INFO.MEDICAL_TREATMENT_CSN
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setMEDICAL_TREATMENT_CSN(String MEDICAL_TREATMENT_CSN) {
-		this.MEDICAL_TREATMENT_CSN = MEDICAL_TREATMENT_CSN == null ? null : MEDICAL_TREATMENT_CSN.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.MEDICAL_TREATMENT_CSV
-	 *
-	 * @return the value of MPI_PERSON_INFO.MEDICAL_TREATMENT_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getMEDICAL_TREATMENT_CSV() {
-		return MEDICAL_TREATMENT_CSV;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.MEDICAL_TREATMENT_CSV
-	 *
-	 * @param MEDICAL_TREATMENT_CSV
-	 *            the value for MPI_PERSON_INFO.MEDICAL_TREATMENT_CSV
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setMEDICAL_TREATMENT_CSV(String MEDICAL_TREATMENT_CSV) {
-		this.MEDICAL_TREATMENT_CSV = MEDICAL_TREATMENT_CSV == null ? null : MEDICAL_TREATMENT_CSV.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.VERSION_NUM
-	 *
-	 * @return the value of MPI_PERSON_INFO.VERSION_NUM
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getVERSION_NUM() {
-		return VERSION_NUM;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.VERSION_NUM
-	 *
-	 * @param VERSION_NUM
-	 *            the value for MPI_PERSON_INFO.VERSION_NUM
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setVERSION_NUM(String VERSION_NUM) {
-		this.VERSION_NUM = VERSION_NUM == null ? null : VERSION_NUM.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.RESPONS_DOC_CODE
-	 *
-	 * @return the value of MPI_PERSON_INFO.RESPONS_DOC_CODE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getRESPONS_DOC_CODE() {
-		return RESPONS_DOC_CODE;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.RESPONS_DOC_CODE
-	 *
-	 * @param RESPONS_DOC_CODE
-	 *            the value for MPI_PERSON_INFO.RESPONS_DOC_CODE
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setRESPONS_DOC_CODE(String RESPONS_DOC_CODE) {
-		this.RESPONS_DOC_CODE = RESPONS_DOC_CODE == null ? null : RESPONS_DOC_CODE.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.RESPONS_DOC_NAME
-	 *
-	 * @return the value of MPI_PERSON_INFO.RESPONS_DOC_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getRESPONS_DOC_NAME() {
-		return RESPONS_DOC_NAME;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.RESPONS_DOC_NAME
-	 *
-	 * @param RESPONS_DOC_NAME
-	 *            the value for MPI_PERSON_INFO.RESPONS_DOC_NAME
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setRESPONS_DOC_NAME(String RESPONS_DOC_NAME) {
-		this.RESPONS_DOC_NAME = RESPONS_DOC_NAME == null ? null : RESPONS_DOC_NAME.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.OTHER_OCCC_DESCR
-	 *
-	 * @return the value of MPI_PERSON_INFO.OTHER_OCCC_DESCR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public String getOTHER_OCCC_DESCR() {
-		return OTHER_OCCC_DESCR;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.OTHER_OCCC_DESCR
-	 *
-	 * @param OTHER_OCCC_DESCR
-	 *            the value for MPI_PERSON_INFO.OTHER_OCCC_DESCR
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setOTHER_OCCC_DESCR(String OTHER_OCCC_DESCR) {
-		this.OTHER_OCCC_DESCR = OTHER_OCCC_DESCR == null ? null : OTHER_OCCC_DESCR.trim();
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method returns the value
-	 * of the database column MPI_PERSON_INFO.USUAL_TYPE_MARK
-	 *
-	 * @return the value of MPI_PERSON_INFO.USUAL_TYPE_MARK
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public Short getUSUAL_TYPE_MARK() {
-		return USUAL_TYPE_MARK;
-	}
-
-	/**
-	 * This method was generated by MyBatis Generator. This method sets the value of
-	 * the database column MPI_PERSON_INFO.USUAL_TYPE_MARK
-	 *
-	 * @param USUAL_TYPE_MARK
-	 *            the value for MPI_PERSON_INFO.USUAL_TYPE_MARK
-	 *
-	 * @mbggenerated Sun Nov 18 19:35:43 CST 2012
-	 */
-	public void setUSUAL_TYPE_MARK(Short USUAL_TYPE_MARK) {
-		this.USUAL_TYPE_MARK = USUAL_TYPE_MARK;
-	}
-
-	public String getM_PHONE_NUM() {
-		return m_PHONE_NUM;
-	}
-
-	public void setM_PHONE_NUM(String m_PHONE_NUM) {
-		this.m_PHONE_NUM = m_PHONE_NUM;
-	}
-
-	public PersonIndex personInfoToPersonIndex() {
+	public PersonIndex toPersonIndex() {
 		PersonIndex index = new PersonIndex();
-		index.setREGISTER_ORG_CODE(this.REGISTER_ORG_CODE);
-		index.setMEDICALSERVICE_NO(this.MEDICALSERVICE_NO);
-		index.setNAME_CN(this.NAME_CN);
-		index.setNAME_EN(this.NAME_EN);
-		index.setBIRTH_DATE(this.BIRTH_DATE);
-		index.setGENDER_CD(this.GENDER_CD);
-		index.setCARD_MARITAL_ST_CD(this.CARD_MARITAL_ST_CD);
-		index.setID_NO_CD(this.ID_NO_CD);
-		index.setID_NO(this.ID_NO);
-		index.setMEDICARE_CD(this.MEDICARE_CD);
-		index.setMEDICAL_INSURANCE_NO(this.MEDICAL_INSURANCE_NO);
-		index.setCARD_OCCU_TYPE_CD(this.CARD_OCCU_TYPE_CD);
-		index.setCARD_NATION_CD(this.CARD_NATION_CD);
-		index.setNATIONALITY_CD(this.NATIONALITY_CD);
-		index.setAR_CD(this.AR_CD);
-		index.setAD_CD(this.AD_CD);
-		index.setPROVINCE_NAME(this.PROVINCE_NAME);
-		index.setCITY_NAME(this.CITY_NAME);
-		index.setAREA_NAME(this.AREA_NAME);
-		index.setSTREET_ID(this.STREET_ID);
-		index.setVILLAGE_NAME(this.VILLAGE_NAME);
-		index.setHOUSE_NO(this.HOUSE_NO);
-		index.setTEL_TYPE_CD(this.TEL_TYPE_CD);
-		index.setPERSON_TEL_NO(this.PERSON_TEL_NO);
-		index.setLINKMAN_NAME(this.LINKMAN_NAME);
-		index.setLINKMAN_REL_CD(this.LINKMAN_REL_CD);
-		index.setLM_ID_NO_CD(this.LM_ID_NO_CD);
-		index.setLM_ID_NO(this.LM_ID_NO);
-		index.setHR_ID(this.HR_ID);
-		index.setPOST_CD(this.POST_CD);
-		index.setABO_CD(this.ABO_CD);
-		index.setRH_CD(this.RH_CD);
-		index.setRH_NEG_CD(this.RH_NEG_CD);
-		index.setCARD_ED_BG_CD(this.CARD_ED_BG_CD);
-		index.setBIRTH_PLACE(this.BIRTH_PLACE);
-		index.setWORKING_UNIT_NAME(this.WORKING_UNIT_NAME);
-		index.setEMAIL_AD(this.EMAIL_AD);
-		index.setVETERANS_MILITARY_MARK(this.VETERANS_MILITARY_MARK);
-		index.setCARD_NO(this.CARD_NO);
-		index.setCARD_CD(this.CARD_CD);
-		index.setCARD_AREA(this.CARD_AREA);
-		index.setPATIENT_TYPE(this.PATIENT_TYPE);
-		index.setM_PHONE_NUM(this.m_PHONE_NUM);
-		index.setWORKING_UNIT_POST(this.WORKING_UNIT_POST);
-		index.setWORKING_UNIT_ADDR(this.WORKING_UNIT_ADDR);
-		index.setLIVING_ADDR(this.LIVING_ADDR);
-		index.setRPR_ADDR(this.RPR_ADDR);
-		index.setRPR_POST(this.RPR_POST);
-		index.setRPR_PHONE(this.RPR_PHONE);
-		index.setLINKMAN_ADDR(this.LINKMAN_ADDR);
-		index.setLINKMAN_POST(this.LINKMAN_POST);
-		index.setLINKMAN_PHONE(this.LINKMAN_PHONE);
-		index.setINSURE_TYPE(this.INSURE_TYPE);
-		index.setMEDICAL_TREATMENT_NAME(this.MEDICAL_TREATMENT_NAME);
-		index.setMEDICAL_TREATMENT_CD(this.MEDICAL_TREATMENT_CD);
-		index.setREGISTER_DATE(this.REGISTER_DATE);
-		index.setRECORDER_NAME(this.RECORDER_NAME);
-		index.setREGISTER_PERSON_CODE(this.REGISTER_PERSON_CODE);
-		index.setSEND_TIME(this.SEND_TIME);
-		index.setSEND_ORG_CODE(this.SEND_ORG_CODE);
-		index.setSEND_SYSTEM(this.SEND_SYSTEM);
-		index.setPROVIDER_NAME(this.PROVIDER_NAME);
-		index.setPROVIDER_ORG_CODE(this.PROVIDER_ORG_CODE);
-		index.setCREATETIME(this.CREATETIME);
-		index.setLASTUPTIME(this.LASTUPTIME);
-		index.setSTATE(this.STATE);
-		index.setGENDER_CS(this.GENDER_CS);
-		index.setGENDER_CSN(this.GENDER_CSN);
-		index.setGENDER_CSV(this.GENDER_CSV);
-		index.setGENDER_DN(this.GENDER_DN);
-		index.setCARD_MARITAL_ST_CS(this.CARD_MARITAL_ST_CS);
-		index.setCARD_MARITAL_ST_CSN(this.CARD_MARITAL_ST_CSN);
-		index.setCARD_MARITAL_ST_CSV(this.CARD_MARITAL_ST_CSV);
-		index.setCARD_MARITAL_ST_DN(this.CARD_MARITAL_ST_DN);
-		index.setID_NO_CS(this.ID_NO_CS);
-		index.setID_NO_CSN(this.ID_NO_CSN);
-		index.setID_NO_CSV(this.ID_NO_CSV);
-		index.setID_NO_DN(this.ID_NO_DN);
-		index.setMEDICARE_CS(this.MEDICARE_CS);
-		index.setMEDICARE_CSN(this.MEDICARE_CSN);
-		index.setMEDICARE_CSV(this.MEDICARE_CSV);
-		index.setMEDICARE_DN(this.MEDICARE_DN);
-		index.setNH_CARD(this.NH_CARD);
-		index.setSSCID(this.SSCID);
-		index.setCARD_OCCU_TYPE_CS(this.CARD_OCCU_TYPE_CS);
-		index.setCARD_OCCU_TYPE_CSN(this.CARD_OCCU_TYPE_CSN);
-		index.setCARD_OCCU_TYPE_CSV(this.CARD_OCCU_TYPE_CSV);
-		index.setCARD_OCCU_TYPE_DN(this.CARD_OCCU_TYPE_DN);
-		index.setCARD_NATION_CS(this.CARD_NATION_CS);
-		index.setCARD_NATION_CSN(this.CARD_NATION_CSN);
-		index.setCARD_NATION_CSV(this.CARD_NATION_CSV);
-		index.setCARD_NATION_DN(this.CARD_NATION_DN);
-		index.setNATIONALITY_CS(this.NATIONALITY_CS);
-		index.setNATIONALITY_CSN(this.NATIONALITY_CSN);
-		index.setNATIONALITY_CSV(this.NATIONALITY_CSV);
-		index.setNATIONALITY_DN(this.NATIONALITY_DN);
-		index.setAR_CS(this.AR_CS);
-		index.setAR_CSN(this.AR_CSN);
-		index.setAR_CSV(this.AR_CSV);
-		index.setAR_DN(this.AR_DN);
-		index.setAD_CS(this.AD_CS);
-		index.setAD_CSN(this.AD_CSN);
-		index.setAD_CSV(this.AD_CSV);
-		index.setAD_DN(this.AD_DN);
-		index.setTEL_TYPE_CS(this.TEL_TYPE_CS);
-		index.setTEL_TYPE_CSN(this.TEL_TYPE_CSN);
-		index.setTEL_TYPE_CSV(this.TEL_TYPE_CSV);
-		index.setTEL_TYPE_DN(this.TEL_TYPE_DN);
-		index.setLINKMAN_REL_CS(this.LINKMAN_REL_CS);
-		index.setLINKMAN_REL_CSN(this.LINKMAN_REL_CSN);
-		index.setLINKMAN_REL_CSV(this.LINKMAN_REL_CSV);
-		index.setLINKMAN_REL_DN(this.LINKMAN_REL_DN);
-		index.setLM_ID_NO_CS(this.LM_ID_NO_CS);
-		index.setLM_ID_NO_CSN(this.LM_ID_NO_CSN);
-		index.setLM_ID_NO_CSV(this.LM_ID_NO_CSV);
-		index.setLM_ID_NO_DN(this.LM_ID_NO_DN);
-		index.setABO_CS(this.ABO_CS);
-		index.setABO_CSN(this.ABO_CSN);
-		index.setABO_CSV(this.ABO_CSV);
-		index.setABO_DN(this.ABO_DN);
-		index.setRH_CS(this.RH_CS);
-		index.setRH_CSN(this.RH_CSN);
-		index.setRH_CSV(this.RH_CSV);
-		index.setRH_DN(this.RH_DN);
-		index.setCARD_ED_BG_CS(this.CARD_ED_BG_CS);
-		index.setCARD_ED_BG_CSN(this.CARD_ED_BG_CSN);
-		index.setCARD_ED_BG_CSV(this.CARD_ED_BG_CSV);
-		index.setCARD_ED_BG_DN(this.CARD_ED_BG_DN);
-		index.setBIRTH_PLACE_CS(this.BIRTH_PLACE_CS);
-		index.setBIRTH_PLACE_CSN(this.BIRTH_PLACE_CSN);
-		index.setBIRTH_PLACE_CSV(this.BIRTH_PLACE_CSV);
-		index.setBIRTH_PLACE_DN(this.BIRTH_PLACE_DN);
-		index.setNATIVE_PROVINCE(this.NATIVE_PROVINCE);
-		index.setNATIVE_PROVINCE_CS(this.NATIVE_PROVINCE_CS);
-		index.setNATIVE_PROVINCE_CSN(this.NATIVE_PROVINCE_CSN);
-		index.setNATIVE_PROVINCE_CSV(this.NATIVE_PROVINCE_CSV);
-		index.setNATIVE_PROVINCE_DN(this.NATIVE_PROVINCE_DN);
-		index.setNATIVE_CITY_CS(this.NATIVE_CITY_CS);
-		index.setNATIVE_CITY_CSN(this.NATIVE_CITY_CSN);
-		index.setNATIVE_CITY_CSV(this.NATIVE_CITY_CSV);
-		index.setNATIVE_CITY_DN(this.NATIVE_CITY_DN);
-		index.setVETERANS_MILITARY_VALUE(this.VETERANS_MILITARY_VALUE);
-		index.setVETERANS_MILITARY_MARK_CS(this.VETERANS_MILITARY_MARK_CS);
-		index.setVETERANS_MILITARY_MARK_CSN(this.VETERANS_MILITARY_MARK_CSN);
-		index.setVETERANS_MILITARY_MARK_CSV(this.VETERANS_MILITARY_MARK_CSV);
-		index.setCARD_CS(this.CARD_CS);
-		index.setCARD_CSN(this.CARD_CSN);
-		index.setCARD_CSV(this.CARD_CSV);
-		index.setCARD_DN(this.CARD_DN);
-		index.setCARD_AREA_CS(this.CARD_AREA_CS);
-		index.setCARD_AREA_CSN(this.CARD_AREA_CSN);
-		index.setCARD_AREA_CSV(this.CARD_AREA_CSV);
-		index.setCARD_AREA_DN(this.CARD_AREA_DN);
-		index.setPATIENT_TYPE_VALUE(this.PATIENT_TYPE_VALUE);
-		index.setPATIENT_TYPE_CS(this.PATIENT_TYPE_CS);
-		index.setPATIENT_TYPE_CSN(this.PATIENT_TYPE_CSN);
-		index.setPATIENT_TYPE_CSV(this.PATIENT_TYPE_CSV);
-		index.setPATIENT_TYPE_DESCR(this.PATIENT_TYPE_DESCR);
-		index.setWORKING_TEL_NO(this.WORKING_TEL_NO);
-		index.setMEDICAL_TREATMENT_CS(this.MEDICAL_TREATMENT_CS);
-		index.setMEDICAL_TREATMENT_CSN(this.MEDICAL_TREATMENT_CSN);
-		index.setMEDICAL_TREATMENT_CSV(this.MEDICAL_TREATMENT_CSV);
-		index.setVERSION_NUM(this.VERSION_NUM);
-		index.setREGISTER_ORG_NAME(this.REGISTER_ORG_NAME);
-		index.setREMARK(this.REMARK);
-		index.setRESPONS_DOC_CODE(this.RESPONS_DOC_CODE);
-		index.setRESPONS_DOC_NAME(this.RESPONS_DOC_NAME);
-		index.setOTHER_OCCC_DESCR(this.OTHER_OCCC_DESCR);
-		index.setUSUAL_TYPE_MARK(this.USUAL_TYPE_MARK);
-		// updated WHN 20170301
-		index.setPATIENT_ID(this.PATIENT_ID);
-		index.setDRUG_ALLERGY_MARK(this.DRUG_ALLERGY_MARK);
-		index.setOP_HISTORY_MARK(this.OP_HISTORY_MARK);
-		index.setTRAUMA_HISTORY_MARK(this.TRAUMA_HISTORY_MARK);
-		index.setBLOOD_TRANSF_MARK(this.BLOOD_TRANSF_MARK);
-		index.setDISABILITY_MARK(this.DISABILITY_MARK);
-		index.setGENETIC_DISEASE_HISTORY(this.GENETIC_DISEASE_HISTORY);
-		index.setEXHAUST_FACILITY_MARK(this.EXHAUST_FACILITY_MARK);
-		index.setEXHAUST_FACILITY_TYPE_CODE(this.EXHAUST_FACILITY_TYPE_CODE);
-		index.setFUEL_TYPE_CODE(this.FUEL_TYPE_CODE);
-		index.setWATER_TYPE_CODE(this.WATER_TYPE_CODE);
-		index.setTOILET_TYPE_CODE(this.TOILET_TYPE_CODE);
-		index.setLIVESTOCK_PEN_TYPE_CODE(this.LIVESTOCK_PEN_TYPE_CODE);
-		index.setOPERATION_HISTORY(this.OPERATION_HISTORY);
-		index.setASTHMA_MARK(this.ASTHMA_MARK);
-		index.setHEDRT_DIS_MARK(this.HEDRT_DIS_MARK);
-		index.setCARDIOVASCULAR_CODE(this.CARDIOVASCULAR_CODE);
-		index.setEPILEPSY_MARK(this.EPILEPSY_MARK);
-		index.setCOAGULOPATHY_MARK(this.COAGULOPATHY_MARK);
-		index.setDIABETES_MARK(this.DIABETES_MARK);
-		index.setGLAUCOMA_MARK(this.GLAUCOMA_MARK);
-		index.setDIALYSIS_MARK(this.DIALYSIS_MARK);
-		index.setORGAN_TRANS_MARK(this.ORGAN_TRANS_MARK);
-		index.setORGAN_DEFECT_MARK(this.ORGAN_DEFECT_MARK);
-		index.setREMOVA_PRO_MARK(this.REMOVA_PRO_MARK);
-		index.setCARDIAC_PAC_MARK(this.CARDIAC_PAC_MARK);
-		index.setORTHER_MEDICAL_ALERT(this.ORTHER_MEDICAL_ALERT);
-		index.setPSYCHIATRIC_MARK(this.PSYCHIATRIC_MARK);
+		try {
+			BeanUtils.copyProperties(index, this);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
 		return index;
 	}
+
+	public PersonInfoHistory toPersonInfoHistory() {
+		PersonInfoHistory his = new PersonInfoHistory();
+		try {
+			BeanUtils.copyProperties(his, this);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return his;
+	}
+
 }

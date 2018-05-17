@@ -11,6 +11,7 @@ import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.PersonInfoSimple;
 import com.sinosoft.mpi.service.PersonInfoService;
+import com.sinosoft.mpi.ws.domain.QueryResult;
 
 @WebService(endpointInterface = "com.sinosoft.mpi.ws.IPersonQueryWS", serviceName = "PersonQueryWS")
 public class PersonQueryWS implements IPersonQueryWS {

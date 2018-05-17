@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.DomainSrcLevel;
 import com.sinosoft.mpi.model.IdentifierDomain;
-import com.sinosoft.mpi.model.PersonPropertiesDesc;
+import com.sinosoft.mpi.model.code.PersonPropertiesDesc;
 import com.sinosoft.mpi.service.DomainSrcLevelService;
 import com.sinosoft.mpi.service.IdentifierDomainService;
 import com.sinosoft.mpi.util.PageInfo;
@@ -32,6 +34,8 @@ public class DomainSrcLevelController {
 	private DomainSrcLevelService domainSrcLevelService;
 	@Resource
 	private IdentifierDomainService identifierDomainService;
+
+	ObjectMapper om = new ObjectMapper();
 
 	/**
 	 * 取得配置列表数据
@@ -55,7 +59,7 @@ public class DomainSrcLevelController {
 	@ResponseBody
 	public Map<String, Object> fieldlevellist(PageInfo page, DomainSrcLevel t) {
 		Map<String, Object> datas = new HashMap<>();
-		List<DomainSrcLevel> list = domainSrcLevelService.queryPageByID(t.getDOMAIN_ID(), page);
+		List<DomainSrcLevel> list = domainSrcLevelService.queryPageByID(t.getDomainId(), page);
 		// 设置总共有多少条记录
 		datas.put(Constant.PAGE_TOTAL, page.getTotal());
 		// 设置当前页的数据
@@ -69,12 +73,12 @@ public class DomainSrcLevelController {
 	@RequestMapping(params = "method=add")
 	@ResponseBody
 	public void addSrcLevel(DomainSrcLevel srclevel) {
-		DomainSrcLevel entity = domainSrcLevelService.queryByDomainIdAndFieldName(srclevel.getDOMAIN_ID(),
-				srclevel.getFIELD_NAME());
+		DomainSrcLevel entity = domainSrcLevelService.queryByDomainIdAndFieldName(srclevel.getDomainId(),
+				srclevel.getFieldName());
 		if (entity == null) {
 			domainSrcLevelService.save(srclevel);
 		} else {
-			domainSrcLevelService.updateByDomainID(srclevel);
+			domainSrcLevelService.update(srclevel);
 		}
 	}
 
@@ -84,7 +88,7 @@ public class DomainSrcLevelController {
 	@RequestMapping(params = "method=toAdd")
 	public ModelAndView toSrcLevelPage(String domainId) {
 		// 取得居民信息 字段描述
-		List<IdentifierDomain> domainlist = identifierDomainService.queryByDomianId(domainId);
+		List<IdentifierDomain> domainlist = identifierDomainService.queryByUniqueSign(domainId);
 		List<PersonPropertiesDesc> pList = CacheManager.getAll(PersonPropertiesDesc.class);
 		Map<String, Object> datas = new HashMap<>();
 		// 字段属性
@@ -92,7 +96,11 @@ public class DomainSrcLevelController {
 		datas.put("domainList", domainlist);
 		datas.put("domainid", domainId);
 		ModelAndView mv = new ModelAndView("/srclevel/page/srclevel");
-		mv.addObject("selectJson", datas);
+		try {
+			mv.addObject("selectJson", om.writeValueAsString(datas));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 		return mv;
 	}
 
@@ -120,7 +128,11 @@ public class DomainSrcLevelController {
 		datas.put("pList", pList);
 		datas.put("domainList", domainlist);
 		ModelAndView mv = new ModelAndView("/srclevel/page/srclevel_edit");
-		mv.addObject("selectJson", datas);
+		try {
+			mv.addObject("selectJson", om.writeValueAsString(datas));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 		return mv;
 	}
 
@@ -129,7 +141,7 @@ public class DomainSrcLevelController {
 	 */
 	@RequestMapping(params = "method=toView")
 	public ModelAndView fieldLevellist(PageInfo page, DomainSrcLevel t) {
-		List<DomainSrcLevel> list = domainSrcLevelService.queryByID(t.getDOMAIN_ID());
+		List<DomainSrcLevel> list = domainSrcLevelService.queryByDomainID(t.getDomainId());
 		ModelAndView mv = new ModelAndView("/domain/page/fieldlevel");
 		mv.addObject("list", list);
 		return mv;

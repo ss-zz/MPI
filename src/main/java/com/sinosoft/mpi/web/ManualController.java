@@ -14,11 +14,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
-import com.sinosoft.mpi.model.IBaseCode;
 import com.sinosoft.mpi.model.ManOpPerson;
-import com.sinosoft.mpi.model.PerInfoPropertiesDesc;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
+import com.sinosoft.mpi.model.code.IBaseCode;
+import com.sinosoft.mpi.model.code.PerInfoPropertiesDesc;
 import com.sinosoft.mpi.service.ManOpPersonService;
 import com.sinosoft.mpi.service.PersonIdxLogService;
 import com.sinosoft.mpi.service.PersonIndexService;

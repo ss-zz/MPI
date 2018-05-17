@@ -2,12 +2,29 @@ package com.sinosoft.mpi.model;
 
 import java.io.Serializable;
 
+import com.sinosoft.mpi.model.code.IBaseCode;
+
+/**
+ * 通用编码属性描述
+ */
 public class CommonDesc implements IBaseCode, Serializable {
 
 	private static final long serialVersionUID = 7389151965152987583L;
-	private String propertyName; // 属性名
-	private String propertyDesc; // 属性描述
-	private String column;// 对应数据库字段
+
+	/**
+	 * 属性名
+	 */
+	private String propertyName;
+
+	/**
+	 * 属性描述
+	 */
+	private String propertyDesc;
+
+	/**
+	 * 对应数据库字段
+	 */
+	private String column;
 
 	public CommonDesc() {
 		super();

@@ -13,7 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sinosoft.mpi.dao.PersonIndexDao;
+import com.sinosoft.mpi.dao.mpi.PersonIndexDao;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.service.PersonIdxLogService;
 import com.sinosoft.mpi.service.PersonIndexService;
@@ -79,7 +79,7 @@ public class IndexOperate {
 				indexs.add(mergeIndexs.get(i));
 			}
 		}
-		personIndex.setMPI_PK(splitPk);
+		personIndex.setMpiPk(splitPk);
 		map.put("splitIndex", indexs);
 		map.put("MPI_PK", splitPk);
 		modelMap.putAll(map);
@@ -95,7 +95,7 @@ public class IndexOperate {
 		List<PersonIndex> personIndexs = personIndexService.findPersonIndexBysplitIndex(splitPk);
 		String mpi_pk = "";
 		for (int i = 0; i < personIndexs.size(); i++) {
-			mpi_pk = "'" + personIndexs.get(i).getMPI_PK() + "'" + ",";
+			mpi_pk = "'" + personIndexs.get(i).getMpiPk() + "'" + ",";
 		}
 		mpi_pk = mpi_pk.substring(0, mpi_pk.length() - 1);
 

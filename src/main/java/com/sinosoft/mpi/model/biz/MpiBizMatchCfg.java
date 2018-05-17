@@ -1,6 +1,5 @@
 package com.sinosoft.mpi.model.biz;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,14 +13,9 @@ import javax.persistence.Transient;
 import com.sinosoft.bizmatch.config.BizMatchConfig;
 import com.sinosoft.match.model.MatchField;
 
-@Entity()
-public class MpiBizMatchCfg implements Serializable {
+@Entity
+public class MpiBizMatchCfg {
 
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * id
-	 */
 	@Id
 	@Column
 	@GeneratedValue

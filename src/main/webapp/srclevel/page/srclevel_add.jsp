@@ -10,17 +10,17 @@
 </script>
 </head>
 <body>
-		<div style="padding: 5px; width:80%; height: 300px;"  id="table_add"class="ToolTip_Form" id="table_edit" onkeydown="if(event.keyCode==13){editData();}">
-        <input type="button" value="重置" id="resetBtn" onclick="resetAllData()" />&nbsp;&nbsp;
-				<input type="button" value="保存" id="saveBtn" onclick="saveMatchCfg()" />&nbsp;&nbsp;
-				<input type="button" value="返回" id="gobackBtn" onclick="goBackClose()" /><br/><br/>	
-        <ul>
+	<div style="padding: 5px; width:80%; height: 300px;"  id="table_add"class="ToolTip_Form" id="table_edit" onkeydown="if(event.keyCode==13){editData();}">
+		<input type="button" value="重置" id="resetBtn" onclick="resetAllData()" />&nbsp;&nbsp;
+		<input type="button" value="保存" id="saveBtn" onclick="saveMatchCfg()" />&nbsp;&nbsp;
+		<input type="button" value="返回" id="gobackBtn" onclick="goBackClose()" /><br/><br/>	
+		<ul>
 			<li>
 				<label for="add_domainSelect">域唯一标识:</label><select id="add_domainSelect"></select>
-			    <label for="add_fieldSelect">字段名称:</label><select id="add_fieldSelect"></select>
+				<label for="add_fieldSelect">字段名称:</label><select id="add_fieldSelect"></select>
 				<label>字段数据源级别：</label>
 				<select id="add_fieldlevel" length="50">
-				    <option value="">--请选择--</option>
+					<option value="">--请选择--</option>
 					<option value="0">0级</option>
 					<option value="1">1级</option>
 					<option value="2">2级</option>
@@ -28,7 +28,7 @@
 					<option value="4">4级</option>
 					<option value="5">5级</option>
 				</select>
-			</li>		
+			</li>
 		</ul>
 	</div>
 </body>

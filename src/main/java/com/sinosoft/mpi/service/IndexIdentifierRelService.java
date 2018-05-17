@@ -6,7 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.IndexIdentifierRelDao;
+import com.sinosoft.mpi.dao.mpi.IndexIdentifierRelDao;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 
 /**
@@ -24,7 +24,7 @@ public class IndexIdentifierRelService {
 	 * @param t
 	 */
 	public void save(IndexIdentifierRel t) {
-		indexIdentifierRelDao.add(t);
+		indexIdentifierRelDao.save(t);
 	}
 
 	/**
@@ -33,38 +33,36 @@ public class IndexIdentifierRelService {
 	 * @param t
 	 */
 	public void delete(IndexIdentifierRel t) {
-		indexIdentifierRelDao.deleteById(t);
+		indexIdentifierRelDao.delete(t);
 	}
 
 	/**
 	 * 根据主键删除
 	 * 
-	 * @param fieldpk
+	 * @param fieldPk
 	 */
-	public void deleteByFieldPk(String fieldpk) {
-		indexIdentifierRelDao.deleteByFieldPK(fieldpk);
+	public void deleteByFieldPk(String fieldPk) {
+		indexIdentifierRelDao.delete(fieldPk);
 	}
 
 	/**
 	 * 根据人员id查询
 	 * 
-	 * @param field_pk
+	 * @param fieldPk
 	 * @return
 	 */
-	public IndexIdentifierRel queryByFieldPK(String field_pk) {
-		IndexIdentifierRel rel = indexIdentifierRelDao.findByFieldPK(field_pk);
-		return rel;
+	public IndexIdentifierRel queryByFieldPK(String fieldPk) {
+		return indexIdentifierRelDao.findFirstByFieldPk(fieldPk);
 	}
 
 	/**
 	 * 根据主索引id查询
 	 * 
-	 * @param mpi_pk
+	 * @param mpiPk
 	 * @return
 	 */
-	public List<IndexIdentifierRel> queryByMpiPK(String mpi_pk) {
-		List<IndexIdentifierRel> rels = indexIdentifierRelDao.findByMpiPK(mpi_pk);
-		return rels;
+	public List<IndexIdentifierRel> queryByMpiPK(String mpiPk) {
+		return indexIdentifierRelDao.findByMpiPk(mpiPk);
 	}
 
 	/**
@@ -73,11 +71,7 @@ public class IndexIdentifierRelService {
 	 * @param combineNo
 	 */
 	public void deleteRecurByCombinNo(Long combineNo) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(
-				" delete from MPI_INDEX_IDENTIFIER_REL r where r.combine_no in (select combine_no from MPI_INDEX_IDENTIFIER_REL t start with combine_no = ? ");
-		sb.append("connect by combine_rec = prior combine_no)");
-		indexIdentifierRelDao.deleteRecurByCombinNo(sb.toString(), combineNo);
+		indexIdentifierRelDao.deleteRecurByCombinNo(combineNo);
 	}
 
 }

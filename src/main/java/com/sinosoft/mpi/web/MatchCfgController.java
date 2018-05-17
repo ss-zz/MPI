@@ -18,7 +18,7 @@ import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.MatchCfg;
 import com.sinosoft.mpi.model.MatchFieldCfg;
-import com.sinosoft.mpi.model.PersonPropertiesDesc;
+import com.sinosoft.mpi.model.code.PersonPropertiesDesc;
 import com.sinosoft.mpi.service.MatchCfgService;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.stringcomparison.config.StringComparisionConfig;

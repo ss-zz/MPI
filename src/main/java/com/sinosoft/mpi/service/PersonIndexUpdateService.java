@@ -6,13 +6,13 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.IdentifierDomainDao;
-import com.sinosoft.mpi.dao.IndexIdentifierRelDao;
-import com.sinosoft.mpi.dao.MpiCombineLevelDao;
-import com.sinosoft.mpi.dao.MpiCombineRecDao;
-import com.sinosoft.mpi.dao.PersonIndexDao;
+import com.sinosoft.mpi.dao.mpi.IdentifierDomainDao;
+import com.sinosoft.mpi.dao.mpi.IndexIdentifierRelDao;
+import com.sinosoft.mpi.dao.mpi.MpiCombineRecDao;
+import com.sinosoft.mpi.dao.mpi.PersonIndexDao;
 import com.sinosoft.mpi.model.IdentifierDomain;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.MpiCombineRec;
@@ -36,12 +36,15 @@ public class PersonIndexUpdateService {
 	@Resource
 	MpiCombineRecDao mpiCombineRecDao;
 	@Resource
-	MpiCombineLevelDao mpiCombineLevelDao;
+	MpiCombineLevelService mpiCombineLevelService;
 	// 更新策略
 	@Value("${index.update.policy}")
 	UpdateStrategy policy;
 	@Resource
 	DomainSrcLevelService domainSrcLevelService;
+	@Resource
+	JdbcTemplate jdbcTemplate;
+
 	List<Map<String, Object>> orgincollevellist = null;
 
 	/**
@@ -72,10 +75,10 @@ public class PersonIndexUpdateService {
 	/**
 	 * 直接更新 索引信息
 	 */
-	private void updateIndexDirect(PersonInfo person, String mpi_pk) {
-		PersonIndex idx = person.personInfoToPersonIndex();
-		idx.setMPI_PK(mpi_pk);
-		personIndexDao.update(idx);
+	private void updateIndexDirect(PersonInfo person, String mpiPk) {
+		PersonIndex idx = person.toPersonIndex();
+		idx.setMpiPk(mpiPk);
+		personIndexDao.save(idx);
 	}
 
 	/**
@@ -86,25 +89,23 @@ public class PersonIndexUpdateService {
 	 */
 	private void updateIndexByLevel(PersonInfo person, String indexId) {
 		// 取得 索引
-		PersonIndex index = new PersonIndex();
-		index.setMPI_PK(indexId);
-		index = personIndexDao.findById(index);
+		PersonIndex index = personIndexDao.findOne(indexId);
 		// 取得居民数据级别
-		IdentifierDomain domain = identifierDomainDao.getByPersonId(person.getFIELD_PK());
+		IdentifierDomain domain = identifierDomainDao.getFirstByPersonId(person.getFieldPk());
 		int srcLevel = 0;
-		if (NumberUtils.isNumber(index.getDOMAIN_LEVEL())) {
-			srcLevel = Integer.parseInt(index.getDOMAIN_LEVEL());
+		if (NumberUtils.isNumber(index.getDomainLevel())) {
+			srcLevel = Integer.parseInt(index.getDomainLevel());
 		}
 		int domainLevel = 0;
-		if (NumberUtils.isNumber(domain.getDOMAIN_LEVEL())) {
-			domainLevel = Integer.parseInt(domain.getDOMAIN_LEVEL());
+		if (NumberUtils.isNumber(domain.getDomainLevel())) {
+			domainLevel = Integer.parseInt(domain.getDomainLevel());
 		}
 		// 对比级别
 		if (srcLevel <= domainLevel) {
-			index = person.personInfoToPersonIndex();
-			index.setMPI_PK(indexId);
-			index.setDOMAIN_LEVEL(domain.getDOMAIN_LEVEL());
-			personIndexDao.update(index);
+			index = person.toPersonIndex();
+			index.setMpiPk(indexId);
+			index.setDomainLevel(domain.getDomainLevel());
+			personIndexDao.save(index);
 		}
 	}
 
@@ -112,38 +113,39 @@ public class PersonIndexUpdateService {
 	private PersonIndex mergeIndex(PersonIndex index, PersonInfo personinfo) {
 		PersonIndex newIndex = new PersonIndex();
 		// 添加索引
-		if (index.getMPI_PK() != null) {
+		if (index.getMpiPk() != null) {
 			// 获取索引字段的级别权限,与当前居民信息级别做比较,判别应替换字段信息，进行字段级别合并
 			// 合并信息入库（第一次入库也记录一次合并信息）
 			// 查询最新一次的合并记录
-			IndexIdentifierRel iirlatest = indexIdentifierRelDao.findByMpiPKByLatest(index.getMPI_PK());
+			IndexIdentifierRel iirlatest = indexIdentifierRelDao
+					.findFirstByMpiPkOrderByCombineRecDesc(index.getMpiPk());
 			IndexIdentifierRel iir = new IndexIdentifierRel();
-			iir.setCOMBINE_REC(iirlatest.getCOMBINE_NO());// 指代上一条的替换记录combine_rec
-			iir.setDOMAIN_ID(personinfo.getDOMAIN_ID());
-			iir.setFIELD_PK(personinfo.getFIELD_PK());
-			iir.setDOMAIN_ID(iirlatest.getDOMAIN_ID());
-			iir.setMPI_PK(index.getMPI_PK());
-			if (personinfo.getTYPE() == "0") {
-				iir.setPERSON_IDENTIFIER(personinfo.getHR_ID());
-			} else if (personinfo.getTYPE() == "1") {
-				iir.setPERSON_IDENTIFIER(personinfo.getMEDICALSERVICE_NO());
-			} else if (personinfo.getTYPE() == "3") {
-				iir.setPERSON_IDENTIFIER(personinfo.getPATIENT_ID());
+			iir.setCombineRec(iirlatest.getCombineNo());// 指代上一条的替换记录combine_rec
+			iir.setDomainId(personinfo.getDomainId());
+			iir.setFieldPk(personinfo.getFieldPk());
+			iir.setDomainId(iirlatest.getDomainId());
+			iir.setMpiPk(index.getMpiPk());
+			if (personinfo.getType() == "0") {
+				iir.setPersonIdentifier(personinfo.getHrId());
+			} else if (personinfo.getType() == "1") {
+				iir.setPersonIdentifier(personinfo.getMedicalserviceNo());
+			} else if (personinfo.getType() == "3") {
+				iir.setPersonIdentifier(personinfo.getPatientId());
 			}
 
-			indexIdentifierRelDao.add(iir);
+			indexIdentifierRelDao.save(iir);
 			// 合并记录入库
-			long comboNO = iir.getCOMBINE_NO();// 本次合并记录号
+			long comboNO = iir.getCombineNo();// 本次合并记录号
 			// 取合并前的字段级别
 			/* updated-whn-2016-11-01 */
 			List<Map<String, Object>> orgincollevellist = getOrgincollevellist();
 			// 合并记录字段级别入库
-			newIndex = mpiCombineLevelDao.compareBatchAdd(index, personinfo, comboNO, personinfo.getSRC_LEVEL(),
+			newIndex = mpiCombineLevelService.compareBatchAdd(index, personinfo, comboNO, personinfo.getSrcLevel(),
 					orgincollevellist, null);
-			personIndexDao.update(newIndex);
+			personIndexDao.save(newIndex);
 			MpiCombineRec mpiCombineRec = newIndex.indexToMpiCombineRec();
-			mpiCombineRec.setCOMBINE_NO(comboNO);
-			mpiCombineRecDao.add(mpiCombineRec);
+			mpiCombineRec.setCombineNo(comboNO);
+			mpiCombineRecDao.save(mpiCombineRec);
 		}
 		return newIndex;
 	}
@@ -155,7 +157,7 @@ public class PersonIndexUpdateService {
 	 */
 	private List<Map<String, Object>> getOrgincollevellist() {
 		if (this.orgincollevellist == null) {
-			this.orgincollevellist = mpiCombineLevelDao.findForMap("select * from MPI_COMBINE_LEVEL");
+			this.orgincollevellist = jdbcTemplate.queryForList("select * from MPI_COMBINE_LEVEL");
 		}
 		return this.orgincollevellist;
 	}

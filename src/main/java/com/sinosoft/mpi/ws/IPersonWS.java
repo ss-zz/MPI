@@ -7,6 +7,7 @@ import javax.jws.soap.SOAPBinding.Style;
 
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.PersonInfoSimple;
+import com.sinosoft.mpi.ws.domain.DataResult;
 
 /**
  * 居民信息服务
@@ -20,7 +21,7 @@ public interface IPersonWS {
 	 * 
 	 * @param person
 	 */
-	DataResult addPerson(@WebParam(name = "person") PersonInfo person);
+	DataResult<Void> addPerson(@WebParam(name = "person") PersonInfo person);
 
 	/**
 	 * 批量添加居民信息接口
@@ -28,14 +29,14 @@ public interface IPersonWS {
 	 * @param persons
 	 *            一次传输最大数量100,大于此数量将返回错误信息.
 	 */
-	DataResult addPersonBatch(@WebParam(name = "persons") PersonInfo[] persons);
+	DataResult<Void> addPersonBatch(@WebParam(name = "persons") PersonInfo[] persons);
 
 	/**
 	 * 更新居民信息
 	 * 
 	 * @param person
 	 */
-	DataResult updatePerson(@WebParam(name = "person") PersonInfo person);
+	DataResult<Void> updatePerson(@WebParam(name = "person") PersonInfo person);
 
 	/**
 	 * 批量更新居民信息接口
@@ -43,7 +44,7 @@ public interface IPersonWS {
 	 * @param persons
 	 *            一次传输最大数量100,大于此数量将返回错误信息.
 	 */
-	DataResult updatePersonBatch(@WebParam(name = "persons") PersonInfo[] persons);
+	DataResult<Void> updatePersonBatch(@WebParam(name = "persons") PersonInfo[] persons);
 
 	/**
 	 * 合并两个居民信息
@@ -53,7 +54,7 @@ public interface IPersonWS {
 	 * @param surviving
 	 *            要保留的居民信息
 	 */
-	DataResult mergePerson(@WebParam(name = "retired") PersonInfoSimple retired,
+	DataResult<Void> mergePerson(@WebParam(name = "retired") PersonInfoSimple retired,
 			@WebParam(name = "surviving") PersonInfoSimple surviving);
 
 	/**
@@ -65,6 +66,6 @@ public interface IPersonWS {
 	 *            要保留的居民信息
 	 * @return
 	 */
-	DataResult mergePersonBatch(@WebParam(name = "retireds") PersonInfoSimple[] retireds,
+	DataResult<Void> mergePersonBatch(@WebParam(name = "retireds") PersonInfoSimple[] retireds,
 			@WebParam(name = "surviving") PersonInfoSimple surviving);
 }

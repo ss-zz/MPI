@@ -8,7 +8,7 @@
 <body>
 	<!-- 对比情况 所有均显示 -->
 	<table class="myTable">
-		<caption>主索引详情【${data.NAME_CN }】</caption>
+		<caption>主索引详情【${data.nameCn }】</caption>
 		<thead>
 			<tr>
 				<th></th>

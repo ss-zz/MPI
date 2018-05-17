@@ -54,8 +54,8 @@ public class IdxOpLogController {
 	public List<IdentifierDomain> listDomain() throws IOException {
 		List<IdentifierDomain> list = identifierDomainService.queryAll();
 		IdentifierDomain first = new IdentifierDomain();
-		first.setDOMAIN_ID("");
-		first.setDOMAIN_DESC("--请选择--");
+		first.setDomainId("");
+		first.setDomainDesc("--请选择--");
 		list.add(0, first);
 		return list;
 	}

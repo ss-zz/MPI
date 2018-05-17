@@ -3,12 +3,16 @@ package com.sinosoft.mpi.service;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.IdentifierDomainDao;
+import com.sinosoft.mpi.dao.mpi.IdentifierDomainDao;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.IdentifierDomain;
 import com.sinosoft.mpi.util.PageInfo;
@@ -18,8 +22,6 @@ import com.sinosoft.mpi.util.PageInfo;
  */
 @Service
 public class IdentifierDomainService {
-
-	private Logger logger = Logger.getLogger(IdentifierDomainService.class);
 
 	@Resource
 	private IdentifierDomainDao identifierDomainDao;
@@ -32,10 +34,10 @@ public class IdentifierDomainService {
 	public void save(IdentifierDomain t) {
 		if (t == null)
 			return;
-		if (testDomain(t.getDOMAIN_ID(), t.getUNIQUE_SIGN())) {
-			identifierDomainDao.add(t);
+		if (testDomain(t.getDomainId(), t.getUniqueSign())) {
+			identifierDomainDao.save(t);
 		} else {
-			throw new ValidationException("身份域唯一标识:" + t.getUNIQUE_SIGN() + "已存在");
+			throw new ValidationException("身份域唯一标识:" + t.getUniqueSign() + "已存在");
 		}
 	}
 
@@ -47,17 +49,17 @@ public class IdentifierDomainService {
 	public void update(IdentifierDomain t) {
 		if (t == null)
 			return;
-		if (testDomain(t.getDOMAIN_ID(), t.getUNIQUE_SIGN())) {
-			IdentifierDomain tmp = identifierDomainDao.findById(t);
-			tmp.setDOMAIN_DESC(t.getDOMAIN_DESC());
-			tmp.setDOMAIN_TYPE(t.getDOMAIN_TYPE());
-			tmp.setUNIQUE_SIGN(t.getUNIQUE_SIGN());
-			tmp.setPUSH_ADDR(t.getPUSH_ADDR());
-			tmp.setBOOK_TYPE(t.getBOOK_TYPE());
-			tmp.setDOMAIN_LEVEL(t.getDOMAIN_LEVEL());
-			identifierDomainDao.update(tmp);
+		if (testDomain(t.getDomainId(), t.getUniqueSign())) {
+			IdentifierDomain tmp = identifierDomainDao.findOne(t.getDomainId());
+			tmp.setDomainDesc(t.getDomainDesc());
+			tmp.setDomainType(t.getDomainType());
+			tmp.setUniqueSign(t.getUniqueSign());
+			tmp.setPushAddr(t.getPushAddr());
+			tmp.setBookType(t.getBookType());
+			tmp.setDomainLevel(t.getDomainLevel());
+			identifierDomainDao.save(tmp);
 		} else {
-			throw new ValidationException("身份域唯一标识:" + t.getUNIQUE_SIGN() + "已存在");
+			throw new ValidationException("业务系统唯一标识:" + t.getUniqueSign() + "已存在");
 		}
 	}
 
@@ -67,7 +69,7 @@ public class IdentifierDomainService {
 	 * @param t
 	 */
 	public void delete(IdentifierDomain t) {
-		identifierDomainDao.deleteById(t);
+		identifierDomainDao.delete(t);
 	}
 
 	/**
@@ -77,9 +79,7 @@ public class IdentifierDomainService {
 	 * @return
 	 */
 	public IdentifierDomain getObject(String id) {
-		IdentifierDomain t = new IdentifierDomain();
-		t.setDOMAIN_ID(id);
-		return identifierDomainDao.findById(t);
+		return identifierDomainDao.findOne(id);
 	}
 
 	/**
@@ -90,15 +90,12 @@ public class IdentifierDomainService {
 	 * @return
 	 */
 	public List<IdentifierDomain> queryForPage(IdentifierDomain t, PageInfo page) {
-		String sql = " select * from mpi_identifier_domain where 1=1 ";
-		// 取得总条数sql
-		String countSql = page.buildCountSql(sql);
-		logger.debug("Execute sql:[" + countSql + "],params[]");
-		// 设置总条数
-		page.setTotal(identifierDomainDao.getCount(countSql, new Object[] {}));
-		sql = page.buildPageSql(sql);
-		logger.debug("Execute sql:[" + sql + "],params[]");
-		return identifierDomainDao.find(sql, new Object[] {});
+		return identifierDomainDao.findAll(new Specification<IdentifierDomain>() {
+			@Override
+			public Predicate toPredicate(Root<IdentifierDomain> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return null;
+			}
+		}, page).getContent();
 	}
 
 	/**
@@ -118,17 +115,12 @@ public class IdentifierDomainService {
 	 * @return
 	 */
 	public boolean testDomain(String domainId, String uniqueSign) {
-		StringBuilder sql = new StringBuilder();
-		Object[] args = null;
-		sql.append(" select count(*) from mpi_identifier_domain where unique_sign = ? ");
+		int count = 0;
 		if (StringUtils.isNotBlank(domainId)) {
-			sql.append(" and domain_id != ?");
-			args = new Object[] { uniqueSign, domainId };
+			count = identifierDomainDao.countByUniqueSignAndDomainId(uniqueSign, domainId);
 		} else {
-			args = new Object[] { uniqueSign };
+			count = identifierDomainDao.countByUniqueSign(uniqueSign);
 		}
-		int count = identifierDomainDao.getCount(sql.toString(), args);
-
 		return count == 0;
 	}
 
@@ -138,19 +130,38 @@ public class IdentifierDomainService {
 	 * @return
 	 */
 	public List<IdentifierDomain> queryPushDomain() {
-		String sql = "select * from mpi_identifier_domain where book_type = '0'";
-		return identifierDomainDao.find(sql);
+		return identifierDomainDao.findByBookType("0");
 	}
 
 	/**
-	 * 根据唯一标识查询
+	 * 根据uniqueSign查询
 	 * 
-	 * @param unique_sign
+	 * @param uniqueSign
 	 * @return
 	 */
-	public List<IdentifierDomain> queryByDomianId(String unique_sign) {
-		String sql = " select * from mpi_identifier_domain  where unique_sign=?";
-		return identifierDomainDao.find(sql, new Object[] { unique_sign });
+	public List<IdentifierDomain> queryByUniqueSign(String uniqueSign) {
+		return identifierDomainDao.findByUniqueSign(uniqueSign);
+	}
+
+	/**
+	 * 根据人员id获取数据
+	 * 
+	 * @param personId
+	 * @return
+	 */
+	public IdentifierDomain getByPersonId(String personId) {
+		List<IdentifierDomain> items = identifierDomainDao.getByPersonId(personId);
+		return items.size() > 0 ? items.get(0) : null;
+	}
+
+	/**
+	 * 根据uniqueSign查询
+	 * 
+	 * @param uniqueSign
+	 * @return
+	 */
+	public IdentifierDomain getByUniqueSign(String uniqueSign) {
+		return identifierDomainDao.findFirstByUniqueSign(uniqueSign);
 	}
 
 }

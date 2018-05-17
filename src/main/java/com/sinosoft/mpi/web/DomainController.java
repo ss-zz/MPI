@@ -47,7 +47,7 @@ public class DomainController {
 	 */
 	@RequestMapping(params = "method=test")
 	public void testDomainName(IdentifierDomain domain, HttpServletResponse response) throws IOException {
-		boolean flag = identifierDomainService.testDomain(domain.getDOMAIN_ID(), domain.getUNIQUE_SIGN());
+		boolean flag = identifierDomainService.testDomain(domain.getDomainId(), domain.getUniqueSign());
 		if (flag) {
 			response.getWriter().print("true");
 		} else {

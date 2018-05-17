@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.sinosoft.config.MqConfig;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.biz.MpiBizInfo;
-import com.sinosoft.mpi.model.register.PersonRegister;
+import com.sinosoft.mpi.model.register.BizRegister;
 
 /**
  * 消息队列人员数据处理
@@ -28,12 +28,12 @@ public class PersonHandler {
 	@RabbitListener(queues = MqConfig.MQ_QUEUE_NAME_INDEX)
 	public void handleMessage(Object obj) {
 		try {
-			if (obj instanceof PersonRegister) {
-				PersonRegister personRegister = (PersonRegister) obj;
+			if (obj instanceof BizRegister) {
+				BizRegister bizRegister = (BizRegister) obj;
 				// 人员信息
-				PersonInfo personInfo = personRegister.getPersonInfo();
+				PersonInfo personInfo = bizRegister.getPersonInfo();
 				// 数据状态
-				int state = personInfo.getSTATE();
+				int state = personInfo.getState();
 				// 主索引id
 				String mpiPk = null;
 				if (state == 0) {// 新增
@@ -46,9 +46,9 @@ public class PersonHandler {
 
 				if (state == 0) {// 新增
 					// 患者id
-					String patientId = personInfo.getFIELD_PK();
+					String patientId = personInfo.getFieldPk();
 					// 业务信息
-					MpiBizInfo bizInfo = personRegister.getBizInfo();
+					MpiBizInfo bizInfo = bizRegister.getBizInfo();
 					String ret = addBizHandler.handleMessage(bizInfo, patientId, mpiPk);
 					System.out.println("业务处理结果：" + ret);
 				}
@@ -59,7 +59,7 @@ public class PersonHandler {
 		} catch (Exception e) {
 			String fieldPk = null;
 			if (obj != null && obj instanceof PersonInfo) {
-				fieldPk = ((PersonInfo) obj).getFIELD_PK();
+				fieldPk = ((PersonInfo) obj).getFieldPk();
 			}
 			throw new RuntimeException("处理人员发生未知异常[" + fieldPk + "]:" + obj, e);
 		}

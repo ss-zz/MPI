@@ -7,6 +7,7 @@ import javax.jws.soap.SOAPBinding.Style;
 
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.PersonInfoSimple;
+import com.sinosoft.mpi.ws.domain.QueryResult;
 
 /**
  * 索引信息查询接口

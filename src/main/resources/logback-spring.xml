@@ -15,7 +15,8 @@
 			<maxHistory>2</maxHistory>
 		</rollingPolicy>
 		<layout class="ch.qos.logback.classic.PatternLayout">
-			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}
+				-%msg%n
 			</Pattern>
 		</layout>
 	</appender>
@@ -36,10 +37,20 @@
 			<maxHistory>2</maxHistory>
 		</rollingPolicy>
 		<layout class="ch.qos.logback.classic.PatternLayout">
-			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}
+				-%msg%n
 			</Pattern>
 		</layout>
 	</appender>
+
+	<!--显示日志 -->
+	<logger name="org.springframework.jdbc.core" additivity="false"
+		level="DEBUG">
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	<logger name="org.hibernate.type" additivity="false" level="TRACE">
+		<appender-ref ref="CONSOLE" />
+	</logger>
 
 	<root level="info">
 		<appender-ref ref="INFO_FILE" />

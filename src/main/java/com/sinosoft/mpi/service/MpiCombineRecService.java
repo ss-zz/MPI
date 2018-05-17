@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.MpiCombineRecDao;
+import com.sinosoft.mpi.dao.mpi.MpiCombineRecDao;
 import com.sinosoft.mpi.model.MpiCombineRec;
 
 /**
@@ -20,7 +20,7 @@ public class MpiCombineRecService {
 	 * 保存
 	 */
 	public void save(MpiCombineRec t) {
-		mpiCombineRecDao.add(t);
+		mpiCombineRecDao.save(t);
 	}
 
 	/**
@@ -30,7 +30,7 @@ public class MpiCombineRecService {
 	 * @return
 	 */
 	public MpiCombineRec queryByCombineNo(Long combineNo) {
-		return mpiCombineRecDao.find(combineNo);
+		return mpiCombineRecDao.findOne(combineNo);
 	}
 
 }

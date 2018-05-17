@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.SysRole;
 import com.sinosoft.mpi.model.SysUser;
+import com.sinosoft.mpi.service.SysRoleService;
 import com.sinosoft.mpi.service.SysUserService;
 
 /**
@@ -27,13 +28,15 @@ public class UserController {
 
 	@Resource
 	private SysUserService sysUserService;
+	@Resource
+	private SysRoleService sysRoleService;
 
 	/**
 	 * 前往列表页面
 	 */
 	@RequestMapping
 	public ModelAndView toListPage() {
-		List<SysRole> roles = sysUserService.findRoles();
+		List<SysRole> roles = sysRoleService.findAll();
 		ModelAndView mv = new ModelAndView("sysuser/page/su");
 		mv.addObject("roles", roles);
 		return mv;

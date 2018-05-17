@@ -33,60 +33,31 @@
 		<c:if test="${log.opStyle == 3 || log.opStyle == 6 }">
 			<h3>
 				主索引记录:<a href="javascript:Void(0);"
-					onclick="unify_viewIndex('${index.MPI_PK }','${index.NAME_CN }')">${index.NAME_CN}</a>
+					onclick="unify_viewIndex('${index.mpiPk }','${index.nameCn }')">${index.nameCn}</a>
 			</h3>
 			<h3>
 				拆分的个人信息记录:<a href="javascript:Void(0);"
-					onclick="unify_viewPerson('${person.FIELD_PK }','${person.NAME_CN }')">${person.NAME_CN}</a>
+					onclick="unify_viewPerson('${person.fieldPk }','${person.nameCn }')">${person.nameCn}</a>
 			</h3>
 		</c:if>
 		<c:if test="${log.opStyle == 1 || log.opStyle == 4 }">
 			<h3>
 				合并后的主索引记录:<a href="javascript:Void(0);"
-					onclick="unify_viewIndex('${index.MPI_PK }','${index.NAME_CN }')">${index.NAME_CN}</a>
+					onclick="unify_viewIndex('${index.mpiPk }','${index.nameCn }')">${index.nameCn}</a>
 			</h3>
 			<h3>
 				合并的个人信息记录: <a href="javascript:Void(0);"
-					onclick="unify_viewPerson('${person.FIELD_PK }','${person.NAME_CN }')">${person.NAME_CN}</a>
+					onclick="unify_viewPerson('${person.fieldPk }','${person.nameCn }')">${person.nameCn}</a>
 			</h3>
 		</c:if>
 		<c:if test="${log.opStyle == 2 || log.opStyle == 5 }">
 			<h3>
 				新建的主索引记录:<a href="javascript:Void(0);"
-					onclick="unify_viewIndex('${index.MPI_PK }','${index.NAME_CN }')">${index.NAME_CN}</a>
+					onclick="unify_viewIndex('${index.mpiPk }','${index.nameCn }')">${index.nameCn}</a>
 			</h3>
 		</c:if>
 	</c:if>
 
-	<%-- <c:if test="${matchField!=null && log.opType == 1 }">
-		<!-- 匹配度表格 需要判断 -->
-		<table class="myTable">
-			<caption>匹配度情况(综合匹配度:${matchResult.matchDegree })</caption>
-			<thead>
-				<tr>
-					<th></th>
-					<th>匹配项</th>
-					<th>匹配度</th>
-					<th>信息-匹配的主索引记录</th>
-					<th>信息-提交匹配的记录</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- loop -->
-				<c:forEach items="${matchField }" var="field" varStatus="s">
-					<tr>
-						<td>${s.count}</td>
-						<td>${field.fieldCnName}</td>
-						<td>${field.matchDegree}</td>
-						<td>${field.indexValue}</td>
-						<td>${field.personValue}</td>
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-		<br />
-		<br />
-	</c:if> --%>
 	<!-- 对比情况 所有均显示 -->
 	<table class="myTable">
 		<caption>
@@ -94,7 +65,7 @@
 				style="float: right;"> <c:if test="${log.opType == 1 }">
 				最终形成的主索引:
 				<a href="javascript:Void(0);"
-						onclick="unify_viewIndex('${index.MPI_PK }','${index.NAME_CN }')">${index.NAME_CN}</a>
+						onclick="unify_viewIndex('${index.mpiPk }','${index.nameCn }')">${index.nameCn}</a>
 				</c:if>
 			</span>
 		</caption>

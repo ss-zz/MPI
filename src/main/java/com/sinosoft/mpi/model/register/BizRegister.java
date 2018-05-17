@@ -1,24 +1,23 @@
 package com.sinosoft.mpi.model.register;
 
-import com.sinosoft.mpi.model.PersonInfo;
+import com.sinosoft.mpi.model.biz.MpiBizInfo;
 
 /**
  * 业务注册
  */
-public class BizRegister {
-
-	/**
-	 * 业务系统唯一标识
-	 */
-	String systemKey;
-
-	/**
-	 * 人员信息
-	 */
-	PersonInfo personInfo;
+public class BizRegister extends PersonRegister {
 
 	/**
 	 * 业务信息
 	 */
+	private MpiBizInfo bizInfo;
+
+	public MpiBizInfo getBizInfo() {
+		return bizInfo;
+	}
+
+	public void setBizInfo(MpiBizInfo bizInfo) {
+		this.bizInfo = bizInfo;
+	}
 
 }

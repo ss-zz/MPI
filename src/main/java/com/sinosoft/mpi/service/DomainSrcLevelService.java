@@ -6,10 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.DomainSrcLevelDao;
+import com.sinosoft.mpi.dao.mpi.DomainSrcLevelDao;
 import com.sinosoft.mpi.model.DomainSrcLevel;
 import com.sinosoft.mpi.util.PageInfo;
 
@@ -25,7 +30,7 @@ public class DomainSrcLevelService {
 	/**
 	 * 对象缓存-根据域id获取数据
 	 */
-	private Map<String, List<Map<String, Object>>> TMP_DOMAINID_DATA = new HashMap<String, List<Map<String, Object>>>();
+	private Map<String, List<DomainSrcLevel>> TMP_DOMAINID_DATA = new HashMap<String, List<DomainSrcLevel>>();
 
 	/**
 	 * 保存
@@ -33,7 +38,7 @@ public class DomainSrcLevelService {
 	 * @param t
 	 */
 	public void save(DomainSrcLevel t) {
-		domainSrcLevelDao.add(t);
+		domainSrcLevelDao.save(t);
 	}
 
 	/**
@@ -42,16 +47,7 @@ public class DomainSrcLevelService {
 	 * @param t
 	 */
 	public void update(DomainSrcLevel t) {
-		domainSrcLevelDao.update(t);
-	}
-
-	/**
-	 * 根据id更新
-	 * 
-	 * @param t
-	 */
-	public void updateByDomainID(DomainSrcLevel t) {
-		domainSrcLevelDao.updateByDomainID(t);
+		domainSrcLevelDao.save(t);
 	}
 
 	/**
@@ -60,7 +56,7 @@ public class DomainSrcLevelService {
 	 * @param t
 	 */
 	public void delete(DomainSrcLevel t) {
-		domainSrcLevelDao.deleteById(t);
+		domainSrcLevelDao.delete(t);
 	}
 
 	/**
@@ -70,7 +66,7 @@ public class DomainSrcLevelService {
 	 * @return
 	 */
 	public DomainSrcLevel getObject(String id) {
-		return null;
+		return domainSrcLevelDao.findOne(id);
 	}
 
 	/**
@@ -81,11 +77,12 @@ public class DomainSrcLevelService {
 	 * @return
 	 */
 	public List<DomainSrcLevel> queryForPage(DomainSrcLevel t, PageInfo page) {
-		String sql = " select * from MPI_DOMAIN_SRCLEVEL where 1=1 ";
-		String countSql = page.buildCountSql(sql);
-		page.setTotal(domainSrcLevelDao.getCount(countSql, new Object[] {}));
-		String querySql = page.buildPageSql(sql);
-		return domainSrcLevelDao.find(querySql, new Object[] {});
+		return domainSrcLevelDao.findAll(new Specification<DomainSrcLevel>() {
+			@Override
+			public Predicate toPredicate(Root<DomainSrcLevel> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return null;
+			}
+		}, page).getContent();
 	}
 
 	/**
@@ -95,12 +92,8 @@ public class DomainSrcLevelService {
 	 * @return
 	 */
 	public DomainSrcLevel queryByDomainIdAndFieldName(String domainId, String fieldName) {
-		String sql = " select * from MPI_DOMAIN_SRCLEVEL where DOMAIN_ID= ? and FIELD_NAME= ? ";
-		List<DomainSrcLevel> datas = domainSrcLevelDao.find(sql, new Object[] { domainId, fieldName });
-		if (datas != null && datas.size() > 0) {
-			return datas.get(0);
-		}
-		return null;
+		List<DomainSrcLevel> datas = domainSrcLevelDao.findByDomainIdAndFieldName(domainId, fieldName);
+		return datas.size() > 0 ? datas.get(0) : null;
 	}
 
 	/**
@@ -109,30 +102,18 @@ public class DomainSrcLevelService {
 	 * @param domainid
 	 * @return
 	 */
-	public List<Map<String, Object>> queryByDomainID(String domainid) {
+	public List<DomainSrcLevel> queryByDomainID(String domainid) {
 		if (domainid == null) {
-			return new ArrayList<Map<String, Object>>();
+			return new ArrayList<DomainSrcLevel>();
 		}
 		if (TMP_DOMAINID_DATA.containsKey(domainid)) {
 			return TMP_DOMAINID_DATA.get(domainid);
 		} else {
-			String sql = " select * from MPI_DOMAIN_SRCLEVEL where DOMAIN_ID=? ";
-			List<Map<String, Object>> datas = domainSrcLevelDao.findForMap(sql, new Object[] { domainid });
+			List<DomainSrcLevel> datas = domainSrcLevelDao.findByDomainId(domainid);
 			TMP_DOMAINID_DATA.put(domainid, datas);
 			return datas;
 		}
 
-	}
-
-	/**
-	 * 根据域id查询对象列表
-	 * 
-	 * @param domainid
-	 * @return
-	 */
-	public List<DomainSrcLevel> queryByID(String domainid) {
-		String sql = " select * from MPI_DOMAIN_SRCLEVEL where DOMAIN_ID=?";
-		return domainSrcLevelDao.find(sql, new Object[] { domainid });
 	}
 
 	/**
@@ -142,12 +123,13 @@ public class DomainSrcLevelService {
 	 * @param page
 	 * @return
 	 */
-	public List<DomainSrcLevel> queryPageByID(String domainid, PageInfo page) {
-		String sql = " select * from MPI_DOMAIN_SRCLEVEL where DOMAIN_ID='" + domainid + "'";
-		String countSql = page.buildCountSql(sql);
-		page.setTotal(domainSrcLevelDao.getCount(countSql, new Object[] {}));
-		String querySql = page.buildPageSql(sql);
-		return domainSrcLevelDao.find(querySql, new Object[] {});
+	public List<DomainSrcLevel> queryPageByID(final String domainid, PageInfo page) {
+		return domainSrcLevelDao.findAll(new Specification<DomainSrcLevel>() {
+			@Override
+			public Predicate toPredicate(Root<DomainSrcLevel> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(cb.equal(root.get("domainId"), domainid));
+			}
+		}, page).getContent();
 	}
 
 	/**

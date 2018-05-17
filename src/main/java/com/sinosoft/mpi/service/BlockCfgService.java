@@ -1,5 +1,6 @@
 package com.sinosoft.mpi.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -7,17 +8,22 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.block.config.BlockConfig;
 import com.sinosoft.mpi.cache.CacheManager;
-import com.sinosoft.mpi.dao.BlockCfgDao;
-import com.sinosoft.mpi.dao.BlockGroupDao;
+import com.sinosoft.mpi.dao.mpi.BlockCfgDao;
+import com.sinosoft.mpi.dao.mpi.BlockGroupDao;
 import com.sinosoft.mpi.model.BlockCfg;
 import com.sinosoft.mpi.model.BlockGroup;
-import com.sinosoft.mpi.model.PersonPropertiesDesc;
+import com.sinosoft.mpi.model.code.PersonPropertiesDesc;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.PageInfo;
 
@@ -26,8 +32,6 @@ import com.sinosoft.mpi.util.PageInfo;
  */
 @Service
 public class BlockCfgService {
-
-	private Logger logger = Logger.getLogger(BlockCfgService.class);
 
 	@Resource
 	private BlockCfgDao blockCfgDao;
@@ -40,11 +44,10 @@ public class BlockCfgService {
 	public void save(BlockCfg t) {
 		t.setCreateDate(DateUtil.getTimeNow(new Date()));
 		t.setState("0");
-		blockCfgDao.add(t);
+		blockCfgDao.save(t);
 		for (Integer key : t.getGroups().keySet()) {
 			saveBlockGroups(t.getGroups().get(key), t.getBolckId(), key);
 		}
-		logger.debug("Add BlockCfg:" + t);
 	}
 
 	/**
@@ -64,7 +67,7 @@ public class BlockCfgService {
 			t.setPropertyCnName(ppd.getPropertyDesc());
 			t.setBolckId(bolckId);
 			t.setGroupSign(groupSign);
-			blockGroupDao.add(t);
+			blockGroupDao.save(t);
 		}
 	}
 
@@ -75,7 +78,7 @@ public class BlockCfgService {
 	 *            数据对象
 	 */
 	public void update(BlockCfg t) {
-		blockCfgDao.update(t);
+		blockCfgDao.save(t);
 	}
 
 	/**
@@ -84,7 +87,7 @@ public class BlockCfgService {
 	 * @param t
 	 */
 	public void delete(BlockCfg t) {
-		blockCfgDao.deleteById(t);
+		blockCfgDao.delete(t);
 	}
 
 	/**
@@ -94,9 +97,7 @@ public class BlockCfgService {
 	 * @return
 	 */
 	public BlockCfg getObject(String id) {
-		BlockCfg t = new BlockCfg();
-		t.setBolckId(id);
-		t = blockCfgDao.findById(t);
+		BlockCfg t = blockCfgDao.findOne(id);
 		if (t != null) {
 			t.setGroups(queryFieldCfg(t));
 		}
@@ -110,12 +111,19 @@ public class BlockCfgService {
 	 * @param page
 	 * @return
 	 */
-	public List<BlockCfg> queryForPage(BlockCfg t, PageInfo page) {
-		String sql = " select * from MPI_BLOCK_CFG where 1=1 ";
-		String countSql = page.buildCountSql(sql);
-		page.setTotal(blockCfgDao.getCount(countSql, new Object[] {}));
-		String querySql = page.buildPageSql(sql);
-		return blockCfgDao.find(querySql, new Object[] {});
+	public List<BlockCfg> queryForPage(final BlockCfg t, PageInfo page) {
+		return blockCfgDao.findAll(new Specification<BlockCfg>() {
+			@Override
+			public Predicate toPredicate(Root<BlockCfg> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				List<Predicate> predicates = new ArrayList<>();
+				if (t != null) {
+					if (StringUtils.isNotBlank(t.getState())) {
+						predicates.add(cb.equal(root.get("state"), t.getState()));
+					}
+				}
+				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+			}
+		}, page).getContent();
 	}
 
 	/**
@@ -125,7 +133,7 @@ public class BlockCfgService {
 	 *            配置id
 	 */
 	public void updateEffect(String cfgId) {
-		// 使id配置 生效
+		blockCfgDao.uneffectAll();
 		blockCfgDao.effect(cfgId);
 		BlockCfg cfg = getObject(cfgId);
 		if (cfg != null) {
@@ -138,9 +146,8 @@ public class BlockCfgService {
 	 * 查询生效的配置
 	 */
 	public BlockCfg queryEffectCfg() {
-		String sql = " select * from MPI_BLOCK_CFG where state = '1' ";
 		BlockCfg result = null;
-		List<BlockCfg> list = blockCfgDao.find(sql);
+		List<BlockCfg> list = blockCfgDao.findAllEffect();
 		if (list != null && !list.isEmpty()) {
 			result = list.get(0);
 		}
@@ -152,14 +159,14 @@ public class BlockCfgService {
 
 	/**
 	 * 查询字段配置
+	 * 
 	 * @param cfg
 	 * @return
 	 */
 	private Map<Integer, List<BlockGroup>> queryFieldCfg(BlockCfg cfg) {
 		Map<Integer, List<BlockGroup>> result = new HashMap<Integer, List<BlockGroup>>(cfg.getGroupCount());
-		String sql = "select * from mpi_block_group where bolck_id=? and group_sign=?";
 		for (int i = 0; i < cfg.getGroupCount(); i++) {
-			result.put(Integer.valueOf(i), blockGroupDao.find(sql, new Object[] { cfg.getBolckId(), i }));
+			result.put(i, blockGroupDao.findByBolckIdAndGroupSign(cfg.getBolckId(), i));
 		}
 		return result;
 	}

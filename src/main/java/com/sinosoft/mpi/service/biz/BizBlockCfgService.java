@@ -19,9 +19,9 @@ import com.sinosoft.bizblock.config.BizBlockConfig;
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.dao.biz.MpiBizBlockCfgDao;
 import com.sinosoft.mpi.dao.biz.MpiBizBlockGroupDao;
-import com.sinosoft.mpi.model.PersonPropertiesDesc;
 import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
 import com.sinosoft.mpi.model.biz.MpiBizBlockGroup;
+import com.sinosoft.mpi.model.code.PersonPropertiesDesc;
 import com.sinosoft.mpi.util.PageInfo;
 
 /**

@@ -13,25 +13,26 @@ import javax.annotation.Resource;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.QueryConditionType;
-import com.sinosoft.mpi.dao.IdentifierDomainDao;
-import com.sinosoft.mpi.dao.MatchResultDao;
-import com.sinosoft.mpi.dao.PersonIdxLogDao;
-import com.sinosoft.mpi.dao.PersonIndexDao;
-import com.sinosoft.mpi.dao.PersonInfoDao;
+import com.sinosoft.mpi.dao.mpi.MatchResultDao;
+import com.sinosoft.mpi.dao.mpi.PersonIdxLogDao;
+import com.sinosoft.mpi.dao.mpi.PersonIndexDao;
+import com.sinosoft.mpi.dao.mpi.PersonInfoDao;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.form.MatchDetailForm;
 import com.sinosoft.mpi.model.IdentifierDomain;
 import com.sinosoft.mpi.model.MatchResult;
-import com.sinosoft.mpi.model.PerInfoPropertiesDesc;
 import com.sinosoft.mpi.model.PersonIdxLog;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
-import com.sinosoft.mpi.model.PersonPropertiesDesc;
+import com.sinosoft.mpi.model.code.PerInfoPropertiesDesc;
+import com.sinosoft.mpi.model.code.PersonPropertiesDesc;
 import com.sinosoft.mpi.util.CodeConvertUtils;
+import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.NumberUtils;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.SqlUtils;
@@ -45,7 +46,7 @@ public class PersonIdxLogService {
 	private Logger logger = Logger.getLogger(PersonIdxLogService.class);
 
 	@Resource
-	private IdentifierDomainDao identifierDomainDao;
+	private IdentifierDomainService identifierDomainService;
 	@Resource
 	private MatchResultDao matchResultDao;
 	@Resource
@@ -56,6 +57,8 @@ public class PersonIdxLogService {
 	private PersonInfoDao personInfoDao;
 	@Resource
 	private PersonIndexService personIndexService;
+	@Resource
+	JdbcTemplate jdbcTemplate;
 
 	/**
 	 * 增加条件
@@ -193,24 +196,23 @@ public class PersonIdxLogService {
 	 */
 	private List<Object> buildQueryConditions(final StringBuilder sql, PersonInfo p) {
 		List<Object> args = new ArrayList<Object>();
-		SqlUtils.appendCondition(p.getID_NO(), "a.id_no", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getID_NO_CD(), "a.id_no_cd", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getID_NO(), "a.id_no", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getMEDICAL_INSURANCE_NO(), "a.medical_insurance_no", sql, args,
+		SqlUtils.appendCondition(p.getIdNo(), "a.id_no", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getIdNoCd(), "a.id_no_cd", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getIdNo(), "a.id_no", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getMedicalInsuranceNo(), "a.medical_insurance_no", sql, args,
 				QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getNH_CARD(), "a.nh_card", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getNAME_CN(), "a.name", sql, args, QueryConditionType.LIKE);
-		SqlUtils.appendCondition(p.getGENDER_CD(), "a.gender_cd", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getBIRTH_DATE(), "a.birth_date", sql, args, QueryConditionType.LIKE);
-		SqlUtils.appendCondition(p.getCARD_NATION_CD(), "a.card_nation_cd", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getCARD_ED_BG_CD(), "a.card_ed_bg_cd", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getCARD_MARITAL_ST_CD(), "a.card_marital_st_cd", sql, args,
-				QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getCARD_OCCU_TYPE_CD(), "a.card_occu_type_cd", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getPERSON_TEL_NO(), "a.person_tel_no", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getLIVING_ADDR(), "a.living_addr", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getUNIQUE_SIGN(), "c.unique_sign", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getFIELD_PK(), "a.field_pk", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getNhCard(), "a.nh_card", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getNameCn(), "a.name", sql, args, QueryConditionType.LIKE);
+		SqlUtils.appendCondition(p.getGenderCd(), "a.gender_cd", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getBirthDate(), "a.birth_date", sql, args, QueryConditionType.LIKE);
+		SqlUtils.appendCondition(p.getCardNationCd(), "a.card_nation_cd", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getCardEdBgCd(), "a.card_ed_bg_cd", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getCardMaritalStCd(), "a.card_marital_st_cd", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getCardOccuTypeCd(), "a.card_occu_type_cd", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getPersonTelNo(), "a.person_tel_no", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getLivingAddr(), "a.living_addr", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getUniqueSign(), "c.unique_sign", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getFieldPk(), "a.field_pk", sql, args, QueryConditionType.EQUAL);
 		return args;
 	}
 
@@ -220,29 +222,18 @@ public class PersonIdxLogService {
 	 * @param t
 	 */
 	public void delete(PersonIdxLog t) {
-		personIdxLogDao.deleteById(t);
+		personIdxLogDao.delete(t);
 	}
 
 	/**
 	 * 根据主键分页查询
 	 * 
-	 * @param field_pk
+	 * @param fieldPk
 	 * @param page
 	 * @return
 	 */
-	private List<MatchResult> findMatchResult(String field_pk, final PageInfo page) {
-		String sql = " select * from mpi_match_result where FIELD_PK=? order by match_degree desc ";
-		// 构建分页查询sql
-		String pageSql = page.buildPageSql(sql);
-		// 构建总数查询sql
-		String countSql = page.buildCountSql(sql);
-		// 查询总数
-		int count = matchResultDao.getCount(countSql, new Object[] { field_pk });
-		// 总数信息设置到分页信息内
-		page.setTotal(count);
-		// 分页查询数据
-		List<MatchResult> list = matchResultDao.find(pageSql, new Object[] { field_pk });
-		return list;
+	private List<MatchResult> findMatchResult(String fieldPk, final PageInfo page) {
+		return matchResultDao.findByFieldPkOrderByMatchDegreeDesc(fieldPk, page);
 	}
 
 	/**
@@ -252,14 +243,9 @@ public class PersonIdxLogService {
 	 * @param field_pk
 	 * @return
 	 */
-	private MatchResult findMatchResult(String mpi_pk, String field_pk) {
-		String sql = " select * from mpi_match_result where MPI_PK=? and FIELD_PK=? order by match_degree desc ";
-		List<MatchResult> list = matchResultDao.find(sql, new Object[] { mpi_pk, field_pk });
-		MatchResult result = null;
-		if (list != null && !list.isEmpty()) {
-			result = list.get(0);
-		}
-		return result;
+	private MatchResult findMatchResult(String mpiPk, String fieldPk) {
+		List<MatchResult> list = matchResultDao.findByMpiPkAndFieldPkOrderByMatchDegreeDesc(mpiPk, fieldPk);
+		return list.size() > 0 ? list.get(0) : null;
 	}
 
 	/**
@@ -272,16 +258,7 @@ public class PersonIdxLogService {
 	 * @return
 	 */
 	private List<MatchResult> findMatchResult(String personId, String[] idxIds) {
-		StringBuilder sql = new StringBuilder(" select * from mpi_match_result where FIELD_PK=? and MPI_PK in ( ");
-		for (String mpiPk : idxIds) {
-			sql.append('\'').append(mpiPk).append("',");
-		}
-		sql.deleteCharAt(sql.length() - 1);
-		sql.append(" ) order by match_degree desc ");
-		// 分页查询数据
-		logger.debug("Execute sql:[" + sql.toString() + "]\nparams:[" + personId + "]");
-		List<MatchResult> list = matchResultDao.find(sql.toString(), new Object[] { personId });
-		return list;
+		return matchResultDao.findByFieldPkAndMpiPkInOrderByMatchDegreeDesc(personId, idxIds);
 	}
 
 	/**
@@ -291,13 +268,7 @@ public class PersonIdxLogService {
 	 * @return
 	 */
 	private PersonIndex findPersonIndex(String mpiPk) {
-		PersonIndex p = new PersonIndex();
-		p.setMPI_PK(mpiPk);
-		p = personIndexDao.findById(p);
-		if (p.getGENDER_CD() != null && !"".equals(p.getGENDER_CD()) && p.getGENDER_CD().length() < 2) {
-			p.setGENDER_CD(p.getGENDER_CD().equals("1") ? "男性" : "女性");
-		}
-		return p;
+		return personIndexDao.findOne(mpiPk);
 	}
 
 	/**
@@ -307,13 +278,7 @@ public class PersonIdxLogService {
 	 * @return
 	 */
 	private PersonInfo findPersonInfo(String personId) {
-		PersonInfo p = new PersonInfo();
-		p.setFIELD_PK(personId);
-		p = personInfoDao.findWithDomainInfoById(p);
-		if (p.getGENDER_CD() != null && !"".equals(p.getGENDER_CD()) && p.getGENDER_CD().length() < 2) {
-			p.setGENDER_CD(p.getGENDER_CD().equals("1") ? "男性" : "女性");
-		}
-		return p;
+		return personInfoDao.findWithDomainInfoById(personId);
 	}
 
 	/**
@@ -334,10 +299,7 @@ public class PersonIdxLogService {
 	 * @return
 	 */
 	public PersonIdxLog getObject(String id) {
-		PersonIdxLog t = new PersonIdxLog();
-		t.setPersonIdxLogId(id);
-		t = personIdxLogDao.findById(t);
-		return t;
+		return personIdxLogDao.findOne(id);
 	}
 
 	/**
@@ -412,12 +374,12 @@ public class PersonIdxLogService {
 		// 取得总数查询sql
 		String countSql = page.buildCountSql(sql);
 		// 查询设置分页记录的总记录数
-		page.setTotal(personIdxLogDao.getCount(countSql, args.toArray()));
+		page.setTotal(jdbcTemplate.queryForObject(countSql, args.toArray(), Integer.class));
 		// 添加排序sql
 		sql.append(" order by a.op_time desc ");
 		// 取得分页查询语句
 		String querySql = page.buildPageSql(sql);
-		return personIdxLogDao.findForMap(querySql, args.toArray());
+		return jdbcTemplate.queryForList(querySql, args.toArray());
 	}
 
 	/**
@@ -428,11 +390,7 @@ public class PersonIdxLogService {
 	 * @return
 	 */
 	public List<PersonIdxLog> queryForPage(PersonIdxLog t, PageInfo page) {
-		String sql = " select * from mpi_person_idx_log where 1=1 ";
-		String countSql = page.buildCountSql(sql);
-		page.setTotal(personIdxLogDao.getCount(countSql));
-		sql = page.buildPageSql(sql);
-		return personIdxLogDao.find(sql, new Object[] {});
+		return personIdxLogDao.findAll(page).getContent();
 	}
 
 	/**
@@ -518,36 +476,27 @@ public class PersonIdxLogService {
 		}
 		// 取得域信息
 		if (StringUtils.isNotBlank(log.getInfoSour())) {
-			IdentifierDomain domain = new IdentifierDomain();
-			domain.setDOMAIN_ID(log.getInfoSour());
-			domain = identifierDomainDao.findById(domain);
-			log.setInfoSour(domain.getDOMAIN_DESC());
+			IdentifierDomain domain = identifierDomainService.getObject(log.getInfoSour());
+			log.setInfoSour(domain.getDomainDesc());
 		}
 		// 取得居民数据
 		PersonInfo person;
 		// 取得索引数据
 		PersonIndex index;
-		person = findPersonInfo(log.getFieldpk());
+		person = findPersonInfo(log.getFieldPk());
 		if (person == null) {
 			person = new PersonInfo();
 		}
-		if (person.getGENDER_CD() != null && !"".equals(person.getGENDER_CD()) && person.getGENDER_CD().length() < 2) {
-			person.setGENDER_CD(person.getGENDER_CD().equals("1") ? "男性" : "女性");
-		}
-		index = findPersonIndex(log.getMpipk());
+		index = findPersonIndex(log.getMpiPk());
 		if (index == null) {
 			index = new PersonIndex();
 		}
-		if (index.getGENDER_CD() != null && !"".equals(index.getGENDER_CD()) && person.getGENDER_CD().length() < 2) {
-			index.setGENDER_CD(index.getGENDER_CD().equals("1") ? "男性" : "女性");
-		}
-
 		// 转码
 		CodeConvertUtils.convert(index);
 		// 转码
 		CodeConvertUtils.convert(person);
 		// 取得匹配结果
-		MatchResult mr = findMatchResult(log.getMpipk(), log.getFieldpk());
+		MatchResult mr = findMatchResult(log.getMpiPk(), log.getFieldPk());
 
 		List<MatchDetailForm> matchField = null;
 		if (mr != null) {
@@ -648,8 +597,7 @@ public class PersonIdxLogService {
 	public List<Map<String, Object>> queryMatchIndex(String personId) {
 		String sql = " select b.mpi_pk,b.name_cn,b.id_no,a.match_degree from mpi_match_result a left join "
 				+ " mpi_person_index b on a.mpi_pk = b.mpi_pk where a.field_pk = ? order by a.match_degree desc ";
-		List<Map<String, Object>> result = matchResultDao.findForMap(sql, new Object[] { personId });
-		return result;
+		return jdbcTemplate.queryForList(sql, new Object[] { personId });
 	}
 
 	/**
@@ -659,8 +607,7 @@ public class PersonIdxLogService {
 	 * @return
 	 */
 	public int queryMatchIndexCount(String personId) {
-		String sql = " select count(*) from mpi_match_result where FIELD_PK=? ";
-		return matchResultDao.getCount(sql, new Object[] { personId });
+		return matchResultDao.countByFieldPk(personId);
 	}
 
 	/**
@@ -674,7 +621,7 @@ public class PersonIdxLogService {
 				+ " b.birth_date,b.id_no,b.person_tel_no,'open' \"state\",b.nh_card,'' opcount "
 				+ " from mpi_person_idx_log a left join mpi_person_index b on a.index_id = b.index_id where 1=1 and a.mpi_person_id = ? "
 				+ " order by a.op_time desc ";
-		return personIdxLogDao.findForMap(sql, new Object[] { personId });
+		return jdbcTemplate.queryForList(sql, new Object[] { personId });
 	}
 
 	/**
@@ -717,9 +664,9 @@ public class PersonIdxLogService {
 		List<Object> args = buildQueryConditions(sql, t);
 		String countSql = page.buildCountSql(sql);
 		String querySql = page.buildPageSql(sql);
-		int count = personInfoDao.getCount(countSql, args.toArray());
+		int count = jdbcTemplate.queryForObject(countSql, args.toArray(), Integer.class);
 		page.setTotal(count);
-		return personIdxLogDao.findForMap(querySql, args.toArray());
+		return jdbcTemplate.queryForList(querySql, args.toArray());
 	}
 
 	/**
@@ -728,7 +675,7 @@ public class PersonIdxLogService {
 	 * @param t
 	 */
 	public void save(PersonIdxLog t) {
-		personIdxLogDao.add(t);
+		personIdxLogDao.save(t);
 	}
 
 	/**
@@ -737,7 +684,39 @@ public class PersonIdxLogService {
 	 * @param t
 	 */
 	public void update(PersonIdxLog t) {
-		personIdxLogDao.update(t);
+		personIdxLogDao.save(t);
+	}
+
+	/**
+	 * 新增主索引操作日志
+	 * 
+	 * @param person
+	 *            居民id
+	 * @param index
+	 *            索引id
+	 * @param domainId
+	 *            域id
+	 * @param opType
+	 *            操作类型
+	 * @param opStyle
+	 *            操作方式
+	 * @param desc
+	 *            操作描述
+	 */
+	public void save(String person, String index, String domainId, String opType, String opStyle, String desc,
+			String formermpipk) {
+		PersonIdxLog result = new PersonIdxLog();
+		result.setOpType(opType);
+		result.setOpStyle(opStyle);
+		result.setOpTime(DateUtil.getTimeNow(new Date()));
+		result.setOpUserId("0");
+		result.setOpDesc(desc);
+		result.setInfoSour(domainId);
+		result.setMpiPk(index);
+		result.setFieldPk(person);
+		result.setFormermpipk(formermpipk);
+		// 自动标志
+		save(result);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.sinosoft.mpi.service;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -14,7 +15,6 @@ import java.util.Vector;
 
 import javax.annotation.Resource;
 import javax.cache.annotation.CacheDefaults;
-import javax.cache.annotation.CacheResult;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
@@ -24,15 +24,14 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.context.QueryConditionType;
-import com.sinosoft.mpi.dao.IndexIdentifierRelDao;
-import com.sinosoft.mpi.dao.IndexOperateDao;
-import com.sinosoft.mpi.dao.MpiCombineLevelDao;
-import com.sinosoft.mpi.dao.PersonIdxLogDao;
-import com.sinosoft.mpi.dao.PersonIndexDao;
-import com.sinosoft.mpi.dao.PersonInfoDao;
+import com.sinosoft.mpi.dao.mpi.IndexIdentifierRelDao;
+import com.sinosoft.mpi.dao.mpi.IndexOperateDao;
+import com.sinosoft.mpi.dao.mpi.PersonIndexDao;
+import com.sinosoft.mpi.dao.mpi.PersonInfoDao;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.IndexOperate;
+import com.sinosoft.mpi.model.MpiCombineLevel;
 import com.sinosoft.mpi.model.PersonIdxLog;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
@@ -58,13 +57,13 @@ public class PersonIndexService {
 	@Resource
 	private PersonIndexUpdateService personIndexUpdateService;
 	@Resource
-	private MpiCombineLevelDao mpiCombineLevelDao;
+	private MpiCombineLevelService mpiCombineLevelService;
 	@Resource
-	private PersonIdxLogDao personIdxLogDao;
-	@Resource
-	private JdbcTemplate jdbcTemplate;
+	private PersonIdxLogService personIdxLogService;
 	@Resource
 	private IndexOperateDao indexOperateDao;
+	@Resource
+	private JdbcTemplate jdbcTemplate;
 
 	/**
 	 * 构建查询条件
@@ -75,26 +74,25 @@ public class PersonIndexService {
 	 */
 	private List<Object> buildQueryConditions(final StringBuilder sql, PersonIndex p) {
 		List<Object> args = new ArrayList<Object>();
-		SqlUtils.appendCondition(p.getGENDER_CD(), "a.gender_cd", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getID_NO_CD(), "a.id_no_cd", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getID_NO(), "a.id_no", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getMEDICAL_INSURANCE_NO(), "a.medical_insurance_no", sql, args,
+		SqlUtils.appendCondition(p.getGenderCd(), "a.gender_cd", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getIdNoCd(), "a.id_no_cd", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getIdNo(), "a.id_no", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getMedicalInsuranceNo(), "a.medical_insurance_no", sql, args,
 				QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getNH_CARD(), "a.nh_card", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getNAME_CN(), "a.name_CN", sql, args, QueryConditionType.LIKE);
-		if (p.getBIRTH_DATE() != null) {
+		SqlUtils.appendCondition(p.getNhCard(), "a.nh_card", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getNameCn(), "a.name_CN", sql, args, QueryConditionType.LIKE);
+		if (p.getBirthDate() != null) {
 			sql.append(" and to_char(a.birth_date,'yyyy-mm-dd' ) =  '"
-					+ new SimpleDateFormat("yyyy-MM-dd").format(p.getBIRTH_DATE()) + "'");
+					+ new SimpleDateFormat("yyyy-MM-dd").format(p.getBirthDate()) + "'");
 		}
 
-		SqlUtils.appendCondition(p.getCARD_NATION_CD(), "a.card_nation_cd", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getCARD_ED_BG_CD(), "a.card_ed_bg_cd", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getCARD_MARITAL_ST_CD(), "a.card_marital_st_cd", sql, args,
-				QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getCARD_OCCU_TYPE_CD(), "a.card_occu_type_cd", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getPERSON_TEL_NO(), "a.person_tel_no", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(p.getLIVING_ADDR(), "a.living_addr", sql, args, QueryConditionType.LIKE);
-		SqlUtils.appendCondition(p.getMPI_PK(), "a.mpi_pk", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getCardNationCd(), "a.card_nation_cd", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getCardEdBgCd(), "a.card_ed_bg_cd", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getCardMaritalStCd(), "a.card_marital_st_cd", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getCardOccuTypeCd(), "a.card_occu_type_cd", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getPersonTelNo(), "a.person_tel_no", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(p.getLivingAddr(), "a.living_addr", sql, args, QueryConditionType.LIKE);
+		SqlUtils.appendCondition(p.getMpiPk(), "a.mpi_pk", sql, args, QueryConditionType.EQUAL);
 		return args;
 	}
 
@@ -104,7 +102,7 @@ public class PersonIndexService {
 	 * @param t
 	 */
 	public void delete(PersonIndex t) {
-		personIndexDao.deleteById(t);
+		personIndexDao.delete(t);
 	}
 
 	/**
@@ -114,10 +112,7 @@ public class PersonIndexService {
 	 * @return
 	 */
 	public PersonIndex getObject(String id) {
-		PersonIndex t = new PersonIndex();
-		t.setMPI_PK(id);
-		t = personIndexDao.findById(t);
-		return t;
+		return personIndexDao.findOne(id);
 	}
 
 	/**
@@ -128,9 +123,7 @@ public class PersonIndexService {
 	 * @return
 	 */
 	public List<PersonIndex> queryForPage(PersonIndex t, PageInfo page) {
-		String sql = " select * from mpi_person_index where 1=1 ";
-		sql = page.buildPageSql(sql);
-		return personIndexDao.find(sql, new Object[] {});
+		return personIndexDao.findAll(page).getContent();
 	}
 
 	/**
@@ -140,7 +133,7 @@ public class PersonIndexService {
 	 * @param page
 	 * @return
 	 */
-	@CacheResult
+	// @CacheResult
 	public List<Map<String, Object>> queryForSplitPage(PersonIndex index, PageInfo page) {
 
 		StringBuilder sql = new StringBuilder();
@@ -156,11 +149,11 @@ public class PersonIndexService {
 		// 添加查询条件
 		List<Object> args = buildQueryConditions(sql, index);
 		sql.append(" ) l ");
-		if (index.getSTATE() != null) {
-			if (index.getSTATE().toString().equals("0")) {
+		if (index.getState() != null) {
+			if (index.getState().toString().equals("0")) {
 				sql.append(" where l.mergeStatus is null");
 			}
-			if (index.getSTATE().toString().equals("1")) {
+			if (index.getState().toString().equals("1")) {
 				sql.append(" where l.mergeStatus is not null");
 			}
 		}
@@ -202,10 +195,10 @@ public class PersonIndexService {
 		// 取得总数查询sql
 		String countSql = page.buildCountSql(sql);
 		// 查询设置分页记录的总记录数
-		page.setTotal(personIndexDao.getCount(countSql, args.toArray()));
+		page.setTotal(jdbcTemplate.queryForObject(countSql, args.toArray(), Integer.class));
 		// 取得分页查询语句
 		String querySql = page.buildPageSql(sql);
-		return personIndexDao.findForMap(querySql, args.toArray());
+		return jdbcTemplate.queryForList(querySql, args.toArray());
 	}
 
 	/**
@@ -224,24 +217,20 @@ public class PersonIndexService {
 		Collection nuCon = new Vector();
 		nuCon.add(null);
 		// 原主索引对象
-		PersonIndex retired = new PersonIndex();
-		retired.setMPI_PK(retiredPk);
-		retired = personIndexDao.findById(retired);
+		PersonIndex retired = personIndexDao.findOne(retiredPk);
 		// 目标主索引对象
-		PersonIndex surviving = new PersonIndex();
-		surviving.setMPI_PK(survivingPk);
-		surviving = personIndexDao.findById(surviving);
+		PersonIndex surviving = personIndexDao.findOne(survivingPk);
 
-		retired.setSTATE((short) 1);
-		personIndexDao.update(retired);
+		retired.setState(new BigDecimal(1));
+		personIndexDao.save(retired);
 		// 被合并主索引人员集合
 		List<PersonInfo> retiredList = new ArrayList<PersonInfo>();
 		// 根据被合并主索引MPI_PK获取合并信息标示关系
-		List<IndexIdentifierRel> retiredRels = indexIdentifierRelDao.findByMpiPK(retired.getMPI_PK());
+		List<IndexIdentifierRel> retiredRels = indexIdentifierRelDao.findByMpiPk(retired.getMpiPk());
 
 		if (retiredRels.size() > 0) {
 			for (int i = 0; i < retiredRels.size(); i++) {
-				retiredList.add(personInfoDao.findByPK(retiredRels.get(i).getFIELD_PK()));
+				retiredList.add(personInfoDao.findOne(retiredRels.get(i).getFieldPk()));
 			}
 			retiredList.removeAll(nuCon);
 			// 将被合并主索引下的居民信息关联关系解除
@@ -249,100 +238,58 @@ public class PersonIndexService {
 				for (int i = 0; i < retiredList.size(); i++) {
 					if (retiredList.get(i) != null) {
 						// 原主索引人员信息
-						PersonInfo personInfo = personInfoDao.findByPK(retiredList.get(i).getFIELD_PK());
+						PersonInfo personInfo = personInfoDao.findOne(retiredList.get(i).getFieldPk());
 
 						// 原主索引居民信息原合并标识关系对象
-						IndexIdentifierRel riir = indexIdentifierRelDao.findByFieldPK(personInfo.getFIELD_PK());
-
-						// 将 被合并主索引下居民信息 解除索引关系
-						/* indexIdentifierRelDao.deleteByFieldPK(personInfo.getFIELD_PK()); */
-						// 添加解除索引log
-						/*
-						 * saveIndexLog(personInfo.getFIELD_PK(), retired.getMPI_PK(),
-						 * riir.getDOMAIN_ID(), Constant.IDX_LOG_TYPE_MODIFY,
-						 * Constant.IDX_LOG_STYLE_MAN_REMOVE, "主索引[" + retired.getNAME_CN() +
-						 * "]解除绑定",null);
-						 */
+						IndexIdentifierRel riir = indexIdentifierRelDao
+								.findFirstByFieldPkOrderByCombineNoDesc(personInfo.getFieldPk());
 
 						// 新增主索引操作关系
-						savaIndexOperate(personInfo.getFIELD_PK(), retired.getMPI_PK(), riir.getDOMAIN_ID(),
+						savaIndexOperate(personInfo.getFieldPk(), retired.getMpiPk(), riir.getDomainId(),
 								Constant.IDX_LOG_TYPE_MODIFY, Constant.IDX_LOG_STYLE_MAN_SPLIT,
-								"主索引[" + retired.getNAME_CN() + "]进行拆分", null);
+								"主索引[" + retired.getNameCn() + "]进行拆分", null);
 
 						// 1.合并相关主索引信息,更新主索引
 						/* personIndexUpdateService.updateIndex(surviving, personInfo); */
 
 						// 2.合并相关主索引信息,不更新主索引
-						if (surviving.getMPI_PK() != null) {
+						if (surviving.getMpiPk() != null) {
 							// 获取索引字段的级别权限,与当前居民信息级别做比较,判别应替换字段信息，进行字段级别合并
 							// 合并信息入库（第一次入库也记录一次合并信息）
 							// 查询最新一次的合并记录
 							IndexIdentifierRel iirlatest = indexIdentifierRelDao
-									.findByMpiPKByLatest(surviving.getMPI_PK());
-							logger.debug("合并的combine_no: " + iirlatest.getCOMBINE_NO());
+									.findFirstByMpiPkOrderByCombineRecDesc(surviving.getMpiPk());
+							logger.debug("合并的combine_no: " + iirlatest.getCombineNo());
 							IndexIdentifierRel iir = new IndexIdentifierRel();
-							iir.setCOMBINE_REC(iirlatest.getCOMBINE_NO());// 指代上一条的替换记录combine_rec
-							iir.setDOMAIN_ID(personInfo.getDOMAIN_ID());
-							iir.setFIELD_PK(personInfo.getFIELD_PK());
-							iir.setDOMAIN_ID(iirlatest.getDOMAIN_ID());
-							iir.setMPI_PK(surviving.getMPI_PK());
-							if (personInfo.getTYPE() == "0") {
-								iir.setPERSON_IDENTIFIER(personInfo.getHR_ID());
-							} else if (personInfo.getTYPE() == "1") {
-								iir.setPERSON_IDENTIFIER(personInfo.getMEDICALSERVICE_NO());
-							} else if (personInfo.getTYPE() == "3") {
-								iir.setPERSON_IDENTIFIER(personInfo.getPATIENT_ID());
+							iir.setCombineRec(iirlatest.getCombineNo());// 指代上一条的替换记录combine_rec
+							iir.setDomainId(personInfo.getDomainId());
+							iir.setFieldPk(personInfo.getFieldPk());
+							iir.setDomainId(iirlatest.getDomainId());
+							iir.setMpiPk(surviving.getMpiPk());
+							if (personInfo.getType() == "0") {
+								iir.setPersonIdentifier(personInfo.getHrId());
+							} else if (personInfo.getType() == "1") {
+								iir.setPersonIdentifier(personInfo.getMedicalserviceNo());
+							} else if (personInfo.getType() == "3") {
+								iir.setPersonIdentifier(personInfo.getPatientId());
 							}
-
-							indexIdentifierRelDao.add(iir);
+							indexIdentifierRelDao.save(iir);
 						}
 						// 添加新关联索引log
-						saveIndexLog(personInfo.getFIELD_PK(), surviving.getMPI_PK(), riir.getDOMAIN_ID(),
+						personIdxLogService.save(personInfo.getFieldPk(), surviving.getMpiPk(), riir.getDomainId(),
 								Constant.IDX_LOG_TYPE_MODIFY, Constant.IDX_LOG_STYLE_MAN_MERGE,
-								"[" + personInfo.getNAME_CN() + "]合并到主索引[" + surviving.getNAME_CN() + "]",
-								retired.getMPI_PK());
+								"[" + personInfo.getNameCn() + "]合并到主索引[" + surviving.getNameCn() + "]",
+								retired.getMpiPk());
 						// 新增主索引操作关系
-						savaIndexOperate(personInfo.getFIELD_PK(), surviving.getMPI_PK(), riir.getDOMAIN_ID(),
+						savaIndexOperate(personInfo.getFieldPk(), surviving.getMpiPk(), riir.getDomainId(),
 								Constant.IDX_LOG_TYPE_MODIFY, Constant.IDX_LOG_STYLE_MAN_MERGE,
-								"[" + personInfo.getNAME_CN() + "]合并到主索引[" + surviving.getNAME_CN() + "]",
-								retired.getMPI_PK());
+								"[" + personInfo.getNameCn() + "]合并到主索引[" + surviving.getNameCn() + "]",
+								retired.getMpiPk());
 
 					}
 				}
 			}
 		}
-	}
-
-	/**
-	 * 新增主索引操作日志
-	 * 
-	 * @param person
-	 *            居民id
-	 * @param index
-	 *            索引id
-	 * @param domainId
-	 *            域id
-	 * @param opType
-	 *            操作类型
-	 * @param opStyle
-	 *            操作方式
-	 * @param desc
-	 *            操作描述
-	 */
-	private void saveIndexLog(String person, String index, String domainId, String opType, String opStyle, String desc,
-			String formermpipk) {
-		PersonIdxLog result = new PersonIdxLog();
-		result.setOpType(opType);
-		result.setOpStyle(opStyle);
-		result.setOpTime(DateUtil.getTimeNow(new Date()));
-		result.setOpUserId("0");
-		result.setOpDesc(desc);
-		result.setInfoSour(domainId);
-		result.setMpipk(index);
-		result.setFieldpk(person);
-		result.setFormermpipk(formermpipk);
-		// 自动标志
-		personIdxLogDao.add(result);
 	}
 
 	/**
@@ -370,11 +317,11 @@ public class PersonIndexService {
 		result.setOpUserId("0");
 		result.setOpDesc(desc);
 		result.setInfoSour(domainId);
-		result.setMpipk(index);
-		result.setFieldpk(person);
-		result.setFormermpipk(formermpipk);
+		result.setMpiPk(index);
+		result.setFieldPk(person);
+		result.setFormerMpiPk(formermpipk);
 		// 自动标志
-		indexOperateDao.add(result);
+		indexOperateDao.save(result);
 	}
 
 	/**
@@ -387,11 +334,11 @@ public class PersonIndexService {
 	 * @return
 	 */
 	public PersonInfo mergeIdexPersonInfo(PersonInfo retired, PersonInfo surviving) {
-		List<Map<String, Object>> orgincollevellist = mpiCombineLevelDao.findForMap("select * from MPI_COMBINE_LEVEL");
-		Iterator<Map<String, Object>> it = orgincollevellist.iterator();
+		List<MpiCombineLevel> orgincollevellist = mpiCombineLevelService.findAll();
+		Iterator<MpiCombineLevel> it = orgincollevellist.iterator();
 		while (it.hasNext()) {
-			Map<String, Object> map = it.next();
-			String combofield = (String) map.get("COMBINE_FIELD");
+			MpiCombineLevel map = it.next();
+			String combofield = map.getCombineField();
 			try {
 				Object survivingPeronInfo = PropertyUtils.getProperty(surviving, combofield);
 				Object replaceval = PropertyUtils.getProperty(retired, combofield);
@@ -413,7 +360,7 @@ public class PersonIndexService {
 	 * @param t
 	 */
 	public void save(PersonIndex t) {
-		personIndexDao.add(t);
+		personIndexDao.save(t);
 	}
 
 	/**
@@ -424,7 +371,6 @@ public class PersonIndexService {
 	 */
 	public List<PersonIndex> findPersonIndexBysplitIndex(String splitIndex) {
 		List<PersonIndex> personIndexs = new ArrayList<PersonIndex>();
-		PersonIndex personIndex = new PersonIndex();
 		StringBuilder sb = new StringBuilder();
 		sb.append(
 				"select s.former_mpi_pk from (SELECT distinct former_mpi_pk , min(op_time)  b  FROM mpi_index_operate l where l.op_style = 4 and l.mpi_pk = '"
@@ -440,8 +386,7 @@ public class PersonIndexService {
 		List<Map<String, String>> list = jdbcTemplate.query(sb.toString(), mp);
 		if (list.size() > 0) {
 			for (int i = 0; i < list.size(); i++) {
-				personIndex.setMPI_PK(list.get(i).get("former_mpi_pk"));
-				personIndexs.add(personIndexDao.findById(personIndex));
+				personIndexs.add(personIndexDao.findOne(list.get(i).get("former_mpi_pk")));
 			}
 		}
 		return personIndexs;
@@ -464,70 +409,43 @@ public class PersonIndexService {
 		sb.append(" i.op_style = 4 and i.mpi_pk = '" + formerPK + "' and i.field_pk in(");
 		sb.append(" select l.field_pk from mpi_index_operate l where l.op_style = 6");
 		sb.append(" 								and l.mpi_pk = '" + retiredPk + "') order by i.op_time desc");
-		List<IndexOperate> mergeLogs = indexOperateDao.find(sb.toString());
-		IndexOperate Operate = new IndexOperate();
+		List<IndexOperate> mergeLogs = jdbcTemplate.queryForList(sb.toString(), IndexOperate.class);
 		// 原主索引
-		PersonIndex formerIndex = new PersonIndex();
-		formerIndex.setMPI_PK(formerPK);
-		formerIndex = personIndexDao.findById(formerIndex);
-
-		// 拆分主索引
-		PersonIndex retiredIndex = new PersonIndex();
-		retiredIndex.setMPI_PK(retiredPk);
-		retiredIndex = personIndexDao.findById(retiredIndex);
+		PersonIndex formerIndex = personIndexDao.findOne(formerPK);
 
 		// 拆分索引下居民
-		PersonInfo personInfo = new PersonInfo();
 		if (mergeLogs.size() > 0) {
 			for (int i = 0; i < mergeLogs.size(); i++) {
-				personInfo.setFIELD_PK(mergeLogs.get(i).getFieldpk());
-				personInfo = personInfoDao.findById(personInfo);
-
-				IndexIdentifierRel riir = indexIdentifierRelDao.findByFieldPK(mergeLogs.get(i).getFieldpk());
+				IndexIdentifierRel riir = indexIdentifierRelDao.findFirstByFieldPk(mergeLogs.get(i).getFieldPk());
 				// 添加解除索引log
-				saveIndexLog(mergeLogs.get(i).getFieldpk(), formerPK, riir.getDOMAIN_ID(), Constant.IDX_LOG_TYPE_MODIFY,
-						Constant.IDX_LOG_STYLE_MAN_SPLIT, "主索引[" + formerIndex.getNAME_CN() + "]进行人工拆分", null);
+				personIdxLogService.save(mergeLogs.get(i).getFieldPk(), formerPK, riir.getDomainId(),
+						Constant.IDX_LOG_TYPE_MODIFY, Constant.IDX_LOG_STYLE_MAN_SPLIT,
+						"主索引[" + formerIndex.getNameCn() + "]进行人工拆分", null);
 
-				indexIdentifierRelDao.deleteByMpiPKFieldPk(formerPK, mergeLogs.get(i).getFieldpk());
-
-				// 添加新关联索引log
-				/*
-				 * saveIndexLog(mergeLogs.get(i).getFieldpk(), retiredPk, riir.getDOMAIN_ID(),
-				 * Constant.IDX_LOG_TYPE_MODIFY, Constant.IDX_LOG_STYLE_MAN_MERGE, "[" +
-				 * personInfo.getNAME_CN() + "]合并到主索引[" + retiredIndex.getNAME_CN() +
-				 * "]",formerIndex.getMPI_PK());
-				 */
+				indexIdentifierRelDao.deleteByMpiPkAndFieldPk(formerPK, mergeLogs.get(i).getFieldPk());
 			}
 			// 删除原主索引合并记录
 			for (int i = 0; i < mergeLogs.size(); i++) {
-				Operate.setPersonIdxLogId(mergeLogs.get(i).getPersonIdxLogId());
-				indexOperateDao.deleteById(Operate);
+				indexOperateDao.delete(mergeLogs.get(i).getPersonIdxLogId());
 			}
 		}
-		/*
-		 * //重新按拆分点后的主索引合并关系记录进行重新合并主索引信息 try { updateIndex(formerPK,mergeLogs); } catch
-		 * (Exception e) { e.printStackTrace(); }
-		 */
 		// 删除主索引相关的拆分记录
 		StringBuilder splitStr = new StringBuilder();
 		splitStr.append(" select * from mpi_index_operate i where");
 		splitStr.append(" i.op_style = 6 and i.mpi_pk = '" + retiredPk + "' and i.field_pk in(");
 		splitStr.append(" select l.field_pk from mpi_person_idx_log l where l.op_style = 4");
 		splitStr.append(" 								and l.mpi_pk = '" + formerPK + "')");
-		List<IndexOperate> splitLogs = indexOperateDao.find(splitStr.toString());
+		List<IndexOperate> splitLogs = jdbcTemplate.queryForList(splitStr.toString(), IndexOperate.class);
 		if (splitLogs.size() > 0) {
 			// 获取原主索引与被拆分主索引的拆分记录
 			for (int i = 0; i < splitLogs.size(); i++) {
-				Operate.setPersonIdxLogId(splitLogs.get(i).getPersonIdxLogId());
-				indexOperateDao.deleteById(Operate);
+				indexOperateDao.delete(splitLogs.get(i).getPersonIdxLogId());
 			}
 		}
 		// 将拆分的主索引记录恢复有效
-		PersonIndex personIndex = new PersonIndex();
-		personIndex.setMPI_PK(retiredPk);
-		personIndex = personIndexDao.findById(personIndex);
-		personIndex.setSTATE((short) 0);
-		personIndexDao.update(personIndex);
+		PersonIndex personIndex = personIndexDao.findOne(retiredPk);
+		personIndex.setState(new BigDecimal(0));
+		personIndexDao.save(personIndex);
 	}
 
 	/**
@@ -545,16 +463,12 @@ public class PersonIndexService {
 		sb.append(" 	and  l.op_style not in (3,6,7)");
 		sb.append(" 	and  l.op_time > '" + mergeLogs.get(0).getOpTime() + "'");
 		sb.append(" 	order by l.op_time desc");
-		List<PersonIdxLog> logs = personIdxLogDao.find(sb.toString());
+		List<PersonIdxLog> logs = jdbcTemplate.queryForList(sb.toString(), PersonIdxLog.class);
 		PersonInfo personInfo = new PersonInfo();
 		if (logs.size() > 0) {
 			// 拆分点后以最新的主索引操作日志信息更新主索引
-			try {
-				personInfo = personInfoDao.findByPK(logs.get(0).getFieldpk());
-				updateIndexDirect(personInfo, formerPK);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			personInfo = personInfoDao.findOne(logs.get(0).getFieldPk());
+			updateIndexDirect(personInfo, formerPK);
 		} else {
 			// 拆分点前以最新的主索引操作日志信息更新主索引
 			String logId = "";
@@ -568,11 +482,10 @@ public class PersonIndexService {
 				merge_sql.append("	where l.op_style not in (4,6,7) and l.mpi_pk = '" + formerPK + "'	and");
 				merge_sql.append("	l.person_idx_log_id not in (" + logId + ")");
 				merge_sql.append("	order by l.op_time desc");
-				List<PersonIdxLog> idxLogs = personIdxLogDao.find(merge_sql.toString());
+				List<PersonIdxLog> idxLogs = jdbcTemplate.queryForList(merge_sql.toString(), PersonIdxLog.class);
 				if (idxLogs.size() > 0) {
 					try {
-						personInfo.setFIELD_PK(idxLogs.get(0).getFieldpk());
-						personInfo = personInfoDao.findById(personInfo);
+						personInfo = personInfoDao.findOne(idxLogs.get(0).getFieldPk());
 						updateIndexDirect(personInfo, formerPK);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -585,10 +498,10 @@ public class PersonIndexService {
 	/**
 	 * 直接更新 索引信息
 	 */
-	private void updateIndexDirect(PersonInfo person, String mpi_pk) {
-		PersonIndex idx = person.personInfoToPersonIndex();
-		idx.setMPI_PK(mpi_pk);
-		personIndexDao.update(idx);
+	private void updateIndexDirect(PersonInfo person, String mpiPk) {
+		PersonIndex idx = person.toPersonIndex();
+		idx.setMpiPk(mpiPk);
+		personIndexDao.save(idx);
 	}
 
 	/**
@@ -597,7 +510,7 @@ public class PersonIndexService {
 	 * @param t
 	 */
 	public void update(PersonIndex t) {
-		personIndexDao.update(t);
+		personIndexDao.save(t);
 	}
 
 }

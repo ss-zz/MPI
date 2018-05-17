@@ -7,9 +7,10 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.dao.ManOpPersonDao;
+import com.sinosoft.mpi.dao.mpi.ManOpPersonDao;
 import com.sinosoft.mpi.model.ManOpPerson;
 import com.sinosoft.mpi.util.PageInfo;
 
@@ -21,26 +22,28 @@ public class ManOpPersonService {
 
 	@Resource
 	private ManOpPersonDao manOpPersonDao;
+	@Resource
+	JdbcTemplate jdbcTemplate;
 
 	/**
 	 * 保存
 	 */
 	public void save(ManOpPerson t) {
-		manOpPersonDao.add(t);
+		manOpPersonDao.save(t);
 	}
 
 	/**
 	 * 更新
 	 */
 	public void update(ManOpPerson t) {
-		manOpPersonDao.update(t);
+		manOpPersonDao.save(t);
 	}
 
 	/**
 	 * 删除-根据id
 	 */
 	public void delete(ManOpPerson t) {
-		manOpPersonDao.deleteById(t);
+		manOpPersonDao.delete(t);
 	}
 
 	/**
@@ -50,10 +53,7 @@ public class ManOpPersonService {
 	 * @return
 	 */
 	public ManOpPerson getObject(String id) {
-		ManOpPerson t = new ManOpPerson();
-		t.setMAN_OP_ID(id);
-		t = manOpPersonDao.findById(t);
-		return t;
+		return manOpPersonDao.findOne(id);
 	}
 
 	/**
@@ -64,9 +64,7 @@ public class ManOpPersonService {
 	 * @return
 	 */
 	public List<ManOpPerson> queryForPage(ManOpPerson t, PageInfo page) {
-		String sql = " select * from mpi_man_op_person where 1=1 ";
-		sql = page.buildPageSql(sql);
-		return manOpPersonDao.find(sql, new Object[] {});
+		return manOpPersonDao.findAll(page).getContent();
 	}
 
 	/**
@@ -85,29 +83,29 @@ public class ManOpPersonService {
 				.append(" left join mpi_identifier_domain d on c.domain_id = d.domain_id where 1=1 ");
 		List<Object> args = new ArrayList<Object>();
 		// 设置查询条件
-		if (StringUtils.isNotBlank(t.getMAN_OP_STATUS())) {
+		if (StringUtils.isNotBlank(t.getManOpStatus())) {
 			sql.append(" and a.man_op_status = ? ");
-			args.add(t.getMAN_OP_STATUS());
+			args.add(t.getManOpStatus());
 		}
 
-		if (StringUtils.isNotBlank(t.getFIELD_PK())) {
+		if (StringUtils.isNotBlank(t.getFieldPk())) {
 			sql.append(" and b.name like ? ");
-			args.add(buildLikeStr(t.getFIELD_PK()));
+			args.add(buildLikeStr(t.getFieldPk()));
 		}
 
-		if (StringUtils.isNotBlank(t.getMAN_OP_ID())) {
+		if (StringUtils.isNotBlank(t.getManOpId())) {
 			sql.append(" and b.gender_cd = ? ");
-			args.add(t.getMAN_OP_ID());
+			args.add(t.getManOpId());
 		}
 
 		// 取得总数查询sql
 		String countSql = page.buildCountSql(sql);
 		// 查询设置分页记录的总记录数
-		page.setTotal(manOpPersonDao.getCount(countSql, args.toArray()));
+		page.setTotal(jdbcTemplate.queryForObject(countSql, args.toArray(), Integer.class));
 		// 取得分页查询语句
 		sql.append(" order by a.man_op_status asc, a.man_op_time desc ");
 		String querySql = page.buildPageSql(sql);
-		return manOpPersonDao.findForMap(querySql, args.toArray());
+		return jdbcTemplate.queryForList(querySql.toString(), args);
 	}
 
 	private String buildLikeStr(String arg) {

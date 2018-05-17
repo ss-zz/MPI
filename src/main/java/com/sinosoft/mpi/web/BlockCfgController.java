@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sinosoft.block.config.BlockConfig;
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.BlockCfg;
-import com.sinosoft.mpi.model.PersonPropertiesDesc;
+import com.sinosoft.mpi.model.code.PersonPropertiesDesc;
 import com.sinosoft.mpi.service.BlockCfgService;
 import com.sinosoft.mpi.util.PageInfo;
 
@@ -29,6 +31,8 @@ public class BlockCfgController {
 
 	@Resource
 	private BlockCfgService blockCfgService;
+	
+	ObjectMapper om = new ObjectMapper();
 
 	/**
 	 * 取得配置列表数据
@@ -56,7 +60,11 @@ public class BlockCfgController {
 		// 字段属性
 		datas.put("pList", pList);
 		ModelAndView mv = new ModelAndView("/cfg/page/block_add");
-		mv.addObject("selectJson", datas);
+		try {
+			mv.addObject("selectJson", om.writeValueAsString(datas));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 		return mv;
 	}
 

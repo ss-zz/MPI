@@ -14,8 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
-import com.sinosoft.mpi.model.PerInfoPropertiesDesc;
 import com.sinosoft.mpi.model.PersonInfo;
+import com.sinosoft.mpi.model.code.PerInfoPropertiesDesc;
 import com.sinosoft.mpi.service.PersonInfoService;
 import com.sinosoft.mpi.util.JsonDateValueProcessor;
 import com.sinosoft.mpi.util.PageInfo;
