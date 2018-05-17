@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,7 +106,7 @@ public class BizMatchCfgService {
 	 * @param page
 	 * @return
 	 */
-	public List<MpiBizMatchCfg> queryForPage(final MpiBizMatchCfg t, PageInfo page) {
+	public Page<MpiBizMatchCfg> queryForPage(final MpiBizMatchCfg t, PageInfo page) {
 		return mpiBizMatchCfgDao.findAll(new Specification<MpiBizMatchCfg>() {
 			@Override
 			public Predicate toPredicate(Root<MpiBizMatchCfg> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -114,7 +115,7 @@ public class BizMatchCfgService {
 				}
 				return null;
 			}
-		}, page).getContent();
+		}, page);
 	}
 
 	/**

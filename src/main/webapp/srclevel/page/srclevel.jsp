@@ -13,21 +13,13 @@ var SELECT_JSON = ${selectJson};
 
 </head>
 <body>
-<div class="easyui-panel" title="新增域字段数据源级别" id="table_add" onkeydown="if(event.keyCode==13){editData();}">
-	<label for="add_domainSelect">域唯一标识:</label>
+<div class="easyui-panel" title="管理字段数据源级别" id="table_add" onkeydown="if(event.keyCode==13){editData();}"
+	style="padding: 10px;">
+	<label for="add_domainSelect">业务唯一标识:</label>
 	<select id="add_domainSelect"></select>
 	&nbsp; &nbsp; &nbsp;
 	<label for="add_fieldSelect">字段名称:</label>
 	<select id="add_fieldSelect">
-	<!--   <option value="">--请选择--</option>
-		<option value="ID_NO">身份证号</option>
-		<option value="NH_CARD">农合卡号</option>
-		<option value="HR_ID">城乡居民健康档案编号</option>
-		<option value="SSCID">社会保障卡号</option>
-		<option value="MEDICALSERVICE_NO">医疗服务编号</option>
-		<option value="NAME_CN">姓名</option>
-		<option value="GENDER_CD">性别</option>
-		<option value="BIRTH_DATE">出生日期</option> -->
 	</select>
 	&nbsp; &nbsp; &nbsp;<label>字段数据源级别：</label>
 	<select id="add_fieldlevel" length="50">
@@ -39,26 +31,23 @@ var SELECT_JSON = ${selectJson};
 		<option value="4">4级</option>
 		<option value="5">5级</option>
 	</select>
-	<br/>
-	<a onclick="saveMatchCfg()" class="easyui-linkbutton" iconCls="icon-save">保存</a>
+	<br/><br/>
+	<a onclick="saveMatchCfg()" class="easyui-linkbutton" iconCls="icon-save">添加</a>
 	<a onclick="resetAllData()" class="easyui-linkbutton" iconCls="icon-reload">重置</a>
 </div>
+<br/>
 <!-- 表格 -->
-<table 	id="listTable"
-		title="已配置的域字段数据源级别"
-		idField="ID" 
-		singleSelect="false" 
-		striped="true"
+<table id="listTable"
+		title="已配置的业务字段数据源级别"
+		idField="id" 
 		url="${pageContext.request.contextPath}/domainsrclevel/srclevel.ac?method=queryByID" >
 	<thead>
 		<tr align="center">
-		    <th field="ck" width="20" checkbox="true" width="20"></th>
-		   <!--  <th field="DOMAIN_ID"  width="100">域唯一标示符</th>
-			<th field="DOMAIN_DESC"  width="100">域描述</th> -->
-			<th field="FIELD_NAME"  width="100">字段名称</th>
-			<th field="FIELD_DESC"  width="100">字段描述</th>
-			<th field="FIELD_LEVEL"  width="100">字段数据源级别</th>
-			<th field="CREATE_DATE"  width="100">创建时间</th>
+			<th field="ck" width="20" checkbox="true" width="20"></th>
+			<th field="fieldName"  width="100">字段名称</th>
+			<th field="fieldDesc"  width="100">字段描述</th>
+			<th field="fieldLevel"  width="100">字段数据源级别</th>
+			<th field="createDate"  width="100">创建时间</th>
 		</tr>
 	</thead>
 </table>

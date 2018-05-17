@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,8 +34,9 @@ public class RoleController {
 	@ResponseBody
 	public Map<String, Object> listRole(SysRole role, PageInfo page) {
 		Map<String, Object> datas = new HashMap<>();
-		datas.put(Constant.PAGE_TOTAL, page.getTotal());
-		datas.put(Constant.PAGE_ROWS, sysRoleService.queryForPage(role, page));
+		Page<SysRole> ret = sysRoleService.queryForPage(role, page);
+		datas.put(Constant.PAGE_TOTAL, ret.getTotalElements());
+		datas.put(Constant.PAGE_ROWS, ret.getContent());
 		return datas;
 	}
 

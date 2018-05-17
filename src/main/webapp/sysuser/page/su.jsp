@@ -56,7 +56,7 @@
 			</c:forEach>
 			</select>
 		</div>
-		<div>
+		<div class="my-form-btns">
 			<a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="addData();">提交</a>
 		</div>
 	</div>
@@ -89,7 +89,7 @@
 				</c:forEach>
 			</select>
 		</div>
-		<div>
+		<div class="my-form-btns">
 			<a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="editData();">提交</a>
 		</div>
 	</div>

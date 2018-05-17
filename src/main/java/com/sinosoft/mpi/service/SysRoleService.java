@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -80,8 +81,8 @@ public class SysRoleService {
 	 * @param page
 	 * @return
 	 */
-	public List<SysRole> queryForPage(SysRole t, PageInfo page) {
-		return sysRoleDao.findAll(page).getContent();
+	public Page<SysRole> queryForPage(SysRole t, PageInfo page) {
+		return sysRoleDao.findAll(page);
 	}
 
 	/**

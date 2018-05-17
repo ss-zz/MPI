@@ -42,11 +42,9 @@ fieldset {
 
 /* 表单 */
 .my-form {
-	padding: 10px;
 	line-height: 2.0em;
 	font-size: 14px;
 	text-align: left;
-	display: inline-block;
 }
 
 .my-form>div {
@@ -63,7 +61,7 @@ fieldset {
 }
 
 .my-form label {
-	width: 100px;
+	width: 30%;
 	display: inline-block;
 	text-align: right;
 }
@@ -79,6 +77,8 @@ fieldset {
 	padding: 0px 11px;
 	font-size: 14px;
 	line-height: 1.5;
+	border-width: 1px;
+	border-style: solid;
 }
 
 .my-form textarea {
@@ -87,6 +87,13 @@ fieldset {
 	width: 400px;
 	height: 64px;
 	padding: 0px 11px;
+}
+
+.my-form .my-form-btns{
+	text-align: center;
+	border-top: 1px solid #dfdfdf;
+	padding: 10px;
+	margin: 0px;
 }
 
 /*table*/

@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -118,7 +119,7 @@ public class BizBlockCfgService {
 	 * @param page
 	 * @return
 	 */
-	public List<MpiBizBlockCfg> queryForPage(final MpiBizBlockCfg t, PageInfo page) {
+	public Page<MpiBizBlockCfg> queryForPage(final MpiBizBlockCfg t, PageInfo page) {
 		return mpiBizBlockCfgDao.findAll(new Specification<MpiBizBlockCfg>() {
 			@Override
 			public Predicate toPredicate(Root<MpiBizBlockCfg> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -129,7 +130,7 @@ public class BizBlockCfgService {
 				}
 				return null;
 			}
-		}, page).getContent();
+		}, page);
 	}
 
 	/**

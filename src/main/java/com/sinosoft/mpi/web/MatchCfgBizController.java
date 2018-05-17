@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -38,10 +39,10 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping("/matchCfgbiz")
 public class MatchCfgBizController {
-	
+
 	@Resource
 	private BizMatchCfgService bizMatchCfgService;
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder, WebRequest request) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -51,23 +52,22 @@ public class MatchCfgBizController {
 		// 自动转换日期类型的字段格式
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
 	}
-	
+
 	/**
 	 * 取得配置列表数据
 	 */
 	@RequestMapping("/match")
 	@ResponseBody
 	public Map<String, Object> list(PageInfo page, MpiBizMatchCfg t) {
-		page.setPage(page.getPage()-1);
 		Map<String, Object> datas = new HashMap<>();
-		List<MpiBizMatchCfg> list = bizMatchCfgService.queryForPage(t, page);
+		Page<MpiBizMatchCfg> data = bizMatchCfgService.queryForPage(t, page);
 		// 设置总共有多少条记录
-		datas.put(Constant.PAGE_TOTAL, page.getTotal());
+		datas.put(Constant.PAGE_TOTAL, data.getTotalElements());
 		// 设置当前页的数据
-		datas.put(Constant.PAGE_ROWS, list);
+		datas.put(Constant.PAGE_ROWS, data.getContent());
 		return datas;
 	}
-	
+
 	/**
 	 * 查看页面入口
 	 */
@@ -89,7 +89,7 @@ public class MatchCfgBizController {
 		mv.addObject("cfg", cfg);
 		return mv;
 	}
-	
+
 	/**
 	 * 使配置生效
 	 */
@@ -98,18 +98,17 @@ public class MatchCfgBizController {
 	public void effectCfg(String cfgId) {
 		bizMatchCfgService.updateEffect(cfgId);
 	}
-	
-	
+
 	/**
 	 * 查看页面入口
 	 */
 	@RequestMapping("/current")
 	public ModelAndView toCurrentViewPage() {
 		// 取得配置信息
-		//MatchConfig matchConfig = MatchConfig.getInstanse();
-		
+		// MatchConfig matchConfig = MatchConfig.getInstanse();
+
 		BizMatchConfig bizMatchConfig = BizMatchConfig.getInstanse();
-		
+
 		MpiBizMatchCfg cfg = new MpiBizMatchCfg(bizMatchConfig);
 		// 取得匹配函数
 		Map<String, DistanceMetricType> metrices = StringComparisionConfig.getInstanse().getDistanceMetricTypes();
@@ -125,7 +124,7 @@ public class MatchCfgBizController {
 		mv.addObject("cfg", cfg);
 		return mv;
 	}
-	
+
 	/**
 	 * 配置列表页面入口
 	 */
@@ -145,7 +144,7 @@ public class MatchCfgBizController {
 		mv.addObject("selectJson", datas.toString());
 		return mv;
 	}
-	
+
 	/**
 	 * 添加配置
 	 */

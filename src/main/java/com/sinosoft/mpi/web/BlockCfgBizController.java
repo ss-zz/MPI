@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,32 +23,33 @@ import com.sinosoft.mpi.util.PageInfo;
 
 /**
  * 主索引业务控制器
+ * 
  * @author admin
  *
  */
 @Controller
 @RequestMapping("/blockCfgbiz")
 public class BlockCfgBizController {
-	
+
 	@Resource
 	BizBlockCfgService BizBlockCfgService;
-	
+
 	/**
 	 * 获取主索引列表数据
 	 */
 	@RequestMapping("/query")
 	@ResponseBody
-	public Map<String, Object> listIndex(PageInfo page,MpiBizBlockCfg bizBlockCfg) {
+	public Map<String, Object> listIndex(PageInfo page, MpiBizBlockCfg bizBlockCfg) {
 		Map<String, Object> datas = new HashMap<>();
-		page.setPage(page.getPage()-1);
-		List<MpiBizBlockCfg> list = BizBlockCfgService.queryForPage(bizBlockCfg, page);
+		page.setPage(page.getPage() - 1);
+		Page<MpiBizBlockCfg> ret = BizBlockCfgService.queryForPage(bizBlockCfg, page);
 		// 设置总共有多少条记录
-		datas.put(Constant.PAGE_TOTAL, page.getTotal());
+		datas.put(Constant.PAGE_TOTAL, ret.getTotalElements());
 		// 设置当前页的数据
-		datas.put(Constant.PAGE_ROWS, list);
+		datas.put(Constant.PAGE_ROWS, ret.getContent());
 		return datas;
 	}
-	
+
 	/**
 	 * 查看页面入口
 	 */
@@ -59,7 +61,7 @@ public class BlockCfgBizController {
 		mv.addObject("cfg", cfg);
 		return mv;
 	}
-	
+
 	/**
 	 * 配置列表页面入口
 	 */
@@ -74,27 +76,27 @@ public class BlockCfgBizController {
 		mv.addObject("selectJson", datas.toString());
 		return mv;
 	}
-	
+
 	/**
 	 * 添加配置
 	 */
 	@RequestMapping("/method=add")
 	@ResponseBody
 	public void add(@RequestBody MpiBizBlockCfg t) {
-		/*blockCfgService.save(t);*/
+		/* blockCfgService.save(t); */
 	}
-	
+
 	/**
 	 * 查看页面入口
 	 */
 	@RequestMapping("/current")
 	public ModelAndView toCurrentViewPage() {
 		ModelAndView mv = new ModelAndView("/biz/page/current_block");
-		//mv.addObject("cfg", new BlockCfg(BlockConfig.getInstanse()));
+		// mv.addObject("cfg", new BlockCfg(BlockConfig.getInstanse()));
 		mv.addObject("cfg", new MpiBizBlockCfg(BizBlockConfig.getInstanse()));
 		return mv;
 	}
-	
+
 	/**
 	 * 使配置生效
 	 */

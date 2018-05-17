@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -76,13 +77,13 @@ public class DomainSrcLevelService {
 	 * @param page
 	 * @return
 	 */
-	public List<DomainSrcLevel> queryForPage(DomainSrcLevel t, PageInfo page) {
+	public Page<DomainSrcLevel> queryForPage(DomainSrcLevel t, PageInfo page) {
 		return domainSrcLevelDao.findAll(new Specification<DomainSrcLevel>() {
 			@Override
 			public Predicate toPredicate(Root<DomainSrcLevel> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				return null;
 			}
-		}, page).getContent();
+		}, page);
 	}
 
 	/**
@@ -123,13 +124,13 @@ public class DomainSrcLevelService {
 	 * @param page
 	 * @return
 	 */
-	public List<DomainSrcLevel> queryPageByID(final String domainid, PageInfo page) {
+	public Page<DomainSrcLevel> queryPageByID(final String domainid, PageInfo page) {
 		return domainSrcLevelDao.findAll(new Specification<DomainSrcLevel>() {
 			@Override
 			public Predicate toPredicate(Root<DomainSrcLevel> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				return cb.and(cb.equal(root.get("domainId"), domainid));
 			}
-		}, page).getContent();
+		}, page);
 	}
 
 	/**

@@ -14,6 +14,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -111,7 +112,7 @@ public class BlockCfgService {
 	 * @param page
 	 * @return
 	 */
-	public List<BlockCfg> queryForPage(final BlockCfg t, PageInfo page) {
+	public Page<BlockCfg> queryForPage(final BlockCfg t, PageInfo page) {
 		return blockCfgDao.findAll(new Specification<BlockCfg>() {
 			@Override
 			public Predicate toPredicate(Root<BlockCfg> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -123,7 +124,7 @@ public class BlockCfgService {
 				}
 				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 			}
-		}, page).getContent();
+		}, page);
 	}
 
 	/**

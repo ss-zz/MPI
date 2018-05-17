@@ -2,12 +2,12 @@ package com.sinosoft.mpi.web;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,12 +33,12 @@ public class DomainController {
 	@RequestMapping(params = "method=query")
 	@ResponseBody
 	public Map<String, Object> listDomain(IdentifierDomain domain, PageInfo page) {
-		List<IdentifierDomain> list = identifierDomainService.queryForPage(domain, page);
+		Page<IdentifierDomain> ret = identifierDomainService.queryForPage(domain, page);
 		Map<String, Object> datas = new HashMap<>();
 		// 设置总共有多少条记录
-		datas.put(Constant.PAGE_TOTAL, page.getTotal());
+		datas.put(Constant.PAGE_TOTAL, ret.getTotalElements());
 		// 设置当前页的数据
-		datas.put(Constant.PAGE_ROWS, list);
+		datas.put(Constant.PAGE_ROWS, ret.getContent());
 		return datas;
 	}
 

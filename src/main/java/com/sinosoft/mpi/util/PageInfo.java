@@ -17,7 +17,7 @@ public class PageInfo implements Pageable, Serializable {
 
 	private int page; // 前台传递来的分页参数 需要显示地几页
 	private int rows; // 前台传递来的参数 每页显示多少条
-	private int total; // 总数
+	private long total; // 总数
 
 	public PageInfo() {
 		super();
@@ -54,11 +54,11 @@ public class PageInfo implements Pageable, Serializable {
 		this.rows = rows;
 	}
 
-	public int getTotal() {
+	public long getTotal() {
 		return total;
 	}
 
-	public void setTotal(int total) {
+	public void setTotal(long total) {
 		this.total = total;
 	}
 

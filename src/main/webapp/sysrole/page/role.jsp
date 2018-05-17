@@ -29,7 +29,7 @@
 			<label>角色名称：</label>
 			<input type="text" class="easyui-validatebox" id="add_roleName" maxlength="50" required="true" validType="roleName['${pageContext.request.contextPath}/role/role.ac?method=test']" />
 		</div>
-		<div>
+		<div class="my-form-btns">
 			<a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="addData();">提交</a>
 		</div>
 	</div>
@@ -44,7 +44,7 @@
 			<input type="text" class="easyui-validatebox" id="edit_roleName"  maxlength="50" required="true"></input>
 			<input type="hidden" id="edit_roleId" >
 		</div>
-		<div>
+		<div class="my-form-btns">
 			<a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="editData();">提交</a>
 		</div>
 	</div>

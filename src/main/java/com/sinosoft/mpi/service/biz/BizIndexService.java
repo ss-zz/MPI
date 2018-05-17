@@ -10,6 +10,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -66,7 +67,7 @@ public class BizIndexService {
 	 * @param page
 	 * @return
 	 */
-	public List<MpiBizIndex> queryForPage(final MpiBizIndex t,PageInfo page) {
+	public Page<MpiBizIndex> queryForPage(final MpiBizIndex t,PageInfo page) {
 		return bizIndexDao.findAll(new Specification<MpiBizIndex>() {
 			@Override
 			public Predicate toPredicate(Root<MpiBizIndex> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -82,7 +83,7 @@ public class BizIndexService {
 	                }
 	                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 			}
-		}, page).getContent();
+		}, page);
 	}
 
 	/**

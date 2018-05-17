@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,11 +44,11 @@ public class MatchCfgController {
 	@ResponseBody
 	public Map<String, Object> list(PageInfo page, MatchCfg t) {
 		Map<String, Object> datas = new HashMap<>();
-		List<MatchCfg> list = matchCfgService.queryForPage(t, page);
+		Page<MatchCfg> data = matchCfgService.queryForPage(t, page);
 		// 设置总共有多少条记录
-		datas.put(Constant.PAGE_TOTAL, page.getTotal());
+		datas.put(Constant.PAGE_TOTAL, data.getTotalElements());
 		// 设置当前页的数据
-		datas.put(Constant.PAGE_ROWS, list);
+		datas.put(Constant.PAGE_ROWS, data.getContent());
 		return datas;
 	}
 

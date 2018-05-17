@@ -8,39 +8,19 @@ $(function() {
 	closeDialog_edit();
 });
 
-/** --------------table------------------* */
 /**
  * 加载表格数据
  */
 function ajaxTable() {
 	// 加载表格
 	$('#listTable').datagrid({
-		toolbar : [{// 正上方工具栏
+		toolbar : [{
 			text : '添加业务系统',
 			iconCls : 'icon-add',
 			handler : function() {
 				openDialog_add();
 			}
-		}, '-', {
-			text : '编辑业务系统',
-			iconCls : 'icon-edit',
-			handler : function() {
-				openDialog_edit();
-			}
-		}, '-', {
-			text : '删除业务系统',
-			iconCls : 'icon-edit',
-			handler : function() {
-				removeData();
-			}
-		},'-',{
-			text : '业务系统字段数据源级别配置',
-			iconCls : 'icon-add',
-			handler : function(){
-				openAddPage();	
-			}
-		}],
-		singleSelect:true//单选
+		}]
 	}).datagrid('acceptChanges');
 }
 // 刷新表格
@@ -85,7 +65,6 @@ function addData() {
 	$('#table_add input').each(function() {
 		if ($(this).attr('required') || $(this).attr('validType')) {
 			if (!$(this).validatebox('isValid')) {
-				// 如果验证不通过，则返回false
 				validateResult = false;
 				return;
 			}
@@ -96,10 +75,7 @@ function addData() {
 	}
 
 	$.ajax({
-		async : false,
-		cache : false,
 		type : 'POST',
-		dataType : "json",
 		data : {
 			domainType:$("#add_domainType").val(),
 			domainDesc:$("#add_domainDesc").val(),
@@ -131,21 +107,16 @@ function setDialog_edit() {
 	});
 }
 // 打开对话框
-function openDialog_edit() {
+function openDialog_edit(idx) {
 	editReset();
-	
-	var row = $('#listTable').datagrid('getSelected');
+	var row = getRowByIdx(idx);
 	if(row==undefined || row==null){
 		alert("请选择要修改的业务系统!");
 		return;
 	}	
-	var domainId = row.domainId;
 	$.ajax({
-		async : false,
-		cache : false,
 		type : 'POST',
-		dataType : "json",
-		data : {domainId: domainId},
+		data : {domainId: row.domainId},
 		url : root + '/domain/domain.ac?method=load',// 请求的action路径
 		success : function(data) {
 			if (data == null) {// 未返回任何消息表示添加成功
@@ -195,10 +166,7 @@ function editData() {
 	}
 
 	$.ajax({
-		async : false,
-		cache : false,
 		type : 'POST',
-		dataType : "json",
 		data : {
 			"domainId":$("#edit_domainId").val(),
 			"domainType":$("#edit_domainType").val(),
@@ -209,9 +177,6 @@ function editData() {
 			"domainLevel":$("#edit_domainLevel").val()
 		},
 		url : root + '/domain/domain.ac?method=edit',// 请求的action路径
-		error : function() {// 请求失败处理函数
-			alert('请求失败');
-		},
 		success : function(data) {
 			var messgage = "修改成功!";
 			if (data == null) {// 未返回任何消息表示添加成功
@@ -225,10 +190,9 @@ function editData() {
 	});
 }
 
-/** --------------编辑操作弹出框------------------* */
 //删除方法
-function removeData(){
-	var row = $('#listTable').datagrid('getSelected');
+function removeData(idx){
+	var row = getRowByIdx(idx);
 	if(row==undefined || row==null){
 		alert("请选择要删除的业务系统");
 		return;
@@ -236,10 +200,7 @@ function removeData(){
 	var domainId = row.domainId;
 	if(confirm("确认要删除业务系统【"+row.domainDesc+"】?")){
 		$.ajax({
-			async : false,
-			cache : false,
 			type : 'POST',
-			dataType : "json",
 			data : {
 				domainId: domainId
 			},
@@ -277,9 +238,6 @@ $.extend($.fn.validatebox.defaults.rules, {
 					uniqueSign: value
 				},
 				type : 'post',
-				dataType : 'json',
-				async : false,
-				cache : false
 			}).responseText;
 			if (result == 'false') {
 				return false;
@@ -294,53 +252,24 @@ $.extend($.fn.validatebox.defaults.rules, {
 			var regex = /^\d+$/;
 			return regex.test(value);
 		},
-		message : '必须为自然数.'	
+		message : '必须为自然数.'
 	}
 });
 
-//创建操作连接
-function buildOptLink(val,row){
-	var link = '';
-	var unique_sign = row.uniqueSign;
-	link +='<a href="#" onclick="openViewPage(\''+unique_sign+'\')">业务系统字段数据源级别</a>&nbsp;&nbsp;&nbsp;&nbsp;';
-	return link;
-}
-function openAddPage(){
-	var row = $('#listTable').datagrid('getSelected');
-	if(row==undefined || row==null){
-		alert("请选择要配置的业务系统");
-		return;
-	}	
-	var domainId = row.uniqueSign;
-	var url = root+'/domainsrclevel/srclevel.ac?method=toAdd&domainId='+domainId;
-	var name = 'iframe_tabId_srclevelAdd';	
-	//如果当前id的tab不存在则创建一个tab
-	if(parent.$("#tabId_srclevelAdd").html()==null){
-		parent.$('#centerTab').tabs('add',{
-			title: '添加数据源级别配置',		 
-			closable:true,
-			cache : false,
-			//注：使用iframe即可防止同一个页面出现js和css冲突的问题
-			content : '<iframe name="'+name+'" id="tabId_srclevelAdd" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-		});
-	}else{
-		parent.$('#centerTab').tabs('select','添加数据源级别配置');
-	}
+// 根据idx获取row
+function getRowByIdx(idx){
+	return $('#listTable').datagrid("getData").rows[idx];
 }
 
-function openViewPage(val){
-	var url = root+'/domainsrclevel/srclevel.ac?method=toAdd&domainId='+val;
-	var name = 'iframe_tabId_domainfieldlevel';	
-	//如果当前id的tab不存在则创建一个tab
-	if(parent.$("#tabId_domainfieldlevel").html()==null){
-		parent.$('#centerTab').tabs('add',{
-			title: '业务系统字段数据源级别',
-			closable:true,
-			cache : false,
-			//注：使用iframe即可防止同一个页面出现js和css冲突的问题
-			content : '<iframe name="'+name+'" id="tabId_domainfieldlevel" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-		});
-	}else{
-		parent.$('#centerTab').tabs('select','业务系统字段数据源级别');
-	}
+//创建操作连接
+function buildOptLink(val,row, idx){
+	var link = '';
+	link +='<a href="#" onclick="openDialog_edit(\''+idx+'\')">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;';
+	link +='<a href="#" onclick="removeData(\''+idx+'\')">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+	link +='<a href="#" onclick="openAddPage(\''+idx+'\')">管理字段数据源级别</a>&nbsp;&nbsp;&nbsp;&nbsp;';
+	return link;
+}
+function openAddPage(idx){
+	var domainId = getRowByIdx(idx).domainId;
+	openTab('tabId_srclevelAdd', '管理字段数据源级别', root+'/domainsrclevel/srclevel.ac?method=toAdd&domainId='+domainId);
 }

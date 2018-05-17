@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.match.config.MatchConfig;
@@ -93,8 +94,8 @@ public class MatchCfgService {
 	 * @param page
 	 * @return
 	 */
-	public List<MatchCfg> queryForPage(MatchCfg t, PageInfo page) {
-		return matchCfgDao.findAll(page).getContent();
+	public Page<MatchCfg> queryForPage(MatchCfg t, PageInfo page) {
+		return matchCfgDao.findAll(page);
 	}
 
 	/**
