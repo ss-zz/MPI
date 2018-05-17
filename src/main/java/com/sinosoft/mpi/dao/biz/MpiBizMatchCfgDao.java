@@ -45,7 +45,7 @@ public interface MpiBizMatchCfgDao
 	 *            id
 	 */
 	@Modifying
-	@Query(value = "update MpiBizMatchCfg cfg set cfg.state = '0' where  cfg.configId = ?1  ")
+	@Query(value = "update MpiBizMatchCfg cfg set cfg.state = '1' where  cfg.configId = ?1  ")
 	void effect(String id);
 
 }

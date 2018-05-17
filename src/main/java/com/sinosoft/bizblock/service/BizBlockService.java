@@ -17,9 +17,12 @@ import com.sinosoft.block.fun.IBlockFuntion;
 import com.sinosoft.block.model.BlockField;
 import com.sinosoft.block.model.BlockRound;
 import com.sinosoft.match.model.Record;
+import com.sinosoft.mpi.model.BlockCfg;
+import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
 import com.sinosoft.mpi.model.biz.MpiBizIndex;
 import com.sinosoft.mpi.model.biz.MpiBizInfo;
 import com.sinosoft.mpi.service.biz.BizIndexService;
+import com.sinosoft.mpi.util.PageInfo;
 
 /**
  * 业务初筛服务
@@ -263,5 +266,7 @@ public class BizBlockService {
 		}
 		return result;
 	}
+	
+	
 
 }

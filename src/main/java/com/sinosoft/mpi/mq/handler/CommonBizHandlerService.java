@@ -64,7 +64,7 @@ public class CommonBizHandlerService {
 				MpiBizIndex bizIndex = pair.getRightRecord().getObject();
 				Double weight = pair.getWeight();
 				// 添加索引操作日志
-				bizIdxLogService.saveIndexLog(bizInfo.getBizId(), bizIndex.getId(), bizInfo.getSystemId(),
+				bizIdxLogService.saveIndexLog(bizInfo.getBizId(), bizIndex.getId(), bizInfo.getBizSystemId(),
 						Constant.IDX_LOG_TYPE_MATCH,
 						"[" + bizInfo.getBizId() + "]匹配到业务[" + pair.getRightRecord().getObject().getBizId() + "],系统匹配度:"
 								+ NumberUtils.toPercentStr(weight),
@@ -95,7 +95,7 @@ public class CommonBizHandlerService {
 		}
 		bizIndexService.save(bizIndex);
 		// 添加索引操作日志
-		bizIdxLogService.saveIndexLog(bizInfo.getBizId(), bizIndex.getId(), bizInfo.getSystemId(),
+		bizIdxLogService.saveIndexLog(bizInfo.getBizId(), bizIndex.getId(), bizInfo.getBizSystemId(),
 				Constant.IDX_LOG_TYPE_MATCH, "新建业务主索引:[" + bizIndex.getId() + "]", null);
 		return bizIndex;
 	}

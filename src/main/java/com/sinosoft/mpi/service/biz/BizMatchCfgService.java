@@ -12,6 +12,7 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.bizmatch.config.BizMatchConfig;
 import com.sinosoft.mpi.dao.biz.MpiBizMatchCfgDao;
@@ -108,7 +109,7 @@ public class BizMatchCfgService {
 		return mpiBizMatchCfgDao.findAll(new Specification<MpiBizMatchCfg>() {
 			@Override
 			public Predicate toPredicate(Root<MpiBizMatchCfg> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				if (t != null) {
+				if (t.getState() != null) {
 					return cb.and(cb.equal(root.get("state"), t.getState()));
 				}
 				return null;
@@ -122,6 +123,7 @@ public class BizMatchCfgService {
 	 * @param cfgId
 	 *            配置id
 	 */
+	@Transactional
 	public void updateEffect(String cfgId) {
 		// 使所有失效
 		mpiBizMatchCfgDao.uneffectAll();

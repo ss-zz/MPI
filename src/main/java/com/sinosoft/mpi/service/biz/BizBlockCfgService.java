@@ -14,6 +14,7 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.bizblock.config.BizBlockConfig;
 import com.sinosoft.mpi.cache.CacheManager;
@@ -122,7 +123,9 @@ public class BizBlockCfgService {
 			@Override
 			public Predicate toPredicate(Root<MpiBizBlockCfg> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				if (t != null) {
-					return cb.and(cb.equal(root.get("state"), t.getState()));
+					if(t.getState() != null){
+						return cb.and(cb.equal(root.get("state"), t.getState()));
+					}
 				}
 				return null;
 			}
@@ -135,6 +138,7 @@ public class BizBlockCfgService {
 	 * @param cfgId
 	 *            配置id
 	 */
+	@Transactional
 	public void updateEffect(String cfgId) {
 		// 使所有失效
 		mpiBizBlockCfgDao.uneffectAll();

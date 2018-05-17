@@ -3,28 +3,28 @@ var INUSED_FIELDS={};
 $(function() {
 	// 加载表格数据
 	ajaxTable();
-	
-	var p = $('#listTable').datagrid('getPager');
-	$(p).pagination({
-		beforePageText: '第',
-		afterPageText: '页	共 {pages} 页',	
-		displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',   
-		pageSize:10,
-		showPageList:false
-		
-	});
+    
+    var p = $('#listTable').datagrid('getPager');
+    $(p).pagination({
+        beforePageText: '第',
+        afterPageText: '页    共 {pages} 页',    
+        displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',   
+        pageSize:10,
+        showPageList:false
+        
+    });
 });
 
 //锁定按钮
 function lockBtn(btn){
-	$(btn).unbind('click').removeAttr('onclick');
-	$(btn).attr("disabled",true);  
+    $(btn).unbind('click').removeAttr('onclick');
+    $(btn).attr("disabled",true);  
 }
 
 // 解锁按钮
 function unlockBtn(btn,handler){
-	$(btn).bind("click",handler);
-	$(btn).attr("disabled",false);	  
+    $(btn).bind("click",handler);
+    $(btn).attr("disabled",false);      
 }
 
 /** --------------table------------------* */
@@ -36,7 +36,7 @@ function ajaxTable() {
 	$('#listTable').datagrid({
 		toolbar:[
 		{
-			text : '添加初筛配置',
+			text : '添加匹配规则',
 			iconCls : 'icon-add',
 			handler : function(){
 				openAddPage();	
@@ -79,28 +79,27 @@ function buildState(val,row){
 // 创建操作连接
 function buildOptLink(val,row){
 	var link = '';
-	link +='<a href="#" onclick="openViewPage(\''+row.blockId+'\')">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;';
+	link +='<a href="#" onclick="openViewPage(\''+row.configId+'\')">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;';
 	if(row.state != "1"){
-		var name = row.blockDesc;
-		var id = row.blockId;
-		link +='<a href="#" onclick="activateCfg(\''+id+'\',\''+name+'\',this)">使用</a>&nbsp;&nbsp;&nbsp;&nbsp;';
+		var name = row.configDesc;
+		link +='<a href="#" onclick="activateCfg(\''+row.configId+'\',\''+name+'\',this)">使用</a>&nbsp;&nbsp;&nbsp;&nbsp;';
 	}
 	return link;
 }
 
-// 打开查看初筛配置页面
+// 打开查看匹配配置页面
 function openViewPage(cfgId){
-	var tabId = 'tabId_block_cfg_view';
-	var title = '初筛配置详情';
-	var url = root+'/blockCfgbiz/view?cfgId='+cfgId;
+	var tabId = 'tabId_match_cfg_view';
+	var title = '匹配配置详情';
+	var url = root+'/matchCfgbiz/view?cfgId='+cfgId;
 	var name = 'iframe_'+tabId;
 	openTab(tabId,title,url,name);
 }
 
 function openCurrentPage(){
-	var tabId = 'tabId_current_block_view';
-	var title = '当前初筛配置详情';
-	var url = root+'/blockCfgbiz/current';
+	var tabId = 'tabId_current_match_view';
+	var title = '当前匹配配置详情';
+	var url = root+'/matchCfgbiz/current';
 	var name = 'iframe_'+tabId;	
 	openTab(tabId,title,url,name);
 }
@@ -109,7 +108,7 @@ function openTab(tabId,title,url,name){
 	//如果当前id的tab不存在则创建一个tab
 	if(parent.$("#"+tabId).html()==null){		
 		parent.$('#centerTab').tabs('add',{
-			title: title,		 
+			title: title,         
 			closable:true,
 			cache : false,
 			//注：使用iframe即可防止同一个页面出现js和css冲突的问题
@@ -135,7 +134,7 @@ function openTab(tabId,title,url,name){
 
 // 使配置生效
 function activateCfg(cfgId,cfgName,btn){
-	if(confirm("确认使用["+cfgName+"]初筛配置么?\n\r(此配置生效后,现使用的配置将失效)")){
+	if(confirm("确认使用["+cfgName+"]匹配配置么?\n\r(此配置生效后,现使用的配置将失效)")){
 		lockBtn(btn);
 		$.ajax({
 			async : false,
@@ -145,7 +144,7 @@ function activateCfg(cfgId,cfgName,btn){
 			data : {
 				cfgId:cfgId
 			},
-			url : root + '/blockCfgbiz/effect',// 请求的action路径
+			url : root + '/matchCfgbiz/effect',// 请求的action路径
 			error : function() {// 请求失败处理函数
 				alert('请求失败');
 				unlockBtn(btn,function(){
@@ -169,18 +168,18 @@ function activateCfg(cfgId,cfgName,btn){
 }
 
 function openAddPage(){
-	var url = root+'/blockCfgbiz/toAdd';
-	var name = 'iframe_tabId_blockCfgAdd';	
+	var url = root+'/matchCfgbiz/toAdd';
+	var name = 'iframe_tabId_matchCfgAdd';	
 	//如果当前id的tab不存在则创建一个tab
-	if(parent.$("#tabId_blockCfgAdd").html()==null){
+	if(parent.$("#tabId_matchCfgAdd").html()==null){
 		parent.$('#centerTab').tabs('add',{
-			title: '添加初筛配置',	
+			title: '添加匹配配置',         
 			closable:true,
 			cache : false,
 			//注：使用iframe即可防止同一个页面出现js和css冲突的问题
-			content : '<iframe name="'+name+'" id="tabId_blockCfgAdd" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
+			content : '<iframe name="'+name+'" id="tabId_matchCfgAdd" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
 		});
 	}else{
-		parent.$('#centerTab').tabs('select','添加初筛配置');
+		parent.$('#centerTab').tabs('select','添加匹配配置');
 	}
 }

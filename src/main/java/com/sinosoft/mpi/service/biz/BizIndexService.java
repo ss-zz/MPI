@@ -1,5 +1,6 @@
 package com.sinosoft.mpi.service.biz;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.cache.annotation.CacheDefaults;
@@ -17,7 +18,7 @@ import com.sinosoft.mpi.dao.biz.MpiBizIndexDao;
 import com.sinosoft.mpi.model.biz.MpiBizIndex;
 import com.sinosoft.mpi.model.biz.MpiBizInfo;
 import com.sinosoft.mpi.util.PageInfo;
-
+import javax.persistence.criteria.Path;
 /**
  * 主索引业务服务
  */
@@ -65,14 +66,21 @@ public class BizIndexService {
 	 * @param page
 	 * @return
 	 */
-	public List<MpiBizIndex> queryForPage(final MpiBizIndex t, String fromIndexId, PageInfo page) {
+	public List<MpiBizIndex> queryForPage(final MpiBizIndex t,PageInfo page) {
 		return bizIndexDao.findAll(new Specification<MpiBizIndex>() {
 			@Override
 			public Predicate toPredicate(Root<MpiBizIndex> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				if (t != null) {
-					return cb.and(cb.equal(root.get("bizSerialId"), t.getBizSerialId()));
-				}
-				return null;
+				 List<Predicate> predicates = new ArrayList<>();
+	                if(null != t.getBizInpatientSerialno()){
+	                    predicates.add(cb.equal(root.get("bizInpatientSerialno"), t.getBizInpatientSerialno()));
+	                }
+	                if(null != t.getBizSystemId()){
+	                    predicates.add(cb.equal(root.get("bizSystemId"), t.getBizSystemId()));
+	                }
+	                if(null != t.getCreate_Date()){
+	                    predicates.add(cb.equal(root.get("create_Date"), t.getCreate_Date()));
+	                }
+	                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 			}
 		}, page).getContent();
 	}
