@@ -46,7 +46,7 @@ public interface MpiBizBlockCfgDao
 	 *            id
 	 */
 	@Modifying
-	@Query(value = "update MpiBizBlockCfg cfg set cfg.state = '0' where  cfg.blockId = ?1  ")
+	@Query(value = "update MpiBizBlockCfg cfg set cfg.state = '1' where  cfg.blockId = ?1  ")
 	void effect(String id);
 
 }

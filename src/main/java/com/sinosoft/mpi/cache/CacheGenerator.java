@@ -15,6 +15,8 @@ import com.sinosoft.mpi.model.PerInfoPropertiesDesc;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.PersonPropertiesDesc;
+import com.sinosoft.mpi.model.biz.MpiBizBPropertiesDesc;
+import com.sinosoft.mpi.model.biz.MpiBizIndex;
 import com.sinosoft.mpi.util.AppliationContextUtils;
 
 /**
@@ -37,6 +39,7 @@ public class CacheGenerator implements InitializingBean {
 		// 初始化PersonIndex表所有属性对应中文名到缓存
 		buildCache(PersonPropertiesDesc.class, buildPropertyDesc());
 		buildCache(PerInfoPropertiesDesc.class, buildPerInfoPropertyDesc());
+		buildCache(MpiBizBPropertiesDesc.class, buildMpiBizPropertyDesc());
 	}
 
 	/**
@@ -94,6 +97,27 @@ public class CacheGenerator implements InitializingBean {
 	 */
 	private List<IBaseCode> buildPerInfoPropertyDesc() {
 		Class<PersonInfo> clz = PersonInfo.class;
+		Field[] fields = clz.getDeclaredFields();
+		List<IBaseCode> codes = new ArrayList<IBaseCode>(fields.length);
+		for (Field field : fields) {
+			if (field.isAnnotationPresent(PropertyDesc.class)) {
+				PropertyDesc ann = field.getAnnotation(PropertyDesc.class);
+				String name = field.getName();
+				String desc = ann.name();
+				String column = ann.column();
+				PerInfoPropertiesDesc ppd = new PerInfoPropertiesDesc(name, desc, column);
+				codes.add(ppd);
+			}
+		}
+		return codes;
+	}
+	
+	/**
+	 * 缓存主索引业务对象
+	 * @return
+	 */
+	private List<IBaseCode> buildMpiBizPropertyDesc(){
+		Class<MpiBizIndex> clz = MpiBizIndex.class;
 		Field[] fields = clz.getDeclaredFields();
 		List<IBaseCode> codes = new ArrayList<IBaseCode>(fields.length);
 		for (Field field : fields) {

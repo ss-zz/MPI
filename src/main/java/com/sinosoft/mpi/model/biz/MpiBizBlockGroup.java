@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.sinosoft.block.model.BlockField;
 import com.sinosoft.mpi.cache.CacheManager;
@@ -42,6 +43,7 @@ public class MpiBizBlockGroup implements Serializable {
 	/**
 	 * 字段中文名 非存库字段
 	 */
+	@Transient
 	private String propertyCnName;
 
 	public MpiBizBlockGroup() {

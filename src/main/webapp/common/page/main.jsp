@@ -133,10 +133,10 @@ $(document).ready(function(){
 						onclick="addTab('tabId_qi_biz','业务查询','${pageContext.request.contextPath}/biz/page/query.jsp');"
 						href="#">业务查询</a></li>
 					<li><a
-						onclick="addTab('tabId_bc','业务初筛规则管理','${pageContext.request.contextPath}/biz/page/block.jsp');"
+						onclick="addTab('tabId_bc_biz','业务初筛规则管理','${pageContext.request.contextPath}/biz/page/block.jsp');"
 						href="#">业务初筛规则管理</a></li>
 					<li><a
-						onclick="addTab('tabId_mc','业务匹配规则管理','${pageContext.request.contextPath}/cfg/page/match.jsp');"
+						onclick="addTab('tabId_mc_biz','业务匹配规则管理','${pageContext.request.contextPath}/biz/page/match.jsp');"
 						href="#">业务匹配规则管理</a></li>
 				</ul>
 			</div>

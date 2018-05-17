@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -17,6 +19,7 @@ import org.springframework.web.context.request.WebRequest;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.biz.MpiBizIndex;
+import com.sinosoft.mpi.service.biz.BizIndexService;
 import com.sinosoft.mpi.util.PageInfo;
 
 /**
@@ -27,6 +30,9 @@ import com.sinosoft.mpi.util.PageInfo;
 @Controller
 @RequestMapping("/indexBIZ")
 public class IndexBIZController {
+	
+	@Resource
+	BizIndexService BizIndexService;
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder, WebRequest request) {
@@ -45,6 +51,12 @@ public class IndexBIZController {
 	@ResponseBody
 	public Map<String, Object> listIndex(PageInfo page,MpiBizIndex  bizIndex) {
 		Map<String, Object> datas = new HashMap<>();
+		page.setPage(page.getPage()-1);
+		List<MpiBizIndex> list = BizIndexService.queryForPage(bizIndex, page);
+		// 设置总共有多少条记录
+		datas.put(Constant.PAGE_TOTAL, page.getTotal());
+		// 设置当前页的数据
+		datas.put(Constant.PAGE_ROWS, list);
 		return datas;
 	}
 	

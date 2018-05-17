@@ -182,7 +182,7 @@ function saveMatchCfg(){
  */
 function goBackClose(){
 	var tabId = 'tabId_bc';
-	var title = '初筛规则管理';
+	var title = '业务初筛规则管理';
 	var url = root+'/biz/page/block.jsp';
 	var name = 'iframe_'+tabId;
 	//如果当前id的tab不存在则创建一个tab

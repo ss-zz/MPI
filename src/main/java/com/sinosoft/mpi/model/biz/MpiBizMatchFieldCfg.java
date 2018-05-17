@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.sinosoft.match.model.MatchField;
 
 @Entity()
@@ -19,7 +21,8 @@ public class MpiBizMatchFieldCfg implements Serializable {
 	 */
 	@Id
 	@Column
-	@GeneratedValue
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GeneratedValue(generator = "system-uuid")
 	private String fieldCfgId;
 
 	/* 配置主键(CONFIG_ID) 配置主键 */

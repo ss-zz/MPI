@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.sinosoft.bizmatch.config.BizMatchConfig;
 import com.sinosoft.match.model.MatchField;
 
@@ -24,7 +26,8 @@ public class MpiBizMatchCfg implements Serializable {
 	 */
 	@Id
 	@Column
-	@GeneratedValue
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GeneratedValue(generator = "system-uuid")
 	private String configId;
 
 	/* 配置描述 配置描述 */

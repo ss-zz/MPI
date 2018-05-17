@@ -1,6 +1,8 @@
 package com.sinosoft.mpi.model.biz;
 
 import java.io.Serializable;
+import java.util.Date;
+
 
 /**
  * 业务信息
@@ -8,7 +10,7 @@ import java.io.Serializable;
 public class MpiBizInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	private String id;
 	private String bizId;
 	private String bizPatientId;
@@ -17,7 +19,10 @@ public class MpiBizInfo implements Serializable {
 	private String bizInpatientSerialno;
 	private String bizClinicno;
 	private String bizClinicSerialno;
-	private String systemId;
+	private String bizSystemId;
+	private Date create_Date;
+	private String state;
+	private String remark;
 
 	public String getBizId() {
 		return bizId;
@@ -86,13 +91,37 @@ public class MpiBizInfo implements Serializable {
 	public void setId(String id) {
 		this.id = id;
 	}
-
-	public String getSystemId() {
-		return systemId;
+	
+	public String getBizSystemId() {
+		return bizSystemId;
 	}
 
-	public void setSystemId(String systemId) {
-		this.systemId = systemId;
+	public void setBizSystemId(String bizSystemId) {
+		this.bizSystemId = bizSystemId;
+	}
+
+	public Date getCreate_Date() {
+		return create_Date;
+	}
+
+	public void setCreate_Date(Date create_Date) {
+		this.create_Date = create_Date;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	public MpiBizIndex toIndex() {

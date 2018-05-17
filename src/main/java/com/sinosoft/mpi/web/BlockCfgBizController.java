@@ -4,17 +4,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sinosoft.bizblock.config.BizBlockConfig;
 import com.sinosoft.block.config.BlockConfig;
 import com.sinosoft.mpi.cache.CacheManager;
+import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.BlockCfg;
 import com.sinosoft.mpi.model.PersonPropertiesDesc;
 import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
+import com.sinosoft.mpi.service.biz.BizBlockCfgService;
 import com.sinosoft.mpi.util.PageInfo;
 
 /**
@@ -26,6 +31,9 @@ import com.sinosoft.mpi.util.PageInfo;
 @RequestMapping("/blockCfgbiz")
 public class BlockCfgBizController {
 	
+	@Resource
+	BizBlockCfgService BizBlockCfgService;
+	
 	/**
 	 * 获取主索引列表数据
 	 */
@@ -33,6 +41,12 @@ public class BlockCfgBizController {
 	@ResponseBody
 	public Map<String, Object> listIndex(PageInfo page,MpiBizBlockCfg bizBlockCfg) {
 		Map<String, Object> datas = new HashMap<>();
+		page.setPage(page.getPage()-1);
+		List<MpiBizBlockCfg> list = BizBlockCfgService.queryForPage(bizBlockCfg, page);
+		// 设置总共有多少条记录
+		datas.put(Constant.PAGE_TOTAL, page.getTotal());
+		// 设置当前页的数据
+		datas.put(Constant.PAGE_ROWS, list);
 		return datas;
 	}
 	
@@ -43,9 +57,8 @@ public class BlockCfgBizController {
 	public ModelAndView toViewPage(String cfgId) {
 		ModelAndView mv = new ModelAndView("/biz/page/block_view");
 		// 取得配置信息
-		/*BlockCfg cfg = blockCfgService.getObject(cfgId);
-		
-		mv.addObject("cfg", cfg);*/
+		MpiBizBlockCfg cfg = BizBlockCfgService.getObject(cfgId);
+		mv.addObject("cfg", cfg);
 		return mv;
 	}
 	
@@ -60,7 +73,7 @@ public class BlockCfgBizController {
 		// 字段属性
 		datas.put("pList", pList);
 		ModelAndView mv = new ModelAndView("/biz/page/block_add");
-		mv.addObject("selectJson", datas);
+		mv.addObject("selectJson", datas.toString());
 		return mv;
 	}
 	
@@ -79,7 +92,17 @@ public class BlockCfgBizController {
 	@RequestMapping("/current")
 	public ModelAndView toCurrentViewPage() {
 		ModelAndView mv = new ModelAndView("/biz/page/current_block");
-		mv.addObject("cfg", new BlockCfg(BlockConfig.getInstanse()));
+		//mv.addObject("cfg", new BlockCfg(BlockConfig.getInstanse()));
+		mv.addObject("cfg", new MpiBizBlockCfg(BizBlockConfig.getInstanse()));
 		return mv;
+	}
+	
+	/**
+	 * 使配置生效
+	 */
+	@RequestMapping("/effect")
+	@ResponseBody
+	public void effectCfg(String cfgId) {
+		BizBlockCfgService.updateEffect(cfgId);
 	}
 }
