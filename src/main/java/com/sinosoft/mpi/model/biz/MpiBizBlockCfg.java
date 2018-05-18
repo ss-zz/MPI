@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.sinosoft.bizblock.config.BizBlockConfig;
 import com.sinosoft.block.model.BlockField;
 import com.sinosoft.block.model.BlockRound;
@@ -27,7 +29,8 @@ public class MpiBizBlockCfg implements Serializable {
 	 */
 	@Id
 	@Column
-	@GeneratedValue
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GeneratedValue(generator = "system-uuid")
 	private String blockId;
 
 	/**

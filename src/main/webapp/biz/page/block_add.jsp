@@ -6,7 +6,7 @@
 <%@include file="/common/page/master.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/biz/js/block_add.js"></script>
 <script type="text/javascript">
-	
+	var SELECT_JSON = ${selectJson};
 </script>
 </head>
 <body>

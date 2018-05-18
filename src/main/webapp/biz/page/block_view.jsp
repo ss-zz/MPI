@@ -28,7 +28,7 @@
 		</tr>
 		<c:forEach items="${fields.value }" var="field">
 			<tr>
-				<td>${field.propertyCnName }</td>		
+				<td>${field.propertyName }</td>		
 				<td>${field.funName }<c:if test="${field.funName==null }">无</c:if></td>
 			</tr>		
 		</c:forEach>

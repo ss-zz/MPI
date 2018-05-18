@@ -1,6 +1,7 @@
 package com.sinosoft.mpi.web;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,12 +14,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sinosoft.bizblock.config.BizBlockConfig;
+import com.sinosoft.bizmatch.config.BizMatchConfig;
+import com.sinosoft.block.config.BlockConfig;
+import com.sinosoft.linshi.entity.ge.mpi.MpiBlockCfg;
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
+import com.sinosoft.mpi.model.biz.MpiBizBPropertiesDesc;
 import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
+import com.sinosoft.mpi.model.biz.MpiBizBlockGroup;
+import com.sinosoft.mpi.model.biz.MpiBizMatchCfg;
+import com.sinosoft.mpi.model.biz.MpiBizMatchFieldCfg;
 import com.sinosoft.mpi.model.code.PersonPropertiesDesc;
 import com.sinosoft.mpi.service.biz.BizBlockCfgService;
 import com.sinosoft.mpi.util.PageInfo;
+import com.sinosoft.stringcomparison.config.StringComparisionConfig;
+import com.sinosoft.stringcomparison.model.DistanceMetricType;
+
+import net.sf.json.JSONObject;
 
 /**
  * 主索引业务控制器
@@ -65,9 +77,9 @@ public class BlockCfgBizController {
 	 */
 	@RequestMapping("/toAdd")
 	public ModelAndView toMatchCfgPage() {
-		Map<String, Object> datas = new HashMap<>();
+		JSONObject datas = new JSONObject();
 		// 取得居民信息 字段描述
-		List<PersonPropertiesDesc> pList = CacheManager.getAll(PersonPropertiesDesc.class);
+		List<MpiBizBPropertiesDesc> pList = CacheManager.getAll(MpiBizBPropertiesDesc.class);
 		// 字段属性
 		datas.put("pList", pList);
 		ModelAndView mv = new ModelAndView("/biz/page/block_add");
@@ -78,10 +90,10 @@ public class BlockCfgBizController {
 	/**
 	 * 添加配置
 	 */
-	@RequestMapping("/method=add")
+	@RequestMapping("/add")
 	@ResponseBody
 	public void add(@RequestBody MpiBizBlockCfg t) {
-		/*blockCfgService.save(t);*/
+		BizBlockCfgService.save(t);
 	}
 	
 	/**
@@ -90,8 +102,12 @@ public class BlockCfgBizController {
 	@RequestMapping("/current")
 	public ModelAndView toCurrentViewPage() {
 		ModelAndView mv = new ModelAndView("/biz/page/current_block");
-		//mv.addObject("cfg", new BlockCfg(BlockConfig.getInstanse()));
-		mv.addObject("cfg", new MpiBizBlockCfg(BizBlockConfig.getInstanse()));
+		
+		BizBlockConfig bizBlockConfig = BizBlockConfig.getInstanse();
+		
+		MpiBizBlockCfg cfg = new MpiBizBlockCfg(bizBlockConfig);
+		
+		mv.addObject("cfg", cfg);
 		return mv;
 	}
 	

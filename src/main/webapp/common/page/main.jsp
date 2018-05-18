@@ -150,7 +150,7 @@ $(document).ready(function(){
 						onclick="addTab('tabId_il','主索引处理日志','${pageContext.request.contextPath}/indexlog/page/il.jsp');"
 						href="#">主索引处理日志</a></li>
 					<li><a
-						onclick="addTab('tabId_il','主索引处理日志','${pageContext.request.contextPath}/indexlog/page/il.jsp');"
+						onclick="addTab('tabId_il_biz','主索引处理日志','${pageContext.request.contextPath}/indexlog/page/il.jsp');"
 						href="#">业务处理日志</a></li>
 					<%-- <li><a
 						onclick="addTab('tabId_pl','居民处理日志','${pageContext.request.contextPath}/personlog/page/pl.jsp');"

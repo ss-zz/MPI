@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.sinosoft.block.model.BlockField;
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.model.CommonDesc;
@@ -22,8 +24,8 @@ public class MpiBizBlockGroup implements Serializable {
 	 */
 	@Id
 	@Column
-	@GeneratedValue
-	/* 分组主键(GROUP_ID) 分组主键 */
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GeneratedValue(generator = "system-uuid")
 	private String groupId;
 
 	/* 初筛主键(BOLCK_ID) 初筛主键 */
@@ -54,7 +56,7 @@ public class MpiBizBlockGroup implements Serializable {
 		this.dbField = field.getDbField();
 		this.funName = field.getFunName();
 		this.propertyName = field.getField();
-		this.propertyCnName = CacheManager.getCodeName(CommonDesc.class, this.propertyName);
+		this.propertyCnName = CacheManager.getCodeName(MpiBizBPropertiesDesc.class, this.propertyName);
 	}
 
 	public String getGroupId() {

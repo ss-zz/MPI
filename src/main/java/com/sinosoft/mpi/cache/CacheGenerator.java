@@ -127,7 +127,7 @@ public class CacheGenerator implements InitializingBean {
 				String name = field.getName();
 				String desc = ann.name();
 				String column = ann.column();
-				PerInfoPropertiesDesc ppd = new PerInfoPropertiesDesc(name, desc, column);
+				MpiBizBPropertiesDesc ppd = new MpiBizBPropertiesDesc(name, desc, column);
 				codes.add(ppd);
 			}
 		}
