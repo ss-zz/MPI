@@ -596,14 +596,8 @@ public class PersonInfo implements Serializable {
 	@PropertyDesc(name = "关联标识", column = "RELATION_TYPE")
 	private String relationType;
 
-	private String uploadState;
-	private Date uploadDate;
-	private String backups;
 	private Date dtCreate;
-	private String flag;
-	private String flagGa;
-	private Date dtUpdateGa;
-
+	
 	// 扩展
 	@Transient
 	private String domainId;
@@ -2012,30 +2006,6 @@ public class PersonInfo implements Serializable {
 		this.type = type == null ? null : type.trim();
 	}
 
-	public String getUploadState() {
-		return uploadState;
-	}
-
-	public void setUploadState(String uploadState) {
-		this.uploadState = uploadState == null ? null : uploadState.trim();
-	}
-
-	public String getBackups() {
-		return backups;
-	}
-
-	public void setBackups(String backups) {
-		this.backups = backups == null ? null : backups.trim();
-	}
-
-	public Date getUploadDate() {
-		return uploadDate;
-	}
-
-	public void setUploadDate(Date uploadDate) {
-		this.uploadDate = uploadDate;
-	}
-
 	public Date getDtCreate() {
 		return dtCreate;
 	}
@@ -2266,30 +2236,6 @@ public class PersonInfo implements Serializable {
 
 	public void setPsychiatricMark(String psychiatricMark) {
 		this.psychiatricMark = psychiatricMark == null ? null : psychiatricMark.trim();
-	}
-
-	public String getFlag() {
-		return flag;
-	}
-
-	public void setFlag(String flag) {
-		this.flag = flag;
-	}
-
-	public String getFlagGa() {
-		return flagGa;
-	}
-
-	public void setFlagGa(String flagGa) {
-		this.flagGa = flagGa == null ? null : flagGa.trim();
-	}
-
-	public Date getDtUpdateGa() {
-		return dtUpdateGa;
-	}
-
-	public void setDtUpdateGa(Date dtUpdateGa) {
-		this.dtUpdateGa = dtUpdateGa;
 	}
 
 	public String getDomainId() {

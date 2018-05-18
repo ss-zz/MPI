@@ -12,7 +12,7 @@ spring:
     host: 192.168.1.252
     port: 5672
     listener:
-      auto-startup: false
+      auto-startup: true
   # jpa
   jpa:
     show-sql: true

@@ -11,7 +11,6 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -73,11 +72,9 @@ public class PersonInfoService {
 	@Resource
 	private PersonInfoDao personInfoDao;
 	@Resource
-	private PersonInfoHistoryDao personInfoHistoryDao;
+	private PersonInfoHistoryDao personInfoHistoryService;
 	@Resource
 	private PersonInfoVerifier personInfoVerifier;
-	@Resource
-	private RabbitTemplate mqTemplate;
 	@Resource
 	private JdbcTemplate jdbcTemplate;
 
@@ -623,7 +620,7 @@ public class PersonInfoService {
 	private PersonInfo findByOrgId(PersonInfo entity) {
 		String type = entity.getType();
 		String sql = " select * from mpi_person_info  t where t.MEDICALSERVICE_NO= ? and t.REGISTER_ORG_CODE=? and t.type=?";
-		List<PersonInfo> datas = null;
+		List<PersonInfo> datas = new ArrayList<>();
 		if ("0".equals(type)) {// 个人
 			sql = " select * from mpi_person_info  t where t.HR_ID= ? and t.REGISTER_ORG_CODE=?  and t.type=?";
 			datas = jdbcTemplate.queryForList(sql, new Object[] { entity.getHrId(), entity.getRegisterOrgCode(), type },
@@ -756,12 +753,11 @@ public class PersonInfoService {
 			throw new ValidationException("居民信息入库失败！");
 		}
 
-		// 发送居民信息至消息队列异步处理主索引
-		mqTemplate.convertAndSend(t);
 	}
 
 	public void addHistory(final PersonInfo entity) {
-		personInfoHistoryDao.save(entity.toPersonInfoHistory());
+		entity.setCreatetime(new Date());
+		personInfoHistoryService.save(entity.toPersonInfoHistory());
 	}
 
 	/**

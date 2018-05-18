@@ -62,4 +62,9 @@ public class DataResult<T> implements Serializable {
 		this.data = data;
 	}
 
+	@Override
+	public String toString() {
+		return "DataResult [success=" + success + ", msg=" + msg + ", data=" + data + "]";
+	}
+
 }
