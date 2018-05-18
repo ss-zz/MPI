@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,11 +45,11 @@ public class DomainSrcLevelController {
 	@ResponseBody
 	public Map<String, Object> list(PageInfo page, DomainSrcLevel t) throws IOException {
 		Map<String, Object> datas = new HashMap<>();
-		List<DomainSrcLevel> list = domainSrcLevelService.queryForPage(t, page);
+		Page<DomainSrcLevel> ret = domainSrcLevelService.queryForPage(t, page);
 		// 设置总共有多少条记录
-		datas.put(Constant.PAGE_TOTAL, page.getTotal());
+		datas.put(Constant.PAGE_TOTAL, ret.getTotalElements());
 		// 设置当前页的数据
-		datas.put(Constant.PAGE_ROWS, list);
+		datas.put(Constant.PAGE_ROWS, ret.getContent());
 		return datas;
 	}
 
@@ -59,11 +60,11 @@ public class DomainSrcLevelController {
 	@ResponseBody
 	public Map<String, Object> fieldlevellist(PageInfo page, DomainSrcLevel t) {
 		Map<String, Object> datas = new HashMap<>();
-		List<DomainSrcLevel> list = domainSrcLevelService.queryPageByID(t.getDomainId(), page);
+		Page<DomainSrcLevel> data = domainSrcLevelService.queryPageByID(t.getDomainId(), page);
 		// 设置总共有多少条记录
-		datas.put(Constant.PAGE_TOTAL, page.getTotal());
+		datas.put(Constant.PAGE_TOTAL, data.getTotalElements());
 		// 设置当前页的数据
-		datas.put(Constant.PAGE_ROWS, list);
+		datas.put(Constant.PAGE_ROWS, data.getContent());
 		return datas;
 	}
 

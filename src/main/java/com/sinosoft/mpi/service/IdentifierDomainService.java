@@ -9,6 +9,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -89,13 +90,13 @@ public class IdentifierDomainService {
 	 * @param page
 	 * @return
 	 */
-	public List<IdentifierDomain> queryForPage(IdentifierDomain t, PageInfo page) {
+	public Page<IdentifierDomain> queryForPage(IdentifierDomain t, PageInfo page) {
 		return identifierDomainDao.findAll(new Specification<IdentifierDomain>() {
 			@Override
 			public Predicate toPredicate(Root<IdentifierDomain> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				return null;
 			}
-		}, page).getContent();
+		}, page);
 	}
 
 	/**

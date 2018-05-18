@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ public class BlockCfgController {
 
 	@Resource
 	private BlockCfgService blockCfgService;
-	
+
 	ObjectMapper om = new ObjectMapper();
 
 	/**
@@ -41,11 +42,11 @@ public class BlockCfgController {
 	@ResponseBody
 	public Map<String, Object> list(PageInfo page, BlockCfg t) {
 		Map<String, Object> ret = new HashMap<>();
-		List<BlockCfg> list = blockCfgService.queryForPage(t, page);
+		Page<BlockCfg> data = blockCfgService.queryForPage(t, page);
 		// 设置总共有多少条记录
-		ret.put(Constant.PAGE_TOTAL, page.getTotal());
+		ret.put(Constant.PAGE_TOTAL, data.getTotalElements());
 		// 设置当前页的数据
-		ret.put(Constant.PAGE_ROWS, list);
+		ret.put(Constant.PAGE_ROWS, data.getContent());
 		return ret;
 	}
 

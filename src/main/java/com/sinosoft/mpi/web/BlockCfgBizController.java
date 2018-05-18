@@ -1,12 +1,12 @@
 package com.sinosoft.mpi.web;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,52 +14,44 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sinosoft.bizblock.config.BizBlockConfig;
-import com.sinosoft.bizmatch.config.BizMatchConfig;
-import com.sinosoft.block.config.BlockConfig;
-import com.sinosoft.linshi.entity.ge.mpi.MpiBlockCfg;
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.biz.MpiBizBPropertiesDesc;
 import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
-import com.sinosoft.mpi.model.biz.MpiBizBlockGroup;
-import com.sinosoft.mpi.model.biz.MpiBizMatchCfg;
-import com.sinosoft.mpi.model.biz.MpiBizMatchFieldCfg;
-import com.sinosoft.mpi.model.code.PersonPropertiesDesc;
 import com.sinosoft.mpi.service.biz.BizBlockCfgService;
 import com.sinosoft.mpi.util.PageInfo;
-import com.sinosoft.stringcomparison.config.StringComparisionConfig;
-import com.sinosoft.stringcomparison.model.DistanceMetricType;
 
 import net.sf.json.JSONObject;
 
 /**
  * 主索引业务控制器
+ * 
  * @author admin
  *
  */
 @Controller
 @RequestMapping("/blockCfgbiz")
 public class BlockCfgBizController {
-	
+
 	@Resource
 	BizBlockCfgService BizBlockCfgService;
-	
+
 	/**
 	 * 获取主索引列表数据
 	 */
 	@RequestMapping("/query")
 	@ResponseBody
-	public Map<String, Object> listIndex(PageInfo page,MpiBizBlockCfg bizBlockCfg) {
+	public Map<String, Object> listIndex(PageInfo page, MpiBizBlockCfg bizBlockCfg) {
 		Map<String, Object> datas = new HashMap<>();
-		page.setPage(page.getPage()-1);
-		List<MpiBizBlockCfg> list = BizBlockCfgService.queryForPage(bizBlockCfg, page);
+		page.setPage(page.getPage() - 1);
+		Page<MpiBizBlockCfg> ret = BizBlockCfgService.queryForPage(bizBlockCfg, page);
 		// 设置总共有多少条记录
-		datas.put(Constant.PAGE_TOTAL, page.getTotal());
+		datas.put(Constant.PAGE_TOTAL, ret.getTotalElements());
 		// 设置当前页的数据
-		datas.put(Constant.PAGE_ROWS, list);
+		datas.put(Constant.PAGE_ROWS, ret.getContent());
 		return datas;
 	}
-	
+
 	/**
 	 * 查看页面入口
 	 */
@@ -71,7 +63,7 @@ public class BlockCfgBizController {
 		mv.addObject("cfg", cfg);
 		return mv;
 	}
-	
+
 	/**
 	 * 配置列表页面入口
 	 */
@@ -86,7 +78,7 @@ public class BlockCfgBizController {
 		mv.addObject("selectJson", datas.toString());
 		return mv;
 	}
-	
+
 	/**
 	 * 添加配置
 	 */
@@ -95,7 +87,7 @@ public class BlockCfgBizController {
 	public void add(@RequestBody MpiBizBlockCfg t) {
 		BizBlockCfgService.save(t);
 	}
-	
+
 	/**
 	 * 查看页面入口
 	 */
@@ -110,7 +102,7 @@ public class BlockCfgBizController {
 		mv.addObject("cfg", cfg);
 		return mv;
 	}
-	
+
 	/**
 	 * 使配置生效
 	 */

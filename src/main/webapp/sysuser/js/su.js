@@ -8,7 +8,6 @@ $(function() {
 	closeDialog_edit();
 });
 
-/** --------------table------------------* */
 /**
  * 加载表格数据
  */
@@ -19,7 +18,6 @@ function ajaxTable() {
 			text : '添加',
 			iconCls : 'icon-add',
 			handler : function() {
-				// 点击工具栏运行的js方法
 				openDialog_add();
 			}
 		}, '-', {
@@ -35,23 +33,6 @@ function ajaxTable() {
 				removeData();
 			}
 		}],
-		singleSelect:true,//单选
-		loadMsg : '数据加载中,请稍后...',
-		onLoadError : function() {
-			alert('数据加载失败!');
-		},
-		queryParams : {// 查询条件
-		},
-		onClickRow : function(rowIndex, rowData) {
-			// 取消选择某行后高亮
-			$('#listTable').datagrid('unselectRow', rowIndex);
-		},
-		onLoadSuccess : function() {
-			var value = $('#listTable').datagrid('getData')['errorMsg'];
-			if (value != null) {
-				alert("错误消息:" + value);
-			}
-		}
 	}).datagrid('acceptChanges');
 }
 // 刷新表格
@@ -64,10 +45,7 @@ function reloadTable() {
 function setDialog_add() {
 	$('#add').dialog({
 		title : '系统用户添加',
-		modal : true, // 模式窗口：窗口背景不可操作
-		collapsible : true, // 可折叠，点击窗口右上角折叠图标将内容折叠起来
-		resizable : true, // 可拖动边框大小
-		onClose : function() { // 继承自panel的关闭事件
+		onClose : function() {
 			addReset();
 		}
 	});
@@ -106,21 +84,15 @@ function addData() {
 	}
 
 	$.ajax({
-		async : false,
-		cache : false,
 		type : 'POST',
-		dataType : "json",
 		data : {
-		   "name":$("#add_name").val(),
-		   "userName":$("#add_userName").val(),
-		   "password":$("#add_password").val(),
-		   "email":$("#add_email").val(),
-		   "sysRoleId":$("#add_role").val()
+			"name":$("#add_name").val(),
+			"userName":$("#add_userName").val(),
+			"password":$("#add_password").val(),
+			"email":$("#add_email").val(),
+			"sysRoleId":$("#add_role").val()
 		},
 		url : root + '/sysuser/su.ac?method=add',// 请求的action路径
-		error : function() {// 请求失败处理函数
-			alert('请求失败');
-		},
 		success : function(data) {
 			var messgage = "添加成功!";
 			if (data == null) {// 未返回任何消息表示添加成功
@@ -139,10 +111,7 @@ function addData() {
 // 设置弹出框的属性
 function setDialog_edit() {
 	$('#edit').dialog({
-		title : '系统用户编辑',
-		modal : true, // 模式窗口：窗口背景不可操作
-		collapsible : true, // 可折叠，点击窗口右上角折叠图标将内容折叠起来
-		resizable : true // 可拖动边框大小
+		title : '系统用户编辑'
 	});
 }
 // 打开对话框
@@ -156,17 +125,11 @@ function openDialog_edit() {
 	}	   
 	var userId = row.USER_ID; 
 	$.ajax({
-		async : false,
-		cache : false,
 		type : 'POST',
-		dataType : "json",
 		data : {
 			"userId":userId
 		},
 		url : root + '/sysuser/su.ac?method=load',// 请求的action路径
-		error : function() {// 请求失败处理函数
-			alert('请求失败');
-		},
 		success : function(data) {
 			if (data == null) {// 未返回任何消息表示添加成功
 				alert('请求失败');
@@ -212,10 +175,7 @@ function editData() {
 	}
 
 	$.ajax({
-		async : false,
-		cache : false,
 		type : 'POST',
-		dataType : "json",
 		data : {
 			"userId":$("#edit_userId").val(),
 			"name":$("#edit_name").val(),
@@ -223,9 +183,6 @@ function editData() {
 			"sysRoleId":$("#edit_role").val()			
 		},
 		url : root + '/sysuser/su.ac?method=edit',// 请求的action路径
-		error : function() {// 请求失败处理函数
-			alert('请求失败');
-		},
 		success : function(data) {
 			var messgage = "修改成功!";
 			if (data == null) {// 未返回任何消息表示添加成功
@@ -251,17 +208,11 @@ function removeData(){
 	var userId = row.USER_ID;
 	if(confirm("确认要删除用户:"+row.USER_NAME+"么?")){
 		$.ajax({
-			async : false,
-			cache : false,
 			type : 'POST',
-			dataType : "json",
 			data : {
 				"userId":userId			
 			},
 			url : root + '/sysuser/su.ac?method=del',// 请求的action路径
-			error : function() {// 请求失败处理函数
-				alert('请求失败');
-			},
 			success : function(data) {
 				var messgage = "删除成功!";
 				if (data == null) {// 未返回任何消息表示添加成功
