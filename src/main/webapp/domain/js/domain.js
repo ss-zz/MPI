@@ -46,6 +46,7 @@ function addReset() {
 	$("#add_pushAddr").val("");
 	$("#add_bookType").val("0");
 	$("#add_domainLevel").val("");
+	$("#add_message").html("");
 }
 
 // 打开对话框
@@ -87,7 +88,7 @@ function addData() {
 		url : root + '/domain/domain.ac?method=add',// 请求的action路径
 		success : function(data) {
 			var messgage = "添加成功!";
-			if (data == null) {// 未返回任何消息表示添加成功
+			if (!data) {// 未返回任何消息表示添加成功
 				addReset();
 				// 刷新列表
 				reloadTable();
@@ -119,9 +120,7 @@ function openDialog_edit(idx) {
 		data : {domainId: row.domainId},
 		url : root + '/domain/domain.ac?method=load',// 请求的action路径
 		success : function(data) {
-			if (data == null) {// 未返回任何消息表示添加成功
-				alert('请求失败');
-			}else{
+			if (data) {
 				$("#edit_domainId").val(data.domainId);
 				$("#edit_domainType").val(data.domainType);
 				$("#edit_domainDesc").val(data.domainDesc);
@@ -179,7 +178,7 @@ function editData() {
 		url : root + '/domain/domain.ac?method=edit',// 请求的action路径
 		success : function(data) {
 			var messgage = "修改成功!";
-			if (data == null) {// 未返回任何消息表示添加成功
+			if (!data) {// 未返回任何消息表示添加成功
 				// 刷新列表
 				reloadTable();
 			} else if (data.errorMsg != null) {// 返回异常信息
@@ -207,7 +206,7 @@ function removeData(idx){
 			url : root + '/domain/domain.ac?method=del',// 请求的action路径
 			success : function(data) {
 				var messgage = "删除成功!";
-				if (data == null) {// 未返回任何消息表示添加成功
+				if (!data) {// 未返回任何消息表示添加成功
 					// 刷新列表
 					reloadTable();
 				} else if (data.errorMsg != null) {// 返回异常信息
@@ -226,7 +225,6 @@ $.extend($.fn.validatebox.defaults.rules, {
 			if(value.length<5){
 				return false;
 			}
-			
 			var domainId = "";
 			if(param[1]!=undefined && param[1]!=null && param[1]!=""){
 				domainId = $(param[1]).val();
@@ -252,7 +250,7 @@ $.extend($.fn.validatebox.defaults.rules, {
 			var regex = /^\d+$/;
 			return regex.test(value);
 		},
-		message : '必须为自然数.'
+		message : '必须为自然数'
 	}
 });
 

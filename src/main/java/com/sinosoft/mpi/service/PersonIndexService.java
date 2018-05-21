@@ -18,6 +18,7 @@ import javax.cache.annotation.CacheDefaults;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
@@ -409,7 +410,8 @@ public class PersonIndexService {
 		sb.append(" i.op_style = 4 and i.mpi_pk = '" + formerPK + "' and i.field_pk in(");
 		sb.append(" select l.field_pk from mpi_index_operate l where l.op_style = 6");
 		sb.append(" 								and l.mpi_pk = '" + retiredPk + "') order by i.op_time desc");
-		List<IndexOperate> mergeLogs = jdbcTemplate.queryForList(sb.toString(), IndexOperate.class);
+		List<IndexOperate> mergeLogs = jdbcTemplate.query(sb.toString(),
+				new BeanPropertyRowMapper<IndexOperate>(IndexOperate.class));
 		// 原主索引
 		PersonIndex formerIndex = personIndexDao.findOne(formerPK);
 
@@ -435,7 +437,8 @@ public class PersonIndexService {
 		splitStr.append(" i.op_style = 6 and i.mpi_pk = '" + retiredPk + "' and i.field_pk in(");
 		splitStr.append(" select l.field_pk from mpi_person_idx_log l where l.op_style = 4");
 		splitStr.append(" 								and l.mpi_pk = '" + formerPK + "')");
-		List<IndexOperate> splitLogs = jdbcTemplate.queryForList(splitStr.toString(), IndexOperate.class);
+		List<IndexOperate> splitLogs = jdbcTemplate.query(splitStr.toString(),
+				new BeanPropertyRowMapper<IndexOperate>(IndexOperate.class));
 		if (splitLogs.size() > 0) {
 			// 获取原主索引与被拆分主索引的拆分记录
 			for (int i = 0; i < splitLogs.size(); i++) {
@@ -463,7 +466,8 @@ public class PersonIndexService {
 		sb.append(" 	and  l.op_style not in (3,6,7)");
 		sb.append(" 	and  l.op_time > '" + mergeLogs.get(0).getOpTime() + "'");
 		sb.append(" 	order by l.op_time desc");
-		List<PersonIdxLog> logs = jdbcTemplate.queryForList(sb.toString(), PersonIdxLog.class);
+		List<PersonIdxLog> logs = jdbcTemplate.query(sb.toString(),
+				new BeanPropertyRowMapper<PersonIdxLog>(PersonIdxLog.class));
 		PersonInfo personInfo = new PersonInfo();
 		if (logs.size() > 0) {
 			// 拆分点后以最新的主索引操作日志信息更新主索引
@@ -482,7 +486,8 @@ public class PersonIndexService {
 				merge_sql.append("	where l.op_style not in (4,6,7) and l.mpi_pk = '" + formerPK + "'	and");
 				merge_sql.append("	l.person_idx_log_id not in (" + logId + ")");
 				merge_sql.append("	order by l.op_time desc");
-				List<PersonIdxLog> idxLogs = jdbcTemplate.queryForList(merge_sql.toString(), PersonIdxLog.class);
+				List<PersonIdxLog> idxLogs = jdbcTemplate.query(merge_sql.toString(),
+						new BeanPropertyRowMapper<PersonIdxLog>(PersonIdxLog.class));
 				if (idxLogs.size() > 0) {
 					try {
 						personInfo = personInfoDao.findOne(idxLogs.get(0).getFieldPk());

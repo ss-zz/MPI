@@ -31,25 +31,24 @@ public class MpiIndexRegisterService {
 		DataResult<Void> result = null;
 		try {
 			// 注册人员
-			PersonInfo person = personReg.getPersonInfo();
+			PersonInfo person = personReg.getMpiPersonInfoRegister().toPersonInfo(personReg.getType());
 			// 保存数据到本地
 			personInfoService.save(person);
 			// 发送到mq
-			mqService.sendPersonInfo(person);
+			mqService.sendPersonInfo(personReg);
 
-			result = new DataResult<Void>(true,
-					"人员注册成功：pname = " + person.getNameCn() + "，personId = " + person.getFieldPk());
+			result = new DataResult<Void>(true, "【人员注册成功】中文名： " + person.getNameCn() + "，原始人员id" + person.getFieldPk());
 		} catch (ValidationException e) { // 验证异常
-			result = new DataResult<Void>(false, e.getMessage());
+			result = new DataResult<Void>(false, "【校验失败】" + e.getMessage());
 		} catch (Throwable e) { // 其他错误
 			e.printStackTrace();
-			result = new DataResult<Void>(false, "系统错误,无法完成注册人员操作");
+			result = new DataResult<Void>(false, "【注册失败】");
 		}
 		return result;
 	}
 
 	/**
-	 * 注册人员
+	 * 注册业务
 	 * 
 	 * @param personInfo
 	 * @return
@@ -58,20 +57,22 @@ public class MpiIndexRegisterService {
 		DataResult<Void> result = null;
 		try {
 			// 注册人员
-			PersonInfo person = bizReg.getPersonInfo();
+			PersonInfo person = bizReg.getMpiPersonInfoRegister().toPersonInfo(bizReg.getType());
 			personInfoService.save(person);
 			// 业务数据不处理直接发送到mq
+
+			// TODO 业务数据校验
 
 			// 发送到mq
 			mqService.sendBizRegister(bizReg);
 
-			result = new DataResult<Void>(true,
-					"业务注册成功：pname = " + person.getNameCn() + "，personId = " + person.getFieldPk());
+			result = new DataResult<Void>(true, "【业务注册成功】中文名：" + person.getNameCn() + "，原始人员id：" + person.getFieldPk()
+					+ ", 原始业务id：" + bizReg.getBizInfo().getBizId());
 		} catch (ValidationException e) { // 验证异常
-			result = new DataResult<Void>(false, e.getMessage());
+			result = new DataResult<Void>(false, "【校验失败】" + e.getMessage());
 		} catch (Throwable e) { // 其他错误
 			e.printStackTrace();
-			result = new DataResult<Void>(false, "系统错误,无法完成注册业务操作");
+			result = new DataResult<Void>(false, "【注册失败】");
 		}
 		return result;
 	}

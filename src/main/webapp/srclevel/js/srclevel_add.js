@@ -50,9 +50,9 @@ function saveMatchCfg(){
 			fieldLevel:$("#add_fieldlevel").val()
 		},
 		success : function(msg) {
-			var messgage = "添加成功!";
+			var messgage = "添加成功";
 			if (msg == null||msg=="") {// 未返回任何消息表示添加成功
-				alert(messgage);
+				showMessage(messgage);
 				$('#listTable').datagrid('reload');
 			} else {// 返回异常信息
 				messgage = msg;

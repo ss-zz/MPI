@@ -3,10 +3,11 @@ package com.sinosoft.mpi.model.biz;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * 业务主索引操作日志
@@ -17,8 +18,8 @@ public class MpiBizIdxLog implements Serializable {
 	private static final long serialVersionUID = 6936464128927712060L;
 
 	@Id
-	@Column
-	@GeneratedValue
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GeneratedValue(generator = "system-uuid")
 	private String blIdxLogId;
 	private Date blTime;
 	private String blUserId;

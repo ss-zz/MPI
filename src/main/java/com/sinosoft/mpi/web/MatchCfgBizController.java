@@ -23,7 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sinosoft.bizmatch.config.BizMatchConfig;
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
-import com.sinosoft.mpi.model.biz.MpiBizBPropertiesDesc;
+import com.sinosoft.mpi.model.biz.MpiBizPropertiesDesc;
 import com.sinosoft.mpi.model.biz.MpiBizMatchCfg;
 import com.sinosoft.mpi.model.biz.MpiBizMatchFieldCfg;
 import com.sinosoft.mpi.service.biz.BizMatchCfgService;
@@ -131,7 +131,7 @@ public class MatchCfgBizController {
 	@RequestMapping("/toAdd")
 	public ModelAndView toMatchCfgPage() {
 		// 取得居民信息 字段描述
-		List<MpiBizBPropertiesDesc> pList = CacheManager.getAll(MpiBizBPropertiesDesc.class);
+		List<MpiBizPropertiesDesc> pList = CacheManager.getAll(MpiBizPropertiesDesc.class);
 		// 取得匹配函数
 		Map<String, DistanceMetricType> metrices = StringComparisionConfig.getInstanse().getDistanceMetricTypes();
 		List<DistanceMetricType> mList = new ArrayList<DistanceMetricType>(metrices.values());

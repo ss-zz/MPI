@@ -15,8 +15,7 @@
 			<maxHistory>2</maxHistory>
 		</rollingPolicy>
 		<layout class="ch.qos.logback.classic.PatternLayout">
-			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}
-				-%msg%n
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n
 			</Pattern>
 		</layout>
 	</appender>
@@ -37,8 +36,7 @@
 			<maxHistory>2</maxHistory>
 		</rollingPolicy>
 		<layout class="ch.qos.logback.classic.PatternLayout">
-			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}
-				-%msg%n
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n
 			</Pattern>
 		</layout>
 	</appender>
@@ -48,7 +46,7 @@
 		level="DEBUG">
 		<appender-ref ref="CONSOLE" />
 	</logger>
-	<logger name="org.hibernate.type" additivity="false" level="TRACE">
+	<logger name="org.hibernate.type" additivity="false" level="DEBUG">
 		<appender-ref ref="CONSOLE" />
 	</logger>
 

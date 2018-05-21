@@ -2,7 +2,6 @@ package com.sinosoft.mpi.model.biz;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,7 +19,6 @@ public class MpiBizMatchFieldCfg implements Serializable {
 	 * id
 	 */
 	@Id
-	@Column
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	@GeneratedValue(generator = "system-uuid")
 	private String fieldCfgId;

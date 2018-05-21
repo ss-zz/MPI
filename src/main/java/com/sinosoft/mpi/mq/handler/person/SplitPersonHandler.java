@@ -1,4 +1,4 @@
-package com.sinosoft.mpi.mq.handler;
+package com.sinosoft.mpi.mq.handler.person;
 
 import java.util.List;
 

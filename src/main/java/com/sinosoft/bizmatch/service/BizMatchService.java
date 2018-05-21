@@ -15,7 +15,7 @@ import com.sinosoft.match.model.MatchField;
 import com.sinosoft.match.model.Record;
 import com.sinosoft.match.model.RecordPairBiz;
 import com.sinosoft.mpi.model.biz.MpiBizIndex;
-import com.sinosoft.mpi.model.biz.MpiBizInfo;
+import com.sinosoft.mpi.model.biz.MpiBizInfoRegister;
 import com.sinosoft.stringcomparison.service.IStringComparisonService;
 
 /**
@@ -36,7 +36,7 @@ public class BizMatchService {
 	 * @param rightRecord
 	 * @return 匹配情况
 	 */
-	public RecordPairBiz match(Record<MpiBizInfo> leftRecord, Record<MpiBizIndex> rightRecord) {
+	public RecordPairBiz match(Record<MpiBizInfoRegister> leftRecord, Record<MpiBizIndex> rightRecord) {
 		RecordPairBiz pair = new RecordPairBiz(leftRecord, rightRecord);
 		// 计算比较
 		this.scoreRecordPair(pair);
@@ -53,7 +53,7 @@ public class BizMatchService {
 	 *            参与被匹配的集合
 	 * @return 匹配结果
 	 */
-	public List<RecordPairBiz> match(Record<MpiBizInfo> leftRecord, List<Record<MpiBizIndex>> rightRecords) {
+	public List<RecordPairBiz> match(Record<MpiBizInfoRegister> leftRecord, List<Record<MpiBizIndex>> rightRecords) {
 		List<RecordPairBiz> result = new ArrayList<RecordPairBiz>(0);
 		for (Record<MpiBizIndex> rightRecord : rightRecords) {
 			RecordPairBiz pair = this.match(leftRecord, rightRecord);
@@ -107,7 +107,7 @@ public class BizMatchService {
 	 * @param rightRecord
 	 * @return 是否匹配
 	 */
-	public boolean isMatched(Record<MpiBizInfo> leftRecord, Record<MpiBizIndex> rightRecord) {
+	public boolean isMatched(Record<MpiBizInfoRegister> leftRecord, Record<MpiBizIndex> rightRecord) {
 		return MatchConfig.getInstanse().getAgreementWeightThreshold() <= this.match(leftRecord, rightRecord)
 				.getWeight();
 	}

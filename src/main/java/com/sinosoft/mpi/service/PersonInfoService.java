@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -214,7 +215,8 @@ public class PersonInfoService {
 	private PersonInfo getByPersonIdentifier(IdentifierDomain domainId, String identifier) {
 		String sql = "select * from mpi_person_info t where t.FIELD_PK in "
 				+ " ( select FIELD_PK from MPI_INDEX_IDENTIFIER_REL where PERSON_IDENTIFIER = ? and DOMAIN_ID = ? )";
-		List<PersonInfo> list = jdbcTemplate.queryForList(sql, new Object[] { identifier, domainId }, PersonInfo.class);
+		List<PersonInfo> list = jdbcTemplate.query(sql, new Object[] { identifier, domainId },
+				new BeanPropertyRowMapper<PersonInfo>(PersonInfo.class));
 		return list.size() > 0 ? list.get(0) : null;
 	}
 
@@ -273,7 +275,8 @@ public class PersonInfoService {
 		String sql = " select a.*,c.domain_id,c.unique_sign,c.domain_desc from "
 				+ " mpi_person_info a left join mpi_index_identifier_rel b on a.field_pk = b.field_pk "
 				+ " left join mpi_identifier_domain c on b.domain_id = c.domain_id where a.field_pk = ? ";
-		List<PersonInfo> datas = jdbcTemplate.queryForList(sql, new Object[] { id }, PersonInfo.class);
+		List<PersonInfo> datas = jdbcTemplate.query(sql, new Object[] { id },
+				new BeanPropertyRowMapper<PersonInfo>(PersonInfo.class));
 		return datas.size() > 0 ? datas.get(0) : null;
 	}
 
@@ -546,7 +549,8 @@ public class PersonInfoService {
 		if (count > 100) {
 			throw new BaseBussinessException("条件查询居民信息时,返回结果过多(" + count + "条)!需增加查询条件.");
 		}
-		return jdbcTemplate.queryForList(sql.toString(), args.toArray(), PersonInfo.class);
+		return jdbcTemplate.query(sql.toString(), args.toArray(),
+				new BeanPropertyRowMapper<PersonInfo>(PersonInfo.class));
 	}
 
 	/**
@@ -583,10 +587,11 @@ public class PersonInfoService {
 		String sql = page.buildPageSql(sb.toString());
 		List<PersonIndex> list = null;
 		if (type == "0") {
-			list = jdbcTemplate.queryForList(sql, new Object[] { p.getHrId(), p.getUniqueSign() }, PersonIndex.class);
+			list = jdbcTemplate.query(sql, new Object[] { p.getHrId(), p.getUniqueSign() },
+					new BeanPropertyRowMapper<PersonIndex>(PersonIndex.class));
 		} else {
-			list = jdbcTemplate.queryForList(sql, new Object[] { p.getMedicalserviceNo(), p.getUniqueSign() },
-					PersonIndex.class);
+			list = jdbcTemplate.query(sql, new Object[] { p.getMedicalserviceNo(), p.getUniqueSign() },
+					new BeanPropertyRowMapper<PersonIndex>(PersonIndex.class));
 		}
 		return list.size() > 0 ? list.get(0) : null;
 	}
@@ -613,7 +618,8 @@ public class PersonInfoService {
 		String sql = "select a.*,b.person_identifier,c.unique_sign from mpi_person_info a left join "
 				+ " mpi_index_identifier_rel b on a.field_pk = b.field_pk left join mpi_identifier_domain c "
 				+ " on b.domain_id = c.domain_id where  b.mpi_pk = ? and c.unique_sign=?";
-		return jdbcTemplate.queryForList(sql, new Object[] { indexId, domainUniqueSign }, PersonInfo.class);
+		return jdbcTemplate.query(sql, new Object[] { indexId, domainUniqueSign },
+				new BeanPropertyRowMapper<PersonInfo>(PersonInfo.class));
 	}
 
 	// 根据机构号和ID查询
@@ -623,15 +629,16 @@ public class PersonInfoService {
 		List<PersonInfo> datas = new ArrayList<>();
 		if ("0".equals(type)) {// 个人
 			sql = " select * from mpi_person_info  t where t.HR_ID= ? and t.REGISTER_ORG_CODE=?  and t.type=?";
-			datas = jdbcTemplate.queryForList(sql, new Object[] { entity.getHrId(), entity.getRegisterOrgCode(), type },
-					PersonInfo.class);
+			datas = jdbcTemplate.query(sql, new Object[] { entity.getHrId(), entity.getRegisterOrgCode(), type },
+					new BeanPropertyRowMapper<PersonInfo>(PersonInfo.class));
 
 		} else if ("1".equals(type)) {
-			datas = jdbcTemplate.queryForList(sql,
-					new Object[] { entity.getMedicalserviceNo(), entity.getRegisterOrgCode(), type }, PersonInfo.class);
+			datas = jdbcTemplate.query(sql,
+					new Object[] { entity.getMedicalserviceNo(), entity.getRegisterOrgCode(), type },
+					new BeanPropertyRowMapper<PersonInfo>(PersonInfo.class));
 		} else if ("3".equals(type)) {
-			datas = jdbcTemplate.queryForList(sql,
-					new Object[] { entity.getPatientId(), entity.getRegisterOrgCode(), type }, PersonInfo.class);
+			datas = jdbcTemplate.query(sql, new Object[] { entity.getPatientId(), entity.getRegisterOrgCode(), type },
+					new BeanPropertyRowMapper<PersonInfo>(PersonInfo.class));
 		}
 		return datas.size() > 0 ? datas.get(0) : null;
 	}
@@ -726,8 +733,6 @@ public class PersonInfoService {
 					throw new ValidationException("居民信息RelationPk=null ,域标识为:" + t.getUniqueSign() + ",居民健康档案号为:"
 							+ t.getHrId() + ",居民医疗服务编号为:" + t.getMedicalserviceNo() + ".");
 				}
-
-				System.out.println("getRELATION_PK:" + t.getRelationPk());
 
 				Map<String, Object> realtionPerson = findById(t.getRelationPk(), t.getRegisterOrgCode(), t.getType());
 				if (realtionPerson != null) {

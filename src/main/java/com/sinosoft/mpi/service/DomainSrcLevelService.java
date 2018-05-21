@@ -1,6 +1,7 @@
 package com.sinosoft.mpi.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ public class DomainSrcLevelService {
 	 * @param t
 	 */
 	public void save(DomainSrcLevel t) {
+		t.setCreateDate(new Date());
 		domainSrcLevelDao.save(t);
 	}
 
@@ -48,6 +50,7 @@ public class DomainSrcLevelService {
 	 * @param t
 	 */
 	public void update(DomainSrcLevel t) {
+		t.setUpdateDate(new Date());
 		domainSrcLevelDao.save(t);
 	}
 

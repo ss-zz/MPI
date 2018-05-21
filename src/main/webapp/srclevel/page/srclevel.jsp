@@ -5,7 +5,8 @@
 <head>
 <%@include file="/common/page/master.jsp"%>
 <script>
-var domainid='${param.domainid == null ? request.domainid : param.domainid }';
+var domainId='${domainId}';
+var uniqueSign='${uniqueSign}';
 var SELECT_JSON = ${selectJson};
 </script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/srclevel/js/srclevel_add.js"></script>
@@ -13,12 +14,11 @@ var SELECT_JSON = ${selectJson};
 
 </head>
 <body>
-<div class="easyui-panel" title="管理字段数据源级别" id="table_add" onkeydown="if(event.keyCode==13){editData();}"
+<div class="easyui-panel" id="table_add" onkeydown="if(event.keyCode==13){editData();}"
 	style="padding: 10px;">
-	<label for="add_domainSelect">业务唯一标识:</label>
-	<select id="add_domainSelect"></select>
-	&nbsp; &nbsp; &nbsp;
-	<label for="add_fieldSelect">字段名称:</label>
+	<h1>【${domain.domainDesc }】字段数据源级别管理</h1>
+	<select id="add_domainSelect" disabled style="display: none;"></select>
+	<label for="add_fieldSelect">字段:</label>
 	<select id="add_fieldSelect">
 	</select>
 	&nbsp; &nbsp; &nbsp;<label>字段数据源级别：</label>
@@ -31,14 +31,13 @@ var SELECT_JSON = ${selectJson};
 		<option value="4">4级</option>
 		<option value="5">5级</option>
 	</select>
-	<br/><br/>
 	<a onclick="saveMatchCfg()" class="easyui-linkbutton" iconCls="icon-save">添加</a>
 	<a onclick="resetAllData()" class="easyui-linkbutton" iconCls="icon-reload">重置</a>
 </div>
 <br/>
 <!-- 表格 -->
 <table id="listTable"
-		title="已配置的业务字段数据源级别"
+		title="已配置的字段数据源级别"
 		idField="id" 
 		url="${pageContext.request.contextPath}/domainsrclevel/srclevel.ac?method=queryByID" >
 	<thead>
@@ -47,7 +46,6 @@ var SELECT_JSON = ${selectJson};
 			<th field="fieldName"  width="100">字段名称</th>
 			<th field="fieldDesc"  width="100">字段描述</th>
 			<th field="fieldLevel"  width="100">字段数据源级别</th>
-			<th field="createDate"  width="100">创建时间</th>
 		</tr>
 	</thead>
 </table>

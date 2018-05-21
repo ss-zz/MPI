@@ -1,6 +1,7 @@
 package com.sinosoft.mpi.web;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,14 +90,18 @@ public class DomainSrcLevelController {
 	@RequestMapping(params = "method=toAdd")
 	public ModelAndView toSrcLevelPage(String domainId) {
 		// 取得居民信息 字段描述
-		List<IdentifierDomain> domainlist = identifierDomainService.queryByUniqueSign(domainId);
+		List<IdentifierDomain> domainlist = new ArrayList<IdentifierDomain>();
+		IdentifierDomain domain = identifierDomainService.getObject(domainId);
+		domainlist.add(domain);
 		List<PersonPropertiesDesc> pList = CacheManager.getAll(PersonPropertiesDesc.class);
 		Map<String, Object> datas = new HashMap<>();
 		// 字段属性
 		datas.put("pList", pList);
 		datas.put("domainList", domainlist);
-		datas.put("domainid", domainId);
 		ModelAndView mv = new ModelAndView("/srclevel/page/srclevel");
+		mv.addObject("domainId", domainId);
+		mv.addObject("uniqueSign", domain.getUniqueSign());
+		mv.addObject("domain", domain);
 		try {
 			mv.addObject("selectJson", om.writeValueAsString(datas));
 		} catch (JsonProcessingException e) {
@@ -112,29 +117,9 @@ public class DomainSrcLevelController {
 	 */
 	@RequestMapping(params = "method=del")
 	@ResponseBody
-	public void deleteSrclevel(DomainSrcLevel t) {
+	public Object deleteSrclevel(DomainSrcLevel t) {
 		domainSrcLevelService.delete(t);
-	}
-
-	/**
-	 * 配置列表页面入口
-	 */
-	@RequestMapping(params = "method=toEdit")
-	public ModelAndView toEdit(DomainSrcLevel t) {
-		Map<String, Object> datas = new HashMap<>();
-		// 取得居民信息 字段描述
-		List<IdentifierDomain> domainlist = identifierDomainService.queryAll();
-		List<PersonPropertiesDesc> pList = CacheManager.getAll(PersonPropertiesDesc.class);
-		// 字段属性
-		datas.put("pList", pList);
-		datas.put("domainList", domainlist);
-		ModelAndView mv = new ModelAndView("/srclevel/page/srclevel_edit");
-		try {
-			mv.addObject("selectJson", om.writeValueAsString(datas));
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		return mv;
+		return new HashMap<>();
 	}
 
 	/**

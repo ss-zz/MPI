@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <basic-blocking xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="blocking.xsd">
+
+	<!-- 人员初筛默认配置 -->
 	<blocking-rounds>
 
+		<!-- 身份证号 -->
 		<blocking-round>
 			<blocking-fields>
 				<blocking-field db-field="ID_NO"
@@ -12,6 +15,7 @@
 			</blocking-fields>
 		</blocking-round>
 
+		<!-- 身份证号 -->
 		<blocking-round>
 			<blocking-fields>
 				<blocking-field db-field="ID_NO"
@@ -21,6 +25,7 @@
 			</blocking-fields>
 		</blocking-round>
 
+		<!-- 卡号 -->
 		<blocking-round>
 			<blocking-fields>
 				<blocking-field db-field="CARD_NO">
@@ -29,6 +34,7 @@
 			</blocking-fields>
 		</blocking-round>
 
+		<!-- 新农合卡号 -->
 		<blocking-round>
 			<blocking-fields>
 				<blocking-field db-field="NH_CARD">
@@ -46,6 +52,7 @@
 			</blocking-fields>
 		</blocking-round>
 
+		<!-- 城乡居民健康档案编号 -->
 		<blocking-round>
 			<blocking-fields>
 				<blocking-field db-field="HR_ID">
@@ -53,18 +60,6 @@
 				</blocking-field>
 			</blocking-fields>
 		</blocking-round>
-
-		<!--医疗服务编号 -->
-		<!-- <blocking-round> <blocking-fields> <blocking-field db-field="MEDICALSERVICE_NO"> 
-			<field-name>MEDICALSERVICE_NO</field-name> </blocking-field> </blocking-fields> 
-			</blocking-round> <blocking-round> <blocking-fields> <blocking-field db-field="NAME_CN"> 
-			<field-name>NAME_CN</field-name> </blocking-field> <blocking-field db-field="GENDER_CD"> 
-			<field-name>GENDER_CD</field-name> </blocking-field> <blocking-field db-field="BIRTH_DATE"> 
-			<field-name>BIRTH_DATE</field-name> </blocking-field> <blocking-field db-field="NATIONALITY_CD"> 
-			<field-name>NATIONALITY_CD</field-name> </blocking-field> </blocking-fields> 
-			</blocking-round> -->
-
-
 
 	</blocking-rounds>
 </basic-blocking>

@@ -1,6 +1,7 @@
 package com.sinosoft.mpi.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -57,12 +58,12 @@ public class DomainSrcLevel implements Serializable {
 	/**
 	 * 数据创建时间
 	 */
-	private String createDate;
+	private Date createDate;
 
 	/**
 	 * 数据更新时间
 	 */
-	private String updateDate;
+	private Date updateDate;
 
 	public String getId() {
 		return id;
@@ -120,19 +121,19 @@ public class DomainSrcLevel implements Serializable {
 		this.fieldLevel = fieldLevel;
 	}
 
-	public String getCreateDate() {
+	public Date getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(String createDate) {
+	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
 
-	public String getUpdateDate() {
+	public Date getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdateDate(String updateDate) {
+	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
 

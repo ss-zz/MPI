@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -121,7 +122,8 @@ public class SysUserService {
 	public SysRole getSysRoleByUser(SysUser user) {
 		String sql = " select * from mpi_sys_role where sys_role_id in ( select "
 				+ " sys_role_id from mpi_sys_user where user_id = ? ) ";
-		List<SysRole> list = jdbcTemplate.queryForList(sql, new Object[] { user.getUserId() }, SysRole.class);
+		List<SysRole> list = jdbcTemplate.query(sql, new Object[] { user.getUserId() },
+				new BeanPropertyRowMapper<SysRole>(SysRole.class));
 		return list.size() > 0 ? list.get(0) : null;
 	}
 

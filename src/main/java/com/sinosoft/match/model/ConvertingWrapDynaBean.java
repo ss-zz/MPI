@@ -6,11 +6,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import com.google.common.base.CaseFormat;
 
 public class ConvertingWrapDynaBean extends org.apache.commons.beanutils.ConvertingWrapDynaBean {
 	private static final long serialVersionUID = -370897935825063946L;
@@ -24,6 +27,11 @@ public class ConvertingWrapDynaBean extends org.apache.commons.beanutils.Convert
 	public Object get(String name) {
 		Object value = null;
 		try {
+
+			// 属性转换为小写驼峰（仅大写+_组成的装换）
+			if (name != null && Pattern.matches("[A-Z_]+", name)) {
+				name = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name.toLowerCase());
+			}
 			value = PropertyUtils.getNestedProperty(instance, name);
 		} catch (InvocationTargetException ite) {
 			Throwable cause = ite.getTargetException();
