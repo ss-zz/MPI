@@ -17,11 +17,13 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.block.config.BlockConfig;
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.dao.mpi.BlockCfgDao;
 import com.sinosoft.mpi.dao.mpi.BlockGroupDao;
+import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.BlockCfg;
 import com.sinosoft.mpi.model.BlockGroup;
 import com.sinosoft.mpi.model.code.PersonPropertiesDesc;
@@ -83,12 +85,32 @@ public class BlockCfgService {
 	}
 
 	/**
-	 * 删除
+	 * 根据id删除
 	 * 
-	 * @param t
+	 * @param id
 	 */
-	public void delete(BlockCfg t) {
-		blockCfgDao.delete(t);
+	@Transactional
+	public void deleteById(String id) {
+		if (canDelete(id)) {
+			blockGroupDao.deleteByBolckId(id);
+			blockCfgDao.delete(id);
+		} else {
+			throw new ValidationException("不能删除生效中的配置");
+		}
+	}
+
+	/**
+	 * 是否允许删除
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private boolean canDelete(String id) {
+		BlockCfg item = getObject(id);
+		if (item != null && item.getState() == "1") {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -133,6 +155,7 @@ public class BlockCfgService {
 	 * @param cfgId
 	 *            配置id
 	 */
+	@Transactional
 	public void updateEffect(String cfgId) {
 		blockCfgDao.uneffectAll();
 		blockCfgDao.effect(cfgId);

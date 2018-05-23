@@ -11,9 +11,9 @@
 		<caption>初筛[<span>${cfg.blockDesc }</span>]详情</caption>
 		<tbody>
 			<tr>
-				<td>创建时间:&nbsp;${cfg.createDate }</td>		
+				<td>创建时间:&nbsp;${cfg.createDate }</td>
 				<td>是否生效:&nbsp;<c:if test="${cfg.state=='1' }">已生效</c:if><c:if test="${cfg.state!='1' }">未生效</c:if></td>
-			</tr>		
+			</tr>
 		</tbody>
 	</table>
 	<br/>
@@ -30,11 +30,11 @@
 			<tr>
 				<td>${field.propertyCnName }</td>		
 				<td>${field.funName }<c:if test="${field.funName==null }">无</c:if></td>
-			</tr>		
+			</tr>
 		</c:forEach>
 		</tbody>
 	</table>
-	<br/>		
+	<br/>
 	</c:forEach>
 </body>
 </html>

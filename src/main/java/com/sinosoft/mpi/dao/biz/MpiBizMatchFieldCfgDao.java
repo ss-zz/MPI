@@ -21,4 +21,12 @@ public interface MpiBizMatchFieldCfgDao
 	 */
 	List<MpiBizMatchFieldCfg> findByConfigId(String configId);
 
+	/**
+	 * 根据configId删除
+	 * 
+	 * @param configId
+	 * @return
+	 */
+	long deleteByConfigId(String configId);
+
 }

@@ -1,12 +1,12 @@
 var PAGE_INFO = {
-    data:[],
-    total:0,
-    start:0,
-    end:0,
-    selectedIndexIds:[]
+	data:[],
+	total:0,
+	start:0,
+	end:0,
+	selectedIndexIds:[]
 };
 
-$(function() {	
+$(function() {
 	// 初始化
 	init_fun();
 	// 初始化摘要窗口
@@ -24,13 +24,6 @@ function init_fun(){
 
 	// 渲染居民和字段名
 	renderPersonInfo();
-	
-/*	// 渲染分页信息
-	renderPageInfo();
-	// 翻页按钮控制
-	showHidePageBtn();
-	// 查询数据
-	queryData(PAGE_INFO.start,PAGE_INFO.end,processData);*/
 	
 }
 
@@ -66,24 +59,6 @@ function addCellData(rowid,startCell,datas){
 		tr.children().get(startCell+index).innerHTML=val;
 	});
 }
-
-
-/**
- * 锁定按钮
- */
-function lockBtn(btn){
-    $(btn).unbind('click').removeAttr('onclick');
-    $(btn).attr("disabled",true);  
-}
-
-/**
- * 解锁按钮
- */
-function unlockBtn(btn,handler){
-    $(btn).bind("click",handler);
-    $(btn).attr("disabled",false);      
-}
-
 
 /**
  * 队列操作
@@ -146,12 +121,10 @@ function processDataClean(data){
  */
 function renderPersonInfo(){
 	$.each(BASE_DATAS.fields,function(index,val){
-		console.dir(val.codeId);
-		console.dir(val.codeName);
 		buildTr("data_show_table",val.codeId,10,true);
 		addCellData(val.codeId,0,[
-		    val.codeName,
-		    BASE_DATAS.person[val.codeId]
+			val.codeName,
+			BASE_DATAS.person[val.codeId]
 		]);
 	});
 }
@@ -178,8 +151,8 @@ function renderIndexInfo(){
 		for(var i = 0 ; i < BASE_DATAS.fields.length ; i++){
 			var field = BASE_DATAS.fields[i];
 			addCellData(field.codeId,(2+idx*2),[
-			    matchDegreeToPercent(fieldDegrees[field.codeId]),
-			    index[field.codeId]
+				matchDegreeToPercent(fieldDegrees[field.codeId]),
+				index[field.codeId]
 			]);
 		}
 	});	
@@ -278,27 +251,21 @@ function Backward(){
  * @param {Boolean} headInsert 是否头部插入数据
  */
 function queryData(start,end,handler,headInsert){
-    $.ajax({
-        async : false,
-        cache : false,
-        type : 'POST',
-        dataType : "json",
-        data : {
-            "personId":BASE_DATAS.person.FIELD_PK,
-            "start":start,
-            "end":end
-        },
-        url : root + '/manual/manual.ac?method=matchList',// 请求的action路径
-        error : function() {// 请求失败处理函数
-            alert('请求失败');
-        },
-        success : function(data) {
-        	var hi = false;
-        	if(headInsert)
-        		hi = headInsert;
-        	handler(data,hi);
-        }
-    });
+	$.ajax({
+		url : root + '/manual/manual.ac?method=matchList',// 请求的action路径
+		type : 'POST',
+		data : {
+			"personId":BASE_DATAS.person.FIELD_PK,
+			"start":start,
+			"end":end
+		},
+		success : function(data) {
+			var hi = false;
+			if(headInsert)
+				hi = headInsert;
+			handler(data,hi);
+		}
+	});
 }
 
 /**
@@ -311,24 +278,18 @@ function queryDataByIndexId(handler){
 		handler([]);
 		return;
 	}
-    $.ajax({
-        async : false,
-        cache : false,
-        type : 'POST',
-        dataType : "json",
-        traditional:true,
-        data : {
-            "personid":BASE_DATAS.person.FIELD_PK,
-            "idxIds":PAGE_INFO.selectedIndexIds
-        },
-        url : root + '/manual/manual.ac?method=matchListByIds',// 请求的action路径
-        error : function() {// 请求失败处理函数
-            alert('请求失败');
-        },
-        success : function(data) {
-        	handler(data);
-        }
-    });
+	$.ajax({
+		url : root + '/manual/manual.ac?method=matchListByIds',
+		type : 'POST',
+		traditional: true,
+		data : {
+			"personid":BASE_DATAS.person.FIELD_PK,
+			"idxIds":PAGE_INFO.selectedIndexIds
+		},
+		success : function(data) {
+			handler(data);
+		}
+	});
 }
 
 /**
@@ -337,98 +298,52 @@ function queryDataByIndexId(handler){
  * @param {String} indexName 索引姓名
  */
 function addToIndex(indexId,indexName){
-	if(!confirm("确认将居民["+BASE_DATAS.person.name+"]合并到索引["+indexName+"]下么?"))
-		return;
-	
-    $.ajax({
-        async : false,
-        cache : false,
-        type : 'POST',
-        dataType : "json",
-        data : {
-            "opId":BASE_DATAS.opId,
-            "personId":BASE_DATAS.person.personId,
-            "indexId":indexId
-        },
-        url : root + '/manual/manual.ac?method=addToIndex',// 请求的action路径
-        error : function() {// 请求失败处理函数
-            alert('请求失败');
-         // 解锁按钮
-            unlockBtn("#add_to_index_btn_"+indexId,addToIndex);
-        },
-        success : function(data) {
-            if (data == null || data == "") {// 未返回任何消息表示添加成功
-            	alert("操作成功!");
-            	// 关闭本tab 刷新原窗口列表
-            	goBackClose();
-            } else {// 返回异常信息
-            	alert(data);
-                // 合并失败 解锁按钮
-                unlockBtn("#add_to_index_btn_"+indexId,addToIndex);
-            }
-        }
-    });
+	confirm("确认将居民["+BASE_DATAS.person.name+"]合并到索引["+indexName+"]下么?", function(){
+		$.ajax({
+			url : root + '/manual/manual.ac?method=addToIndex',
+			type : 'POST',
+			data : {
+				"opId":BASE_DATAS.opId,
+				"personId":BASE_DATAS.person.personId,
+				"indexId":indexId
+			},
+			success : function(data) {
+				showMessage("操作成功!");
+				goBackClose();
+			}
+		});
+	})
+
 }
 
 /**
  * 生成新索引
  */
 function addNewIndex(){
-	if(!confirm("请确认新建索引"))
-		return;
-	
-    // 锁定按钮防止重复点击
-    lockBtn("#add_new_index_btn");
-    
-    $.ajax({
-        async : false,
-        cache : false,
-        type : 'POST',
-        dataType : "text",
-        data : {
-            "opId":BASE_DATAS.opId,
-            "personId":BASE_DATAS.person.personId
-        },
-        url : root + '/manual/manual.ac?method=addNewIndex',// 请求的action路径
-        error : function() {// 请求失败处理函数
-            alert('请求失败');
-            // 解锁按钮
-            unlockBtn("#add_new_index_btn",addNewIndex);
-        },
-        success : function(data) {
-            if (data == null || data == "") {// 未返回任何消息表示添加成功
-            	alert("操作成功!");
-            	// 关闭本tab 刷新原窗口列表
-            	goBackClose();
-            } else {// 返回异常信息
-            	alert(data);
-                // 合并失败 解锁按钮
-                unlockBtn("#add_new_index_btn",addNewIndex);
-            }
-        }
-    });
+	confirm("确认新建索引?", function(){
+		$.ajax({
+			url : root + '/manual/manual.ac?method=addNewIndex',
+			type : 'POST',
+			data : {
+				"opId":BASE_DATAS.opId,
+				"personId":BASE_DATAS.person.personId
+			},
+			success : function(data) {
+				showMessage("操作成功");
+				goBackClose();
+			}
+		});
+	})
+
 }
 
 /**
  * 关闭页面并返回
  */
 function goBackClose(){
-	var tabId = 'tabId_ma';
-	var title = '人工审核记录';
-	var url = root+'/manual/page/add.jsp';
-	var name = 'iframe_'+tabId;
-	//如果当前id的tab不存在则创建一个tab
-	if(parent.$("#"+tabId).html()==null){		
-		parent.$('#centerTab').tabs('add',{
-			title: title,         
-			closable:true,
-			cache : false,
-			//注：使用iframe即可防止同一个页面出现js和css冲突的问题
-			content : '<iframe name="'+name+'" id="'+tabId+'" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-		});
-	}else{
-		parent.tabCallPass(name,"reloadTable");
-	}
+	backTab('tabId_ma', '人工审核记录', root+'/manual/page/add.jsp', function(){
+		parent.tabCallPass("iframe_tabId_ma", "reloadTable");
+	});
 	parent.$('#centerTab').tabs('close','查看匹配结果');
 }
 
@@ -454,33 +369,25 @@ function matchDegreeToPercent(degree){
  * 判断字符串是否是数字
  */
 function isNumeric(str){ 
-        return (str.search(/^[\+\-]?\d+\.?\d*$/)==0);
+	return (str.search(/^[\+\-]?\d+\.?\d*$/)==0);
 }
 
-//========================一下是窗口定义
+//========================窗口定义
 /**
  * 定义摘要窗口
  */
 function setWindow_view(){
-    $('#window_view').window({  
-        width:800,  
-        height:500,  
-        modal:true, // 模态
-        closed:true, // 初始关闭
-        collapsible:false, // 不可卷起
-        minimizable:false, // 不可最小化
-        maximizable:true, // 可以最大化
-        closable:true, //可以关闭
-        draggable:true, // 可拖拽
-        resizable:true // 可改变大小        
-    });     
+	$('#window_view').window({
+		width:800,
+		height:500
+	});
 }
 
 /**
  * 关闭摘要窗口方法
  */
 function closeWindow_view(){
-    $("#window_view").window('close');
+	$("#window_view").window('close');
 }
 
 /**
@@ -490,22 +397,15 @@ function reloadDetailTable() {
 	$('#detailTable').datagrid('reload');
 }
 
-function openSummaryWin(){	
+// 打开摘要窗口
+function openSummaryWin(){
 	// 加载表格
 	$('#detailTable').datagrid({
 		toolbar :"#detailTable_toolbar",
-        singleSelect:false,//单选
-        pagination:false,//分页
-		loadMsg : '数据加载中,请稍后...',
-		onLoadError : function() {
-			alert('数据加载失败!');
-		},
-		queryParams : {// 查询条件
+		singleSelect: false,
+		pagination: false,
+		queryParams : {
 			"personId":BASE_DATAS.person.personId
-		},
-		onClickRow : function(rowIndex, rowData) {
-			// 取消选择某行后高亮
-			$('#listTable').datagrid('unselectRow', rowIndex);
 		},
 		onSelect : rowSelectEvent,
 		onUnselect : rowSelectEvent,
@@ -517,9 +417,9 @@ function openSummaryWin(){
 			// 去掉全选
 			$('#detailTable').parent().find("div .datagrid-header-check").children("input[type='checkbox']").eq(0).attr("disabled", true);
 		}
-	}).datagrid('acceptChanges');	
+	}).datagrid('acceptChanges');
 
-     $("#window_view").window('open');
+	$("#window_view").window('open');
 }
 
 /**
@@ -562,4 +462,3 @@ function moveRightFun(idx){
 	PAGE_INFO.data[idx+1] = tmp;
 	renderIndexInfo();	
 }
-

@@ -40,7 +40,6 @@ function reloadTable() {
 	$('#listTable').datagrid('reload');
 }
 
-/** --------------添加操作弹出框------------------* */
 // 设置弹出框的属性
 function setDialog_add() {
 	$('#add').dialog({
@@ -73,7 +72,6 @@ function addData() {
 	$('#table_add input').each(function() {
 		if ($(this).attr('required') || $(this).attr('validType')) {
 			if (!$(this).validatebox('isValid')) {
-				// 如果验证不通过，则返回false
 				validateResult = false;
 				return;
 			}
@@ -84,6 +82,7 @@ function addData() {
 	}
 
 	$.ajax({
+		url : root + '/sysuser/su.ac?method=add',
 		type : 'POST',
 		data : {
 			"name":$("#add_name").val(),
@@ -92,22 +91,14 @@ function addData() {
 			"email":$("#add_email").val(),
 			"sysRoleId":$("#add_role").val()
 		},
-		url : root + '/sysuser/su.ac?method=add',// 请求的action路径
 		success : function(data) {
-			var messgage = "添加成功!";
-			if (data == null) {// 未返回任何消息表示添加成功
-				addReset();
-				// 刷新列表
-				reloadTable();
-			} else if (data.errorMsg != null) {// 返回异常信息
-				messgage = data.errorMsg;
-			}
-			$("#add_message").html(messgage);
+			showMessage("添加成功");
+			addReset();
+			reloadTable();
 		}
 	});
 }
 
-/** --------------编辑操作弹出框------------------* */
 // 设置弹出框的属性
 function setDialog_edit() {
 	$('#edit').dialog({
@@ -122,16 +113,16 @@ function openDialog_edit() {
 	if(row==undefined || row==null){
 		alert("请选择要修改的用户!");
 		return;
-	}	   
+	}
 	var userId = row.USER_ID; 
 	$.ajax({
+		url : root + '/sysuser/su.ac?method=load',
 		type : 'POST',
 		data : {
 			"userId":userId
 		},
-		url : root + '/sysuser/su.ac?method=load',// 请求的action路径
 		success : function(data) {
-			if (data == null) {// 未返回任何消息表示添加成功
+			if (!data) {
 				alert('请求失败');
 			}else{
 				$("#edit_name").val(data.name);
@@ -175,29 +166,22 @@ function editData() {
 	}
 
 	$.ajax({
+		url : root + '/sysuser/su.ac?method=edit',
 		type : 'POST',
 		data : {
 			"userId":$("#edit_userId").val(),
 			"name":$("#edit_name").val(),
 			"email":$("#edit_email").val(),
-			"sysRoleId":$("#edit_role").val()			
+			"sysRoleId":$("#edit_role").val()
 		},
-		url : root + '/sysuser/su.ac?method=edit',// 请求的action路径
 		success : function(data) {
-			var messgage = "修改成功!";
-			if (data == null) {// 未返回任何消息表示添加成功
-				// 刷新列表
-				reloadTable();
-			} else if (data.errorMsg != null) {// 返回异常信息
-				messgage = data.errorMsg;
-			}
-			$("#edit_message").html(messgage);
+			showMessage("修改成功");
+			reloadTable();
 		}
 	});
 }
 
 
-/** --------------编辑操作弹出框------------------* */
 //删除用户方法
 function removeData(){
 	var row = $('#listTable').datagrid('getSelected');
@@ -206,25 +190,19 @@ function removeData(){
 		return;
 	}	 
 	var userId = row.USER_ID;
-	if(confirm("确认要删除用户:"+row.USER_NAME+"么?")){
+	confirm("确认删除用户【"+row.USER_NAME+"】?", function(){
 		$.ajax({
+			url : root + '/sysuser/su.ac?method=del',
 			type : 'POST',
 			data : {
-				"userId":userId			
+				"userId":userId
 			},
-			url : root + '/sysuser/su.ac?method=del',// 请求的action路径
 			success : function(data) {
-				var messgage = "删除成功!";
-				if (data == null) {// 未返回任何消息表示添加成功
-					// 刷新列表
-					reloadTable();
-				} else if (data.errorMsg != null) {// 返回异常信息
-					messgage = data.errorMsg;
-				}
-				alert(messgage);
+				showMessage("删除成功");
+				reloadTable();
 			}
-		});		
-	}
+		});
+	})
 }
 
 $.extend($.fn.validatebox.defaults.rules, {

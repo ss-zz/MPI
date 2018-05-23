@@ -1,4 +1,3 @@
-var INUSED_FIELDS={};
 $(function() {
 	// 加载表格数据
 	ajaxTable();
@@ -17,15 +16,17 @@ function ajaxTable() {
 				removeData();
 			}
 		}],
-		queryParams : {// 查询条件
+		queryParams : {
 			domainId: uniqueSign
 		}
 	}).datagrid('acceptChanges');
 }
+
 // 刷新表格
 function reloadTable() {
 	$('#listTable').datagrid('reload');
 }
+
 //删除
 function removeData(){
 	var row = $('#listTable').datagrid('getSelected');
@@ -35,7 +36,7 @@ function removeData(){
 	}	 
 	var id = row.id;
 	var field_name = row.fieldDesc;
-	if(confirm("确认要删除:"+row.fieldDesc+"么?")){
+	confirm("确认删除:"+row.fieldDesc+"？删除之后不可撤销。", function(){
 		$.ajax({
 			url : root + '/domainsrclevel/srclevel.ac?method=del',// 请求的action路径
 			type : 'POST',
@@ -46,5 +47,5 @@ function removeData(){
 				showMessage("删除成功");
 			}
 		});
-	}
+	})
 }

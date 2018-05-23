@@ -25,7 +25,7 @@ import com.sinosoft.mpi.ws.domain.DataResult;
 @SpringBootTest(classes = MpiApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BizRegisterTests {
 
-	private static final String SYSTEM_ID = "005471944";
+	private static final String SYSTEM_ID = "xdgykzs";
 	private static final Short DATA_STATE = Short.valueOf("0");
 
 	@Resource
@@ -45,9 +45,9 @@ public class BizRegisterTests {
 		biz.setMpiPersonInfoRegister(getDemoPerson());
 		biz.setBizInfo(getDemoBiz());
 
-		int max = 1;
+		int max = 10;
 		for (int i = 0; i < max; i++) {
-			DataResult<Void> ret = mpiIndexRegisterService.registeBiz(biz);
+			DataResult<Void> ret = mpiIndexRegisterService.registerBiz(biz);
 			System.out.println(ret);
 		}
 	}

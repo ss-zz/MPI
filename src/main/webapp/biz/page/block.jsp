@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<a href="#" onclick="openCurrentPage();" class="easyui-linkbutton" data-options="selected:true">查看当前初筛配置</a>
+<a href="#" onclick="openCurrentPage();" class="easyui-linkbutton" data-options="selected:true">查看当前配置</a>
 <br/>
 <br/>
 <!-- 表格 -->
@@ -18,10 +18,10 @@
 		url="${pageContext.request.contextPath}/blockCfgbiz/query" >
 	<thead>
 		<tr align="center">
-			<th field="blockDesc"  width="400">配置描述</th>
-			<th field="createDate"  width="100">创建日期</th>
-			<th field="state"  width="50" formatter="buildState">状态</th>
-			<th field="bolckId"  width="150" formatter="buildOptLink">操作</th>
+			<th field="blockDesc" width="400">配置描述</th>
+			<th field="createDate" width="100">创建日期</th>
+			<th field="state" width="50" formatter="buildState">状态</th>
+			<th field="bolckId" width="150" formatter="buildOptLink">操作</th>
 		</tr>
 	</thead>
 </table>

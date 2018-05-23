@@ -28,12 +28,11 @@ function reloadTable() {
 	$('#listTable').datagrid('reload');
 }
 
-/** --------------添加操作弹出框------------------* */
 // 设置弹出框的属性
 function setDialog_add() {
 	$('#add').dialog({
 		title : '业务系统添加',
-		onClose : function() { // 继承自panel的关闭事件
+		onClose : function() {
 			addReset();
 		}
 	});
@@ -76,6 +75,7 @@ function addData() {
 	}
 
 	$.ajax({
+		url : root + '/domain/domain.ac?method=add',
 		type : 'POST',
 		data : {
 			domainType:$("#add_domainType").val(),
@@ -85,22 +85,15 @@ function addData() {
 			bookType:$("#add_bookType").val(),
 			domainLevel:$("#add_domainLevel").val()
 		},
-		url : root + '/domain/domain.ac?method=add',// 请求的action路径
 		success : function(data) {
-			var messgage = "添加成功!";
-			if (!data) {// 未返回任何消息表示添加成功
-				addReset();
-				// 刷新列表
-				reloadTable();
-			} else if (data.errorMsg != null) {// 返回异常信息
-				messgage = data.errorMsg;
-			}
-			$("#add_message").html(messgage);
+			showMessage("添加成功");
+			closeDialog_add();
+			addReset();
+			reloadTable();
 		}
 	});
 }
 
-/** --------------编辑操作弹出框------------------* */
 // 设置弹出框的属性
 function setDialog_edit() {
 	$('#edit').dialog({
@@ -111,14 +104,14 @@ function setDialog_edit() {
 function openDialog_edit(idx) {
 	editReset();
 	var row = getRowByIdx(idx);
-	if(row==undefined || row==null){
+	if(!row){
 		alert("请选择要修改的业务系统!");
 		return;
 	}	
 	$.ajax({
+		url : root + '/domain/domain.ac?method=load',
 		type : 'POST',
 		data : {domainId: row.domainId},
-		url : root + '/domain/domain.ac?method=load',// 请求的action路径
 		success : function(data) {
 			if (data) {
 				$("#edit_domainId").val(data.domainId);
@@ -165,6 +158,7 @@ function editData() {
 	}
 
 	$.ajax({
+		url : root + '/domain/domain.ac?method=edit',
 		type : 'POST',
 		data : {
 			"domainId":$("#edit_domainId").val(),
@@ -175,16 +169,10 @@ function editData() {
 			"bookType":$("#edit_bookType").val(),
 			"domainLevel":$("#edit_domainLevel").val()
 		},
-		url : root + '/domain/domain.ac?method=edit',// 请求的action路径
 		success : function(data) {
-			var messgage = "修改成功!";
-			if (!data) {// 未返回任何消息表示添加成功
-				// 刷新列表
-				reloadTable();
-			} else if (data.errorMsg != null) {// 返回异常信息
-				messgage = data.errorMsg;
-			}
-			$("#edit_message").html(messgage);
+			showMessage("修改成功");
+			reloadTable();
+			closeDialog_edit();
 		}
 	});
 }
@@ -192,30 +180,22 @@ function editData() {
 //删除方法
 function removeData(idx){
 	var row = getRowByIdx(idx);
-	if(row==undefined || row==null){
+	if(!row){
 		alert("请选择要删除的业务系统");
 		return;
 	}	 
 	var domainId = row.domainId;
-	if(confirm("确认要删除业务系统【"+row.domainDesc+"】?")){
+	confirm("确认要删除业务系统【"+row.domainDesc+"】?", function(){
 		$.ajax({
+			url : root + '/domain/domain.ac?method=del',
 			type : 'POST',
-			data : {
-				domainId: domainId
-			},
-			url : root + '/domain/domain.ac?method=del',// 请求的action路径
+			data : {domainId: domainId},
 			success : function(data) {
-				var messgage = "删除成功!";
-				if (!data) {// 未返回任何消息表示添加成功
-					// 刷新列表
-					reloadTable();
-				} else if (data.errorMsg != null) {// 返回异常信息
-					messgage = data.errorMsg;
-				}
-				alert(messgage);
+				reloadTable();
+				showMessage("删除成功");
 			}
-		});		
-	}
+		});
+	})
 }
 
 // 扩展校验
@@ -267,6 +247,8 @@ function buildOptLink(val,row, idx){
 	link +='<a href="#" onclick="openAddPage(\''+idx+'\')">管理字段数据源级别</a>&nbsp;&nbsp;&nbsp;&nbsp;';
 	return link;
 }
+
+// 打开添加页面
 function openAddPage(idx){
 	var domainId = getRowByIdx(idx).domainId;
 	openTab('tabId_srclevelAdd', '管理字段数据源级别', root+'/domainsrclevel/srclevel.ac?method=toAdd&domainId='+domainId);

@@ -4,38 +4,6 @@ $(function() {
 		$.getScript(root+'/js/easyui/json2.js');
 	}
 });
-//锁定按钮
-function lockBtn(btn){
-	$(btn).unbind('click').removeAttr('onclick');
-	$(btn).attr("disabled",true);
-}
-
-// 解锁按钮
-function unlockBtn(btn,handler){
-	$(btn).bind("click",handler);
-	$(btn).attr("disabled",false);
-}
-
-/**
- * @param id select ID
- * @param data 数据
- * @param textStr 文本标志
- * @param valStr 值标志
- * @param inused 使用中的数据
- */
-function createSelect(id,data,textStr,valStr,inused){
-	var sel = $("#"+id);
-	sel.empty();
-	sel.prepend('<option value="">请选择</option>');
-	for(var i = 0 ; i < data.length ; i++){
-		var obj = data[i];
-		var text = obj[textStr];
-		var val = obj[valStr];
-		if(inused!=undefined && inused!=null && inused[val]!=null)
-			continue;
-		sel.append('<option value="'+val+'">'+text+'</option>');
-	}
-}
 
 /**
  * 添加字段配置
@@ -145,34 +113,15 @@ function saveMatchCfg(){
 	if(!validateResult){
 		return;
 	}
-	// 将按钮置为无效
-	var btn = $("#saveBtn");
-	lockBtn(btn);	
 	$.ajax({
-		async : false,
-		cache : false,
+		url : root + '/cfg/block.ac?method=add',
 		type : 'POST',
 		dataType : "text",
 		contentType: "application/json",
 		data : JSON.stringify(params),
-		url : root + '/cfg/block.ac?method=add',// 请求的action路径
-		error : function() {// 请求失败处理函数
-			alert('请求失败');
-			// 失败回复 btn
-			unlockBtn(btn,saveMatchCfg);
-		},
 		success : function(msg) {
-			var messgage = "添加成功!";
-			if (msg == null||msg=="") {// 未返回任何消息表示添加成功
-				alert(messgage);
-				goBackClose();
-			} else {// 返回异常信息
-				// 失败回复 btn
-				unlockBtn(btn,saveMatchCfg);
-				messgage = msg;
-				alert(messgage);
-			}
-			
+			showMessage("添加成功");
+			goBackClose();
 		}
 	});
 }
@@ -181,22 +130,9 @@ function saveMatchCfg(){
  * 关闭页面并返回
  */
 function goBackClose(){
-	var tabId = 'tabId_bc';
-	var title = '初筛规则管理';
-	var url = root+'/cfg/page/block.jsp';
-	var name = 'iframe_'+tabId;
-	//如果当前id的tab不存在则创建一个tab
-	if(parent.$("#"+tabId).html()==null){		
-		parent.$('#centerTab').tabs('add',{
-			title: title,		 
-			closable:true,
-			cache : false,
-			//注：使用iframe即可防止同一个页面出现js和css冲突的问题
-			content : '<iframe name="'+name+'" id="'+tabId+'" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-		});
-	}else{
-		parent.tabCallPass(name,"reloadTable");
-	}
+	backTab('tabId_bc', '主索引初筛规则管理', root+'/cfg/page/block.jsp', function(){
+		parent.tabCallPass("iframe_tabId_bc", "reloadTable");
+	});
 	parent.$('#centerTab').tabs('close','添加初筛配置');
 }
 

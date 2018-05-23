@@ -7,69 +7,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript" src="${pageContext.request.contextPath}/manual/js/match.js"></script>
 <title>匹配详情</title>
-<style>
-.myTable {
-	border-collapse: collapse;
-	border-left: 1px solid #ccc;
-	border-top: 1px solid #ccc;
-	color: #333;
-	min-width: 98%;
-}
-
-.myTable caption {
-	font-size: 1.1em;
-	font-weight: bold;
-	letter-spacing: -1px;
-	margin-bottom: 10px;
-	padding: 5px;
-	text-align: left;
-}
-
-.myTable a {
-	text-decoration: none;
-	border-bottom: 1px dotted #f60;
-	color: #f60;
-	font-weight: bold;
-}
-
-.myTable a:hover {
-	text-decoration: none;
-	color: #fff;
-	background: #f60;
-}
-
-.myTable tr th a {
-	color: #369;
-	border-bottom: 1px dotted #369;
-}
-
-.myTable tr th a:hover {
-	color: #fff;
-	background: #369;
-}
-
-.myTable thead tr th {
-	text-transform: uppercase;
-	background: #e2e2e2;
-}
-
-.myTable td,table th {
-	border-right: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-	padding: 5px;
-	line-height: 1.8em;
-	font-size: 0.8em;
-	vertical-align: middle;
-}
-
-.myTable tbody tr:nth-of-type(even) td {
-	background: #efefef !important;
-}
-
-.pageSpan {
-	font-weight: normal;
-}
-</style>
 <script type="text/javascript">
 	var BASE_DATAS = ${datas};
 </script>
@@ -125,30 +62,22 @@
 	<div class="easyui-layout" fit="true">
 		<div id="match_detail_view" region="center" border="false" style="padding: 10px; background: #fff; border: 1px solid #ccc;">	
 			<table 	id="detailTable"
-					title="匹配索引摘要"  
-					border="0"
-					cellspacing="0"
-					cellpadding="0"
-					iconCls="icon-edit" 
-					width="98%" 
-					idField="INDEX_ID" 
-					remoteSort="false" 
-					singleSelect="false" 
-					showFooter="false"
-					striped="true"
+					title="匹配索引摘要"
+					iconCls="icon-edit"
+					idField="INDEX_ID"
 					url="${pageContext.request.contextPath}/manual/manual.ac?method=listMatchIndex" >
 				<thead>
 					<tr align="center">
 						<th field="ck" width="20" checkbox="true" width="20"></th>
 						<th field="NAME_CN"  width="100">姓名</th>
 						<th field="ID_NO" width="100">身份证号</th>
-						<th field="MATCH_DEGREE" width="100" formatter="matchDegreeToPercent">综合匹配度</th>		
+						<th field="MATCH_DEGREE" width="100" formatter="matchDegreeToPercent">综合匹配度</th>
 					</tr>
 				</thead>
 			</table>	
 			<!-- 定义toobar -->
 			<div id="detailTable_toolbar">  
-			    <a href="#" class="easyui-linkbutton" id="toobar_show_compare" iconCls="icon-remove" plain="true" onclick="closeAndRerender();">开始对比</a>  
+				<a href="#" class="easyui-linkbutton" id="toobar_show_compare" iconCls="icon-remove" plain="true" onclick="closeAndRerender();">开始对比</a>  
 			</div>  		
 		</div>
 	</div>

@@ -4,8 +4,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<%@include file="/common/page/master.jsp"%>
-<script type="text/javascript" src="${pageContext.request.contextPath}/merge/js/merge.js"></script>
+	<%@include file="/common/page/master.jsp"%>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/merge/js/merge.js"></script>
 </head>
 <body>
 <div id="showSummary" class="easyui-panel" title="已选中居民" >
@@ -54,7 +54,6 @@
 					idField="PERSON_ID" 
 					singleSelect="false"
 					fitColumns="true"
-					striped="true"
 					url="${pageContext.request.contextPath}/merge/merge.ac" >
 				<thead>
 					<tr align="center">
@@ -88,7 +87,6 @@
 					idField="PERSON_ID" 
 					singleSelect="true"
 					fitColumns="true"
-					striped="true"
 					url="${pageContext.request.contextPath}/merge/merge.ac">
 				<thead>
 					<tr align="center">
@@ -115,12 +113,9 @@
 		
 	</tr>
 </table>
-	<div id="survivePanel" selected="true" style="overflow:auto;padding:0px;" title="选择目标居民" iconCls="icon-save" >
-		
-	</div>	
-	<div id="retiredPanel" style="overflow:auto;padding:0px; width: 46%;" title="选择被合并居民" iconCls="icon-save">
-		
-	</div>
-</div>  
+<div id="survivePanel" selected="true" style="overflow:auto;padding:0px;" title="选择目标居民" iconCls="icon-save" >
+</div>
+<div id="retiredPanel" style="overflow:auto;padding:0px; width: 46%;" title="选择被合并居民" iconCls="icon-save">
+</div>
 </body>
 </html>

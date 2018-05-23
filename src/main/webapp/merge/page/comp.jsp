@@ -8,76 +8,15 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/merge/js/comp.js"></script>
 <title>
 </title>
-<style>
-.myTable {
-	border-collapse: collapse;
-	border-left: 1px solid #ccc;
-	border-top: 1px solid #ccc;
-	color: #333;
-	min-width: 98%;
-}
-
-.myTable caption {
-	font-size: 1.1em;
-	font-weight: bold;
-	letter-spacing: -1px;
-	margin-bottom: 10px;
-	padding: 5px;
-	text-align: left;
-}
-
-.myTable a {
-	text-decoration: none;
-	border-bottom: 1px dotted #f60;
-	color: #f60;
-	font-weight: bold;
-}
-
-.myTable a:hover {
-	text-decoration: none;
-	color: #fff;
-	background: #f60;
-}
-
-.myTable tr th a {
-	color: #369;
-	border-bottom: 1px dotted #369;
-}
-
-.myTable tr th a:hover {
-	color: #fff;
-	background: #369;
-}
-
-.myTable thead tr th {
-	text-transform: uppercase;
-	background: #e2e2e2;
-}
-
-.myTable td,table th {
-	border-right: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-	padding: 5px;
-	line-height: 1.8em;
-	font-size: 0.8em;
-	vertical-align: middle;
-}
-
-.myTable tbody tr:nth-of-type(even) td {
-	background: #efefef !important;
-}
-
-.pageSpan {
-	font-weight: normal;
-}
-</style>
 <script type="text/javascript">
 	var BASE_DATAS = ${datas};
 </script>
 </head>
 <body>	
 <div>
-	&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="合并" id="merge_person_btn" onclick="mergePerson();" />&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="合并" id="merge_person_btn" onclick="mergePerson();" />
+	&nbsp;&nbsp;&nbsp;&nbsp;
 	<input type="button" value="返回" onclick="goBackClose();" />
 </div>
 <br/>

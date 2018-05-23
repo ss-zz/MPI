@@ -2,6 +2,7 @@ $(function() {
 	$('#centerTab').tabs({
 		tools:[{
 			iconCls:'icon-cancel',
+			text: '关闭',
 			handler: function(){
 				$.messager.confirm('关闭提示', '您确定关闭其他标签页吗?', function(r){
 					if(r){
@@ -19,24 +20,7 @@ $(function() {
 					}
 				});
 			}
-		}/*,{
-			iconCls:'icon-remove',
-			handler: function(){
-				$.messager.confirm('关闭提示', '您确定关闭所有标签页吗?', function(r){
-					if(r){
-						var $tab = $('#centerTab');
-						var allTabs = $tab.tabs('tabs');
-						var selectTab = $tab.tabs('getSelected');
-						var selectTabIndex = $tab.tabs('getTabIndex',selectTab);
-						for(var i = allTabs.length - 1; i >= 0 ; i--){
-							var tab = allTabs[i];
-							var idx = $tab.tabs('getTabIndex',tab);
-							$tab.tabs('close', idx);
-						}
-					}
-				});
-			}
-		}*/]
+		}]
 	});
 });
 

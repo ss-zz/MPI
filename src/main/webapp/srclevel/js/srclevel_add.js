@@ -11,27 +11,6 @@ $(function() {
 });
 
 /**
- * @param id select ID
- * @param data 数据
- * @param textStr 文本标志
- * @param valStr 值标志
- * @param inused 使用中的数据
- */
-function createSelect(id,data,textStr,valStr,inused){
-	var sel = $("#"+id);
-	sel.empty();
-	for(var i = 0 ; i < data.length ; i++){
-		var obj = data[i];
-		var text = obj[textStr];
-		var val = obj[valStr];
-		if(inused!=undefined && inused!=null && inused[val]!=null)
-			continue;
-		sel.append('<option value="'+val+'">'+text+'</option>');
-	}
-}
-
-
-/**
  * 保存匹配设置
  */
 function saveMatchCfg(){
@@ -50,14 +29,8 @@ function saveMatchCfg(){
 			fieldLevel:$("#add_fieldlevel").val()
 		},
 		success : function(msg) {
-			var messgage = "添加成功";
-			if (msg == null||msg=="") {// 未返回任何消息表示添加成功
-				showMessage(messgage);
-				$('#listTable').datagrid('reload');
-			} else {// 返回异常信息
-				messgage = msg;
-				alert(messgage);
-			}
+			showMessage("添加成功");
+			$('#listTable').datagrid('reload');
 		}
 	});
 }

@@ -16,9 +16,11 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.sinosoft.mpi.dao")
+@EnableTransactionManagement
 @EnableCaching
 public class MpiApplication extends SpringBootServletInitializer {
 

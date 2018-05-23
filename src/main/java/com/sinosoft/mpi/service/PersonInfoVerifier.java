@@ -26,25 +26,24 @@ public class PersonInfoVerifier {
 		// 验证自身属性必填值
 		result = result && verifyIdNoValue(t);
 		if (!result) {
-			sb.append("身份证长度不等于15位或18位；");
+			sb.append("身份证长度只能为15位或18位；");
 		}
-		// WHN 2017-05-01 居民健康卡号验证及非标准字符过滤
 		result = result && verifyCardNoValue(t);
 		if (!result) {
-			sb.append("健康卡号不等于15位或18位；");
+			sb.append("健康卡号长度不能大于40；");
 		}
 		result = result && verifyBlankValue(t.getNameCn());
 		if (!result) {
-			sb.append("中文名称信息为空；");
+			sb.append("中文名称不能为空；");
 		}
 		result = result && verifyBlankValue(t.getGenderCd());
 		if (!result) {
-			sb.append("性别信息为空；");
+			sb.append("性别不能为空；");
 		}
 		// 验证域信息
 		result = result && verifyBlankValue(t.getUniqueSign());
 		if (!result) {
-			sb.append("身份域信息为空；");
+			sb.append("业务系统标识不能为空；");
 		}
 		VerifyResult ret = new VerifyResult();
 		ret.setSuccess(result);

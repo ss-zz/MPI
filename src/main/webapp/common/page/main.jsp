@@ -74,6 +74,7 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
+	// 默认打开第一个菜单
 	$(".easyui-accordion ul li a")[0].click();
 });
 
@@ -123,12 +124,6 @@ $(document).ready(function(){
 			
 			<div title="业务管理" data-options="collapsed:false,collapsible:false" class="myMenu">
 				<ul>
-					<%-- <li><a
-						onclick="addTab('tabId_tyzdgl','通用字段配置','${pageContext.request.contextPath}/config/page/common_field_config.jsp');"
-						href="#">通用字段配置</a></li>
-					<li><a
-						onclick="addTab('tabId_biz_config','业务配置','${pageContext.request.contextPath}/config/page/biz_config.jsp');"
-						href="#">业务配置</a></li> --%>
 					<li><a
 						onclick="addTab('tabId_qi_biz','业务查询','${pageContext.request.contextPath}/biz/page/query.jsp');"
 						href="#">业务查询</a></li>
@@ -171,8 +166,8 @@ $(document).ready(function(){
 		</div>
 	</div>
 	<!-- 正中间panel -->
-	<div region="center">
-		<div class="easyui-tabs" id="centerTab" fit="true" border="false" toolPosition="right">
+	<div region="center" style="padding: 10px;">
+		<div class="easyui-tabs" id="centerTab" data-options="fit: true, border: false, toolPosition: 'right'" style="border: none">
 		</div>
 	</div>
 </body>

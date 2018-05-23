@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.sinosoft.mpi.model.IdentifierDomain;
@@ -30,14 +31,6 @@ public interface IdentifierDomainDao
 	 * @return
 	 */
 	int countByUniqueSign(String uniqueSign);
-
-	/**
-	 * 根据booktype查询
-	 * 
-	 * @param bookType
-	 * @return
-	 */
-	List<IdentifierDomain> findByBookType(String bookType);
 
 	/**
 	 * 根据uniqueSign查询
@@ -74,5 +67,26 @@ public interface IdentifierDomainDao
 	 * @return
 	 */
 	IdentifierDomain findFirstByUniqueSign(String uniqueSign);
+
+	/**
+	 * 部分更新-可能更新主键
+	 * 
+	 * @param domainDesc
+	 * @param uniqueSign
+	 * @param domainLevel
+	 * @param domainId
+	 */
+	@Modifying
+	@Query("update #{#entityName} t set t.domainId = ?2, t.domainDesc = ?1, t.uniqueSign = ?2, t.domainLevel = ?3 where t.domainId = ?4 ")
+	void updatePart(String domainDesc, String uniqueSign, String domainLevel, String domainId);
+
+	/**
+	 * 根据uniqueSign和非domainId统计数量
+	 * 
+	 * @param uniqueSign
+	 * @param domainId
+	 * @return
+	 */
+	int countByUniqueSignAndDomainIdNot(String uniqueSign, String domainId);
 
 }

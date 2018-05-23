@@ -8,63 +8,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript" src="${pageContext.request.contextPath}/query/js/query.js"></script>
 <style>
-.myTable {
-	border-collapse: collapse;
-	border-left: 1px solid #ccc;
-	border-top: 1px solid #ccc; 
-	color: #333;
-}
-
-.myTable caption {
-	font-size: 1.1em;
-	font-weight: bold;
-	letter-spacing: -1px;
-	margin-bottom: 10px;
-	padding: 5px;
-	text-align: left;
-}
-
-.myTable a {
-	text-decoration: none;
-	border-bottom: 1px dotted #f60;
-	color: #f60;
-	font-weight: bold;
-}
-
-.myTable a:hover {
-	text-decoration: none;
-	color: #fff;
-	background: #f60;
-}
-
-.myTable tr th a {
-	color: #369;
-	border-bottom: 1px dotted #369;
-}
-
-.myTable tr th a:hover {
-	color: #fff;
-	background: #369;
-}
-
-.myTable thead tr th {
-	text-transform: uppercase;
-	background: #e2e2e2;
-}
-
-.myTable td, table th {
-	border-right: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-	padding: 5px;
-	line-height: 1.8em;
-	font-size: 0.8em;
-	vertical-align: top;
-}
-
-.myTable tr.odd th, table tr.odd td {
-	background: #efefef;
-}
-
 .r{position:fixed; bottom:0; right:20px;padding:10px;}
 </style>
 <script type="text/javascript">
@@ -83,15 +26,8 @@
 				dataType : 'json',
 				type : 'post',
 				success : function(data) {
-					  var messgage = "主索引拆分成功!";
-			            if (data == null) {// 未返回任何消息表示添加成功
-			                // 刷新表格
-			            	 window.parent.split_close();
-			            } else if (data.errorMsg != null) {// 返回异常信息
-			                messgage = data.errorMsg;
-			            }
-				},error : function() {
-					$.messager.alert("提示","网络故障","Info");
+					showMessage("主索引拆分成功");
+					window.parent.split_close();
 				}
 			});
 		}
@@ -131,9 +67,9 @@
 		</tbody>
 	</table>
 	<div>
-    <div class="r">
-       	<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="spile_Sub()">确认</a>
-    </div>
+	<div class="r">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="spile_Sub()">确认</a>
+	</div>
 </div>
 </body>
 </html>

@@ -40,16 +40,14 @@ function openEditPage(id){
 
 //删除
 function del(id){
-	$.messager.confirm('确认', '确认删除？删除之后不可撤销。', function(r){
-		if (r){
-			$.ajax({
-				url: root + '/mgr/fieldconfig/del/' + id,
-				type: 'post',
-				success: function(){
-					$.messager.show({title:'消息', msg:'删除成功'});
-					reloadTable();
-				}
-			})
-		}
+	confirm('确认删除？删除之后不可撤销。', function(){
+		$.ajax({
+			url: root + '/mgr/fieldconfig/del/' + id,
+			type: 'post',
+			success: function(){
+				$.messager.show({title:'消息', msg:'删除成功'});
+				reloadTable();
+			}
+		})
 	});
 }

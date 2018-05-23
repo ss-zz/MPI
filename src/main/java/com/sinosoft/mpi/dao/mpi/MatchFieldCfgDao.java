@@ -21,4 +21,11 @@ public interface MatchFieldCfgDao
 	 */
 	List<MatchFieldCfg> findByConfigId(String configId);
 
+	/**
+	 * 根据configId删除
+	 * 
+	 * @param configId
+	 */
+	long deleteByConfigId(String configId);
+
 }

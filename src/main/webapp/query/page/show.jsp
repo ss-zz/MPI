@@ -7,63 +7,6 @@
 <%@include file="/common/page/master.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/query/js/query.js"></script>
 <style>
-.myTable {
-	border-collapse: collapse;
-	border-left: 1px solid #ccc;
-	border-top: 1px solid #ccc; 
-	color: #333;
-}
-
-.myTable caption {
-	font-size: 1.1em;
-	font-weight: bold;
-	letter-spacing: -1px;
-	margin-bottom: 10px;
-	padding: 5px;
-	text-align: left;
-}
-
-.myTable a {
-	text-decoration: none;
-	border-bottom: 1px dotted #f60;
-	color: #f60;
-	font-weight: bold;
-}
-
-.myTable a:hover {
-	text-decoration: none;
-	color: #fff;
-	background: #f60;
-}
-
-.myTable tr th a {
-	color: #369;
-	border-bottom: 1px dotted #369;
-}
-
-.myTable tr th a:hover {
-	color: #fff;
-	background: #369;
-}
-
-.myTable thead tr th {
-	text-transform: uppercase;
-	background: #e2e2e2;
-}
-
-.myTable td, table th {
-	border-right: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-	padding: 5px;
-	line-height: 1.8em;
-	font-size: 0.8em;
-	vertical-align: top;
-}
-
-.myTable tr.odd th, table tr.odd td {
-	background: #efefef;
-}
-
 .r{position:fixed; bottom:0; right:20px;padding:10px;}
 </style>
 <script type="text/javascript">
@@ -72,7 +15,7 @@
 	//调换索引位置
 	function changeIndex(){
 		var retiredTab = document.getElementById( "retiredTab" ).style.float;
-		 if(retiredTab == 'left'){
+		if(retiredTab == 'left'){
 			document.getElementById( "retiredTab" ).style.float = 'right'
 			document.getElementById( "survivingTab" ).style.float = 'left';
 			$('#retired').html('目标主索引['+ retiredText+']');
@@ -96,40 +39,28 @@
 		if(retiredTab == 'left'){
 			retiredPK = '${retiredMap.fields[0].personValue}';
 			survivingPK = '${survivingMap.fields[0].personValue}';
-			text = '确定合并主索引？   原主索引：【'+'${retiredMap.fields[3].personValue}'+'】    目标主索引：【'+'${survivingMap.fields[3].personValue}'+'】';
+			text = '确定合并主索引？   原主索引：【'+'${retiredMap.fields[3].personValue}'+'】	目标主索引：【'+'${survivingMap.fields[3].personValue}'+'】';
 		}else{
 			retiredPK = '${survivingMap.fields[0].personValue}';
 			survivingPK = '${retiredMap.fields[0].personValue}';
-			text = '确定合并主索引？    原索引：【'+'${survivingMap.fields[3].personValue}'+'】    目标主索引：【'+'${retiredMap.fields[3].personValue}'+'】';
+			text = '确定合并主索引？	原索引：【'+'${survivingMap.fields[3].personValue}'+'】	目标主索引：【'+'${retiredMap.fields[3].personValue}'+'】';
 		}
 		
 		$.messager.confirm('消息 ',text,function(r){
-		    if (r){
-		     	$.ajax({
-			        async : false,
-			        cache : false,
-			        type : 'POST',
-			        dataType : "json",
-			        data : {
+			if (r){
+			 	$.ajax({
+					url : root + '/index/index.ac?method=merge',
+					type : 'POST',
+					data : {
 						"retiredPk":retiredPK,
 						"survivingPk":survivingPK
-			        },
-			        url : root + '/index/index.ac?method=merge',// 请求的action路径
-			        error : function() {// 请求失败处理函数
-			            alert('请求失败');
-			        },
-			        success : function(data) {
-			            var messgage = "主索引合并成功!";
-			            if (data == null) {// 未返回任何消息表示添加成功
-			                // 刷新表格
-			            	 window.parent.d_close();
-			            } else if (data.errorMsg != null) {// 返回异常信息
-			                messgage = data.errorMsg;
-			            }
-			            $.messager.alert('消息',messgage);
-			        }
-    			});	 
-		    }
+					},
+					success : function(data) {
+						showMessage("主索引合并成功");
+						window.parent.d_close();
+					}
+				});	 
+			}
 		});
 	}
 	
@@ -182,10 +113,10 @@
 	</table>
 	<br/><br/>	
 	<div>
-    <div class="r">
-    <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="changeIndex()">调换</a>
-       	<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="mergeIndex()">确认</a>
-    </div>
+	<div class="r">
+	<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="changeIndex()">调换</a>
+	<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="mergeIndex()">确认</a>
+	</div>
 </div>
 </body>
 </html>

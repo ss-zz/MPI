@@ -28,7 +28,7 @@
 <!-- 表格 -->
 <table id="listTable"
 	title="主索引处理日志"
-	idField="PERSON_IDX_LOG_ID" 
+	idField="PERSON_IDX_LOG_ID"
 	>
 	<thead>
 		<tr align="center">
@@ -48,7 +48,6 @@
 <!--主索引处理日志处理日期设置默认值  -->
 <script type="text/javascript">
 $(function(){
-	
 	var sysdate = new Date();
 	var year = sysdate.getFullYear(),
 		month = sysdate.getMonth()+1,

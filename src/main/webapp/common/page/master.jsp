@@ -110,6 +110,9 @@ body {
 		$.fn.dialog.defaults.modal = true;
 		
 		$.fn.window.defaults.modal = true;
+		$.fn.window.defaults.maximizable = false;
+		$.fn.window.defaults.minimizable = false;
+		$.fn.window.defaults.collapsible = false;
 		
 	})
 	
@@ -265,6 +268,28 @@ body {
 		return '<iframe name="'+ ('iframe_' + tabId) + '" id="'+ tabId + '" src="' + url + '" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>';
 	}
 	
+	/**
+	 * 创建下拉框
+	 * @param id select ID
+	 * @param data 数据
+	 * @param textStr 文本标志
+	 * @param valStr 值标志
+	 * @param inused 使用中的数据
+	 */
+	function createSelect(id,data,textStr,valStr,inused){
+		var sel = $("#"+id);
+		sel.empty();
+		sel.prepend('<option value="">请选择</option>');
+		for(var i = 0 ; i < data.length ; i++){
+			var obj = data[i];
+			var text = obj[textStr];
+			var val = obj[valStr];
+			if(inused!=undefined && inused!=null && inused[val]!=null)
+				continue;
+			sel.append('<option value="'+val+'">'+text+'</option>');
+		}
+	}
+	
 	// 覆盖默认的alert弹出框
 	function alert(info){
 		$.messager.alert('提示', info);
@@ -272,6 +297,19 @@ body {
 	function showMessage(message){
 		$.messager.show({title: '提示', msg: message});
 		
+	}
+	
+	// 覆盖默认的confirm
+	function confirm(message, cb){
+		$.messager.confirm({
+			title: '确认',
+			msg: message,
+			fn: function(r){
+				if (r){
+					if(cb) cb();
+				}
+			}
+		});
 	}
 	
 	// 转换函数数据

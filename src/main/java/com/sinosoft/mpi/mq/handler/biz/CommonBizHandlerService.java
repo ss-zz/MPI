@@ -83,7 +83,9 @@ public class CommonBizHandlerService {
 		}
 		// 主索引信息入库
 		MpiBizIndex bizIndex = bizInfo.toIndex();
-		bizIndex.setBizSerialId(serialId);
+		bizIndex.setBizSerialId(serialId);// 次id
+		bizIndex.setBizPatientId(patientId);// 原始人员id
+		bizIndex.setBizSystemId(bizRegister.getSystemKey());// 业务唯一标识
 		bizIndex = bizIndexService.save(bizIndex);
 		// 添加索引操作日志
 		bizIdxLogService.saveIndexLog(bizInfo.getBizId(), bizIndex.getId(), bizIndex.getBizSystemId(),

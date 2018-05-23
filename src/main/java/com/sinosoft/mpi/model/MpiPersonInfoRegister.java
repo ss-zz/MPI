@@ -6,6 +6,8 @@ import java.util.Date;
 
 import org.apache.commons.beanutils.BeanUtils;
 
+import com.sinosoft.mpi.model.register.PersonRegister;
+
 /**
  * 主索引人员注册信息参数
  */
@@ -16,7 +18,7 @@ public class MpiPersonInfoRegister implements Serializable {
 	/**
 	 * 人员id
 	 */
-	private String patientId;;
+	private String patientId;
 	private String medicalserviceNo;
 	private String nameCn;
 	private String nameEn;
@@ -1691,7 +1693,14 @@ public class MpiPersonInfoRegister implements Serializable {
 		this.psychiatricMark = psychiatricMark;
 	}
 
-	public PersonInfo toPersonInfo(Short state) {
+	/**
+	 * 将注册的人员信息转换为实际的人员信息并设置相关值
+	 * 
+	 * @param personRegister
+	 *            注册的人员信息
+	 * @return 转换后的人员信息
+	 */
+	public PersonInfo toPersonInfo(PersonRegister personRegister) {
 		PersonInfo info = new PersonInfo();
 		try {
 			String S_DEFAULT = "default";
@@ -1700,23 +1709,25 @@ public class MpiPersonInfoRegister implements Serializable {
 			info.setRegisterDate(new Date());
 			info.setRegisterOrgCode(S_DEFAULT);
 			info.setRegisterOrgName(S_DEFAULT);
-			
+
 			info.setArCd(S_DEFAULT);
-			
+
 			info.setSendOrgCode(S_DEFAULT);
 			info.setSendSystem(S_DEFAULT);
 			info.setSendTime(new Date());
-			
+
 			info.setProviderName(S_DEFAULT);
 			info.setProviderOrgCode(S_DEFAULT);
-			
+
 			info.setCreatetime(new Date());
-			
+
+			Short state = personRegister.getType();
 			info.setState(state == null ? Short.valueOf("0") : state);
-			
-			
-			
-			
+
+			String domainId = personRegister.getSystemKey();
+			info.setUniqueSign(domainId);
+			info.setDomainId(domainId);
+
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {

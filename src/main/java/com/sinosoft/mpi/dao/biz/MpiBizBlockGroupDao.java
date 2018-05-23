@@ -22,4 +22,11 @@ public interface MpiBizBlockGroupDao
 	 */
 	List<MpiBizBlockGroup> findByBolckIdAndGroupSign(String blockId, Integer groupSign);
 
+	/**
+	 * 根据bolckId删除
+	 * @param bolckId
+	 * @return
+	 */
+	long deleteByBolckId(String bolckId);
+
 }

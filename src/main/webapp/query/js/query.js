@@ -3,7 +3,6 @@ $(function() {
 	$('#listTable').treegrid({
 		title : '主索引记录',
 		toolbar: "#listTable_tb",
-		loadMsg: '数据加载中,请稍后...',
 		idField: "ROW_ID",
 		singleSelect:false,
 		treeField: "NAME",
@@ -51,10 +50,9 @@ function mergeIndex(){
 						title:text,
 						width:1000,
 						height:450,
-						modal:true,
 						content : '<iframe name="'+text+'" id="tabId_IndexView" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
 					});
-					$("#dialog").dialog("open"); // 打开dialog
+					$("#dialog").dialog("open"); 
 				}
 			});
 		}else{
@@ -62,16 +60,16 @@ function mergeIndex(){
 				title:text,
 				width:1000,
 				height:450,
-				modal:true,
 				content : '<iframe name="'+text+'" id="tabId_IndexView" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
 			});
-			$("#dialog").dialog("open"); // 打开dialog
+			$("#dialog").dialog("open");
 		}
 		
 	}else{
 		$.messager.alert('消息','请选择需要合并的两个主索引');
 	}
 }
+
 //拆分主索引
 function spileIndex(val , row){
 	var type = row.MERGESTATUS;
@@ -82,30 +80,16 @@ function spileIndex(val , row){
 }
 
 function spile_Index(id){
-		var text = '人工主索引信息拆分';
-		var url = root+'/index/index.ac?method=indexSplitDetail&splitPk='+id;
-		$("#dialog_split").dialog({
-			title:text,
-			width:1000,
-			height:450,
-			modal:true,
-				content : '<iframe name="'+text+'" id="tabId_SplitIndexView" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-		});
-		$("#dialog_split").dialog("open"); // 打开dialog
+	var url = root+'/index/index.ac?method=indexSplitDetail&splitPk='+id;
+	$("#dialog_split").dialog({
+		title: '人工主索引信息拆分',
+		width:1000,
+		height:450,
+		content : '<iframe name="'+text+'" id="tabId_SplitIndexView" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
+	});
+	$("#dialog_split").dialog("open");
 }
 
-//锁定按钮
-function lockBtn(btn){
-	$(btn).unbind('click').removeAttr('onclick');
-	$(btn).attr("disabled",true);  
-}
-
-// 解锁按钮
-function unlockBtn(btn,handler){
-	$(btn).bind("click",handler);
-	$(btn).attr("disabled",false);	  
-}
-/** --------------table------------------* */
 /**
  * 加载表格数据
  */
@@ -117,7 +101,7 @@ function ajaxTable() {
 		iconCls:"icon-edit",
 		idField:"ROW_ID",
 		treeField:"NAME",
-		url: root + "/query/query.ac",	
+		url: root + "/query/query.ac",
 		columns:[[  
 			{field:'NAME_CN',title:'姓名',width:150,formatter:buildViewLink},
 			{field:'GENDER_CD',title:'性别',width:100},
@@ -183,9 +167,7 @@ function buildRemoveLink(val , row){
 			html = '<a href="#" onclick="splitPerson(\''+personId+'\',\''+indexId+'\')">拆分并新建</a>&nbsp;&nbsp;'+html;
 			return html;
 		}
-		
 	}
-
 }
 
 /**
@@ -194,67 +176,25 @@ function buildRemoveLink(val , row){
  * @param {String} indexId
  */
 function splitPersonToExistIndex(personId,indexId){
-	var url = root+'/query/query.ac?method=toQueryIdx&personId='+personId+'&indexId='+indexId;
-	var tabId = "tabId_splitToIndex";
-	var title = "选择目标索引";
-	var name = 'iframe_'+tabId; 
-	//如果当前id的tab不存在则创建一个tab
-	if(parent.$("#"+tabId).html()==null){
-		parent.$('#centerTab').tabs('add',{
-			title: title,		 
-			closable:true,
-			cache : false,
-			//注：使用iframe即可防止同一个页面出现js和css冲突的问题
-			content : '<iframe name="'+name+'" id="'+tabId+'" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-		});
-	}else{
-		var tabs = parent.$('#centerTab').tabs('tabs');
-		for(var i = 0 ; i < tabs.length ; i++){
-			var tab = tabs[i];
-			if(tab.panel("options").title == title){
-				parent.$('#centerTab').tabs('update',{
-					tab: tab,
-					options:{
-						content : '<iframe name="'+name+'" id="'+tabId+'" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-					}
-				});
-				parent.$('#centerTab').tabs('select',title);
-				break;
-			}
-		}
-	}	
+	openTab('tabId_splitToIndex', '选择目标索引', root+'/query/query.ac?method=toQueryIdx&personId='+personId+'&indexId='+indexId);
 }
 
 //执行拆分方法
 function splitPerson(personId,indexId){
-	if(!confirm("请确认拆分居民信息"))
-		return;
-	// 锁定按钮防止重复点击
-	lockBtn(this);
-	$.ajax({
-		async : false,
-		cache : false,
-		type : 'POST',
-		dataType : "json",
-		data : {
-			"indexId":indexId,
-			"personId":personId
-		},
-		url : root + '/manual/manual.ac?method=split',// 请求的action路径
-		error : function() {// 请求失败处理函数
-			alert('请求失败');
-		},
-		success : function(data) {
-			var messgage = "成功拆分!";
-			if (data == null) {// 未返回任何消息表示添加成功
-				// 刷新表格
+	confirm("请确认拆分居民信息", function(){
+		$.ajax({
+			url : root + '/manual/manual.ac?method=split',
+			type : 'POST',
+			data : {
+				"indexId":indexId,
+				"personId":personId
+			},
+			success : function(data) {
+				showMessage("拆分成功");
 				reloadTable();
-			} else if (data.errorMsg != null) {// 返回异常信息
-				messgage = data.errorMsg;
 			}
-			alert(messgage);
-		}
-	});	
+		});
+	})
 }
 
 // 刷新表格
@@ -272,6 +212,7 @@ function searchListTable() {
 	var birthdate = $("#search_personBirthdate").datebox('getValue');
 	var mergeStatus = $('#search_mergeStatus').combobox('getValue'); 
 	$("#listTable").treegrid({
+		url: root + "/query/query.ac",
 		queryParams : {
 			"NAME_CN" : personName,
 			"ID_NO":id_no,
@@ -279,8 +220,7 @@ function searchListTable() {
 			"STATE":mergeStatus,
 			page: 1,
 			rows: 10
-		},
-		url: root + "/query/query.ac",
+		}
 	});
 }
 

@@ -6,70 +6,6 @@
 <head>
 <%@include file="/common/page/master.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/query/js/list.js"></script>
-<style type="text/css">
-.myTable {
-	border-collapse: collapse;
-	border-left: 1px solid #ccc;
-	border-top: 1px solid #ccc;
-	color: #333;
-	min-width: 98%;
-}
-
-.myTable caption {
-	font-size: 1.1em;
-	font-weight: bold;
-	letter-spacing: -1px;
-	margin-bottom: 10px;
-	padding: 5px;
-	text-align: left;
-}
-
-.myTable a {
-	text-decoration: none;
-	border-bottom: 1px dotted #f60;
-	color: #f60;
-	font-weight: bold;
-}
-
-.myTable a:hover {
-	text-decoration: none;
-	color: #fff;
-	background: #f60;
-}
-
-.myTable tr th a {
-	color: #369;
-	border-bottom: 1px dotted #369;
-}
-
-.myTable tr th a:hover {
-	color: #fff;
-	background: #369;
-}
-
-.myTable thead tr th {
-	text-transform: uppercase;
-	background: #e2e2e2;
-}
-
-.myTable td,table th {
-	border-right: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-	padding: 5px;
-	line-height: 1.8em;
-	font-size: 0.8em;
-	vertical-align: middle;
-}
-
-.myTable tbody tr:nth-of-type(even) td {
-	background: #efefef !important;
-}
-
-.pageSpan {
-	font-weight: normal;
-}
-
-</style>
 </head>
 <body>
 <!-- 列出选定居民信息 -->
@@ -102,17 +38,9 @@
 </div>
 <!-- 表格 -->
 <table 	id="listTable"
-		title="索引列表"  
-		border="0"
-		cellspacing="0"
-		cellpadding="0"
-		iconCls="icon-edit" 
-		width="98%" 
-		idField="INDEX_ID" 
-		remoteSort="false" 
-		singleSelect="true" 
-		showFooter="false"
-		striped="true"
+		title="索引列表"
+		iconCls="icon-edit"
+		idField="INDEX_ID"
 		url="${pageContext.request.contextPath}/query/query.ac?method=queryIdx&fromIndexId=${indexId }" >
 	<thead>
 		<tr align="center">
@@ -130,7 +58,7 @@
 <div id="listTable_tb" style="padding:5px;height:auto">
 	<div>
 		索引姓名:<input type="text" class="combo-text" id="search_personName">
-	<%-- 	索引性别:<input class="easyui-combobox" id="search_personSex" url="${pageContext.request.contextPath}/manual/manual.ac?method=listCode&codeName=SexCode" valueField="codeId" textField="codeName" panelHeight="auto" /> --%>
+		<%-- 索引性别:<input class="easyui-combobox" id="search_personSex" url="${pageContext.request.contextPath}/manual/manual.ac?method=listCode&codeName=SexCode" valueField="codeId" textField="codeName" panelHeight="auto" /> --%>
 		索引生日:<input class="easyui-datetimebox" id="search_personBirthdate">
 		索引身份证:<input type="text" class="combo-text" id="search_idCardNum">
 		<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchListTable();">搜索</a>

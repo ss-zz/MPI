@@ -21,7 +21,7 @@
 	<!-- loop -->
 	<c:forEach items="${cfg.matchFieldCfgs }" var="field">
 	<table class="myTable">
-		<caption>字段[<span style="color:#ff0000;font-weight:bold;">${field.cfgDesc }</span>]配置</caption>
+		<caption>字段【<span>${field.cfgDesc }</span>】配置</caption>
 		<tbody>
 			<tr>
 				<%-- <td>完全匹配值:&nbsp;${field.agreeProb }</td>

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sinosoft.bizmatch.config.BizMatchConfig;
 import com.sinosoft.mpi.dao.biz.MpiBizMatchCfgDao;
 import com.sinosoft.mpi.dao.biz.MpiBizMatchFieldCfgDao;
+import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.biz.MpiBizMatchCfg;
 import com.sinosoft.mpi.model.biz.MpiBizMatchFieldCfg;
 import com.sinosoft.mpi.util.PageInfo;
@@ -67,10 +68,32 @@ public class BizMatchCfgService {
 	}
 
 	/**
-	 * 删除
+	 * 根据id删除
+	 * 
+	 * @param id
 	 */
+	@Transactional
 	public void deleteById(String id) {
-		mpiBizMatchCfgDao.delete(id);
+		if (canDelete(id)) {
+			mpiBizMatchFieldCfgDao.deleteByConfigId(id);
+			mpiBizMatchCfgDao.delete(id);
+		} else {
+			throw new ValidationException("不能删除生效中的配置");
+		}
+	}
+
+	/**
+	 * 是否允许删除
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private boolean canDelete(String id) {
+		MpiBizMatchCfg item = getObject(id);
+		if (item != null && item.getState() == "1") {
+			return false;
+		}
+		return true;
 	}
 
 	/**

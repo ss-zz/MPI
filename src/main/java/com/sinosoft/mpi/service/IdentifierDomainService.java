@@ -8,10 +8,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.mpi.dao.mpi.IdentifierDomainDao;
 import com.sinosoft.mpi.exception.ValidationException;
@@ -35,7 +35,9 @@ public class IdentifierDomainService {
 	public void save(IdentifierDomain t) {
 		if (t == null)
 			return;
-		if (testDomain(t.getDomainId(), t.getUniqueSign())) {
+		if (testDomain(t.getUniqueSign())) {
+			// 设置主键与唯一标识相同
+			t.setDomainId(t.getUniqueSign());
 			identifierDomainDao.save(t);
 		} else {
 			throw new ValidationException("身份域唯一标识:" + t.getUniqueSign() + "已存在");
@@ -47,18 +49,12 @@ public class IdentifierDomainService {
 	 * 
 	 * @param t
 	 */
+	@Transactional
 	public void update(IdentifierDomain t) {
 		if (t == null)
 			return;
-		if (testDomain(t.getDomainId(), t.getUniqueSign())) {
-			IdentifierDomain tmp = identifierDomainDao.findOne(t.getDomainId());
-			tmp.setDomainDesc(t.getDomainDesc());
-			tmp.setDomainType(t.getDomainType());
-			tmp.setUniqueSign(t.getUniqueSign());
-			tmp.setPushAddr(t.getPushAddr());
-			tmp.setBookType(t.getBookType());
-			tmp.setDomainLevel(t.getDomainLevel());
-			identifierDomainDao.save(tmp);
+		if (testDomain(t.getUniqueSign(), t.getDomainId())) {
+			identifierDomainDao.updatePart(t.getDomainDesc(), t.getUniqueSign(), t.getDomainLevel(), t.getDomainId());
 		} else {
 			throw new ValidationException("业务系统唯一标识:" + t.getUniqueSign() + "已存在");
 		}
@@ -111,27 +107,22 @@ public class IdentifierDomainService {
 	/**
 	 * 验证域是否存在
 	 * 
-	 * @param domainId
 	 * @param uniqueSign
 	 * @return
 	 */
-	public boolean testDomain(String domainId, String uniqueSign) {
-		int count = 0;
-		if (StringUtils.isNotBlank(domainId)) {
-			count = identifierDomainDao.countByUniqueSignAndDomainId(uniqueSign, domainId);
-		} else {
-			count = identifierDomainDao.countByUniqueSign(uniqueSign);
-		}
-		return count == 0;
+	public boolean testDomain(String uniqueSign) {
+		return identifierDomainDao.countByUniqueSign(uniqueSign) == 0;
 	}
 
 	/**
-	 * 查询待推送的域
+	 * 验证域是否存在
 	 * 
+	 * @param uniqueSign
+	 * @param domainId
 	 * @return
 	 */
-	public List<IdentifierDomain> queryPushDomain() {
-		return identifierDomainDao.findByBookType("0");
+	public boolean testDomain(String uniqueSign, String domainId) {
+		return identifierDomainDao.countByUniqueSignAndDomainIdNot(uniqueSign, domainId) == 0;
 	}
 
 	/**

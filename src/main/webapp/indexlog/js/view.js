@@ -1,5 +1,4 @@
 $(function() {
-	
 	$("#show_log_opType").text(buildTypeStr($("#log_opType").val()));
 	$("#show_log_opStyle").text(buildStyleStr($("#log_opStyle").val()));
 	$("#show_log_opStyle_1").text(buildStyleStr($("#log_opStyle").val()));

@@ -21,9 +21,10 @@ import com.sinosoft.bizblock.config.BizBlockConfig;
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.dao.biz.MpiBizBlockCfgDao;
 import com.sinosoft.mpi.dao.biz.MpiBizBlockGroupDao;
-import com.sinosoft.mpi.model.biz.MpiBizPropertiesDesc;
+import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
 import com.sinosoft.mpi.model.biz.MpiBizBlockGroup;
+import com.sinosoft.mpi.model.biz.MpiBizPropertiesDesc;
 import com.sinosoft.mpi.util.PageInfo;
 
 /**
@@ -81,21 +82,32 @@ public class BizBlockCfgService {
 	}
 
 	/**
-	 * 删除
-	 * 
-	 * @param t
-	 */
-	public void delete(MpiBizBlockCfg t) {
-		mpiBizBlockCfgDao.delete(t);
-	}
-
-	/**
-	 * 删除
+	 * 根据id删除
 	 * 
 	 * @param id
 	 */
+	@Transactional
 	public void deleteById(String id) {
-		mpiBizBlockCfgDao.delete(id);
+		if (canDelete(id)) {
+			mpiBizBlockGroupDao.deleteByBolckId(id);
+			mpiBizBlockCfgDao.delete(id);
+		} else {
+			throw new ValidationException("不能删除生效中的配置");
+		}
+	}
+
+	/**
+	 * 是否允许删除
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private boolean canDelete(String id) {
+		MpiBizBlockCfg item = getObject(id);
+		if (item != null && item.getState() == "1") {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -124,7 +136,7 @@ public class BizBlockCfgService {
 			@Override
 			public Predicate toPredicate(Root<MpiBizBlockCfg> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				if (t != null) {
-					if(t.getState() != null){
+					if (t.getState() != null) {
 						return cb.and(cb.equal(root.get("state"), t.getState()));
 					}
 				}

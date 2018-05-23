@@ -15,7 +15,7 @@ Date.prototype.formatDate = function(format) {
 		"h+" : this.getHours(), //hour  
 		"m+" : this.getMinutes(), //minute  
 		"s+" : this.getSeconds(), //second  
-		"q+" : Math.floor((this.getMonth() + 3) / 3), //quarter  
+		"q+" : Math.floor((this.getMonth() + 3) / 3), //quarter
 		"S" : this.getMilliseconds()
 	};
 	if (/(y+)/.test(format))
@@ -28,49 +28,44 @@ Date.prototype.formatDate = function(format) {
 
 $(function() {
 	// 搜索框初始化
-	$('#search_optype').combobox({
-		width : 150
-	});
-	$('#search_opstyle').combobox({
-		width : 150
-	});
+	$('#search_optype').combobox({ width : 150 });
+	$('#search_opstyle').combobox({ width : 150 });
 	//初始化时间输入框
 	init_timeInput();
 	// 加载表格数据
 	ajaxTable();
-
 });
 
 /**
  * 初始化时间选择框
  */
 function init_timeInput(){
-	var option = {  
-			showSeconds:true,
-			editable:false,
-			formatter:function(date){
-				return date.formatDate("yyyy-MM-dd hh:mm:ss");
-			},
-			parser:function(dateStr){
-				if(dateStr == undefined || dateStr==null || dateStr=="")
-					return new Date();
-				var regexDT = /(\d{4})-?(\d{2})?-?(\d{2})?\s?(\d{2})?:?(\d{2})?:?(\d{2})?/g;  
-				var matchs = regexDT.exec(dateStr);  
-				var date = new Array();  
-				for (var i = 1; i < matchs.length; i++) {  
-					if (matchs[i]!=undefined) {  
-						date[i] = matchs[i];  
+	var option = {
+		showSeconds:true,
+		editable:false,
+		formatter:function(date){
+			return date.formatDate("yyyy-MM-dd hh:mm:ss");
+		},
+		parser:function(dateStr){
+			if(dateStr == undefined || dateStr==null || dateStr=="")
+				return new Date();
+			var regexDT = /(\d{4})-?(\d{2})?-?(\d{2})?\s?(\d{2})?:?(\d{2})?:?(\d{2})?/g;  
+			var matchs = regexDT.exec(dateStr);  
+			var date = new Array();  
+			for (var i = 1; i < matchs.length; i++) {  
+				if (matchs[i]!=undefined) {  
+					date[i] = matchs[i];  
+				} else {  
+					if (i<=3) {  
+						date[i] = '01';  
 					} else {  
-						if (i<=3) {  
-							date[i] = '01';  
-						} else {  
-							date[i] = '00';  
-						}  
+						date[i] = '00';  
 					}  
 				}  
-				return new Date(date[1], date[2]-1, date[3], date[4], date[5],date[6]);
-			}
-		};
+			}  
+			return new Date(date[1], date[2]-1, date[3], date[4], date[5],date[6]);
+		}
+	};
 	
 	$('#search_optime_begin').datetimebox(option); 	
 	$('#search_optime_begin').attr("readonly","readonly");
@@ -79,29 +74,14 @@ function init_timeInput(){
 	$('#search_optime_end').attr("readonly","readonly");
 }
 
-/** --------------table------------------* */
 /**
  * 加载表格数据
  */
 function ajaxTable() {
 	// 加载表格
 	$('#listTable').datagrid({
-		toolbar : "#listTable_tb",
-		singleSelect : true,//单选
-		pagination : true,//分页
-		onClickRow : function(rowIndex, rowData) {
-			// 取消选择某行后高亮
-			$('#listTable').datagrid('unselectRow', rowIndex);
-		},
-		onLoadSuccess : function(data) {
-			var value = $('#listTable').datagrid('getData')['errorMsg'];
-			if (value != null) {
-				alert("错误消息:" + value);
-			}
-		}
+		toolbar : "#listTable_tb"
 	}).datagrid('acceptChanges');
-	
-	
 }
 
 //构建索引查看连接
@@ -110,36 +90,9 @@ function buildMatchUrl(val, row) {
 	return '<a href="#" onclick="viewMatch(\'' + logId + '\');">查看</a>';
 }
 
+// 打开查看页面
 function viewMatch(logId){
-	var url = root+'/indexlog/il.ac?method=view&logId='+logId;
-	var tabId = "tabId_logDetailView";
-	var title = "索引日志处理详情";
-	var name = 'iframe_'+tabId; 
-	//如果当前id的tab不存在则创建一个tab
-	if(parent.$("#"+tabId).html()==null){
-		parent.$('#centerTab').tabs('add',{
-			title: title,		 
-			closable:true,
-			cache : false,
-			//注：使用iframe即可防止同一个页面出现js和css冲突的问题
-			content : '<iframe name="'+name+'" id="'+tabId+'" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-		});
-	}else{
-		var tabs = parent.$('#centerTab').tabs('tabs');
-		for(var i = 0 ; i < tabs.length ; i++){
-			var tab = tabs[i];
-			if(tab.panel("options").title == title){
-				parent.$('#centerTab').tabs('update',{
-					tab: tab,
-					options:{
-						content : '<iframe name="'+name+'" id="'+tabId+'" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-					}
-				});
-				parent.$('#centerTab').tabs('select',title);
-				break;
-			}
-		}
-	}
+	openTab('tabId_logDetailView', '索引日志处理详情', root+'/indexlog/il.ac?method=view&logId='+logId);
 }
 
 // 构建操作类型描述

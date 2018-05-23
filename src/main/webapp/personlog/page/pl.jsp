@@ -3,18 +3,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<%@include file="/common/page/master.jsp"%>
-<script type="text/javascript" src="${pageContext.request.contextPath}/personlog/js/pl.js"></script>
+	<%@include file="/common/page/master.jsp"%>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/personlog/js/pl.js"></script>
 <style type="text/css">
-.mytable {
-	border-collapse:collapse;
-	border: 1px #CCCCCC dotted ;
-	margin: 0px;
-}
-.mytable tr td {
-	border: 1px #CCCCCC dotted ;
-	margin: 0px;
-}
 .tree-folder{
 	background:url('${pageContext.request.contextPath}/images/person.png') no-repeat !important;
 }

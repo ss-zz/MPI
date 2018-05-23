@@ -42,24 +42,15 @@ function ajaxTable() {
 			text : '添加',
 			iconCls : 'icon-add',
 			handler : function() {
-				// 点击工具栏运行的js方法
 				openDialog_add();
-			}			
+			}
 		},"-",{
 			text : '编辑',
 			iconCls : 'icon-edit',
 			handler : function() {
-				// 点击工具栏运行的js方法
 				openDialog_edit();
-			}	
-		}],
-		pagination:true,//分页
-		onLoadSuccess : function() {
-			var value = $('#listTable').datagrid('getData')['errorMsg'];
-			if (value != null) {
-				alert("错误消息:" + value);
 			}
-		}
+		}]
 	}).datagrid('acceptChanges');
 }
 
@@ -106,15 +97,8 @@ function ajaxUserTable(roleId, roleName) {
 	$("#current_sysrole_id").val(roleId);
 	// 加载表格
 	$('#userListTable').datagrid({
-		pagination: true,//分页
-		queryParams : {// 查询条件
+		queryParams : {
 			"sysRoleId":roleId
-		},
-		onLoadSuccess : function() {
-			var value = $('#userListTable').datagrid('getData')['errorMsg'];
-			if (value != null) {
-				alert("错误消息:" + value);
-			}
 		}
 	}).datagrid('acceptChanges');
 	
@@ -128,8 +112,6 @@ function reloadUserTable() {
 }
 
 
-/*----------------添加用户定义方法--------------*/
-
 /**
  * 设置添加窗口
  */
@@ -137,7 +119,7 @@ function setDialog_add() {
 	$('#add').dialog({
 		title : '系统角色添加',
 		closed: true,
-		onClose : function() { // 继承自panel的关闭事件
+		onClose : function() {
 			addReset();
 		}
 	});
@@ -169,11 +151,9 @@ function closeDialog_add() {
  */
 function addData() {
 	var validateResult = true;
-	// easyui 表单验证
 	$('#table_add input').each(function() {
 		if ($(this).attr('required') || $(this).attr('validType')) {
 			if (!$(this).validatebox('isValid')) {
-				// 如果验证不通过，则返回false
 				validateResult = false;
 				return;
 			}
@@ -184,31 +164,24 @@ function addData() {
 	}
 
 	$.ajax({
-		url : root + '/role/role.ac?method=add',// 请求的action路径
+		url : root + '/role/role.ac?method=add',
 		data : {
 			"roleName":$("#add_roleName").val()
 		},
 		success : function(data) {
-			var messgage = "添加成功!";
-			if (data == null) {// 未返回任何消息表示添加成功
-				addReset();
-				// 刷新列表
-				reloadTable();
-			} else if (data.errorMsg != null) {// 返回异常信息
-				messgage = data.errorMsg;
-			}
-			$("#add_message").html(messgage);
+			showMessage("添加成功");
+			addReset();
+			reloadTable();
 		}
 	});
 }
 
-/*-----------------------编辑对话框----------------------------*/
 //设置弹出框的属性
 function setDialog_edit() {
 	$('#edit').dialog({
 		title : '系统角色编辑',
 		closed: true,
-		onClose : function() { // 继承自panel的关闭事件
+		onClose : function() {
 			editReset();
 		}
 	});
@@ -216,7 +189,6 @@ function setDialog_edit() {
 // 打开对话框
 function openDialog_edit() {
 	editReset();
-	
 	var row = $('#listTable').datagrid('getSelected');
 	if(row==undefined || row==null){
 		alert("请选择要修改的角色!");
@@ -224,12 +196,12 @@ function openDialog_edit() {
 	}
 	var roleId = row.sysRoleId; 
 	$.ajax({
-		url : root + '/role/role.ac?method=load',// 请求的action路径
+		url : root + '/role/role.ac?method=load',
 		data : {
 			"sysRoleId":roleId
 		},
 		success : function(data) {
-			if (data == null) {// 未返回任何消息表示添加成功
+			if (!data) {
 				alert('请求失败');
 			}else{
 				$("#edit_roleName").val(data.roleName);
@@ -239,23 +211,24 @@ function openDialog_edit() {
 	});
 	$('#edit').dialog('open');
 }
+
 // 关闭对话框
 function closeDialog_edit() {
 	$('#edit').dialog('close');
 }
+
 // 根据用户id查询用户的信息
 function editReset() {
 	$("#edit_roleName").val("");
 	$("#edit_roleId").val("");
 }
+
 // 执行用户编辑操作
 function editData() {
 	var validateResult = true;
-	// easyui 表单验证
 	$('#table_edit input').each(function() {
 		if ($(this).attr('required') || $(this).attr('validType')) {
 			if (!$(this).validatebox('isValid')) {
-				// 如果验证不通过，则返回false
 				validateResult = false;
 				return;
 			}
@@ -266,20 +239,14 @@ function editData() {
 	}
 
 	$.ajax({
-		url : root + '/role/role.ac?method=edit',// 请求的action路径
+		url : root + '/role/role.ac?method=edit',
 		data : {
 			"sysRoleId":$("#edit_roleId").val(),
 			"roleName":$("#edit_roleName").val(),
 		},
 		success : function(data) {
-			var messgage = "修改成功!";
-			if (data == null) {// 未返回任何消息表示添加成功
-				// 刷新列表
-				reloadTable();
-			} else if (data.errorMsg != null) {// 返回异常信息
-				messgage = data.errorMsg;
-			}
-			$("#edit_message").html(messgage);
+			showMessage("修改成功");
+			reloadTable();
 		}
 	});
 }

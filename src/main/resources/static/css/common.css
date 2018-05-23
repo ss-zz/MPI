@@ -13,6 +13,12 @@ fieldset {
 
 /* 覆盖easyui默认样式 */
 
+/* 表格链接 */
+.datagrid-cell a{
+	text-decoration: none;
+	color: #1890ff;
+}
+
 /* 按钮 */
 .my-btn {
 	margin: 0 6px 0 26px;
@@ -109,7 +115,7 @@ fieldset {
 	font-size: 1.1em;
 	font-weight: bold;
 	letter-spacing: -1px;
-	padding: 5px;
+	padding: 10px;
 	text-align: left;
 	background-color: #6494bc;
 	color: #fff;

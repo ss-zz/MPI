@@ -1,5 +1,7 @@
 package com.sinosoft.config;
 
+import java.text.SimpleDateFormat;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -46,6 +48,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 		// 忽略绑定失败属性
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
+		// 日期格式化
+		objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 
 		jsonConverter.setObjectMapper(objectMapper);
 		return jsonConverter;

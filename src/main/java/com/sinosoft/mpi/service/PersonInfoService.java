@@ -622,49 +622,50 @@ public class PersonInfoService {
 				new BeanPropertyRowMapper<PersonInfo>(PersonInfo.class));
 	}
 
-	// 根据机构号和ID查询
-	private PersonInfo findByOrgId(PersonInfo entity) {
-		String type = entity.getType();
-		String sql = " select * from mpi_person_info  t where t.MEDICALSERVICE_NO= ? and t.REGISTER_ORG_CODE=? and t.type=?";
-		List<PersonInfo> datas = new ArrayList<>();
-		if ("0".equals(type)) {// 个人
-			sql = " select * from mpi_person_info  t where t.HR_ID= ? and t.REGISTER_ORG_CODE=?  and t.type=?";
-			datas = jdbcTemplate.query(sql, new Object[] { entity.getHrId(), entity.getRegisterOrgCode(), type },
-					new BeanPropertyRowMapper<PersonInfo>(PersonInfo.class));
-
-		} else if ("1".equals(type)) {
-			datas = jdbcTemplate.query(sql,
-					new Object[] { entity.getMedicalserviceNo(), entity.getRegisterOrgCode(), type },
-					new BeanPropertyRowMapper<PersonInfo>(PersonInfo.class));
-		} else if ("3".equals(type)) {
-			datas = jdbcTemplate.query(sql, new Object[] { entity.getPatientId(), entity.getRegisterOrgCode(), type },
-					new BeanPropertyRowMapper<PersonInfo>(PersonInfo.class));
-		}
-		return datas.size() > 0 ? datas.get(0) : null;
-	}
-
-	public Map<String, Object> findById(String person_id, String org_code, String type) {
+	/**
+	 * 查询患者数据-根据person_id、机构编码、人员类型
+	 * 
+	 * @param person_id
+	 *            人员唯一id（0个人：hr_id，1患者：MEDICALSERVICE_NO，其他：PATIENT_ID）
+	 * @param org_code
+	 *            注册机构
+	 * @param type
+	 *            人员类型
+	 * @return
+	 */
+	public PersonInfo findByPersonInfo(PersonInfo personInfo) {
+		if (personInfo == null)
+			return null;
+		String type = personInfo.getType();
+		String orgCode = personInfo.getRegisterOrgCode();
+		String personId = null;
 		StringBuilder sql = new StringBuilder();
-		List<Map<String, Object>> list = null;
-		if ("0".equals(type)) {// 个人
-			sql.append("select * from mpi_person_info a where a.type='" + type + "' and a.hr_id='" + person_id
-					+ "' and a.REGISTER_ORG_CODE='" + org_code + "'");
-		} else if ("1".equals(type)) {// 患者
-			sql.append("select * from mpi_person_info a where a.type='" + type + "' and a.MEDICALSERVICE_NO='"
-					+ person_id + "' and a.REGISTER_ORG_CODE='" + org_code + "'");
-		} else if ("3".equals(type)) {
-			sql.append("select * from mpi_person_info a where a.type='" + type + "' and a.PATIENT_ID='" + person_id
-					+ "' and a.REGISTER_ORG_CODE='" + org_code + "'");
+		sql.append("select * from mpi_person_info a where a.type=? and a.REGISTER_ORG_CODE=? ");
+		if ("0".equals(type)) {// 个人-健康档案编号
+			sql.append(" and a.HR_ID=? ");
+			personId = personInfo.getHrId();
+		} else if ("1".equals(type)) {// 患者-医疗服务编号
+			sql.append(" and a.MEDICALSERVICE_NO=? ");
+			personId = personInfo.getMedicalserviceNo();
+		} else {// 其他
+			sql.append(" and a.PATIENT_ID=? ");
+			personId = personInfo.getPatientId();
 		}
-		list = jdbcTemplate.queryForList(sql.toString());
+		List<PersonInfo> list = jdbcTemplate.query(sql.toString(), new Object[] { type, orgCode, personId },
+				new BeanPropertyRowMapper<PersonInfo>(PersonInfo.class));
 		return list.size() > 0 ? list.get(0) : null;
 	}
 
+	/**
+	 * 保存人员信息
+	 * 
+	 * @param t
+	 */
 	public void save(PersonInfo t) {
 		// 校验居民信息
 		VerifyResult flag = personInfoVerifier.verify(t);
 		if (!flag.isSuccess()) {
-			throw new ValidationException("居民信息数据校验失败:" + flag.getMsg());
+			throw new ValidationException("数据校验失败:" + flag.getMsg());
 		}
 
 		// 校验系统中是否有对应注册域
@@ -688,78 +689,76 @@ public class PersonInfoService {
 			t.setSrcLevel(new Short(domainlevel));
 		}
 
-		try {
-			if (t.getState() == 0) {
-				// 校验该居民信息是否已注册
-				PersonInfo p = findByOrgId(t);
-				if (p != null) {
-					throw new ValidationException(
-							"居民信息已注册,域标识为:" + t.getUniqueSign() + ",居民信息主键为:" + t.getFieldPk() + "的用户已注册.");
-				}
+		// 查询关联的人员
+		PersonInfo realtionPerson = findByPersonInfo(t);
 
-				// 为居民分配唯一标识
-				t.setFieldPk(IDUtil.getUUID().toString());
-				// 保存历史信息 update 2013年5月15日17:56:08
-				addHistory(t);
-				// 保存居民信息
-				personInfoDao.save(t);
-			} else if (t.getState() == 1) {
-				// 查看对应居民信息记录更新的居民信息的FIELD_PK;
-				if (t.getRelationPk() == null || "".equals(t.getRelationPk())) {
-					throw new ValidationException("居民信息RelationPk=null,域标识为:" + t.getUniqueSign() + ",居民健康档案号为:"
-							+ t.getHrId() + ",居民医疗服务编号为:" + t.getMedicalserviceNo() + ".");
-				}
-				Map<String, Object> realtionPerson = findById(t.getRelationPk(), t.getRegisterOrgCode(), t.getType());
-				if (realtionPerson != null) {
-					// 插入更新历史记录 update 2013年5月15日
-					t.setFieldPk(IDUtil.getUUID().toString());
-					addHistory(t);
-					String relationpk = (String) realtionPerson.get("FIELD_PK");
-					logger.debug("relationpk=" + relationpk);
-					if ("0".equals(t.getType())) {// 个人
-						t.setHrId(t.getRelationPk());
-					} else {// 患者
-						t.setMedicalserviceNo(t.getRelationPk());
-					}
-					t.setRelationPk(relationpk);
-					t.setFieldPk(relationpk);
-					personInfoDao.save(t);
-				} else {
-					throw new ValidationException("未找到要更新的居民信息,主键为" + t.getRelationPk() + " 域标识为" + t.getUniqueSign());
-				}
-			} else if (t.getState() == 2) {
-				// 查看对应居民信息记录更新的居民信息的FIELD_PK;
-				if (t.getRelationPk() == null || "".equals(t.getRelationPk())) {
-					throw new ValidationException("居民信息RelationPk=null ,域标识为:" + t.getUniqueSign() + ",居民健康档案号为:"
-							+ t.getHrId() + ",居民医疗服务编号为:" + t.getMedicalserviceNo() + ".");
-				}
+		if (t.getState() == 0) {// 新增
 
-				Map<String, Object> realtionPerson = findById(t.getRelationPk(), t.getRegisterOrgCode(), t.getType());
-				if (realtionPerson != null) {
-					// 备份新来数据信息
-					t.setFieldPk(IDUtil.getUUID().toString());
-					addHistory(t);
-
-					String relationpk = (String) realtionPerson.get("FIELD_PK");
-					t.setRelationPk(relationpk);
-					t.setFieldPk(relationpk);
-					// 删除原始数据信息
-					personInfoDao.delete(t);
-				} else {
-					throw new ValidationException("未找到要更新的居民信息,主键为" + t.getRelationPk() + " 域标识为" + t.getUniqueSign());
-				}
-			} else {
-				throw new ValidationException("居民信息异常: State=" + t.getState() + ";域标识为:" + t.getUniqueSign()
-						+ ",居民健康档案号为:" + t.getHrId() + ",居民医疗服务编号为:" + t.getMedicalserviceNo() + ".");
+			if (realtionPerson != null) {// 人员已注册
+				throw new ValidationException("居民信息已注册,域标识为:" + t.getUniqueSign() + ",居民信息主键为:" + t.getFieldPk());
 			}
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ValidationException("居民信息入库失败！");
+			// 生成新主键
+			t.setFieldPk(IDUtil.getUUID().toString());
+			// 保存历史信息
+			addHistory(t);
+			// 保存居民信息
+			personInfoDao.save(t);
+
+		} else if (t.getState() == 1) {// 更新
+
+			if (t.getRelationPk() == null || "".equals(t.getRelationPk())) {
+				throw new ValidationException("居民信息RelationPk=null,域标识为:" + t.getUniqueSign() + ",居民健康档案号为:"
+						+ t.getHrId() + ",居民医疗服务编号为:" + t.getMedicalserviceNo() + ".");
+			}
+			if (realtionPerson != null) {
+				// 插入更新历史记录
+				t.setFieldPk(IDUtil.getUUID().toString());
+				// 保存历史信息
+				addHistory(t);
+				String relationpk = realtionPerson.getFieldPk();
+				if ("0".equals(t.getType())) {// 个人
+					t.setHrId(t.getRelationPk());
+				} else {// 患者
+					t.setMedicalserviceNo(t.getRelationPk());
+				}
+				t.setRelationPk(relationpk);
+				t.setFieldPk(relationpk);
+				// 更新居民信息
+				personInfoDao.save(t);
+			} else {
+				throw new ValidationException("未找到要更新的居民信息,主键为" + t.getRelationPk() + " 域标识为" + t.getUniqueSign());
+			}
+
+		} else if (t.getState() == 2) {// 拆分
+
+			if (t.getRelationPk() == null || "".equals(t.getRelationPk())) {
+				throw new ValidationException("居民信息RelationPk=null ,域标识为:" + t.getUniqueSign() + ",居民健康档案号为:"
+						+ t.getHrId() + ",居民医疗服务编号为:" + t.getMedicalserviceNo() + ".");
+			}
+
+			if (realtionPerson != null) {
+				// 备份新来数据信息
+				t.setFieldPk(IDUtil.getUUID().toString());
+				addHistory(t);
+
+				String relationpk = realtionPerson.getFieldPk();
+				t.setRelationPk(relationpk);
+				t.setFieldPk(relationpk);
+				// 删除原始数据信息
+				personInfoDao.delete(t);
+			} else {
+				throw new ValidationException("未找到要拆分的居民信息,主键为" + t.getRelationPk() + " 域标识为" + t.getUniqueSign());
+			}
+
+		} else {
+			throw new ValidationException("居民信息异常: 人员注册类型错误；state=" + t.getState() + ";域标识为:" + t.getUniqueSign()
+					+ ",居民健康档案号为:" + t.getHrId() + ",居民医疗服务编号为:" + t.getMedicalserviceNo() + ".");
 		}
 
 	}
 
+	// 增加历史信息
 	public void addHistory(final PersonInfo entity) {
 		entity.setCreatetime(new Date());
 		personInfoHistoryService.save(entity.toPersonInfoHistory());

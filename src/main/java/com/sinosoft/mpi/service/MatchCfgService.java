@@ -8,10 +8,12 @@ import javax.annotation.Resource;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.match.config.MatchConfig;
 import com.sinosoft.mpi.dao.mpi.MatchCfgDao;
 import com.sinosoft.mpi.dao.mpi.MatchFieldCfgDao;
+import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.MatchCfg;
 import com.sinosoft.mpi.model.MatchFieldCfg;
 import com.sinosoft.mpi.util.DateUtil;
@@ -55,10 +57,32 @@ public class MatchCfgService {
 	}
 
 	/**
-	 * 删除
+	 * 根据id删除
+	 * 
+	 * @param id
 	 */
-	public void delete(MatchCfg t) {
-		matchCfgDao.delete(t);
+	@Transactional
+	public void deleteById(String id) {
+		if (canDelete(id)) {
+			matchFieldCfgDao.deleteByConfigId(id);
+			matchCfgDao.delete(id);
+		} else {
+			throw new ValidationException("不能删除生效中的配置");
+		}
+	}
+
+	/**
+	 * 是否允许删除
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private boolean canDelete(String id) {
+		MatchCfg item = getObject(id);
+		if (item != null && item.getState() == "1") {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -103,6 +127,7 @@ public class MatchCfgService {
 	 * 
 	 * @param cfgId
 	 */
+	@Transactional
 	public void updateEffect(String cfgId) {
 		matchCfgDao.uneffectAll();
 		matchCfgDao.effect(cfgId);
@@ -136,4 +161,5 @@ public class MatchCfgService {
 			MatchConfig.getInstanse().reloadCfg(cfg);
 		}
 	}
+
 }

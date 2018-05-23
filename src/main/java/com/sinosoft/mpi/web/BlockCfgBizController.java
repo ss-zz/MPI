@@ -34,7 +34,7 @@ import net.sf.json.JSONObject;
 public class BlockCfgBizController {
 
 	@Resource
-	BizBlockCfgService BizBlockCfgService;
+	BizBlockCfgService bizBlockCfgService;
 
 	/**
 	 * 获取主索引列表数据
@@ -44,7 +44,7 @@ public class BlockCfgBizController {
 	public Map<String, Object> listIndex(PageInfo page, MpiBizBlockCfg bizBlockCfg) {
 		Map<String, Object> datas = new HashMap<>();
 		page.setPage(page.getPage() - 1);
-		Page<MpiBizBlockCfg> ret = BizBlockCfgService.queryForPage(bizBlockCfg, page);
+		Page<MpiBizBlockCfg> ret = bizBlockCfgService.queryForPage(bizBlockCfg, page);
 		// 设置总共有多少条记录
 		datas.put(Constant.PAGE_TOTAL, ret.getTotalElements());
 		// 设置当前页的数据
@@ -59,7 +59,7 @@ public class BlockCfgBizController {
 	public ModelAndView toViewPage(String cfgId) {
 		ModelAndView mv = new ModelAndView("/biz/page/block_view");
 		// 取得配置信息
-		MpiBizBlockCfg cfg = BizBlockCfgService.getObject(cfgId);
+		MpiBizBlockCfg cfg = bizBlockCfgService.getObject(cfgId);
 		mv.addObject("cfg", cfg);
 		return mv;
 	}
@@ -85,7 +85,7 @@ public class BlockCfgBizController {
 	@RequestMapping("/add")
 	@ResponseBody
 	public void add(@RequestBody MpiBizBlockCfg t) {
-		BizBlockCfgService.save(t);
+		bizBlockCfgService.save(t);
 	}
 
 	/**
@@ -109,6 +109,16 @@ public class BlockCfgBizController {
 	@RequestMapping("/effect")
 	@ResponseBody
 	public void effectCfg(String cfgId) {
-		BizBlockCfgService.updateEffect(cfgId);
+		bizBlockCfgService.updateEffect(cfgId);
 	}
+	
+	/**
+	 * 删除
+	 */
+	@RequestMapping(params = "method=del")
+	@ResponseBody
+	public void del(String id) {
+		bizBlockCfgService.deleteById(id);
+	}
+	
 }

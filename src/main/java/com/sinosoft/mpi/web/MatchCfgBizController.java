@@ -153,4 +153,14 @@ public class MatchCfgBizController {
 	public void add(@RequestBody MpiBizMatchCfg t) {
 		bizMatchCfgService.save(t);
 	}
+	
+	/**
+	 * 删除
+	 */
+	@RequestMapping(params = "method=del")
+	@ResponseBody
+	public void del(String id) {
+		bizMatchCfgService.deleteById(id);
+	}
+	
 }

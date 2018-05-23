@@ -15,9 +15,16 @@ import java.util.Vector;
 
 import javax.annotation.Resource;
 import javax.cache.annotation.CacheDefaults;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -39,6 +46,7 @@ import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.SqlUtils;
+import com.sinosoft.mpi.ws.domain.MpiIndexSearchParams;
 
 /**
  * 主索引人员服务
@@ -123,8 +131,23 @@ public class PersonIndexService {
 	 * @param page
 	 * @return
 	 */
-	public List<PersonIndex> queryForPage(PersonIndex t, PageInfo page) {
-		return personIndexDao.findAll(page).getContent();
+	public Page<PersonIndex> queryForPage(final MpiIndexSearchParams params, PageInfo page) {
+		return personIndexDao.findAll(new Specification<PersonIndex>() {
+			@Override
+			public Predicate toPredicate(Root<PersonIndex> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				List<Predicate> predicates = new ArrayList<>();
+				if (StringUtils.isNotBlank(params.getName())) {// 姓名
+					predicates.add(cb.equal(root.get("nameCn"), params.getName()));
+				}
+				if (StringUtils.isNotBlank(params.getSex())) {// 性别
+					predicates.add(cb.equal(root.get("genderCd"), params.getSex()));
+				}
+				if (StringUtils.isNotBlank(params.getIdNo())) {// 身份证号
+					predicates.add(cb.equal(root.get("idNo"), params.getIdNo()));
+				}
+				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+			}
+		}, page);
 	}
 
 	/**

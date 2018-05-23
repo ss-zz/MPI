@@ -134,7 +134,7 @@ function openTab(tabId,title,url,name){
 
 // 使配置生效
 function activateCfg(cfgId,cfgName,btn){
-	if(confirm("确认使用["+cfgName+"]匹配配置么?\n\r(此配置生效后,现使用的配置将失效)")){
+	confirm("确认使用["+cfgName+"]匹配配置么?\n\r(此配置生效后,现使用的配置将失效)", function(){
 		lockBtn(btn);
 		$.ajax({
 			async : false,
@@ -163,8 +163,8 @@ function activateCfg(cfgId,cfgName,btn){
 				}
 				alert(messgage);
 			}
-		});		
-	}
+		});
+	})
 }
 
 function openAddPage(){

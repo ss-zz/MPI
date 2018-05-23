@@ -477,7 +477,9 @@ public class PersonIdxLogService {
 		// 取得域信息
 		if (StringUtils.isNotBlank(log.getInfoSour())) {
 			IdentifierDomain domain = identifierDomainService.getObject(log.getInfoSour());
-			log.setInfoSour(domain.getDomainDesc());
+			if(domain != null) {
+				log.setInfoSour(domain.getDomainDesc());
+			}
 		}
 		// 取得居民数据
 		PersonInfo person;

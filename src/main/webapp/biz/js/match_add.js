@@ -21,27 +21,6 @@ function unlockBtn(btn,handler){
 }
 
 /**
- * @param id select ID
- * @param data 数据
- * @param textStr 文本标志
- * @param valStr 值标志
- * @param inused 使用中的数据
- */
-function createSelect(id,data,textStr,valStr,inused){
-	var sel = $("#"+id);
-	sel.empty();
-	sel.prepend('<option value="">请选择</option>');
-	for(var i = 0 ; i < data.length ; i++){
-		var obj = data[i];
-		var text = obj[textStr];
-		var val = obj[valStr];
-		if(inused!=undefined && inused!=null && inused[val]!=null)
-			continue;		
-		sel.append('<option value="'+val+'">'+text+'</option>');
-	}
-}
-
-/**
  * 添加字段配置
  */
 function addFieldCfg(){

@@ -60,7 +60,6 @@
 			<table id="userListTable"
 					title="角色用户列表"
 					iconCls="icon-detail" 
-					width="98%" 
 					idField="USER_ID" 
 					url="${pageContext.request.contextPath}/role/role.ac?method=listUser" >
 				<thead>

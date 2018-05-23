@@ -7,9 +7,13 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
 
+import org.springframework.data.domain.Page;
+
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.register.BizRegister;
 import com.sinosoft.mpi.model.register.PersonRegister;
+import com.sinosoft.mpi.model.search.BizSearchResult;
+import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.ws.domain.DataResult;
 import com.sinosoft.mpi.ws.domain.MpiIndexSearchParams;
 
@@ -70,7 +74,8 @@ public interface IMpiIndexWS {
 	 *            主索引id
 	 * @return 主索引信息
 	 */
-	DataResult<List<PersonIndex>> searchPersonIndex(@WebParam(name = "params") MpiIndexSearchParams params);
+	DataResult<Page<PersonIndex>> searchPersonIndex(@WebParam(name = "params") MpiIndexSearchParams params,
+			@WebParam(name = "page") PageInfo page);
 
 	/**
 	 * 根据主索引id获取所有相关业务id
@@ -79,7 +84,7 @@ public interface IMpiIndexWS {
 	 *            主索引id
 	 * @return 业务id、业务系统id、次id列表
 	 */
-	DataResult<String[][]> searchBizsByMpiId(@WebParam(name = "mpiId") String mpiId);
+	DataResult<List<BizSearchResult>> searchBizsByMpiId(@WebParam(name = "mpiId") String mpiId);
 
 	/**
 	 * 根据主索引id获取所有相关业务id
@@ -90,7 +95,7 @@ public interface IMpiIndexWS {
 	 *            业务系统id
 	 * @return 业务id、次id列表
 	 */
-	DataResult<String[][]> searchBizsByMpiIdAndSystemId(@WebParam(name = "mpiId") String mpiId,
+	DataResult<List<BizSearchResult>> searchBizsByMpiIdAndSystemId(@WebParam(name = "mpiId") String mpiId,
 			@WebParam(name = "systemId") String systemId);
 
 }

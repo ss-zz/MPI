@@ -21,4 +21,12 @@ public interface BlockGroupDao extends JpaRepository<BlockGroup, String>, JpaSpe
 	 */
 	List<BlockGroup> findByBolckIdAndGroupSign(String blockId, Integer groupSign);
 
+	/**
+	 * 根据blockId删除
+	 * 
+	 * @param blockId
+	 * @return
+	 */
+	long deleteByBolckId(String blockId);
+
 }

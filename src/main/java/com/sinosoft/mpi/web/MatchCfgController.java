@@ -113,6 +113,15 @@ public class MatchCfgController {
 	}
 
 	/**
+	 * 删除
+	 */
+	@RequestMapping(params = "method=del")
+	@ResponseBody
+	public void del(String id) {
+		matchCfgService.deleteById(id);
+	}
+
+	/**
 	 * 查看页面入口
 	 */
 	@RequestMapping(params = "method=current")

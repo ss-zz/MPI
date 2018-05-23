@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.config.MqConfig;
 import com.sinosoft.mpi.model.register.BizRegister;
+import com.sinosoft.mpi.model.register.BizRegisterMq;
 import com.sinosoft.mpi.model.register.PersonRegister;
 import com.sinosoft.mpi.ws.domain.DataResult;
 
@@ -19,25 +20,31 @@ public class MqService {
 	private RabbitTemplate mqTemplate;
 
 	/**
-	 * 发送bizRegister
+	 * 发送bizRegisterMq
 	 * 
-	 * @param bizRegister
+	 * @param bizRegisterMq
 	 */
-	public void sendBizRegister(BizRegister bizRegister) {
-		mqTemplate.convertAndSend(MqConfig.MQ_EXCHANGE_NAME, MqConfig.MQ_QUEUE_NAME_INDEX, bizRegister);
+	public void sendBizRegisterMq(BizRegisterMq bizRegisterMq) {
+		mqTemplate.convertAndSend(MqConfig.MQ_EXCHANGE_NAME, MqConfig.MQ_QUEUE_NAME_INDEX, bizRegisterMq);
 	}
 
 	/**
-	 * 发送personInfo
+	 * 发送personRegister
 	 * 
-	 * @param personInfo
+	 * @param personRegister
+	 *            人员注册信息
+	 * @param personFieldPk
+	 *            新生成的人员主键
 	 */
-	public void sendPersonInfo(PersonRegister personRegister) {
+	public void sendPersonInfo(PersonRegister personRegister, String personFieldPk) {
+		BizRegisterMq regMq = new BizRegisterMq();
 		BizRegister reg = new BizRegister();
 		reg.setMpiPersonInfoRegister(personRegister.getMpiPersonInfoRegister());
 		reg.setSystemKey(personRegister.getSystemKey());
 		reg.setType(personRegister.getType());
-		sendBizRegister(reg);
+		regMq.setBizRegister(reg);
+		regMq.setPersonFieldPk(personFieldPk);
+		sendBizRegisterMq(regMq);
 	}
 
 	/**
