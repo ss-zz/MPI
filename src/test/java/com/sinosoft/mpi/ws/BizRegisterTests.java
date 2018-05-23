@@ -11,21 +11,22 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.sinosoft.MpiApplication;
-import com.sinosoft.mpi.model.PersonInfo;
-import com.sinosoft.mpi.model.register.PersonRegister;
+import com.sinosoft.mpi.model.MpiPersonInfoRegister;
+import com.sinosoft.mpi.model.biz.MpiBizInfoRegister;
+import com.sinosoft.mpi.model.register.BizRegister;
 import com.sinosoft.mpi.service.MpiIndexRegisterService;
 import com.sinosoft.mpi.ws.domain.DataResult;
 
 /**
- * webservice 测试
+ * 业务数据注册测试
  * 
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = MpiApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class WSTests {
+public class BizRegisterTests {
 
 	private static final String SYSTEM_ID = "005471944";
-	private static final String SYSTEM_DESC = "测试系统";
+	private static final Short DATA_STATE = Short.valueOf("0");
 
 	@Resource
 	private MpiIndexRegisterService mpiIndexRegisterService;
@@ -36,12 +37,19 @@ public class WSTests {
 	@Test
 	public void registerPerson() throws Exception {
 
-		PersonRegister person = new PersonRegister();
-		person.setPersonInfo(getDemoPerson());
-		person.setSystemKey(SYSTEM_ID);
+		BizRegister biz = new BizRegister();
 
-		DataResult<Void> ret = mpiIndexRegisterService.registerPerson(person);
-		System.out.println(ret);
+		biz.setType(DATA_STATE);
+		biz.setSystemKey(SYSTEM_ID);
+
+		biz.setMpiPersonInfoRegister(getDemoPerson());
+		biz.setBizInfo(getDemoBiz());
+
+		int max = 1;
+		for (int i = 0; i < max; i++) {
+			DataResult<Void> ret = mpiIndexRegisterService.registeBiz(biz);
+			System.out.println(ret);
+		}
 	}
 
 	/**
@@ -49,16 +57,13 @@ public class WSTests {
 	 * 
 	 * @return
 	 */
-	private PersonInfo getDemoPerson() {
+	private MpiPersonInfoRegister getDemoPerson() {
 
-		String systemId = SYSTEM_ID;
-		String systemDesc = SYSTEM_DESC;
 		Date now = new Date();
 
-		PersonInfo person = new PersonInfo();
+		MpiPersonInfoRegister person = new MpiPersonInfoRegister();
 
 		// 必填项
-
 		// 人员id
 		person.setPatientId(UUID.randomUUID().toString());
 
@@ -68,28 +73,22 @@ public class WSTests {
 		person.setBirthDate(now);
 		person.setArCd("410000");
 
-		// 域信息
-		person.setDomainId("1");
-		person.setUniqueSign(systemId);
-
-		// 数据状态
-		person.setState((short) 0);
-
-		// 发送信息
-		person.setSendOrgCode(systemId);
-		person.setSendSystem(systemDesc);
-		person.setSendTime(now);
-
-		// 注册信息
-		person.setRegisterDate(now);
-		person.setRegisterOrgCode(systemId);
-		person.setRegisterOrgName(systemDesc);
-
-		// 系统开发商信息
-		person.setProviderName("系统开发商");
-		person.setProviderOrgCode("000");
-
 		return person;
+	}
+
+	/**
+	 * 获取测试业务数据
+	 * 
+	 * @return
+	 */
+	public MpiBizInfoRegister getDemoBiz() {
+		MpiBizInfoRegister biz = new MpiBizInfoRegister();
+		biz.setBizId(UUID.randomUUID().toString());
+		biz.setBizClinicno("12345");
+		biz.setBizClinicSerialno("45687");
+		biz.setBizInpatientno("78545");
+		biz.setBizInpatientSerialno("74521");
+		return biz;
 	}
 
 }

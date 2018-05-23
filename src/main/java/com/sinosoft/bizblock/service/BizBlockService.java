@@ -11,18 +11,15 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sinosoft.bizblock.config.BizBlockConfig;
 import com.sinosoft.block.BlockException;
-import com.sinosoft.block.config.BlockConfig;
 import com.sinosoft.block.fun.IBlockFuntion;
 import com.sinosoft.block.model.BlockField;
 import com.sinosoft.block.model.BlockRound;
 import com.sinosoft.match.model.Record;
-import com.sinosoft.mpi.model.BlockCfg;
-import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
 import com.sinosoft.mpi.model.biz.MpiBizIndex;
-import com.sinosoft.mpi.model.biz.MpiBizInfo;
+import com.sinosoft.mpi.model.biz.MpiBizInfoRegister;
 import com.sinosoft.mpi.service.biz.BizIndexService;
-import com.sinosoft.mpi.util.PageInfo;
 
 /**
  * 业务初筛服务
@@ -40,13 +37,13 @@ public class BizBlockService {
 	 *            业务信息
 	 * @return 初筛结果集
 	 */
-	public List<Record<MpiBizIndex>> findCandidates(Record<MpiBizInfo> record) {
+	public List<Record<MpiBizIndex>> findCandidates(Record<MpiBizInfoRegister> record) {
 		List<Record<MpiBizIndex>> result = new ArrayList<Record<MpiBizIndex>>();
-		List<BlockRound> rounds = BlockConfig.getInstanse().getBlockRounds();
+		List<BlockRound> rounds = BizBlockConfig.getInstanse().getBlockRounds();
 		List<Object> args = new ArrayList<Object>();
 
 		StringBuilder sb = new StringBuilder();
-		sb.append(" select *  from mpi_person_index a where ");
+		sb.append(" select *  from mpi_biz_index a where ");
 		int k = 0;
 		for (int i = 0; i < rounds.size(); i++) {
 			BlockRound round = rounds.get(i);
@@ -91,9 +88,6 @@ public class BizBlockService {
 
 			}
 		}
-		// bysun 2012-5-9 13:38:53 增加一个排序 主动关联至 关联人员最多的索引上
-		sb.append(
-				" order by (select count(b.COMBINE_NO) from mpi_index_identifier_rel b where b.mpi_pk = a.mpi_pk ) desc ");
 		if (k != rounds.size()) {
 			List<MpiBizIndex> indexes = bizIndexService.find(sb.toString(), args.toArray());
 			for (MpiBizIndex index : indexes) {
@@ -115,7 +109,7 @@ public class BizBlockService {
 	 *            字段配置
 	 * @return 指定字段的值
 	 */
-	private Object foundArg(Record<MpiBizInfo> record, BlockField field) {
+	private Object foundArg(Record<MpiBizInfoRegister> record, BlockField field) {
 		Object result = null;
 		if (field.getFunName() == null || "".equals(field.getFunName().trim())) {
 			result = record.getAsString(field.getField());
@@ -266,7 +260,5 @@ public class BizBlockService {
 		}
 		return result;
 	}
-	
-	
 
 }

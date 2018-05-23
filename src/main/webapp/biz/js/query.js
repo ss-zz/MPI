@@ -112,7 +112,7 @@ function searchListTable() {
 	$("#listTable").treegrid({
 		queryParams : {
 			"bizSystemId" : search_system_id,
-			"create_Date":search_create_date,
+			"createDate":search_create_date,
 			"bizInpatientSerialno":search_inpatient_no,
 			"bizClinicSerialno":search_clinic_serial_no,
 			page: 0,

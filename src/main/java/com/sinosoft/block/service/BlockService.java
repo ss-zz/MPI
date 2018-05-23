@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -48,55 +49,55 @@ public class BlockService {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(" select *  from mpi_person_index a where ");
+		// k代表验证不通过字段数量
 		int k = 0;
+		// 循环组
 		for (int i = 0; i < rounds.size(); i++) {
 			BlockRound round = rounds.get(i);
 
 			List<BlockField> fields = round.getBlockFields();
+			// 循环字段
 			for (int j = 0; j < fields.size(); j++) {
 				BlockField field = fields.get(j);
 				String fieldvalue = getFieldValue(record.get(field.getDbField()));
 				boolean isdate = getObjType(record.get(field.getDbField()));
+
+				if (i != 0 && j == 0) {
+					sb.append(" or ");
+				}
+				if (j == 0) {
+					sb.append(" (");
+				} else {
+					sb.append(" and ");
+				}
+
 				if (verifyPerson(field.getDbField(), fieldvalue)) {
 					args.add(foundArg(record, field));
-					if (i != 0) {
-						if (i > k) {
-							if (j == 0) {
-								sb.append(" or ");
-							}
-						}
-					}
+
 					if (isdate) {
-						if (j == 0) {
-							sb.append(" (").append(field.getDbField()).append("=TO_DATE(?, 'YYYY-mm-dd HH24:MI:SS') ");
-						}
-						if (j != 0) {
-							sb.append(" and ").append(field.getDbField())
-									.append("=TO_DATE(?, 'YYYY-mm-dd HH24:MI:SS')  ");
-						}
+						sb.append(field.getDbField()).append("=TO_DATE(?, 'YYYY-mm-dd HH24:MI:SS')  ");
 					} else {
-						if (j == 0) {
-							sb.append(" (").append(field.getDbField()).append("=? ");
-						}
-						if (j != 0) {
-							sb.append(" and ").append(field.getDbField()).append("=? ");
-						}
+						sb.append(field.getDbField()).append("=? ");
 					}
 
-					if (j == fields.size() - 1) {
-						sb.append(")");
-					}
 				} else {
+					// 不合法的字段直接不能初筛查询
+					sb.append(" 1=2 ");
 					k++;
+				}
+
+				if (j == fields.size() - 1) {
+					sb.append(")");
 				}
 
 			}
 		}
-		// bysun 2012-5-9 13:38:53 增加一个排序 主动关联至 关联人员最多的索引上
+		// 增加一个排序 主动关联至 关联人员最多的索引上
 		sb.append(
 				" order by (select count(b.COMBINE_NO) from mpi_index_identifier_rel b where b.mpi_pk = a.mpi_pk ) desc ");
 		if (k != rounds.size()) {
-			List<PersonIndex> indexes = jdbcTemplate.queryForList(sb.toString(), args.toArray(), PersonIndex.class);
+			List<PersonIndex> indexes = jdbcTemplate.query(sb.toString(), args.toArray(),
+					new BeanPropertyRowMapper<PersonIndex>(PersonIndex.class));
 			for (PersonIndex index : indexes) {
 				Record<PersonIndex> indexRecord = new Record<PersonIndex>(index);
 				indexRecord.setRecordId(index.getMpiPk());// 主键标志

@@ -28,7 +28,6 @@ public class MpiBizBlockCfg implements Serializable {
 	 * id
 	 */
 	@Id
-	@Column
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	@GeneratedValue(generator = "system-uuid")
 	private String blockId;

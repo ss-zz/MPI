@@ -1,36 +1,23 @@
 package com.sinosoft.mpi.model.register;
 
-import com.sinosoft.mpi.model.PersonInfo;
+import com.sinosoft.mpi.model.MpiPersonInfoRegister;
 
 /**
- * 人员注册
+ * 人员注册信息
  */
-public class PersonRegister {
-
-	/**
-	 * 业务系统唯一标识
-	 */
-	String systemKey;
+public class PersonRegister extends BaseRegister{
 
 	/**
 	 * 人员信息
 	 */
-	PersonInfo personInfo;
+	private MpiPersonInfoRegister mpiPersonInfoRegister;
 
-	public String getSystemKey() {
-		return systemKey;
+	public MpiPersonInfoRegister getMpiPersonInfoRegister() {
+		return mpiPersonInfoRegister;
 	}
 
-	public void setSystemKey(String systemKey) {
-		this.systemKey = systemKey;
-	}
-
-	public PersonInfo getPersonInfo() {
-		return personInfo;
-	}
-
-	public void setPersonInfo(PersonInfo personInfo) {
-		this.personInfo = personInfo;
+	public void setMpiPersonInfoRegister(MpiPersonInfoRegister mpiPersonInfoRegister) {
+		this.mpiPersonInfoRegister = mpiPersonInfoRegister;
 	}
 
 }

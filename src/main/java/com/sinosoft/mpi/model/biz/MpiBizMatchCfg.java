@@ -1,10 +1,10 @@
 package com.sinosoft.mpi.model.biz;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -16,10 +16,11 @@ import com.sinosoft.bizmatch.config.BizMatchConfig;
 import com.sinosoft.match.model.MatchField;
 
 @Entity
-public class MpiBizMatchCfg {
+public class MpiBizMatchCfg implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	@GeneratedValue(generator = "system-uuid")
 	private String configId;

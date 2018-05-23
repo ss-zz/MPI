@@ -21,10 +21,9 @@ import com.sinosoft.bizblock.config.BizBlockConfig;
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.dao.biz.MpiBizBlockCfgDao;
 import com.sinosoft.mpi.dao.biz.MpiBizBlockGroupDao;
-import com.sinosoft.mpi.model.biz.MpiBizBPropertiesDesc;
+import com.sinosoft.mpi.model.biz.MpiBizPropertiesDesc;
 import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
 import com.sinosoft.mpi.model.biz.MpiBizBlockGroup;
-import com.sinosoft.mpi.model.code.PersonPropertiesDesc;
 import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.PageInfo;
 
@@ -63,7 +62,7 @@ public class BizBlockCfgService {
 	 */
 	private void saveBlockGroups(List<MpiBizBlockGroup> list, String bolckId, Integer groupSign) {
 		for (MpiBizBlockGroup t : list) {
-			MpiBizBPropertiesDesc ppd = CacheManager.get(MpiBizBPropertiesDesc.class, t.getPropertyName());
+			MpiBizPropertiesDesc ppd = CacheManager.get(MpiBizPropertiesDesc.class, t.getPropertyName());
 			t.setDbField(ppd.getColumn());
 			t.setPropertyCnName(ppd.getPropertyDesc());
 			t.setBolckId(bolckId);

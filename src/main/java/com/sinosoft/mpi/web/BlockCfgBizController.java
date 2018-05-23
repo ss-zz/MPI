@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sinosoft.bizblock.config.BizBlockConfig;
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
-import com.sinosoft.mpi.model.biz.MpiBizBPropertiesDesc;
+import com.sinosoft.mpi.model.biz.MpiBizPropertiesDesc;
 import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
 import com.sinosoft.mpi.service.biz.BizBlockCfgService;
 import com.sinosoft.mpi.util.PageInfo;
@@ -71,7 +71,7 @@ public class BlockCfgBizController {
 	public ModelAndView toMatchCfgPage() {
 		JSONObject datas = new JSONObject();
 		// 取得居民信息 字段描述
-		List<MpiBizBPropertiesDesc> pList = CacheManager.getAll(MpiBizBPropertiesDesc.class);
+		List<MpiBizPropertiesDesc> pList = CacheManager.getAll(MpiBizPropertiesDesc.class);
 		// 字段属性
 		datas.put("pList", pList);
 		ModelAndView mv = new ModelAndView("/biz/page/block_add");

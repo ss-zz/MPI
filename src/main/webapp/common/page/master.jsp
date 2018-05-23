@@ -269,6 +269,10 @@ body {
 	function alert(info){
 		$.messager.alert('提示', info);
 	}
+	function showMessage(message){
+		$.messager.show({title: '提示', msg: message});
+		
+	}
 	
 	// 转换函数数据
 	var SELECT_FUNS = [{

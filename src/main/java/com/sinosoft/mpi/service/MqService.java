@@ -5,8 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.config.MqConfig;
-import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.register.BizRegister;
+import com.sinosoft.mpi.model.register.PersonRegister;
+import com.sinosoft.mpi.ws.domain.DataResult;
 
 /**
  * mq相关服务
@@ -31,11 +32,21 @@ public class MqService {
 	 * 
 	 * @param personInfo
 	 */
-	public void sendPersonInfo(PersonInfo personInfo) {
+	public void sendPersonInfo(PersonRegister personRegister) {
 		BizRegister reg = new BizRegister();
-		reg.setPersonInfo(personInfo);
-		reg.setSystemKey(personInfo.getDomainId());
+		reg.setMpiPersonInfoRegister(personRegister.getMpiPersonInfoRegister());
+		reg.setSystemKey(personRegister.getSystemKey());
+		reg.setType(personRegister.getType());
 		sendBizRegister(reg);
+	}
+
+	/**
+	 * 发送数据处理结果
+	 * 
+	 * @param result
+	 */
+	public <T> void sendDataResult(DataResult<T> result) {
+		mqTemplate.convertAndSend(MqConfig.MQ_EXCHANGE_NAME, MqConfig.MQ_QUEUE_NAME_RESULT, result);
 	}
 
 }

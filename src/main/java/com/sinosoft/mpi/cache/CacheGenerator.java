@@ -12,7 +12,7 @@ import com.sinosoft.mpi.annotation.PropertyDesc;
 import com.sinosoft.mpi.dao.IBaseDao;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
-import com.sinosoft.mpi.model.biz.MpiBizBPropertiesDesc;
+import com.sinosoft.mpi.model.biz.MpiBizPropertiesDesc;
 import com.sinosoft.mpi.model.biz.MpiBizIndex;
 import com.sinosoft.mpi.model.code.IBaseCode;
 import com.sinosoft.mpi.model.code.PerInfoPropertiesDesc;
@@ -39,7 +39,7 @@ public class CacheGenerator implements InitializingBean {
 		// 初始化PersonIndex表所有属性对应中文名到缓存
 		buildCache(PersonPropertiesDesc.class, buildPropertyDesc());
 		buildCache(PerInfoPropertiesDesc.class, buildPerInfoPropertyDesc());
-		buildCache(MpiBizBPropertiesDesc.class, buildMpiBizPropertyDesc());
+		buildCache(MpiBizPropertiesDesc.class, buildMpiBizPropertyDesc());
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class CacheGenerator implements InitializingBean {
 				String name = field.getName();
 				String desc = ann.name();
 				String column = ann.column();
-				MpiBizBPropertiesDesc ppd = new MpiBizBPropertiesDesc(name, desc, column);
+				MpiBizPropertiesDesc ppd = new MpiBizPropertiesDesc(name, desc, column);
 				codes.add(ppd);
 			}
 		}

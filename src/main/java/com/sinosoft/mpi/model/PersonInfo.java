@@ -158,7 +158,7 @@ public class PersonInfo implements Serializable {
 	@PropertyDesc(name = "患者类型", column = "PATIENT_TYPE")
 	private String patientType;
 
-	@PropertyDesc(name = "手机号码", column = "m_PHONE_NUM")
+	@PropertyDesc(name = "手机号码", column = "M_PHONE_NUM")
 	private String mPhoneNum;
 
 	@PropertyDesc(name = "工作单位邮编", column = "WORKING_UNIT_POST")

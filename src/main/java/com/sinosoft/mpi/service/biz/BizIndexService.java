@@ -15,18 +15,18 @@ import javax.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.context.QueryConditionType;
 import com.sinosoft.mpi.dao.biz.MpiBizIndexDao;
-import com.sinosoft.mpi.model.biz.MpiBizIdxLog;
 import com.sinosoft.mpi.model.biz.MpiBizIndex;
-import com.sinosoft.mpi.model.biz.MpiBizInfo;
+import com.sinosoft.mpi.model.biz.MpiBizInfoRegister;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.SqlUtils;
 
-import javax.persistence.criteria.Path;
+
 /**
  * 主索引业务服务
  */
@@ -74,21 +74,21 @@ public class BizIndexService {
 	 * @param page
 	 * @return
 	 */
-	public Page<MpiBizIndex> queryForPage(final MpiBizIndex t,PageInfo page) {
+	public Page<MpiBizIndex> queryForPage(final MpiBizIndex t, PageInfo page) {
 		return bizIndexDao.findAll(new Specification<MpiBizIndex>() {
 			@Override
 			public Predicate toPredicate(Root<MpiBizIndex> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				 List<Predicate> predicates = new ArrayList<>();
-	                if(null != t.getBizInpatientSerialno()){
-	                    predicates.add(cb.equal(root.get("bizInpatientSerialno"), t.getBizInpatientSerialno()));
-	                }
-	                if(null != t.getBizSystemId()){
-	                    predicates.add(cb.equal(root.get("bizSystemId"), t.getBizSystemId()));
-	                }
-	                if(null != t.getCreate_Date()){
-	                    predicates.add(cb.equal(root.get("create_Date"), t.getCreate_Date()));
-	                }
-	                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+				List<Predicate> predicates = new ArrayList<>();
+				if (null != t.getBizInpatientSerialno()) {
+					predicates.add(cb.equal(root.get("bizInpatientSerialno"), t.getBizInpatientSerialno()));
+				}
+				if (null != t.getBizSystemId()) {
+					predicates.add(cb.equal(root.get("bizSystemId"), t.getBizSystemId()));
+				}
+				if (null != t.getCreateDate()) {
+					predicates.add(cb.equal(root.get("create_Date"), t.getCreateDate()));
+				}
+				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 			}
 		}, page);
 	}
@@ -107,9 +107,10 @@ public class BizIndexService {
 	/**
 	 * 直接更新 索引信息
 	 */
-	public MpiBizIndex updateIndexDirect(MpiBizInfo person, String id) {
-		person.setId(id);
-		return bizIndexDao.save(person.toIndex());
+	public MpiBizIndex updateIndexDirect(MpiBizInfoRegister person, String id) {
+		MpiBizIndex index = person.toIndex();
+		index.setId(id);
+		return bizIndexDao.save(index);
 	}
 
 	/**
@@ -129,7 +130,7 @@ public class BizIndexService {
 	 * @return
 	 */
 	public List<MpiBizIndex> find(String sql, Object[] args) {
-		return jdbcTemplate.queryForList(sql, args, MpiBizIndex.class);
+		return jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<MpiBizIndex>(MpiBizIndex.class));
 	}
 	
 	/**
@@ -146,8 +147,8 @@ public class BizIndexService {
 				.append(" left join mpi_identifier_domain d on b.BIZ_SYSTEM_ID = d.domain_id ")
 				.append(" left join mpi_person_info i on i.field_pk = b.biz_patient_id where 1=1 ");
 		
-			if(t.getCreate_Date() != null){
-				sql.append("and b.CREATE_DATE = TO_DATE('"+sdf.format(t.getCreate_Date()).toString()+"','yyyy-mm-dd') ");
+			if(t.getCreateDate() != null){
+				sql.append("and b.CREATE_DATE = TO_DATE('"+sdf.format(t.getCreateDate()).toString()+"','yyyy-mm-dd') ");
 			}
 			/*if(t.getBlTime_end() != null && t.getBlTime_begin() == null){
 				sql.append("and l.bl_time <= TO_DATE('"+sdf.format(sdf.parse(t.getBlTime_end())).toString()+"','yyyy-mm-dd') ");
