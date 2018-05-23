@@ -21,7 +21,9 @@
 <body>
 
 	<!-- 表格 -->
-	<table id="listTable"></table>
+	<table id="listTable">
+	
+	</table>
 	
 	<!-- 搜索工具条 -->
 	<div id="listTable_tb">

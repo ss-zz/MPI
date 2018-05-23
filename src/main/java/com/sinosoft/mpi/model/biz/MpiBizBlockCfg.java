@@ -46,7 +46,7 @@ public class MpiBizBlockCfg implements Serializable {
 	private Integer groupCount;
 
 	@Column
-	private Date createDate;
+	private String createDate;
 
 	/**
 	 * 状态：0 - 无效,1 - 有效
@@ -100,11 +100,13 @@ public class MpiBizBlockCfg implements Serializable {
 		this.groupCount = groupCount;
 	}
 
-	public Date getCreateDate() {
+	
+
+	public String getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 

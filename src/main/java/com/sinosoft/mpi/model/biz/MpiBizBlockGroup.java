@@ -12,7 +12,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.sinosoft.block.model.BlockField;
 import com.sinosoft.mpi.cache.CacheManager;
-import com.sinosoft.mpi.model.CommonDesc;
 
 @Entity()
 public class MpiBizBlockGroup implements Serializable {

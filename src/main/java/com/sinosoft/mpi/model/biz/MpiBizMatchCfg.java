@@ -34,7 +34,7 @@ public class MpiBizMatchCfg {
 	private String matchThreshold;
 
 	/* 创建日期 创建日期 */
-	private Date createDate;
+	private String createDate;
 
 	/* 生效状态 0 - 未生效 1 - 生效 */
 	private String state;
@@ -106,12 +106,14 @@ public class MpiBizMatchCfg {
 		this.matchFieldCfgs = matchFieldCfgs;
 	}
 
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
+
+
 
 }

@@ -76,6 +76,10 @@ function buildState(val,row){
 	}
 }
 
+function initDate(val,row){
+	return val.substring(0,val.length-2);
+}
+
 // 创建操作连接
 function buildOptLink(val,row){
 	var link = '';

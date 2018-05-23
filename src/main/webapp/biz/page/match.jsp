@@ -19,7 +19,7 @@
 	<thead>
 		<tr align="center">
 			<th field="configDesc"  width="400">描述</th>
-			<th field="createDate"  width="100">创建日期</th>
+			<th field="createDate"  width="100" formatter="initDate">创建日期</th>
 			<th field="state"  width="50" formatter="buildState">状态</th>
 			<th field="configId"  width="150" formatter="buildOptLink">操作</th>
 		</tr>
