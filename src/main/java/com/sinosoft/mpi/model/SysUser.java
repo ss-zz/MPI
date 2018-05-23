@@ -9,6 +9,7 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.GenericGenerator;
 
+
 /**
  * 系统用户
  */
@@ -74,6 +75,11 @@ public class SysUser implements Serializable {
 	 * 更新时间
 	 */
 	private Date updateDate;
+	
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 	public String getUserId() {
 		return userId;

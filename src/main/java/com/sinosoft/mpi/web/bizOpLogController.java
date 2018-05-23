@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.http.HttpRequest;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -17,26 +18,23 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.context.support.HttpRequestHandlerServlet;
 
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.biz.MpiBizIdxLog;
-import com.sinosoft.mpi.model.biz.MpiBizIndex;
-import com.sinosoft.mpi.service.biz.BizIndexService;
+import com.sinosoft.mpi.service.biz.BizIdxLogService;
 import com.sinosoft.mpi.util.PageInfo;
 
 /**
- * 主索引业务控制器
- * 
- * @author admin
- *
+ * 主索引操作日志
  */
 @Controller
-@RequestMapping("/indexBIZ")
-public class IndexBIZController {
+@RequestMapping("/bizLog")
+public class bizOpLogController {
 
 	@Resource
-	BizIndexService BizIndexService;
-
+	private BizIdxLogService bizIdxLogService;
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder, WebRequest request) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -48,28 +46,13 @@ public class IndexBIZController {
 	}
 
 	/**
-	 * 获取主索引列表数据
-	 *//*
-	@RequestMapping("/query")
-	@ResponseBody
-	public Map<String, Object> listIndex(PageInfo page, MpiBizIndex bizIndex) {
-		Map<String, Object> datas = new HashMap<>();
-		Page<MpiBizIndex> data = BizIndexService.queryForPage(bizIndex, page);
-		// 设置总共有多少条记录
-		datas.put(Constant.PAGE_TOTAL, data.getTotalElements());
-		// 设置当前页的数据
-		datas.put(Constant.PAGE_ROWS, data.getContent());
-		return datas;
-	}
-	*/
-	/**
-	 * 显示主索引业务列表
+	 * 显示操作日志列表
 	 */
 	@RequestMapping("/query")
 	@ResponseBody
-	public Map<String, Object> list(PageInfo page, MpiBizIndex bizIndex) {
+	public Map<String, Object> list(PageInfo page, MpiBizIdxLog t) {
 		Map<String, Object> datas = new HashMap<>();
-		List<Map<String, Object>> list = BizIndexService.queryForMapPage(bizIndex, page);
+		List<Map<String, Object>> list = bizIdxLogService.queryForMapPage(t, page);
 		// 设置总共有多少条记录
 		datas.put(Constant.PAGE_TOTAL, page.getTotal());
 		// 设置当前页的数据
@@ -82,9 +65,12 @@ public class IndexBIZController {
 	 */
 	@RequestMapping("/view")
 	public String view(String logId, ModelMap modelMap) {
-		MpiBizIndex map = BizIndexService.getObject(logId);
+		//MpiBizIdxLog map1 = bizIdxLogService.findLogById(logId);
+		MpiBizIdxLog map = bizIdxLogService.getObject(logId);
 		modelMap.put("log", map);
-		return "biz/page/view";
+		return "bizlog/page/view";
 	}
+
+	
 
 }

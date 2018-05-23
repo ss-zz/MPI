@@ -1,8 +1,11 @@
 package com.sinosoft.mpi.service.biz;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.cache.annotation.CacheDefaults;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -17,11 +20,14 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.sinosoft.mpi.context.QueryConditionType;
 import com.sinosoft.mpi.dao.biz.MpiBizIndexDao;
 import com.sinosoft.mpi.model.biz.MpiBizIndex;
 import com.sinosoft.mpi.model.biz.MpiBizInfoRegister;
 import com.sinosoft.mpi.model.search.BizSearchResult;
 import com.sinosoft.mpi.util.PageInfo;
+import com.sinosoft.mpi.util.SqlUtils;
+
 
 /**
  * 主索引业务服务
@@ -88,6 +94,8 @@ public class BizIndexService {
 			}
 		}, page);
 	}
+	
+	
 
 	/**
 	 * 保存
@@ -126,6 +134,58 @@ public class BizIndexService {
 	 */
 	public List<MpiBizIndex> find(String sql, Object[] args) {
 		return jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<MpiBizIndex>(MpiBizIndex.class));
+	}
+	
+	/**
+	 * 分页查询
+	 * 
+	 * @param t
+	 * @param page
+	 * @return
+	 */
+	public List<Map<String, Object>> queryForMapPage(MpiBizIndex t, PageInfo page) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		StringBuilder sql = new StringBuilder();
+		sql.append("select b.BIZ_ID as bizId,b.BIZ_PATIENT_ID as bizPatientId,b.BIZ_SERIAL_ID as bizSerialId,b.BIZ_INPATIENTNO as bizInpatientno,b.BIZ_INPATIENT_SERIALNO as bizInpatientSerialno, b.BIZ_CLINICNO as bizClinicno,b.BIZ_CLINIC_SERIALNO as bizClinicSerialno,b.CREATE_DATE as create_Date,b.STATE as state,b.REMARK as remark,b.ID as id,b.BIZ_SYSTEM_ID as bizSystemId,d.DOMAIN_DESC as domainName,i.name_cn as uName from mpi_biz_index b")
+				.append(" left join mpi_identifier_domain d on b.BIZ_SYSTEM_ID = d.domain_id ")
+				.append(" left join mpi_person_info i on i.field_pk = b.biz_patient_id where 1=1 ");
+		
+			if(t.getCreateDate() != null){
+				sql.append("and b.CREATE_DATE = TO_DATE('"+sdf.format(t.getCreateDate()).toString()+"','yyyy-mm-dd') ");
+			}
+			/*if(t.getBlTime_end() != null && t.getBlTime_begin() == null){
+				sql.append("and l.bl_time <= TO_DATE('"+sdf.format(sdf.parse(t.getBlTime_end())).toString()+"','yyyy-mm-dd') ");
+			}
+			if(t.getBlTime_begin() != null && t.getBlTime_end() !=null){
+				sql.append("and l.bl_time >= TO_DATE('"+sdf.format(sdf.parse(t.getBlTime_begin())).toString()+"','yyyy-mm-dd') and l.bl_time <= TO_DATE('"+sdf.format(sdf.parse(t.getBlTime_end())).toString()+"','yyyy-mm-dd') ");
+			}*/
+		List<Object> args = new ArrayList<Object>();
+		// 添加查询条件
+		addconditions(t, sql, args);
+		
+		// 取得总数查询sql
+		String countSql = page.buildCountSql(sql);
+		// 查询设置分页记录的总记录数
+		page.setTotal(jdbcTemplate.queryForObject(countSql, args.toArray(), Integer.class));
+		// 添加排序sql
+		sql.append(" order by CREATE_DATE desc ");
+		// 取得分页查询语句
+		String querySql = page.buildPageSql(sql);
+		return jdbcTemplate.queryForList(querySql, args.toArray());
+	}
+	
+	/**
+	 * 增加条件
+	 * 
+	 * @param t
+	 * @param sql
+	 * @param args
+	 * @throws ParseException 
+	 */
+	private void addconditions(final MpiBizIndex t, final StringBuilder sql, final List<Object> args){
+		SqlUtils.appendCondition(t.getBizInpatientSerialno(), "b.BIZ_INPATIENT_SERIALNO", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(t.getBizSystemId(), "b.BIZ_SYSTEM_ID", sql, args, QueryConditionType.EQUAL);
+		SqlUtils.appendCondition(t.getBizClinicSerialno(), "b.BIZ_CLINIC_SERIALNO", sql, args, QueryConditionType.EQUAL);
 	}
 
 	/**

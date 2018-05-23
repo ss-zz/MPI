@@ -21,6 +21,7 @@ import com.sinosoft.mpi.dao.biz.MpiBizMatchFieldCfgDao;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.biz.MpiBizMatchCfg;
 import com.sinosoft.mpi.model.biz.MpiBizMatchFieldCfg;
+import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.PageInfo;
 
 /**
@@ -39,7 +40,7 @@ public class BizMatchCfgService {
 	 */
 	public void save(MpiBizMatchCfg t) {
 		// 设置必要信息
-		t.setCreateDate(new Date());
+		t.setCreateDate(DateUtil.getTimeNow(new Date()));
 		// 默认无效
 		t.setState("0");
 		// 保存

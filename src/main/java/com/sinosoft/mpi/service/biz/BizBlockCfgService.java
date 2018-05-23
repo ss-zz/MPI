@@ -25,6 +25,7 @@ import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.biz.MpiBizBlockCfg;
 import com.sinosoft.mpi.model.biz.MpiBizBlockGroup;
 import com.sinosoft.mpi.model.biz.MpiBizPropertiesDesc;
+import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.PageInfo;
 
 /**
@@ -42,7 +43,7 @@ public class BizBlockCfgService {
 	 * 保存配置信息
 	 */
 	public void save(MpiBizBlockCfg t) {
-		t.setCreateDate(new Date());
+		t.setCreateDate(DateUtil.getTimeNow(new Date()));
 		t.setState("0");
 		mpiBizBlockCfgDao.save(t);
 		for (Integer key : t.getGroups().keySet()) {
