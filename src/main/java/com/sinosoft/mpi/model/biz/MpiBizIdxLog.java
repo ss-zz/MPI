@@ -4,22 +4,21 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import com.sinosoft.mpi.model.SysUser;
-
-
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * 业务主索引操作日志
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class MpiBizIdxLog implements Serializable {
 
 	private static final long serialVersionUID = 6936464128927712060L;
@@ -28,15 +27,26 @@ public class MpiBizIdxLog implements Serializable {
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	@GeneratedValue(generator = "system-uuid")
 	private String blIdxLogId;
+
+	/**
+	 * 操作时间
+	 */
+	@CreatedDate
 	private Date blTime;
+
+	/**
+	 * 操作人
+	 */
+	@CreatedBy
 	private String blUserId;
+
 	private String blDesc;
 	private Double blMatched;
 	private String blBizId;
 	private String blSerialId;
 	private String blInfoSour;
 	private String blType;
-	
+
 	@Transient
 	private Date begin;
 	@Transient
@@ -49,7 +59,6 @@ public class MpiBizIdxLog implements Serializable {
 	private String blMatched_begin;
 	@Transient
 	private String blMatched_end;
-	
 
 	public String getBlIdxLogId() {
 		return blIdxLogId;
@@ -82,8 +91,6 @@ public class MpiBizIdxLog implements Serializable {
 	public void setBlDesc(String blDesc) {
 		this.blDesc = blDesc;
 	}
-
-	
 
 	public Double getBlMatched() {
 		return blMatched;
@@ -176,7 +183,5 @@ public class MpiBizIdxLog implements Serializable {
 	public void setBlMatched_end(String blMatched_end) {
 		this.blMatched_end = blMatched_end;
 	}
-	
-	
 
 }

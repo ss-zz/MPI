@@ -109,7 +109,7 @@ public class BizRegisterHandler {
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setSuccess(false);
-			result.setMsg("数据处理发生异常" + e.getMessage());
+			result.setMsg("数据处理发生异常：" + e.getMessage());
 		} finally {
 			// 处理结果发送到mq
 			mqService.sendDataResult(result);

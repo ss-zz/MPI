@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
 import com.sinosoft.mpi.context.Constant;
-import com.sinosoft.mpi.model.biz.MpiBizIdxLog;
 import com.sinosoft.mpi.model.biz.MpiBizIndex;
 import com.sinosoft.mpi.service.biz.BizIndexService;
 import com.sinosoft.mpi.util.PageInfo;
@@ -48,21 +46,6 @@ public class IndexBIZController {
 	}
 
 	/**
-	 * 获取主索引列表数据
-	 *//*
-	@RequestMapping("/query")
-	@ResponseBody
-	public Map<String, Object> listIndex(PageInfo page, MpiBizIndex bizIndex) {
-		Map<String, Object> datas = new HashMap<>();
-		Page<MpiBizIndex> data = BizIndexService.queryForPage(bizIndex, page);
-		// 设置总共有多少条记录
-		datas.put(Constant.PAGE_TOTAL, data.getTotalElements());
-		// 设置当前页的数据
-		datas.put(Constant.PAGE_ROWS, data.getContent());
-		return datas;
-	}
-	*/
-	/**
 	 * 显示主索引业务列表
 	 */
 	@RequestMapping("/query")
@@ -76,7 +59,7 @@ public class IndexBIZController {
 		datas.put(Constant.PAGE_ROWS, list);
 		return datas;
 	}
-	
+
 	/**
 	 * 查看索引日志详情
 	 */

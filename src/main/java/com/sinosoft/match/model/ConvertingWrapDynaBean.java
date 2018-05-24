@@ -35,9 +35,9 @@ public class ConvertingWrapDynaBean extends org.apache.commons.beanutils.Convert
 			value = PropertyUtils.getNestedProperty(instance, name);
 		} catch (InvocationTargetException ite) {
 			Throwable cause = ite.getTargetException();
-			throw new IllegalArgumentException("Error reading property '" + name + "' nested exception - " + cause);
+			throw new IllegalArgumentException("属性读取失败 '" + name + "' nested exception - " + cause);
 		} catch (Throwable t) {
-			throw new IllegalArgumentException("Error reading property '" + name + "', exception - " + t);
+			throw new IllegalArgumentException("属性读取失败 '" + name + "', exception - " + t);
 		}
 		return (value);
 	}

@@ -8,9 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.http.HttpRequest;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.context.support.HttpRequestHandlerServlet;
 
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.biz.MpiBizIdxLog;
@@ -34,7 +31,7 @@ public class bizOpLogController {
 
 	@Resource
 	private BizIdxLogService bizIdxLogService;
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder, WebRequest request) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -59,18 +56,15 @@ public class bizOpLogController {
 		datas.put(Constant.PAGE_ROWS, list);
 		return datas;
 	}
-	
+
 	/**
 	 * 查看索引日志详情
 	 */
 	@RequestMapping("/view")
 	public String view(String logId, ModelMap modelMap) {
-		//MpiBizIdxLog map1 = bizIdxLogService.findLogById(logId);
 		MpiBizIdxLog map = bizIdxLogService.getObject(logId);
 		modelMap.put("log", map);
 		return "bizlog/page/view";
 	}
-
-	
 
 }

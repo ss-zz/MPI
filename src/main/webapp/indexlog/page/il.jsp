@@ -5,24 +5,6 @@
 <head>
 <%@include file="/common/page/master.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/indexlog/js/il.js"></script>
-<style type="text/css">
-.formeTable {
-	border: 0px;
-	border-collapse: collapse;
-	width: 60%;
-}
-
-.formeTable tr td:nth-child(odd){
-	width:20%;
-	text-align: right;
-}
-
-.formeTable tr td:nth-child(even){
-	width:30%;
-	text-align: left;
-}
-
-</style>
 </head>
 <body>
 <!-- 表格 -->
@@ -71,13 +53,13 @@ $(function(){
 		<tr>
 			<td>处理类型:</td>
 			<td><select id="search_optype" >
-			<!-- 	<option value="">--请选择--</option> -->
+				<option value="">--请选择--</option>
 				<option value="1">匹配</option>
 				<option value="2">修订</option>
 			</select></td>
 			<td>处理方式:</td>
 			<td><select id="search_opstyle" >
-			<!-- 	<option value="">--请选择--</option> -->
+				<option value="">--请选择--</option>
 				<option value="1">自动合并</option>
 				<option value="2">自动新建</option>
 				<option value="3">自动拆分</option>
@@ -106,9 +88,9 @@ $(function(){
 		</tr>
 
 	</table>
-	<div>
+	<div class="formeTable-btn">
 		<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchListTable();">搜索</a>
-		<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchReset();">重置</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="searchReset();">重置</a>
 	</div>
 
 </div>

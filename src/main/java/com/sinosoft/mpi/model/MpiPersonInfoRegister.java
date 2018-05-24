@@ -1,10 +1,9 @@
 package com.sinosoft.mpi.model;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.BeanUtils;
 
 import com.sinosoft.mpi.model.register.PersonRegister;
 
@@ -1702,37 +1701,31 @@ public class MpiPersonInfoRegister implements Serializable {
 	 */
 	public PersonInfo toPersonInfo(PersonRegister personRegister) {
 		PersonInfo info = new PersonInfo();
-		try {
-			String S_DEFAULT = "default";
-			BeanUtils.copyProperties(info, this);
-			// 默认参数
-			info.setRegisterDate(new Date());
-			info.setRegisterOrgCode(S_DEFAULT);
-			info.setRegisterOrgName(S_DEFAULT);
+		String S_DEFAULT = "default";
+		BeanUtils.copyProperties(this, info);
+		// 默认参数
+		info.setRegisterDate(new Date());
+		info.setRegisterOrgCode(S_DEFAULT);
+		info.setRegisterOrgName(S_DEFAULT);
 
-			info.setArCd(S_DEFAULT);
+		info.setArCd(S_DEFAULT);
 
-			info.setSendOrgCode(S_DEFAULT);
-			info.setSendSystem(S_DEFAULT);
-			info.setSendTime(new Date());
+		info.setSendOrgCode(S_DEFAULT);
+		info.setSendSystem(S_DEFAULT);
+		info.setSendTime(new Date());
 
-			info.setProviderName(S_DEFAULT);
-			info.setProviderOrgCode(S_DEFAULT);
+		info.setProviderName(S_DEFAULT);
+		info.setProviderOrgCode(S_DEFAULT);
 
-			info.setCreatetime(new Date());
+		info.setCreatetime(new Date());
 
-			Short state = personRegister.getType();
-			info.setState(state == null ? Short.valueOf("0") : state);
+		Short state = personRegister.getType();
+		info.setState(state == null ? Short.valueOf("0") : state);
 
-			String domainId = personRegister.getSystemKey();
-			info.setUniqueSign(domainId);
-			info.setDomainId(domainId);
+		String domainId = personRegister.getSystemKey();
+		info.setUniqueSign(domainId);
+		info.setDomainId(domainId);
 
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
 		return info;
 	}
 

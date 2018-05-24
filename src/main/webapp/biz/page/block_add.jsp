@@ -18,12 +18,13 @@
 		</div>
 		
 		<fieldset>
-			<legend>初筛配置设定</legend>			
+			<legend>初筛配置设定</legend>
 			<label for="add_configDesc">初筛配置描述:</label><input type="text" class="easyui-validatebox" id="add_configDesc" maxlength="100" required="true"/>
 			<div id="add_configTip" style="color:#ff0000;font-weight:bold;"></div>
-		</fieldset><br/>
+		</fieldset>
+		<br/>
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" id="resetBtn" onclick="addGroup()">添加分组</a>
-		<div id="field_cfg_div">	</div>
+		<div id="field_cfg_div"></div>
 	</div>
 </body>
 </html>

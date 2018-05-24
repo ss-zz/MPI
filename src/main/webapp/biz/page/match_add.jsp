@@ -18,9 +18,18 @@
 		</div>
 		<fieldset>
 			<legend>整体匹配设定</legend>
-				<label for="add_agreeThreshold">完全匹配值:</label><input type="text" class="easyui-validatebox" id="add_agreeThreshold" maxlength="10" required="true" validType="decimalValid"/>
-				<label for="add_matchThreshold">可能匹配值:</label><input type="text" class="easyui-validatebox" id="add_matchThreshold" maxlength="10" required="true" validType="decimalValid"/>
-				<label for="add_configDesc">匹配设定描述:</label><input type="text" class="easyui-validatebox" id="add_configDesc" maxlength="100" required="true"/>
+				<a href="#" title="1、匹配度大于可能匹配值则匹配成功，但会在人工干预表中添加一条记录" class="easyui-tooltip easyui-linkbutton" data-options="plain:true,iconCls:'icon-help'">帮助</a>
+				<br/><br/>
+				
+				<label for="add_configDesc">配置描述:</label><input type="text" class="easyui-validatebox" id="add_configDesc" maxlength="100" required="true"/>
+				<br/><br/>
+				
+				<label for="add_agreeThreshold">完全匹配值:</label>
+				<input type="text" class="easyui-validatebox" id="add_agreeThreshold" maxlength="10" required="true" validType="decimalValid"/>
+				
+				<label for="add_matchThreshold">可能匹配值:</label>
+				<input type="text" class="easyui-validatebox" id="add_matchThreshold" maxlength="10" required="true" validType="decimalValid"/>
+				
 		</fieldset><br/>
 		<label for="add_fieldSelect">请选择匹配字段:</label><select id="add_fieldSelect" onchange="addFieldCfg()"></select>
 		<div id="field_cfg_div"></div>

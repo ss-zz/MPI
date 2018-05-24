@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.sinosoft.mpi.annotation.PropertyDesc;
 
@@ -15,6 +18,7 @@ import com.sinosoft.mpi.annotation.PropertyDesc;
  * 业务主索引
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class MpiBizIndex implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -22,29 +26,46 @@ public class MpiBizIndex implements Serializable {
 	@Id
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	@GeneratedValue(generator = "system-uuid")
-	@PropertyDesc(name = "主键", column = "ID")
 	private String id;
-	@PropertyDesc(name = "原始业务Id", column = "BIZ_ID")
+
+	@PropertyDesc(name = "原始业务唯一标识", column = "BIZ_ID")
 	private String bizId;
-	@PropertyDesc(name = "患者id", column = "BIZ_PATIENT_ID")
+
+	/**
+	 * 患者唯一标识
+	 */
 	private String bizPatientId;
-	@PropertyDesc(name = "患者就诊流水号ID(标识同一次就诊)", column = "BIZ_SERIAL_ID")
+
+	/*
+	 * 患者就诊流水号ID(标识同一次就诊)
+	 */
 	private String bizSerialId;
+
 	@PropertyDesc(name = "住院号", column = "BIZ_INPATIENTNO")
 	private String bizInpatientno;
-	@PropertyDesc(name = "住院就诊流水号", column = "BIZ_INPATIENT_SERIALNO")
-	private String bizInpatientSerialno;
+
 	@PropertyDesc(name = "门诊号", column = "BIZ_CLINICNO")
 	private String bizClinicno;
-	@PropertyDesc(name = "门诊就诊流水号", column = "BIZ_CLINIC_SERIALNO")
-	private String bizClinicSerialno;
-	@PropertyDesc(name = "域id (区别业务)", column = "BIZ_SYSTEM_ID")
+
+	/**
+	 * 业务唯一标识
+	 */
 	private String bizSystemId;
-	@PropertyDesc(name = "创建日期", column = "CREATE_DATE")
+
+	/**
+	 * 创建日期
+	 */
+	@CreatedBy
 	private Date createDate;
-	@PropertyDesc(name = "数据注册类型：0-新增 1-更新 2-拆分", column = "STATE")
+
+	/**
+	 * 数据注册类型
+	 */
 	private Short state;
-	@PropertyDesc(name = "备注", column = "REMARK")
+
+	/**
+	 * 备注
+	 */
 	private String remark;
 
 	public String getId() {
@@ -87,28 +108,12 @@ public class MpiBizIndex implements Serializable {
 		this.bizInpatientno = bizInpatientno;
 	}
 
-	public String getBizInpatientSerialno() {
-		return bizInpatientSerialno;
-	}
-
-	public void setBizInpatientSerialno(String bizInpatientSerialno) {
-		this.bizInpatientSerialno = bizInpatientSerialno;
-	}
-
 	public String getBizClinicno() {
 		return bizClinicno;
 	}
 
 	public void setBizClinicno(String bizClinicno) {
 		this.bizClinicno = bizClinicno;
-	}
-
-	public String getBizClinicSerialno() {
-		return bizClinicSerialno;
-	}
-
-	public void setBizClinicSerialno(String bizClinicSerialno) {
-		this.bizClinicSerialno = bizClinicSerialno;
 	}
 
 	public String getBizSystemId() {
@@ -152,9 +157,7 @@ public class MpiBizIndex implements Serializable {
 		this.bizPatientId = bizPatientId;
 		this.bizSerialId = bizSerialId;
 		this.bizInpatientno = bizInpatientno;
-		this.bizInpatientSerialno = bizInpatientSerialno;
 		this.bizClinicno = bizClinicno;
-		this.bizClinicSerialno = bizClinicSerialno;
 		this.bizSystemId = bizSystemId;
 		this.createDate = createDate;
 		this.state = state;

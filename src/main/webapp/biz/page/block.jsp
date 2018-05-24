@@ -12,7 +12,7 @@
 <br/>
 <br/>
 <!-- 表格 -->
-<table 	id="listTable"
+<table id="listTable"
 		title="配置列表"
 		idField="bolckId" 
 		url="${pageContext.request.contextPath}/blockCfgbiz/query" >

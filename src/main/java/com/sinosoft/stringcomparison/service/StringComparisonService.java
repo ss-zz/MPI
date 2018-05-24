@@ -1,17 +1,17 @@
 package com.sinosoft.stringcomparison.service;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.stringcomparison.MetricsException;
 import com.sinosoft.stringcomparison.config.StringComparisionConfig;
 import com.sinosoft.stringcomparison.model.DistanceMetricType;
 
 /**
  * 字符串匹配服务
  */
-@Service("stringComparisonService")
+@Service
 public class StringComparisonService implements IStringComparisonService {
 
 	@Override
@@ -26,9 +26,11 @@ public class StringComparisonService implements IStringComparisonService {
 
 	@Override
 	public DistanceMetricType getDistanceMetricType(String name) {
-		DistanceMetricType type = StringComparisionConfig.getInstanse().getDistanceMetricTypes().get(name);
+		Map<String, DistanceMetricType> types = StringComparisionConfig.getInstanse().getDistanceMetricTypes();
+		DistanceMetricType type = types.get(name);
 		if (type == null) {
-			throw new MetricsException("该匹配计算函数不存在");
+			// 默认返回精确匹配
+			return types.get("exact");
 		}
 		return type;
 	}

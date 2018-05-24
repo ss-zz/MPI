@@ -1,47 +1,50 @@
 package com.sinosoft.mpi.ws;
 
-import javax.annotation.Resource;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sinosoft.MpiApplication;
-import com.sinosoft.config.MqConfig;
-import com.sinosoft.mpi.mq.handler.BizRegisterHandler;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.Envelope;
+import com.sinosoft.mpi.ws.domain.DataResult;
 
 /**
  * 队列中数据处理结果测试
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = MpiApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MqIndexResultHandlerTests {
 
-	@Resource
-	BizRegisterHandler bizRegisterHandler;
-	@Autowired
-	RabbitTemplate mqTemplate;
-
-	ObjectMapper om = new ObjectMapper();
+	public static ObjectMapper om = new ObjectMapper();
+	public static final String MQ_HOST = "192.168.1.252";
+	public static final int MQ_PORT = 5672;
+	public static final String MQ_QUEUE_NAME = "mpi_queue_result";
 
 	/**
 	 * 处理一条数据
 	 */
-	@Test
-	public void handleOne() throws Exception {
+	public static void main(String[] args) {
 
-		// 从处理结果队列中获取结果内容
-		Object result = null;
-		int count = 0;
-		while ((result = mqTemplate.receiveAndConvert(MqConfig.MQ_QUEUE_NAME_RESULT)) != null) {
-			count++;
-			System.out.println(om.writeValueAsString(result));
+		try {
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost(MQ_HOST);
+			factory.setPort(MQ_PORT);
+			Connection conn = factory.newConnection();
+
+			final Channel channel = conn.createChannel();
+
+			channel.basicConsume(MQ_QUEUE_NAME, true, new DefaultConsumer(channel) {
+				@Override
+				public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties,
+						byte[] body) throws IOException {
+					System.out.println(om.writeValueAsString(om.readValue(body, DataResult.class)));
+				}
+			});
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		System.out.println(count == 0 ? "结果队列无数据" : "结果队列中返回数据" + count + "条");
 
 	}
 

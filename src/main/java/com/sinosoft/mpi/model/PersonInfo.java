@@ -1,7 +1,6 @@
 package com.sinosoft.mpi.model;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -9,8 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.BeanUtils;
 
 import com.sinosoft.mpi.annotation.PropertyDesc;
 
@@ -597,7 +596,7 @@ public class PersonInfo implements Serializable {
 	private String relationType;
 
 	private Date dtCreate;
-	
+
 	// 扩展
 	@Transient
 	private String domainId;
@@ -2264,25 +2263,13 @@ public class PersonInfo implements Serializable {
 
 	public PersonIndex toPersonIndex() {
 		PersonIndex index = new PersonIndex();
-		try {
-			BeanUtils.copyProperties(index, this);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
+		BeanUtils.copyProperties(this, index);
 		return index;
 	}
 
 	public PersonInfoHistory toPersonInfoHistory() {
 		PersonInfoHistory his = new PersonInfoHistory();
-		try {
-			BeanUtils.copyProperties(his, this);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
+		BeanUtils.copyProperties(this, his);
 		return his;
 	}
 

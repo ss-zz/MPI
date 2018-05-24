@@ -1,8 +1,6 @@
 package com.sinosoft.mpi.model;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -10,8 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.BeanUtils;
 
 import com.sinosoft.mpi.annotation.PropertyDesc;
 
@@ -226,7 +224,7 @@ public class PersonIndex implements Serializable {
 	private Date lastuptime;
 
 	@PropertyDesc(name = "上传状态", column = "STATE")
-	private BigDecimal state;
+	private Short state;
 
 	@PropertyDesc(name = "性别代码的字典表代码", column = "GENDER_CS")
 	private String genderCs;
@@ -1125,11 +1123,11 @@ public class PersonIndex implements Serializable {
 		this.lastuptime = lastuptime;
 	}
 
-	public BigDecimal getState() {
+	public Short getState() {
 		return state;
 	}
 
-	public void setState(BigDecimal state) {
+	public void setState(Short state) {
 		this.state = state;
 	}
 
@@ -2207,13 +2205,7 @@ public class PersonIndex implements Serializable {
 
 	public MpiCombineRec indexToMpiCombineRec() {
 		MpiCombineRec rec = new MpiCombineRec();
-		try {
-			BeanUtils.copyProperties(rec, this);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
+		BeanUtils.copyProperties(this, rec);
 		rec.setSrcLevel(this.domainLevel);
 		return rec;
 	}

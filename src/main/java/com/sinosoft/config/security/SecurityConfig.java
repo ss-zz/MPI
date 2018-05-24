@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.csrf().disable()// 禁用csrf
 				.authorizeRequests()// 安全认证
-				.antMatchers("/ws/**", "/login/**").permitAll()// 放过的地址
+				.antMatchers("/ws/**", "/api/pub/**", "/login/**").permitAll()// 放过的地址
 				.anyRequest().authenticated() // 其它
 				.and().formLogin()// 登录页
 				.loginPage("/login").defaultSuccessUrl("/index", true).permitAll().and().logout()// 登出页

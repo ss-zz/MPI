@@ -63,23 +63,26 @@ public class CommonBizHandlerService {
 		RecordPairBiz pair = null;
 		// 次id
 		String serialId = null;
+
+		// 匹配的权重
+		Double weightPair = null;
+
+		// 日志的组装信息
+		String logInfo = null;
+		// 是否匹配上
+		Boolean isPair = false;
 		// 没有初步匹配者，或者匹配度不够，直接添加索引
 		if (records.size() == 0 || pairs.size() == 0 || (pair = bizMatchServcie.matchedPair(pairs)) == null) {
+			isPair = false;
 			// 生成新次id
 			serialId = UUID.randomUUID().toString();
 		} else {
+			isPair = true;
 			// 如果信息匹配结果，则使用相同次id
-			MpiBizIndex bizIndex = pair.getRightRecord().getObject();
-			Double weight = pair.getWeight();
-			// 添加索引操作日志
-			bizIdxLogService.saveIndexLog(bizInfo.getBizId(), bizIndex.getId(), bizRegister.getSystemKey(),
-					Constant.IDX_LOG_TYPE_MATCH,
-					"[" + bizInfo.getBizId() + "]匹配到业务[" + pair.getRightRecord().getObject().getBizId() + "],系统匹配度:"
-							+ NumberUtils.toPercentStr(weight),
-					weight);
-
+			MpiBizIndex bizIndexPair = pair.getRightRecord().getObject();
+			weightPair = pair.getWeight();
 			// 次id
-			serialId = bizIndex.getBizSerialId();
+			serialId = bizIndexPair.getBizSerialId();
 		}
 		// 主索引信息入库
 		MpiBizIndex bizIndex = bizInfo.toIndex();
@@ -87,9 +90,19 @@ public class CommonBizHandlerService {
 		bizIndex.setBizPatientId(patientId);// 原始人员id
 		bizIndex.setBizSystemId(bizRegister.getSystemKey());// 业务唯一标识
 		bizIndex = bizIndexService.save(bizIndex);
+
+		if (isPair) {// 匹配上
+			logInfo = "业务[" + bizInfo.getBizId() + "]匹配到业务[" + pair.getRightRecord().getObject().getBizId() + "],匹配度:"
+					+ NumberUtils.toPercentStr(weightPair);
+		} else {// 未匹配上
+			logInfo = "新建业务主索引:[" + bizIndex.getId() + "]";
+		}
+
 		// 添加索引操作日志
 		bizIdxLogService.saveIndexLog(bizInfo.getBizId(), bizIndex.getId(), bizIndex.getBizSystemId(),
-				Constant.IDX_LOG_TYPE_MATCH, "新建业务主索引:[" + bizIndex.getId() + "]", null);
+				Constant.IDX_LOG_TYPE_MATCH, logInfo, weightPair);
+
+		// 整理返回的信息
 		result.setNewBizId(bizIndex.getId());
 		result.setTimeId(serialId);
 		return result;

@@ -26,6 +26,9 @@ spring:
     port: 5672
     listener:
       auto-startup: true
+  # 数据源
+  datasource:
+    continue-on-error: true
   # data
   data:
     jpa:

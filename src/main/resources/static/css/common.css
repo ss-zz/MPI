@@ -162,3 +162,29 @@ fieldset {
 .myTable tr.odd th, table tr.odd td {
 	background: #efefef;
 }
+
+/* 查询区域表单 */
+.formeTable {
+	border: 0px;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.formeTable tr td:nth-child(odd){
+	width:10%;
+	text-align: right;
+}
+
+.formeTable tr td:nth-child(even){
+	width:40%;
+	text-align: left;
+}
+
+.formeTable td{
+	padding: 5px;
+}
+
+.formeTable-btn{
+	text-align: center;
+	margin: 10px;
+}

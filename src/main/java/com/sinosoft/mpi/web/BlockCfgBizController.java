@@ -94,11 +94,11 @@ public class BlockCfgBizController {
 	@RequestMapping("/current")
 	public ModelAndView toCurrentViewPage() {
 		ModelAndView mv = new ModelAndView("/biz/page/current_block");
-		
+
 		BizBlockConfig bizBlockConfig = BizBlockConfig.getInstanse();
-		
+
 		MpiBizBlockCfg cfg = new MpiBizBlockCfg(bizBlockConfig);
-		
+
 		mv.addObject("cfg", cfg);
 		return mv;
 	}
@@ -111,14 +111,14 @@ public class BlockCfgBizController {
 	public void effectCfg(String cfgId) {
 		bizBlockCfgService.updateEffect(cfgId);
 	}
-	
+
 	/**
 	 * 删除
 	 */
-	@RequestMapping(params = "method=del")
+	@RequestMapping("del")
 	@ResponseBody
 	public void del(String id) {
 		bizBlockCfgService.deleteById(id);
 	}
-	
+
 }

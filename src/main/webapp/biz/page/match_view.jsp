@@ -9,7 +9,7 @@
 <body>
 	<!-- 对比情况 所有均显示 -->
 	<table class="myTable">
-		<caption>匹配配置[<span style="color:#ff0000;font-weight:bold;">${cfg.configDesc }</span>]详情显示</caption>
+		<caption>匹配配置[${cfg.configDesc }]详情</caption>
 		<tbody>
 			<tr>
 				<td>完全匹配值:&nbsp;${cfg.agreeThreshold }</td>
@@ -34,7 +34,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<br/>		
+	<br/>
 	</c:forEach>
 </body>
 </html>

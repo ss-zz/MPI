@@ -18,7 +18,6 @@
 		</tbody>
 	</table>
 	<br/>
-	<!-- loop -->
 	<c:forEach items="${cfg.matchFieldCfgs }" var="field">
 	<table class="myTable">
 		<caption>字段[<span style="color:#ff0000;font-weight:bold;">${field.cfgDesc }</span>]配置</caption>
@@ -32,7 +31,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<br/>		
+	<br/>
 	</c:forEach>
 </body>
 </html>

@@ -7,19 +7,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.sinosoft.bizblock.config.BizBlockConfig;
 import com.sinosoft.block.model.BlockField;
 import com.sinosoft.block.model.BlockRound;
 
-@Entity()
+@Entity
+@EntityListeners(AuditingEntityListener.class)
 public class MpiBizBlockCfg implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -35,25 +38,24 @@ public class MpiBizBlockCfg implements Serializable {
 	/**
 	 * 初筛描述
 	 */
-	@Column
 	private String blockDesc;
 
 	/**
 	 * 分组数量
 	 */
-	@Column
 	private Integer groupCount;
 
-	@Column
-	private String createDate;
+	@CreatedDate
+	private Date createDate;
 
 	/**
 	 * 状态：0 - 无效,1 - 有效
 	 */
-	@Column
 	private String state;
 
-	/* 字段匹配信息 */
+	/**
+	 * 字段匹配信息
+	 */
 	@Transient
 	private Map<Integer, List<MpiBizBlockGroup>> groups;
 
@@ -99,13 +101,11 @@ public class MpiBizBlockCfg implements Serializable {
 		this.groupCount = groupCount;
 	}
 
-	
-
-	public String getCreateDate() {
+	public Date getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(String createDate) {
+	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
 

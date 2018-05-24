@@ -7,7 +7,6 @@
 <title>初筛设置详情</title>
 </head>
 <body>
-	<!-- loop -->
 	<c:forEach items="${cfg.groups }" var="fields">
 	<table class="myTable">
 		<caption>分组-${fields.key+1 }</caption>
@@ -18,13 +17,13 @@
 		</tr>
 		<c:forEach items="${fields.value }" var="field">
 			<tr>
-				<td>${field.propertyCnName }</td>		
+				<td>${field.propertyCnName }</td>
 				<td>${field.funName }<c:if test="${field.funName==null }">无</c:if></td>
-			</tr>		
+			</tr>
 		</c:forEach>
 		</tbody>
 	</table>
-	<br/>		
+	<br/>
 	</c:forEach>
 </body>
 </html>

@@ -1,6 +1,5 @@
 package com.sinosoft.mpi.service;
 
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -245,7 +244,7 @@ public class PersonIndexService {
 		// 目标主索引对象
 		PersonIndex surviving = personIndexDao.findOne(survivingPk);
 
-		retired.setState(new BigDecimal(1));
+		retired.setState(new Short("1"));
 		personIndexDao.save(retired);
 		// 被合并主索引人员集合
 		List<PersonInfo> retiredList = new ArrayList<PersonInfo>();
@@ -470,7 +469,7 @@ public class PersonIndexService {
 		}
 		// 将拆分的主索引记录恢复有效
 		PersonIndex personIndex = personIndexDao.findOne(retiredPk);
-		personIndex.setState(new BigDecimal(0));
+		personIndex.setState(new Short("0"));
 		personIndexDao.save(personIndex);
 	}
 

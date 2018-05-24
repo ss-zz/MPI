@@ -110,9 +110,6 @@ $(document).ready(function(){
 					<li><a
 						onclick="addTab('tabId_me','主索引记录合并','${pageContext.request.contextPath}/merge/page/merge.jsp');"
 						href="#">主索引人工合并</a></li>
-					<%-- <li><a
-						onclick="addTab('tabId_field','主索引字段管理','${pageContext.request.contextPath}/cfg/page/field.jsp');"
-						href="#">主索引字段管理</a></li> --%>
 					<li><a
 						onclick="addTab('tabId_bc','主索引初筛规则管理','${pageContext.request.contextPath}/cfg/page/block.jsp');"
 						href="#">主索引初筛规则管理</a></li>
@@ -145,7 +142,7 @@ $(document).ready(function(){
 						onclick="addTab('tabId_il','主索引处理日志','${pageContext.request.contextPath}/indexlog/page/il.jsp');"
 						href="#">主索引处理日志</a></li>
 					<li><a
-						onclick="addTab('tabId_il_biz','主索引处理日志','${pageContext.request.contextPath}/bizlog/page/il.jsp');"
+						onclick="addTab('tabId_il_biz','业务处理日志','${pageContext.request.contextPath}/bizlog/page/il.jsp');"
 						href="#">业务处理日志</a></li>
 					<%-- <li><a
 						onclick="addTab('tabId_pl','居民处理日志','${pageContext.request.contextPath}/personlog/page/pl.jsp');"

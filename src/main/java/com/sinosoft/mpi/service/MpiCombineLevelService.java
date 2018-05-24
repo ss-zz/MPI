@@ -36,12 +36,11 @@ public class MpiCombineLevelService {
 	 * @param domainLevel
 	 * @param srcLevelcolmap
 	 */
-	@SuppressWarnings("unchecked")
 	public void batchAddLevel(PersonIndex personindex, Long combono, Short domainLevel,
 			List<DomainSrcLevel> srcLevelcolmap) {
 		if (srcLevelcolmap != null) {
 			try {
-				Map<String, Object> map = BeanUtils.describe(personindex);
+				Map<String, String> map = BeanUtils.describe(personindex);
 				Iterator<String> it = map.keySet().iterator();
 				while (it.hasNext()) {
 					String key = it.next();

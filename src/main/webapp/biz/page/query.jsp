@@ -21,18 +21,16 @@
 <body>
 
 	<!-- 表格 -->
-	<table id="listTable">
-	
-	</table>
+	<table id="listTable"></table>
 	
 	<!-- 搜索工具条 -->
 	<div id="listTable_tb">
-		<table style="width: 100%;">
+		<table>
 			<tr>
 				<td>业务来源: <input class="combo-text" id="search_system_id" style="width:150px"></td>
 				<td>创建日期: <input class="easyui-datebox" id="search_create_date" style="width:150px"></td>
-				<td>住院流水号: <input class="combo-text" id="search_inpatient_no" style="width:150px"></td>
-				<td>门诊流水号: <input class="combo-text" id="search_clinic_serial_no" style="width:150px"></td>
+				<td>住院号: <input class="combo-text" id="search_inpatient_no" style="width:150px"></td>
+				<td>门诊号: <input class="combo-text" id="search_clinic_serial_no" style="width:150px"></td>
 			<tr>
 				<td>
 					<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchListTable();">搜索</a>

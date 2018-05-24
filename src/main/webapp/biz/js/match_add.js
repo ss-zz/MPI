@@ -3,22 +3,7 @@ var INUSED_FIELDS={};
 $(function() {	
 	// 初始化字段下拉
 	createSelect("add_fieldSelect",SELECT_JSON.pList,"codeName","codeId",INUSED_FIELDS);
-	if (typeof (JSON) == 'undefined') {
-		$.getScript(root+'/js/easyui/json2.js');
-	}
 });
-
-//锁定按钮
-function lockBtn(btn){
-	$(btn).unbind('click').removeAttr('onclick');
-	$(btn).attr("disabled",true);  
-}
-
-// 解锁按钮
-function unlockBtn(btn,handler){
-	$(btn).bind("click",handler);
-	$(btn).attr("disabled",false);	  
-}
 
 /**
  * 添加字段配置
@@ -69,17 +54,6 @@ function addFieldCfg(){
  * 移除字段匹配属性
  */
 function removeFieldCfg(fieldId){
-	// 消除验证框
-	/*
-	$('#table_add input').each(function() {
-		if($(this).attr('id')=="add_agreeThreshold"||$(this).attr('id')=="add_matchThreshold"){
-			return;
-		}
-		if ($(this).attr('required') || $(this).attr('validType')) {
-			$(this).validatebox('destroy');
-		}
-	});
-	*/
 	delete INUSED_FIELDS[fieldId];
 	$("#"+fieldId+"_add_fieldset").remove();
 	// 重建 字段下拉
@@ -94,9 +68,6 @@ function saveMatchCfg(){
 	if(!validMatchCfgData()){
 		return ;
 	}
-	// 将按钮置为无效
-	var btn = $("#saveBtn");
-	lockBtn(btn);
 	var params = {};
 	
 	params.configDesc=$("#add_configDesc").val();
@@ -117,30 +88,14 @@ function saveMatchCfg(){
 	}
 	
 	$.ajax({
-		async : false,
-		cache : false,
+		url : root + '/matchCfgbiz/add',// 请求的action路径
 		type : 'POST',
 		dataType : "text",
 		contentType: "application/json",
 		data : JSON.stringify(params),
-		url : root + '/matchCfgbiz/add',// 请求的action路径
-		error : function() {// 请求失败处理函数
-			alert('请求失败');
-			// 失败回复 btn
-			unlockBtn(btn,saveMatchCfg);
-		},
 		success : function(msg) {
-			var messgage = "添加成功!";
-			if (msg == null||msg=="") {// 未返回任何消息表示添加成功
-				alert(messgage);
-				goBackClose();
-			} else {// 返回异常信息
-				// 失败回复 btn
-				unlockBtn(btn,saveMatchCfg);
-				messgage = msg;
-				alert(messgage);
-			}
-			
+			showMessage("添加成功");
+			goBackClose();
 		}
 	});
 }
@@ -149,13 +104,10 @@ function saveMatchCfg(){
  * 校验数据
  */
 function validMatchCfgData(){
-	// 校验数据
 	var validateResult = true;
-	// easyui 表单验证
 	$('#table_add input').each(function() {
 		if ($(this).attr('required') || $(this).attr('validType')) {
 			if (!$(this).validatebox('isValid')) {
-				// 如果验证不通过，则返回false
 				validateResult = false;
 			}
 		}
@@ -229,23 +181,11 @@ function resetAllData(){
  * 关闭页面并返回
  */
 function goBackClose(){
-	var tabId = 'tabId_mc';
-	var title = '业务匹配规则管理';
-	var url = root+'/biz/page/match.jsp';
-	var name = 'iframe_'+tabId;
-	//如果当前id的tab不存在则创建一个tab
-	if(parent.$("#"+tabId).html()==null){		
-		parent.$('#centerTab').tabs('add',{
-			title: title,		 
-			closable:true,
-			cache : false,
-			//注：使用iframe即可防止同一个页面出现js和css冲突的问题
-			content : '<iframe name="'+name+'" id="'+tabId+'" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-		});
-	}else{
-		parent.tabCallPass(name,"reloadTable");	
-	}
-	parent.$('#centerTab').tabs('close','添加匹配配置');
+	
+	backTab('tabId_mc_biz', '业务匹配规则管理', root+'/biz/page/match.jsp', function(){
+		parent.tabCallPass("iframe_tabId_mc_biz", "reloadTable");
+	});
+	parent.$('#centerTab').tabs('close','添加业务匹配配置');
 }
 
 $.extend($.fn.validatebox.defaults.rules, {

@@ -157,7 +157,7 @@ public class MatchCfgBizController {
 	/**
 	 * 删除
 	 */
-	@RequestMapping(params = "method=del")
+	@RequestMapping("/del")
 	@ResponseBody
 	public void del(String id) {
 		bizMatchCfgService.deleteById(id);

@@ -10,7 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.sinosoft.match.model.MatchField;
 
-@Entity()
+@Entity
 public class MpiBizMatchFieldCfg implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -23,28 +23,44 @@ public class MpiBizMatchFieldCfg implements Serializable {
 	@GeneratedValue(generator = "system-uuid")
 	private String fieldCfgId;
 
-	/* 配置主键(CONFIG_ID) 配置主键 */
+	/**
+	 * 配置主键
+	 */
 	private String configId;
 
-	/* 字段名称(PROPERTY_NAME) 字段名称 */
+	/**
+	 * 字段名称
+	 */
 	private String propertyName;
 
-	/* 匹配协议(AGREE_PROB) 匹配协议 */
+	/**
+	 * 匹配协议
+	 */
 	private String agreeProb;
 
-	/* 不匹配度(DIS_AGREE) 不匹配度 */
+	/**
+	 * 不匹配度
+	 */
 	private String disAgree;
 
-	/* 匹配阀值(MATCH_THRESHOLD) 匹配阀值 */
+	/**
+	 * 匹配阀值
+	 */
 	private String matchThreshold;
 
-	/* 匹配函数(MATCH_FUNCTION) 匹配函数 */
+	/**
+	 * 匹配函数
+	 */
 	private String matchFunction;
 
-	/* 权重(WEIGHT) 权重 */
+	/**
+	 * 权重
+	 */
 	private String weight;
 
-	/* 描述(CFG_DESC) 描述 */
+	/**
+	 * 描述
+	 */
 	private String cfgDesc;
 
 	public MpiBizMatchFieldCfg() {

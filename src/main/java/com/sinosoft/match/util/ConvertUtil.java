@@ -15,11 +15,11 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.DynaProperty;
 import org.apache.commons.beanutils.WrapDynaClass;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeanUtils;
 
 /**
  * 转换工具类
@@ -77,14 +77,8 @@ public final class ConvertUtil {
 	 * @return a populated object
 	 */
 	public static Object populateObject(Object obj, ResourceBundle rb) {
-		try {
-			Map<String, String> map = convertBundleToMap(rb);
-			BeanUtils.copyProperties(obj, map);
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error("Exception occurred populating object: " + e.getMessage());
-		}
-
+		Map<String, String> map = convertBundleToMap(rb);
+		BeanUtils.copyProperties(map, obj);
 		return obj;
 	}
 

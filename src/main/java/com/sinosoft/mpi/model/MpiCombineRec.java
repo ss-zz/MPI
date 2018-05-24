@@ -1,14 +1,12 @@
 package com.sinosoft.mpi.model;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.BeanUtils;
 
 /**
  * 合并记录表
@@ -151,7 +149,7 @@ public class MpiCombineRec implements Serializable {
 
 	private Date lastuptime;
 
-	private BigDecimal state;
+	private Short state;
 
 	private String genderCs;
 
@@ -949,11 +947,11 @@ public class MpiCombineRec implements Serializable {
 		this.lastuptime = lastuptime;
 	}
 
-	public BigDecimal getState() {
+	public Short getState() {
 		return state;
 	}
 
-	public void setState(BigDecimal state) {
+	public void setState(Short state) {
 		this.state = state;
 	}
 
@@ -2031,13 +2029,7 @@ public class MpiCombineRec implements Serializable {
 
 	public PersonIndex mpiCombineRecToPersonIndex() {
 		PersonIndex index = new PersonIndex();
-		try {
-			BeanUtils.copyProperties(index, this);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
+		BeanUtils.copyProperties(this, index);
 		index.setDomainLevel(this.srcLevel);
 		return index;
 	}

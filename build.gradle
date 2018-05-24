@@ -43,7 +43,7 @@ dependencies {
 	compile('javax.mail:mail:1.4.4')
 	
 	// util
-	compile('commons-beanutils:commons-beanutils:1.8.3')
+	compile('commons-beanutils:commons-beanutils:1.9.3')
 	compile('commons-lang:commons-lang:2.6')
 	compile('net.sf.json-lib:json-lib:2.4:jdk15')
 	compile('com.google.guava:guava:25.0-jre')

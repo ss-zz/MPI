@@ -12,7 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 import com.sinosoft.block.model.BlockField;
 import com.sinosoft.mpi.cache.CacheManager;
 
-@Entity()
+@Entity
 public class MpiBizBlockGroup implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -25,20 +25,31 @@ public class MpiBizBlockGroup implements Serializable {
 	@GeneratedValue(generator = "system-uuid")
 	private String groupId;
 
-	/* 初筛主键(BOLCK_ID) 初筛主键 */
+	/**
+	 * 初筛主键
+	 */
 	private String bolckId;
 
-	/* 分组标志(GROUP_SIGN) 分组标志 */
+	/**
+	 * 分组标志
+	 */
 	private Integer groupSign;
 
-	/* 数据库字段(DB_FIELD) 数据库字段 */
+	/**
+	 * 数据库字段
+	 */
 	private String dbField;
 
-	/* 实体字段(PROPERTY_NAME) 实体字段 */
+	/**
+	 * 实体字段
+	 */
 	private String propertyName;
 
-	/* 转换函数(FUN_NAME) 转换函数 */
+	/**
+	 * 转换函数
+	 */
 	private String funName;
+
 	/**
 	 * 字段中文名 非存库字段
 	 */

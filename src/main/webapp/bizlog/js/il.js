@@ -27,28 +27,11 @@ Date.prototype.formatDate = function(format) {
 };
 
 $(function() {
-	// 搜索框初始化
-	$('#listTable_tb').combobox({
-		width : 150
-	});
-	$('#search_blType').combobox({
-		width : 150
-	});
 	//初始化时间输入框
 	init_timeInput();
 	// 加载表格数据
 	ajaxTable();
-
 });
-
-function bindCombobox(){
-	 $("#blInfoSour").combobox({  
-		  url:root +"/bizLog/bindCombox",
-		  method : "post",  
-		  valueField: 'CODE',  
-		  textField: 'NAME',   
-	  });
-}
 
 //初始化列 --日志类型
 function initType(val, row){
@@ -67,32 +50,32 @@ function initMatched(val, row){
  * 初始化时间选择框
  */
 function init_timeInput(){
-	var option = {  
-			showSeconds:true,
-			editable:false,
-			formatter:function(date){
-				return date.formatDate("yyyy-MM-dd hh:mm:ss");
-			},
-			parser:function(dateStr){
-				if(dateStr == undefined || dateStr==null || dateStr=="")
-					return new Date();
-				var regexDT = /(\d{4})-?(\d{2})?-?(\d{2})?\s?(\d{2})?:?(\d{2})?:?(\d{2})?/g;  
-				var matchs = regexDT.exec(dateStr);  
-				var date = new Array();  
-				for (var i = 1; i < matchs.length; i++) {  
-					if (matchs[i]!=undefined) {  
-						date[i] = matchs[i];  
+	var option = {
+		showSeconds:true,
+		editable:false,
+		formatter:function(date){
+			return date.formatDate("yyyy-MM-dd hh:mm:ss");
+		},
+		parser:function(dateStr){
+			if(dateStr == undefined || dateStr==null || dateStr=="")
+				return new Date();
+			var regexDT = /(\d{4})-?(\d{2})?-?(\d{2})?\s?(\d{2})?:?(\d{2})?:?(\d{2})?/g;
+			var matchs = regexDT.exec(dateStr);
+			var date = new Array();
+			for (var i = 1; i < matchs.length; i++) {
+				if (matchs[i]!=undefined) {
+					date[i] = matchs[i];
+				} else {  
+					if (i<=3) {
+						date[i] = '01';
 					} else {  
-						if (i<=3) {  
-							date[i] = '01';  
-						} else {  
-							date[i] = '00';  
-						}  
-					}  
-				}  
-				return new Date(date[1], date[2]-1, date[3], date[4], date[5],date[6]);
+						date[i] = '00';
+					}
+				}
 			}
-		};
+			return new Date(date[1], date[2]-1, date[3], date[4], date[5],date[6]);
+		}
+	};
 	
 	$('#blTime_begin').datetimebox(option); 	
 	$('#blTime_begin').attr("readonly","readonly");
@@ -101,43 +84,25 @@ function init_timeInput(){
 	$('#blTime_end').attr("readonly","readonly");
 }
 
-/** --------------table------------------* */
 /**
  * 加载表格数据
  */
 function ajaxTable() {
 	// 加载表格
 	$('#listTable').datagrid({
-		toolbar : "#listTable_tb",
-		singleSelect : true,//单选
-		pagination : true,//分页
-		onClickRow : function(rowIndex, rowData) {
-			// 取消选择某行后高亮
-			$('#listTable').datagrid('unselectRow', rowIndex);
-		},
-		onLoadSuccess : function(data) {
-			var value = $('#listTable').datagrid('getData')['errorMsg'];
-			if (value != null) {
-				alert("错误消息:" + value);
-			}
-		}
+		toolbar : "#listTable_tb"
 	}).datagrid('acceptChanges');
 }
 
 function timestampToTime(timestamp) {
-        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-        Y = date.getFullYear() + '-';
-        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-        D = date.getDate() + ' ';
-        h = date.getHours() + ':';
-        m = date.getMinutes() + ':';
-        s = date.getSeconds();
-        return Y+M+D+h+m+s;
-}
-
-function initDate(val, row){
-	var time1 = new Date(val).formatDate("yyyy-MM-dd hh:mm:ss");
-	return time1;
+	var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+	Y = date.getFullYear() + '-';
+	M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+	D = date.getDate() + ' ';
+	h = date.getHours() + ':';
+	m = date.getMinutes() + ':';
+	s = date.getSeconds();
+	return Y+M+D+h+m+s;
 }
 
 //构建索引查看连接
@@ -147,35 +112,7 @@ function buildMatchUrl(val, row) {
 }
 
 function viewMatch(logId){
-	var url = root+'/bizLog/view?logId='+logId;
-	var tabId = "tabId_logDetailView";
-	var title = "索引日志处理详情";
-	var name = 'iframe_'+tabId; 
-	//如果当前id的tab不存在则创建一个tab
-	if(parent.$("#"+tabId).html()==null){
-		parent.$('#centerTab').tabs('add',{
-			title: title,		 
-			closable:true,
-			cache : false,
-			//注：使用iframe即可防止同一个页面出现js和css冲突的问题
-			content : '<iframe name="'+name+'" id="'+tabId+'" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-		});
-	}else{
-		var tabs = parent.$('#centerTab').tabs('tabs');
-		for(var i = 0 ; i < tabs.length ; i++){
-			var tab = tabs[i];
-			if(tab.panel("options").title == title){
-				parent.$('#centerTab').tabs('update',{
-					tab: tab,
-					options:{
-						content : '<iframe name="'+name+'" id="'+tabId+'" src="'+url+'" width="100%" height="100%" frameborder="0" scrolling="auto" ></iframe>'
-					}
-				});
-				parent.$('#centerTab').tabs('select',title);
-				break;
-			}
-		}
-	}
+	openTab('tabId_logDetailView_biz', '业务索引日志处理详情', root+'/bizLog/view?logId='+logId);
 }
 
 // 构建操作类型描述
@@ -222,7 +159,6 @@ function searchListTable() {
 
 	// 查询的时候重置回第一页
 	$("#listTable").datagrid("options").pageNumber = 1;
-	var blType = $('#blType option:selected').val();
 	var blInfoSour = $('#blInfoSour').val();
 	var blTime_begin = $("#search_optime_begin").datetimebox('getValue');
 	var blTime_end = $("#search_optime_end").datetimebox('getValue');
@@ -230,16 +166,15 @@ function searchListTable() {
 	var blMatched_end = $('#blMatched_end').val();
 	var blMatched_begin = $('#blMatched_begin').val();
 	$("#listTable").datagrid({
+		url:root +"/bizLog/query",
 		queryParams : {
-			"blType" : blType,
 			"blInfoSour" : blInfoSour,
 			"blUserId" : blUserId,
 			"blTime_begin":blTime_begin,
 			"blTime_end":blTime_end,
 			"blMatched_begin":blMatched_begin,
 			"blMatched_end":blMatched_end
-		},
-		url:root +"/bizLog/query"
+		}
 	});
 }
 
@@ -247,13 +182,8 @@ function searchListTable() {
 function searchReset() {
 	$("#blMatched_begin").val('');
 	$("#blMatched_end").val('');
-	
-	$("#blInfoSour").combobox('setValue', '');	
 	$("#search_optime_begin").datetimebox('setValue', '');
 	$("#search_optime_end").datetimebox('setValue', '');
-	$("#blUserId").val('');
-	$("#blType").combobox('setValue', '');	
-
 }
 
 // 刷新表格

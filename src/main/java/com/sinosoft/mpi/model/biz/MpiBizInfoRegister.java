@@ -1,9 +1,8 @@
 package com.sinosoft.mpi.model.biz;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.BeanUtils;
 
 /**
  * 业务数据注册信息
@@ -77,19 +76,9 @@ public class MpiBizInfoRegister implements Serializable {
 		this.bizClinicSerialno = bizClinicSerialno;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	public MpiBizIndex toIndex() {
 		MpiBizIndex index = new MpiBizIndex();
-		try {
-			BeanUtils.copyProperties(index, this);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
+		BeanUtils.copyProperties(this, index);
 		return index;
 	}
 
