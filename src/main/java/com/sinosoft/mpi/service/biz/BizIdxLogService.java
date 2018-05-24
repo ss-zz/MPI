@@ -3,7 +3,6 @@ package com.sinosoft.mpi.service.biz;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.sinosoft.mpi.context.QueryConditionType;
 import com.sinosoft.mpi.dao.biz.MpiBizIdxLogDao;
 import com.sinosoft.mpi.model.biz.MpiBizIdxLog;
+import com.sinosoft.mpi.model.biz.MpiBizIdxLogSearch;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.SqlUtils;
 
@@ -91,42 +91,13 @@ public class BizIdxLogService {
 	}
 
 	/**
-	 * 新增主索引操作日志
-	 * 
-	 * @param srcBizId
-	 *            原始业务id
-	 * @param bizId
-	 *            新业务id
-	 * @param domainId
-	 *            域id
-	 * @param opType
-	 *            操作类型
-	 * @param desc
-	 *            操作描述
-	 * @param weight
-	 *            匹配度
-	 */
-	public void saveIndexLog(String srcBizId, String bizId, String domainId, String opType, String desc,
-			Double weight) {
-		MpiBizIdxLog result = new MpiBizIdxLog();
-		result.setBlType(opType);
-		result.setBlTime(new Date());
-		result.setBlDesc(desc);
-		result.setBlInfoSour(domainId);
-		result.setBlBizId(bizId);
-		result.setBlMatched(weight == null ? null : weight);
-		// 自动标志
-		save(result);
-	}
-
-	/**
 	 * 分页查询
 	 * 
 	 * @param t
 	 * @param page
 	 * @return
 	 */
-	public List<Map<String, Object>> queryForMapPage(MpiBizIdxLog t, PageInfo page) {
+	public List<Map<String, Object>> queryForMapPage(MpiBizIdxLogSearch t, PageInfo page) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		StringBuilder sql = new StringBuilder();
 		sql.append(
@@ -135,21 +106,20 @@ public class BizIdxLogService {
 				.append(" left join mpi_identifier_domain d on l.bl_serial_id = d.domain_id where 1=1 ");
 
 		try {
-			if (t.getBlTime_begin() != null && t.getBlTime_end() == null) {
-				sql.append("and l.bl_time >= TO_DATE('" + sdf.format(sdf.parse(t.getBlTime_begin())).toString()
+			if (t.getBlTimeBegin() != null && t.getBlTimeEnd() == null) {
+				sql.append("and l.bl_time >= TO_DATE('" + sdf.format(sdf.parse(t.getBlTimeBegin())).toString()
 						+ "','yyyy-mm-dd') ");
 			}
-			if (t.getBlTime_end() != null && t.getBlTime_begin() == null) {
-				sql.append("and l.bl_time <= TO_DATE('" + sdf.format(sdf.parse(t.getBlTime_end())).toString()
+			if (t.getBlTimeEnd() != null && t.getBlTimeBegin() == null) {
+				sql.append("and l.bl_time <= TO_DATE('" + sdf.format(sdf.parse(t.getBlTimeEnd())).toString()
 						+ "','yyyy-mm-dd') ");
 			}
-			if (t.getBlTime_begin() != null && t.getBlTime_end() != null) {
-				sql.append("and l.bl_time >= TO_DATE('" + sdf.format(sdf.parse(t.getBlTime_begin())).toString()
+			if (t.getBlTimeBegin() != null && t.getBlTimeEnd() != null) {
+				sql.append("and l.bl_time >= TO_DATE('" + sdf.format(sdf.parse(t.getBlTimeBegin())).toString()
 						+ "','yyyy-mm-dd') and l.bl_time <= TO_DATE('"
-						+ sdf.format(sdf.parse(t.getBlTime_end())).toString() + "','yyyy-mm-dd') ");
+						+ sdf.format(sdf.parse(t.getBlTimeEnd())).toString() + "','yyyy-mm-dd') ");
 			}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		List<Object> args = new ArrayList<Object>();
@@ -175,67 +145,12 @@ public class BizIdxLogService {
 	 * @param args
 	 * @throws ParseException
 	 */
-	private void addconditions(final MpiBizIdxLog t, final StringBuilder sql, final List<Object> args) {
-		/*
-		 * SqlUtils.appendCondition(t.getBegin(), "l.bl_time", sql, args,
-		 * QueryConditionType.GREATER_OR_EQUAL); SqlUtils.appendCondition(t.getEnd(),
-		 * "l.bl_time", sql, args, QueryConditionType.LESS_OR_EQUAL);
-		 */
+	private void addconditions(final MpiBizIdxLogSearch t, final StringBuilder sql, final List<Object> args) {
 		SqlUtils.appendCondition(t.getBlType(), "l.bl_type", sql, args, QueryConditionType.EQUAL);
 		SqlUtils.appendCondition(t.getBlInfoSour(), "l.bl_info_sour", sql, args, QueryConditionType.EQUAL);
 		SqlUtils.appendCondition(t.getBlUserId(), "l.bl_user_id", sql, args, QueryConditionType.EQUAL);
-		SqlUtils.appendCondition(t.getBlMatched_begin(), "l.bl_matched", sql, args,
-				QueryConditionType.GREATER_OR_EQUAL);
-		SqlUtils.appendCondition(t.getBlMatched_end(), "l.bl_matched", sql, args, QueryConditionType.LESS_OR_EQUAL);
+		SqlUtils.appendCondition(t.getBlMatchedBegin(), "l.bl_matched", sql, args, QueryConditionType.GREATER_OR_EQUAL);
+		SqlUtils.appendCondition(t.getBlMatchedEnd(), "l.bl_matched", sql, args, QueryConditionType.LESS_OR_EQUAL);
 	}
-
-	/**
-	 * 分页查询
-	 * 
-	 * @param t
-	 * @param page
-	 * @return
-	 */
-	/*
-	 * public Page<MpiBizIdxLog> queryForPage(final MpiBizIdxLog t, PageInfo page) {
-	 * return bizIdxLogDao.findAll(new Specification<MpiBizIdxLog>() {
-	 * 
-	 * @Override public Predicate toPredicate(Root<MpiBizIdxLog> root,
-	 * CriteriaQuery<?> query, CriteriaBuilder cb) { List<Predicate> predicates =
-	 * new ArrayList<>(); SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	 * try { if (t.getBlTime_begin() != null && t.getBlTime_begin() != "") {
-	 * t.setBegin(sdf.parse(t.getBlTime_begin()));
-	 * 
-	 * } if( t.getBlTime_end() !=null && t.getBlTime_end() != ""){
-	 * t.setEnd(sdf.parse(t.getBlTime_end())); } } catch (ParseException e) {
-	 * e.printStackTrace(); } if (null != t.getBegin() && null != t.getEnd()) {
-	 * predicates.add(cb.between(root.<Date>get("blTime"), t.getBegin(),
-	 * t.getEnd())); } if(null == t.getBegin() && null != t.getEnd()){
-	 * predicates.add(cb.lessThanOrEqualTo(root.<Date>get("blTime"), t.getEnd())); }
-	 * if(null == t.getEnd() && null != t.getBegin()){
-	 * predicates.add(cb.greaterThanOrEqualTo(root.<Date>get("blTime"),
-	 * t.getBegin())); } if (null != t.getBlInfoSour()) {
-	 * predicates.add(cb.equal(root.get("blInfoSour"), t.getBlInfoSour())); } if
-	 * (null != t.getBlType()) { predicates.add(cb.equal(root.get("blType"),
-	 * t.getBlType())); } if (null != t.getBlUserId()) {
-	 * predicates.add(cb.equal(root.get("blUserId"), t.getBlUserId())); } if(null !=
-	 * t.getBlMatched_begin() && t.getBlMatched_begin() != "" && null !=
-	 * t.getBlMatched_end() && "" != t.getBlMatched_end()){
-	 * predicates.add(cb.between(root.<Double>get("blMatched"),
-	 * Double.parseDouble(t.getBlMatched_begin()),
-	 * Double.parseDouble(t.getBlMatched_end()))); } if(null !=
-	 * t.getBlMatched_begin() && t.getBlMatched_begin() != "" && null ==
-	 * t.getBlMatched_end()){ predicates.add(cb.gt(root.<Double>get("blMatched"),
-	 * Double.parseDouble(t.getBlMatched_begin()))); } if(null !=
-	 * t.getBlMatched_end() && t.getBlMatched_begin() != "" &&
-	 * t.getBlMatched_begin() == null){
-	 * predicates.add(cb.lt(root.<Double>get("blMatched"),
-	 * Double.parseDouble(t.getBlMatched_end()))); }
-	 * 
-	 * //Join<MpiBizIdxLog, SysUser> fuJoin =
-	 * root.join(root.getModel().getSingularAttribute("sUser", SysUser.class),
-	 * JoinType.LEFT); return cb.and(predicates.toArray(new
-	 * Predicate[predicates.size()])); } }, page); }
-	 */
 
 }

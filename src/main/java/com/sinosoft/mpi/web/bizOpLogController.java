@@ -19,6 +19,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.model.biz.MpiBizIdxLog;
+import com.sinosoft.mpi.model.biz.MpiBizIdxLogSearch;
 import com.sinosoft.mpi.service.biz.BizIdxLogService;
 import com.sinosoft.mpi.util.PageInfo;
 
@@ -47,7 +48,7 @@ public class bizOpLogController {
 	 */
 	@RequestMapping("/query")
 	@ResponseBody
-	public Map<String, Object> list(PageInfo page, MpiBizIdxLog t) {
+	public Map<String, Object> list(PageInfo page, MpiBizIdxLogSearch t) {
 		Map<String, Object> datas = new HashMap<>();
 		List<Map<String, Object>> list = bizIdxLogService.queryForMapPage(t, page);
 		// 设置总共有多少条记录

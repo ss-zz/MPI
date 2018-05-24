@@ -170,10 +170,10 @@ function searchListTable() {
 		queryParams : {
 			"blInfoSour" : blInfoSour,
 			"blUserId" : blUserId,
-			"blTime_begin":blTime_begin,
-			"blTime_end":blTime_end,
-			"blMatched_begin":blMatched_begin,
-			"blMatched_end":blMatched_end
+			"blTimeBegin":blTime_begin,
+			"blTimeEnd":blTime_end,
+			"blMatchedBegin":blMatched_begin,
+			"blMatchedEnd":blMatched_end
 		}
 	});
 }
