@@ -11,10 +11,6 @@ public class MatchField implements Serializable {
 
 	// 字段名
 	private String fieldName;
-	// 协议匹配度
-	private float agreementProbability;
-	// 不匹配度
-	private float disagreementProbability;
 	// 比较函数的标志/算法
 	private String comparatorFunction;
 	// 匹配门槛
@@ -30,22 +26,6 @@ public class MatchField implements Serializable {
 
 	public void setFieldName(String fieldName) {
 		this.fieldName = fieldName;
-	}
-
-	public float getAgreementProbability() {
-		return agreementProbability;
-	}
-
-	public void setAgreementProbability(float agreementProbability) {
-		this.agreementProbability = agreementProbability;
-	}
-
-	public float getDisagreementProbability() {
-		return disagreementProbability;
-	}
-
-	public void setDisagreementProbability(float disagreementProbability) {
-		this.disagreementProbability = disagreementProbability;
 	}
 
 	public String getComparatorFunction() {

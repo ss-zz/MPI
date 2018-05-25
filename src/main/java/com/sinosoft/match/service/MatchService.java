@@ -29,22 +29,6 @@ public class MatchService {
 	List<MatchField> matchFields = MatchConfig.getInstanse().getMatchFields();
 
 	/**
-	 * 两个对象的匹配情况
-	 * 
-	 * @param leftRecord
-	 * @param rightRecord
-	 * @return 匹配情况
-	 */
-	public RecordPair match(Record<PersonInfo> leftRecord, Record<PersonIndex> rightRecord) {
-		RecordPair pair = new RecordPair(leftRecord, rightRecord);
-		// 计算比较
-		this.scoreRecordPair(pair);
-		// 计算合并匹配度
-		this.calculateWeight(pair);
-		return pair;
-	}
-
-	/**
 	 * 找出所有的可能符合条件匹配对
 	 * 
 	 * @param leftRecord
@@ -61,6 +45,22 @@ public class MatchService {
 			}
 		}
 		return result;
+	}
+	
+	/**
+	 * 两个对象的匹配情况
+	 * 
+	 * @param leftRecord
+	 * @param rightRecord
+	 * @return 匹配情况
+	 */
+	public RecordPair match(Record<PersonInfo> leftRecord, Record<PersonIndex> rightRecord) {
+		RecordPair pair = new RecordPair(leftRecord, rightRecord);
+		// 计算比较
+		this.scoreRecordPair(pair);
+		// 计算合并匹配度
+		this.calculateWeight(pair);
+		return pair;
 	}
 
 	// 计算每个属性的匹配度

@@ -1,10 +1,6 @@
 $(function() {
-	ajaxTable("surviveTable", "#surviveTable_tb", {
-		"isSurvive" : true
-	});
-	ajaxTable("retiredTable", "#retiredTable_tb", {
-		"isSurvive" : false
-	});
+	ajaxTable("surviveTable", "#surviveTable_tb", { "isSurvive" : true });
+	ajaxTable("retiredTable", "#retiredTable_tb", { "isSurvive" : false });
 	$("#showSummary").hide();
 });
 
@@ -35,8 +31,7 @@ function selectSurvivePerson() {
 	reSelectSurvivePerson();
 	$("#survivePersonId").val(row.FIELD_PK);
 	$("#surviveDomainId").val(row.DOMAIN_ID);
-	addCellData("surviveSummary", 1, [row.NAME_CN, row.ID_NO,
-					row.DOMAIN_DESC]);
+	addCellData("surviveSummary", 1, [row.NAME_CN, row.ID_NO, row.DOMAIN_DESC]);
 	$("#showSummary").show();
 	searchRetiredTable();
 	// 展开 被合并居民列表
@@ -111,10 +106,9 @@ function searchSurviveTable() {
 	$("#surviveTable").datagrid("options").pageNumber = 1;
 	$("#surviveTable").datagrid({
 		queryParams : {
-			"DOMAIN_ID" : $("#search_domain")
-					.combobox('getValue'),
-			"NAME_CN" : $("#search_personName").val(),
-			"ID_NO" : $("#search_personIdcard").val(),
+			"domainId" : $("#search_domain").combobox('getValue'),
+			"nameCn" : $("#search_personName").val(),
+			"idNo" : $("#search_personIdcard").val(),
 			"isSurvive" : true
 		}
 	});
@@ -126,9 +120,9 @@ function searchRetiredTable() {
 	$("#retiredTable").datagrid("options").pageNumber = 1;
 	$("#retiredTable").datagrid({
 		queryParams : {
-			"DOMAIN_ID" : $("#surviveDomainId").val(),
-			"NAME_CD" : $("#search_retired_personName").val(),
-			"ID_NO" : $("#search_retired_personIdcard").val(),
+			"domainId" : $("#surviveDomainId").val(),
+			"nameCn" : $("#search_retired_personName").val(),
+			"idNo" : $("#search_retired_personIdcard").val(),
 			"isSurvive" : false
 		}
 	});

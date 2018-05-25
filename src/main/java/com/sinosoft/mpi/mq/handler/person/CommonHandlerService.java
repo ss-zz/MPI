@@ -68,6 +68,7 @@ public class CommonHandlerService {
 	public String savePersonIndex(PersonInfo personinfo) {
 		Record<PersonInfo> personRecord = new Record<PersonInfo>(personinfo);
 		personRecord.setRecordId(personinfo.getFieldPk());
+		// 查询初筛数据
 		List<Record<PersonIndex>> records = blockService.findCandidates(personRecord);
 		// 找出匹配情况。
 		List<RecordPair> pairs = matchServcie.match(personRecord, records);
@@ -90,7 +91,7 @@ public class CommonHandlerService {
 								+ "],系统匹配度:" + NumberUtils.toPercentStr(pair.getWeight()));
 				// 更新索引信息
 				personindex = personIndexUpdateService.updateIndex(personindex, personinfo);
-				// 可能匹配值0.4<整体匹配阀值<完全匹配值1.0 同时人工干预表中添加一条记录进行标识
+				// 可能匹配值<整体匹配阀值<完全匹配值 同时人工干预表中添加一条记录进行标识
 				if (pair.getWeight() >= MatchConfig.getInstanse().getMatchWeightThreshold()
 						&& pair.getWeight() < MatchConfig.getInstanse().getAgreementWeightThreshold()) {
 					addMenOpPerson(personinfo, personindex.getMpiPk());

@@ -3,9 +3,6 @@ var INUSED_FIELDS={};
 $(function() {
 	// 初始化字段下拉
 	createSelect("add_fieldSelect",SELECT_JSON.pList,"codeName","codeId",INUSED_FIELDS);
-	if (typeof (JSON) == 'undefined') {
-		$.getScript(root+'/js/easyui/json2.js');
-	}
 });
 
 /**
@@ -13,7 +10,7 @@ $(function() {
  */
 function addFieldCfg(){
 	var filedId = $("#add_fieldSelect").val();
-	if(filedId==undefined || filedId==null || filedId==""){
+	if(!filedId){
 		alert("请选择字段");
 		return ;
 	}
@@ -28,16 +25,14 @@ function addFieldCfg(){
 		}
 	}
 	
-	if(data==undefined || data==null || data==""){
+	if(!data){
 		alert("无效字段,请重新选择");
 		return;
 	}
 	// 定义要添加的html代码	
 	var htm = '<fieldset id="'+filedId+'_add_fieldset"><legend><span style="color:#78a9cb;font-weight:bold;">'+data.codeName+'</span>-匹配设定</legend>'+
 		'<input type="hidden" id="'+filedId+'_add_fieldName" value="xxx">'+
-		'<input type="hidden" id="'+filedId+'_add_desc" value="'+data.codeName+'">'+			
-		'<label for="'+filedId+'_add_agreeThreshold">完全匹配值:</label><input type="text" class="easyui-validatebox" id="'+filedId+'_add_agreeThreshold" maxlength="10" required="true" validType="decimalValid"/>&nbsp;&nbsp;'+
-		'<label for="'+filedId+'_add_disagreeThreshold">不匹配值:</label><input type="text" class="easyui-validatebox" id="'+filedId+'_add_disagreeThreshold" maxlength="10" required="true" validType="decimalValid"/>&nbsp;&nbsp;'+
+		'<input type="hidden" id="'+filedId+'_add_desc" value="'+data.codeName+'">'+
 		'<label for="'+filedId+'_add_matchThreshold">匹配阀值:</label><input type="text" class="easyui-validatebox" id="'+filedId+'_add_matchThreshold" maxlength="10" required="true" validType="decimalValid"/>'+
 		'<label for="'+filedId+'_add_weight">权重:</label><input type="text" class="easyui-validatebox" id="'+filedId+'_add_weight" maxlength="10" required="true" validType="decimalValid"/>&nbsp;&nbsp;'+
 		'<label for="'+filedId+'_add_matchFunction">匹配算法:</label><select id="'+filedId+'_add_matchFunction" required="true"></select>&nbsp;&nbsp;'+
@@ -79,8 +74,6 @@ function saveMatchCfg(){
 	for(var fieldId in INUSED_FIELDS){
 		params.matchFieldCfgs[i]={};
 		params.matchFieldCfgs[i].propertyName=fieldId;
-		params.matchFieldCfgs[i].agreeProb=$("#"+fieldId+"_add_agreeThreshold").val();
-		params.matchFieldCfgs[i].disAgree=$("#"+fieldId+"_add_disagreeThreshold").val();
 		params.matchFieldCfgs[i].matchThreshold=$("#"+fieldId+"_add_matchThreshold").val();
 		params.matchFieldCfgs[i].matchFunction=$("#"+fieldId+"_add_matchFunction").val();
 		params.matchFieldCfgs[i].weight=$("#"+fieldId+"_add_weight").val();
@@ -89,7 +82,7 @@ function saveMatchCfg(){
 	}
 	
 	$.ajax({
-		url : root + '/cfg/match.ac?method=add',// 请求的action路径
+		url : root + '/cfg/match.ac?method=add',
 		type : 'POST',
 		dataType : "text",
 		contentType: "application/json",
@@ -155,17 +148,6 @@ function getPropertyCount(o) {
  * 验证字段数据
  */
 function validFieldData(fieldId){
-	//取得值
-	var agree = parseFloat($("#"+fieldId+"_add_agreeThreshold").val());
-	var disagree = parseFloat($("#"+fieldId+"_add_disagreeThreshold").val());
-	var match = parseFloat($("#"+fieldId+"_add_matchThreshold").val());
-	
-	var name = $("#"+fieldId+"_add_desc").val();
-
-	if(match>=agree||disagree>=match){
-		alert("["+name+"]字段中的匹配数据不符合:\n\r 完全匹配值 > 匹配阀值 > 不匹配值");
-		return false;
-	}
 	return true;
 }
 

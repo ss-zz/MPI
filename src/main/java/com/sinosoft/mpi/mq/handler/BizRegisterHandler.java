@@ -87,13 +87,14 @@ public class BizRegisterHandler {
 				// 处理人员
 				mpiPk = updatePersonHandler.handleMessage(personInfo);
 
-				// TODO 处理业务
+				// 业务不需要更新
 
 			} else if (type == 2) {// 拆分
 				// 处理人员
 				mpiPk = splitPersonandler.handleMessage(personInfo);
 
-				// TODO 处理业务
+				// 业务不需要拆分
+
 			} else {
 				result.setSuccess(false);
 				result.setMsg("数据注册类型错误，应为[0|1|2]，实际为-" + type);

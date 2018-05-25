@@ -84,7 +84,7 @@
 			<!-- 表格 -->
 			<table 	id="retiredTable"
 					title="被合并居民"
-					idField="PERSON_ID" 
+					idField="PERSON_ID"
 					singleSelect="true"
 					fitColumns="true"
 					url="${pageContext.request.contextPath}/merge/merge.ac">

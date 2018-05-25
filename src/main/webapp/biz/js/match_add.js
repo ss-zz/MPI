@@ -33,8 +33,6 @@ function addFieldCfg(){
 	var htm = '<fieldset id="'+filedId+'_add_fieldset"><legend><span style="color:#78a9cb;font-weight:bold;">'+data.codeName+'</span>-匹配设定</legend>'+
 		'<input type="hidden" id="'+filedId+'_add_fieldName" value="xxx">'+
 		'<input type="hidden" id="'+filedId+'_add_desc" value="'+data.codeName+'">'+			
-		'<label for="'+filedId+'_add_agreeThreshold">完全匹配值:</label><input type="text" class="easyui-validatebox" id="'+filedId+'_add_agreeThreshold" maxlength="10" required="true" validType="decimalValid"/>&nbsp;&nbsp;'+
-		'<label for="'+filedId+'_add_disagreeThreshold">不匹配值:</label><input type="text" class="easyui-validatebox" id="'+filedId+'_add_disagreeThreshold" maxlength="10" required="true" validType="decimalValid"/>&nbsp;&nbsp;'+
 		'<label for="'+filedId+'_add_matchThreshold">匹配阀值:</label><input type="text" class="easyui-validatebox" id="'+filedId+'_add_matchThreshold" maxlength="10" required="true" validType="decimalValid"/>'+
 		'<label for="'+filedId+'_add_weight">权重:</label><input type="text" class="easyui-validatebox" id="'+filedId+'_add_weight" maxlength="10" required="true" validType="decimalValid"/>&nbsp;&nbsp;'+
 		'<label for="'+filedId+'_add_matchFunction">匹配算法:</label><select id="'+filedId+'_add_matchFunction" required="true"></select>&nbsp;&nbsp;'+
@@ -78,8 +76,6 @@ function saveMatchCfg(){
 	for(var fieldId in INUSED_FIELDS){
 		params.matchFieldCfgs[i]={};
 		params.matchFieldCfgs[i].propertyName=fieldId;
-		params.matchFieldCfgs[i].agreeProb=$("#"+fieldId+"_add_agreeThreshold").val();
-		params.matchFieldCfgs[i].disAgree=$("#"+fieldId+"_add_disagreeThreshold").val();
 		params.matchFieldCfgs[i].matchThreshold=$("#"+fieldId+"_add_matchThreshold").val();
 		params.matchFieldCfgs[i].matchFunction=$("#"+fieldId+"_add_matchFunction").val();
 		params.matchFieldCfgs[i].weight=$("#"+fieldId+"_add_weight").val();
@@ -151,17 +147,6 @@ function getPropertyCount(o) {
  * 验证字段数据
  */
 function validFieldData(fieldId){
-	//取得值
-	var agree = parseFloat($("#"+fieldId+"_add_agreeThreshold").val());
-	var disagree = parseFloat($("#"+fieldId+"_add_disagreeThreshold").val());
-	var match = parseFloat($("#"+fieldId+"_add_matchThreshold").val());
-	
-	var name = $("#"+fieldId+"_add_desc").val();
-
-	if(match>=agree||disagree>=match){
-		alert("["+name+"]字段中的匹配数据不符合:\n\r 完全匹配值 > 匹配阀值 > 不匹配值");
-		return false;
-	}
 	return true;
 }
 

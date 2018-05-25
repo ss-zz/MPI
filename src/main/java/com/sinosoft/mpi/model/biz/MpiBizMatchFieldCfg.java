@@ -70,8 +70,6 @@ public class MpiBizMatchFieldCfg implements Serializable {
 	public MpiBizMatchFieldCfg(MatchField matchField) {
 		super();
 		this.propertyName = matchField.getFieldName();
-		this.agreeProb = String.valueOf(matchField.getAgreementProbability());
-		this.disAgree = String.valueOf(matchField.getDisagreementProbability());
 		this.matchThreshold = String.valueOf(matchField.getMatchThreshold());
 		this.matchFunction = matchField.getComparatorFunction();
 		this.weight = String.valueOf(matchField.getWeight());
@@ -80,10 +78,8 @@ public class MpiBizMatchFieldCfg implements Serializable {
 
 	public MatchField toMatchField() {
 		MatchField mf = new MatchField();
-		mf.setAgreementProbability(Float.parseFloat(this.agreeProb));
 		mf.setComparatorFunction(this.matchFunction);
 		mf.setDesc(this.cfgDesc);
-		mf.setDisagreementProbability(Float.parseFloat(this.disAgree));
 		mf.setFieldName(this.propertyName);
 		mf.setMatchThreshold(Float.parseFloat(this.matchThreshold));
 		mf.setWeight(Float.parseFloat(this.weight));

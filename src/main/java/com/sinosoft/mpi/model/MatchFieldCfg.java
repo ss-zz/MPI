@@ -34,16 +34,6 @@ public class MatchFieldCfg implements Serializable {
 	private String propertyName;
 
 	/**
-	 * 匹配协议
-	 */
-	private String agreeProb;
-
-	/**
-	 * 不匹配度
-	 */
-	private String disAgree;
-
-	/**
 	 * 匹配阀值
 	 */
 	private String matchThreshold;
@@ -70,8 +60,6 @@ public class MatchFieldCfg implements Serializable {
 	public MatchFieldCfg(MatchField matchField) {
 		super();
 		this.propertyName = matchField.getFieldName();
-		this.agreeProb = String.valueOf(matchField.getAgreementProbability());
-		this.disAgree = String.valueOf(matchField.getDisagreementProbability());
 		this.matchThreshold = String.valueOf(matchField.getMatchThreshold());
 		this.matchFunction = matchField.getComparatorFunction();
 		this.weight = String.valueOf(matchField.getWeight());
@@ -80,10 +68,8 @@ public class MatchFieldCfg implements Serializable {
 
 	public MatchField toMatchField() {
 		MatchField mf = new MatchField();
-		mf.setAgreementProbability(Float.parseFloat(this.agreeProb));
 		mf.setComparatorFunction(this.matchFunction);
 		mf.setDesc(this.cfgDesc);
-		mf.setDisagreementProbability(Float.parseFloat(this.disAgree));
 		mf.setFieldName(this.propertyName);
 		mf.setMatchThreshold(Float.parseFloat(this.matchThreshold));
 		mf.setWeight(Float.parseFloat(this.weight));
@@ -112,22 +98,6 @@ public class MatchFieldCfg implements Serializable {
 
 	public void setPropertyName(String propertyName) {
 		this.propertyName = propertyName;
-	}
-
-	public String getAgreeProb() {
-		return agreeProb;
-	}
-
-	public void setAgreeProb(String agreeProb) {
-		this.agreeProb = agreeProb;
-	}
-
-	public String getDisAgree() {
-		return disAgree;
-	}
-
-	public void setDisAgree(String disAgree) {
-		this.disAgree = disAgree;
 	}
 
 	public String getMatchThreshold() {

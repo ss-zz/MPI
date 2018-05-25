@@ -7,7 +7,7 @@ $(function() {
  * 初始化
  */
 function init_fun(){
-	$("#dataFromSpan").text(BASE_DATAS.survive.DOMAIN_DESC);
+	$("#dataFromSpan").text(BASE_DATAS.survive.domainDesc);
 	// 循环 构建表格
 	$.each(BASE_DATAS.fields,function(idx,data){
 		buildTr("data_show_table",data.codeId,3,true);
@@ -67,8 +67,8 @@ function mergePerson(){
 			url : root + '/merge/merge.ac?method=merge',
 			type : 'POST',
 			data : {
-				"survivePersonId":BASE_DATAS.survive.FIELD_PK,
-				"retiredPersonId":BASE_DATAS.retired.FIELD_PK
+				"survivePersonId":BASE_DATAS.survive.fieldPk,
+				"retiredPersonId":BASE_DATAS.retired.fieldPk
 			},
 			success : function(data) {
 				showMessage("操作成功");

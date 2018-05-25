@@ -46,19 +46,15 @@ public class MatchConfig {
 		for (Element matchFieldElement : matchFieldElements) {
 			MatchField matchField = new MatchField();
 
-			String agreementProbability = matchFieldElement.attributeValue("agreement-probability");
 			String comparatorFunction = matchFieldElement.attributeValue("comparator-function");
 			String fieldName = matchFieldElement.attributeValue("field-name");
 			String matchThreshold = matchFieldElement.attributeValue("match-threshold");
-			String disagreementProbability = matchFieldElement.attributeValue("disagreement-probability");
 			String weight = matchFieldElement.attributeValue("weight");
 			String desc = matchFieldElement.attributeValue("desc");
 
 			matchField.setFieldName(fieldName);
 			matchField.setComparatorFunction(comparatorFunction);
-			matchField.setDisagreementProbability(Float.parseFloat(disagreementProbability));
 			matchField.setMatchThreshold(Float.parseFloat(matchThreshold));
-			matchField.setAgreementProbability(Float.parseFloat(agreementProbability));
 			matchField.setWeight(Float.parseFloat(weight));
 			matchField.setDesc(desc);
 			matchFields.add(matchField);

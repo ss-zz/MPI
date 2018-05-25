@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.context.QueryConditionType;
@@ -38,7 +39,6 @@ import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.PersonInfoSimple;
 import com.sinosoft.mpi.util.CodeConvertUtils;
 import com.sinosoft.mpi.util.DateUtil;
-import com.sinosoft.mpi.util.IDUtil;
 import com.sinosoft.mpi.util.NumberUtils;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.SqlUtils;
@@ -331,7 +331,7 @@ public class PersonInfoService {
 		} else {// 患者
 			sp = getByPersonIdentifier(surviving.getUniqueSign(), surviving.getMedicalserviceNo());
 		}
-		mergePersonFlow(rp, sp);
+		mergePersonFlow(rp, sp, true);
 	}
 
 	/**
@@ -346,10 +346,19 @@ public class PersonInfoService {
 		}
 	}
 
-	private void mergePersonFlow(PersonInfo rp, PersonInfo sp) {
+	/**
+	 * 合并人员
+	 * 
+	 * @param rp
+	 *            被合并人员
+	 * @param sp
+	 *            目标人员
+	 * @param isAuto
+	 *            是否自动合并
+	 */
+	private void mergePersonFlow(PersonInfo rp, PersonInfo sp, boolean isAuto) {
 
 		if (rp == null || sp == null) {
-			logger.debug("MPI系统中未取得相关居民信息");
 			throw new ValidationException("MPI系统中未取得相关居民信息");
 		}
 		// 索引关联信息查询
@@ -360,7 +369,6 @@ public class PersonInfoService {
 
 		// 如 surviving 居民信息 无关联索引 返回处理错误
 		if (siir == null) {
-			logger.debug("合并到的居民信息还没有关联到索引中,无法完成合并");
 			throw new ValidationException("合并到的居民信息还没有关联到索引中,无法完成合并");
 		}
 
@@ -371,7 +379,8 @@ public class PersonInfoService {
 			indexIdentifierRelDao.deleteByFieldPk(sp.getFieldPk());
 			// 添加解除索引log
 			saveIndexLog(rp.getFieldPk(), riir.getFieldPk(), riir.getDomainId(), Constant.IDX_LOG_TYPE_MODIFY,
-					Constant.IDX_LOG_STYLE_AUTO_SPLIT, "主索引[" + rIdx.getNameCn() + "]进行拆分");
+					isAuto ? Constant.IDX_LOG_STYLE_AUTO_SPLIT : Constant.IDX_LOG_STYLE_MAN_SPLIT,
+					"主索引[" + rIdx.getNameCn() + "]进行拆分");
 		}
 
 		// 取得索引内容
@@ -380,7 +389,8 @@ public class PersonInfoService {
 		saveIndexRelByPer(riir.getFieldPk(), siir);
 		// 索引log
 		saveIndexLog(rp.getFieldPk(), siir.getMpiPk(), riir.getDomainId(), Constant.IDX_LOG_TYPE_MODIFY,
-				Constant.IDX_LOG_STYLE_AUTO_MERGE, "[" + rp.getNameCn() + "]合并到主索引[" + sIdx.getNameCn() + "]");
+				isAuto ? Constant.IDX_LOG_STYLE_AUTO_MERGE : Constant.IDX_LOG_STYLE_MAN_MERGE,
+				"[" + rp.getNameCn() + "]合并到主索引[" + sIdx.getNameCn() + "]");
 		// 更新索引信息
 		personIndexUpdateService.updateIndex(rp, siir.getMpiPk());
 	}
@@ -393,13 +403,14 @@ public class PersonInfoService {
 	 * @param survivePersonId
 	 *            目标居民
 	 */
+	@Transactional
 	public void mergePersonFromPage(String retiredPersonId, String survivePersonId) {
 		PersonInfo survive = getObject(survivePersonId);
 		PersonInfo retired = getObject(retiredPersonId);
 		if (survive == null || retired == null) {
 			throw new ValidationException("找不到居民信息,无法完成合并.");
 		}
-		mergePersonFlow(retired, survive);
+		mergePersonFlow(retired, survive, false);
 	}
 
 	private void modifyManOpPerson(String opId) {
@@ -698,12 +709,10 @@ public class PersonInfoService {
 				throw new ValidationException("居民信息已注册,域标识为:" + t.getUniqueSign() + ",居民信息主键为:" + t.getFieldPk());
 			}
 
-			// 生成新主键
-			t.setFieldPk(IDUtil.getUUID().toString());
+			// 保存居民信息
+			t = personInfoDao.save(t);
 			// 保存历史信息
 			addHistory(t);
-			// 保存居民信息
-			personInfoDao.save(t);
 
 		} else if (t.getState() == 1) {// 更新
 
@@ -712,10 +721,6 @@ public class PersonInfoService {
 						+ t.getHrId() + ",居民医疗服务编号为:" + t.getMedicalserviceNo() + ".");
 			}
 			if (realtionPerson != null) {
-				// 插入更新历史记录
-				t.setFieldPk(IDUtil.getUUID().toString());
-				// 保存历史信息
-				addHistory(t);
 				String relationpk = realtionPerson.getFieldPk();
 				if ("0".equals(t.getType())) {// 个人
 					t.setHrId(t.getRelationPk());
@@ -725,7 +730,9 @@ public class PersonInfoService {
 				t.setRelationPk(relationpk);
 				t.setFieldPk(relationpk);
 				// 更新居民信息
-				personInfoDao.save(t);
+				t = personInfoDao.save(t);
+				// 保存历史信息
+				addHistory(t);
 			} else {
 				throw new ValidationException("未找到要更新的居民信息,主键为" + t.getRelationPk() + " 域标识为" + t.getUniqueSign());
 			}
@@ -738,13 +745,11 @@ public class PersonInfoService {
 			}
 
 			if (realtionPerson != null) {
-				// 备份新来数据信息
-				t.setFieldPk(IDUtil.getUUID().toString());
-				addHistory(t);
-
 				String relationpk = realtionPerson.getFieldPk();
 				t.setRelationPk(relationpk);
 				t.setFieldPk(relationpk);
+				// 备份新来数据信息
+				addHistory(t);
 				// 删除原始数据信息
 				personInfoDao.delete(t);
 			} else {

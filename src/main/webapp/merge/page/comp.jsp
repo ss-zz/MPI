@@ -12,16 +12,15 @@
 	var BASE_DATAS = ${datas};
 </script>
 </head>
-<body>	
-<div>
-	&nbsp;&nbsp;&nbsp;&nbsp;
-	<input type="button" value="合并" id="merge_person_btn" onclick="mergePerson();" />
-	&nbsp;&nbsp;&nbsp;&nbsp;
-	<input type="button" value="返回" onclick="goBackClose();" />
+<body>
+
+<div class="easyui-panel" style="padding:5px; margin-bottom: 10px;">
+	<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-back'" id="gobackBtn" onclick="goBackClose();">返回</a>
+	<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" id="merge_person_btn" onclick="mergePerson();">确认合并</a>
 </div>
-<br/>
+
 <table class="myTable">
-	<caption>数据来源:[<span id="dataFromSpan"></span>]</caption>
+	<caption>数据来源【<span id="dataFromSpan"></span>】</caption>
 	<thead>
 	<tr>
 		<th>字段名</th>
