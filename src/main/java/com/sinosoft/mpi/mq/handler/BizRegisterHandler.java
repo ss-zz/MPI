@@ -50,8 +50,12 @@ public class BizRegisterHandler {
 			// 人员信息
 			MpiPersonInfoRegister personInfoRegister = bizRegister.getMpiPersonInfoRegister();
 			PersonInfo personInfo = personInfoRegister.toPersonInfo(bizRegisterMq.getBizRegister());
-			personInfo.setFieldPk(bizRegisterMq.getPersonFieldPk());
+			
+			// 新生成人员id
+			String newPersonId = bizRegisterMq.getPersonFieldPk();
+			personInfo.setFieldPk(newPersonId);
 
+			// 原始人员id
 			String srcPersonId = personInfoRegister.getPatientId();
 			// 人员原始id
 			handlerResult.setSrcPersonId(srcPersonId);
@@ -75,7 +79,7 @@ public class BizRegisterHandler {
 				if (bizInfo != null) {
 					// 业务数据默认状态
 
-					BizHandlerResult bizHandlerResult = addBizHandler.handleMessage(bizInfo, srcPersonId, mpiPk,
+					BizHandlerResult bizHandlerResult = addBizHandler.handleMessage(bizInfo, newPersonId, mpiPk,
 							bizRegister);
 
 					handlerResult.setBizIdxId(bizHandlerResult.getNewBizId());

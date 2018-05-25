@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
@@ -12,6 +13,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.CaseFormat;
 import com.sinosoft.mpi.dao.mpi.MpiCombineLevelDao;
 import com.sinosoft.mpi.model.DomainSrcLevel;
 import com.sinosoft.mpi.model.MpiCombineLevel;
@@ -79,6 +81,12 @@ public class MpiCombineLevelService {
 			Map<String, Object> map = it.next();
 			Short level = ((BigDecimal) map.get("SRC_LEVEL")).shortValue();
 			String combofield = (String) map.get("COMBINE_FIELD");
+			
+			// 数据库中combofield为大写，转为驼峰小写
+			if (combofield != null && Pattern.matches("[A-Z_]+", combofield)) {
+				combofield = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, combofield.toLowerCase());
+			}
+			
 			// 2016年11月1日16:47:45 WHN update 所有字段进行合并，非空字段不进行替换
 			if (srcLevelcollist == null) {
 				// 如果索引字段优先级小于当前信息字段优先级，信息合并

@@ -6,7 +6,10 @@ package com.sinosoft.mpi.ws;
 public class RegisterBizTest extends BaseTest {
 
 	public static void main(String[] args) {
-		post("api/pub/index/register/biz", DemoDataFactory.getBizRegister());
+		int count = 1;
+		for(int i = 0; i < count; i++) {
+			post("api/pub/index/register/biz", DemoDataFactory.getBizRegister());
+		}
 	}
 
 }

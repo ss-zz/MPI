@@ -3,15 +3,13 @@ $(function() {
 	$('#listTable').datagrid({
 		title : '业务记录',
 		toolbar: "#listTable_tb",
-		idField: "ROW_ID",
 		columns:[[  
-			{field:'UNAME',title:'患者姓名',width:100},
-			{field:'DOMAINNAME',title:'业务来源',width:150},
-			{field:'BIZCLINICSERIALNO',title:'患者就诊流水号',width:100},
-			{field:'BIZINPATIENTSERIALNO',title:'患者住院流水号',width:100},
+			{field:'UNAME',title:'姓名',width:100},
+			{field:'DOMAINNAME',title:'数据来源',width:150},
+			{field:'BIZSERIALID',title:'就诊流水号',width:100},
+			{field:'BIZINPATIENTNO',title:'住院号',width:100},
+			{field:'BIZCLINICNO',title:'门诊号',width:100},
 			{field:'CREATE_DATE',title:'创建日期',width:100},
-			{field:'STATE',title:'状态',width:100,formatter:initState},
-			{field:'REMARK',title:'备注',width:100},
 			{field:'CONFIGID',title:'操作',width:100,formatter:detail}
 		]]
 	});

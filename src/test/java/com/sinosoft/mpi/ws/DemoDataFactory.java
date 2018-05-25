@@ -57,13 +57,27 @@ public class DemoDataFactory {
 		person.setPatientId(UUID.randomUUID().toString());
 
 		// 人员基本信息
-		person.setNameCn("测试姓名");
-		person.setGenderCd("01");
-		person.setBirthDate(now);
-		person.setArCd("410000");
-		person.setIdNo("410182451452145412");
+		person.setNameCn("测试姓名" + getRandomStr());
+		person.setGenderCd("01");// 性别
+		person.setBirthDate(now);// 出生日期
+		person.setArCd("410000");// 地区编码
+		// person.setIdNo("410182451452145412");// 身份证号
+		person.setMedicalserviceNo(getRandomStr());// 医疗服务号
+		person.setHrId(getRandomStr());// 居民健康档案号
+		person.setNhCard(getRandomStr());// 新农合卡号
+		person.setSscid(getRandomStr());// 社保卡号
 
 		return person;
+	}
+
+	/**
+	 * 获取随机字符串
+	 * 
+	 * @return
+	 */
+	private static String getRandomStr() {
+		// 1-10随机数
+		return (int) (1 + Math.random() * (10 - 1 + 1)) + "";
 	}
 
 	/**
@@ -73,11 +87,11 @@ public class DemoDataFactory {
 	 */
 	public static MpiBizInfoRegister getBiz() {
 		MpiBizInfoRegister biz = new MpiBizInfoRegister();
-		biz.setBizId(UUID.randomUUID().toString());
-		biz.setBizClinicno("12345");
-		biz.setBizClinicSerialno("45687");
-		biz.setBizInpatientno("78545");
-		biz.setBizInpatientSerialno("74521");
+		biz.setBizId(UUID.randomUUID().toString());// 业务id-每次都随机
+		biz.setBizClinicno(getRandomStr());
+		biz.setBizClinicSerialno(getRandomStr());
+		biz.setBizInpatientno(getRandomStr());
+		biz.setBizInpatientSerialno(getRandomStr());
 		return biz;
 	}
 

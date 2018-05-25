@@ -94,7 +94,8 @@ public class BizIndexService {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		StringBuilder sql = new StringBuilder();
 		sql.append(
-				"select b.BIZ_ID as bizId,b.BIZ_PATIENT_ID as bizPatientId,b.BIZ_SERIAL_ID as bizSerialId,b.BIZ_INPATIENTNO as bizInpatientno,b.BIZ_INPATIENT_SERIALNO as bizInpatientSerialno, b.BIZ_CLINICNO as bizClinicno,b.BIZ_CLINIC_SERIALNO as bizClinicSerialno,b.CREATE_DATE as create_Date,b.STATE as state,b.REMARK as remark,b.ID as id,b.BIZ_SYSTEM_ID as bizSystemId,d.DOMAIN_DESC as domainName,i.name_cn as uName from mpi_biz_index b")
+				"select b.BIZ_ID as bizId,b.BIZ_PATIENT_ID as bizPatientId,b.BIZ_SERIAL_ID as bizSerialId,b.BIZ_INPATIENTNO as bizInpatientno, b.BIZ_CLINICNO as bizClinicno,b.CREATE_DATE as create_Date,b.STATE as state,b.REMARK as remark,b.ID as id,b.BIZ_SYSTEM_ID as bizSystemId,d.DOMAIN_DESC as domainName,i.name_cn as uName"
+				+ " from mpi_biz_index b")
 				.append(" left join mpi_identifier_domain d on b.BIZ_SYSTEM_ID = d.domain_id ")
 				.append(" left join mpi_person_info i on i.field_pk = b.biz_patient_id where 1=1 ");
 

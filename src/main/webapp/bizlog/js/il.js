@@ -17,12 +17,16 @@ $(function() {
 function initType(val, row){
 	if(val == '1'){
 		return '匹配';
+	}else{
+		return '-';
 	}
 }
 //初始化列 --百分比
 function initMatched(val, row){
 	if(val != null){
-		return val+'%'
+		return val*100+'%'
+	}else{
+		return '-';
 	}
 }
 

@@ -257,6 +257,9 @@ public class BlockService {
 		if (StringUtils.isBlank(fieldvalue)) {// 为空
 			return false;
 		}
+		
+		//TODO 不验证特殊号码，正式使用需放开
+		/*
 		if ("ID_NO".equals(field)) {// 身份证号
 			result = verifyIdNo(fieldvalue);
 		} else if ("NH_CARD".equals(field)) {
@@ -266,6 +269,7 @@ public class BlockService {
 		} else if ("SSCID".equals(field)) {
 			result = verifySSCID(fieldvalue);
 		}
+		*/
 		return result;
 	}
 

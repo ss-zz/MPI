@@ -6,7 +6,10 @@ package com.sinosoft.mpi.ws;
 public class RegisterPersonTest extends BaseTest {
 
 	public static void main(String[] args) {
-		post("api/pub/index/register/person", DemoDataFactory.getPersonRegister());
+		int count = 10;
+		for(int i = 0; i < count; i++) {
+			post("api/pub/index/register/person", DemoDataFactory.getPersonRegister());
+		}
 	}
 
 }
