@@ -1,13 +1,13 @@
 package com.sinosoft.mpi.service.biz;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -98,29 +98,17 @@ public class BizIdxLogService {
 	 * @return
 	 */
 	public List<Map<String, Object>> queryForMapPage(MpiBizIdxLogSearch t, PageInfo page) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		StringBuilder sql = new StringBuilder();
 		sql.append(
 				"select l.bl_idx_log_id as blIdxLogId,l.bl_time as blTime,l.bl_user_id as blUserId,l.bl_desc as blDesc,l.bl_matched as blMatched,l.bl_biz_id as blBizId,l.bl_serial_id as blSerialId,l.bl_info_sour as blInfoSour,l.bl_type as blType,u.name as userName,d.domain_desc as ser_Desc from MPI_BIZ_IDX_LOG l")
 				.append(" left join mpi_sys_user u on u.user_id = l.bl_user_id")
-				.append(" left join mpi_identifier_domain d on l.bl_serial_id = d.domain_id where 1=1 ");
+				.append(" left join mpi_identifier_domain d on l.bl_info_sour = d.domain_id where 1=1 ");
 
-		try {
-			if (t.getBlTimeBegin() != null && t.getBlTimeEnd() == null) {
-				sql.append("and l.bl_time >= TO_DATE('" + sdf.format(sdf.parse(t.getBlTimeBegin())).toString()
-						+ "','yyyy-mm-dd') ");
-			}
-			if (t.getBlTimeEnd() != null && t.getBlTimeBegin() == null) {
-				sql.append("and l.bl_time <= TO_DATE('" + sdf.format(sdf.parse(t.getBlTimeEnd())).toString()
-						+ "','yyyy-mm-dd') ");
-			}
-			if (t.getBlTimeBegin() != null && t.getBlTimeEnd() != null) {
-				sql.append("and l.bl_time >= TO_DATE('" + sdf.format(sdf.parse(t.getBlTimeBegin())).toString()
-						+ "','yyyy-mm-dd') and l.bl_time <= TO_DATE('"
-						+ sdf.format(sdf.parse(t.getBlTimeEnd())).toString() + "','yyyy-mm-dd') ");
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
+		if (StringUtils.isNotBlank(t.getBlTimeBegin())) {
+			sql.append("and l.bl_time >= TO_DATE('" + t.getBlTimeBegin() + "','yyyy-mm-dd HH24:mi:ss') ");
+		}
+		if (StringUtils.isNotBlank(t.getBlTimeEnd())) {
+			sql.append("and l.bl_time <= TO_DATE('" + t.getBlTimeEnd() + "','yyyy-mm-dd HH24:mi:ss') ");
 		}
 		List<Object> args = new ArrayList<Object>();
 		// 添加查询条件

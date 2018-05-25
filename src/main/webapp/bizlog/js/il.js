@@ -1,36 +1,16 @@
-//为date类添加一个format方法  
-//yyyy 年  
-//MM 月  
-//dd 日  
-//hh 小时  
-//mm 分  
-//ss 秒  
-//qq 季度  
-//S  毫秒  
-//author: meizz  
-Date.prototype.formatDate = function(format) {
-	var o = {
-		"M+" : this.getMonth() + 1, //month  
-		"d+" : this.getDate(), //day  
-		"h+" : this.getHours(), //hour  
-		"m+" : this.getMinutes(), //minute  
-		"s+" : this.getSeconds(), //second  
-		"q+" : Math.floor((this.getMonth() + 3) / 3), //quarter  
-		"S" : this.getMilliseconds()
-	};
-	if (/(y+)/.test(format))
-		format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-	for ( var k in o)
-		if (new RegExp("(" + k + ")").test(format))
-			format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
-	return format;
-};
-
 $(function() {
 	//初始化时间输入框
-	init_timeInput();
+	initTimeInput();
 	// 加载表格数据
 	ajaxTable();
+	
+	// 日期默认值
+	var sysdate = new Date();
+	var year = sysdate.getFullYear(),
+		month = sysdate.getMonth()+1,
+		day = sysdate.getDate();
+	$('#search_optime_begin').datetimebox('setValue', year+"-01-01 00:00:00");
+	$('#search_optime_end').datetimebox('setValue', year+"-"+month+"-"+day + " 23:59:59");
 });
 
 //初始化列 --日志类型
@@ -49,39 +29,16 @@ function initMatched(val, row){
 /**
  * 初始化时间选择框
  */
-function init_timeInput(){
+function initTimeInput(){
 	var option = {
-		showSeconds:true,
-		editable:false,
-		formatter:function(date){
+		showSeconds: true,
+		formatter: function(date){
 			return date.formatDate("yyyy-MM-dd hh:mm:ss");
-		},
-		parser:function(dateStr){
-			if(dateStr == undefined || dateStr==null || dateStr=="")
-				return new Date();
-			var regexDT = /(\d{4})-?(\d{2})?-?(\d{2})?\s?(\d{2})?:?(\d{2})?:?(\d{2})?/g;
-			var matchs = regexDT.exec(dateStr);
-			var date = new Array();
-			for (var i = 1; i < matchs.length; i++) {
-				if (matchs[i]!=undefined) {
-					date[i] = matchs[i];
-				} else {  
-					if (i<=3) {
-						date[i] = '01';
-					} else {  
-						date[i] = '00';
-					}
-				}
-			}
-			return new Date(date[1], date[2]-1, date[3], date[4], date[5],date[6]);
 		}
 	};
 	
-	$('#blTime_begin').datetimebox(option); 	
-	$('#blTime_begin').attr("readonly","readonly");
-	
-	$('#blTime_end').datetimebox(option); 	
-	$('#blTime_end').attr("readonly","readonly");
+	$('#blTime_begin').datetimebox(option);
+	$('#blTime_end').datetimebox(option);
 }
 
 /**
@@ -156,24 +113,17 @@ function buildStyleStr(val, row) {
 
 // 查询匹配详情
 function searchListTable() {
-
 	// 查询的时候重置回第一页
 	$("#listTable").datagrid("options").pageNumber = 1;
-	var blInfoSour = $('#blInfoSour').val();
-	var blTime_begin = $("#search_optime_begin").datetimebox('getValue');
-	var blTime_end = $("#search_optime_end").datetimebox('getValue');
-	var blUserId = $("#blUserId").val();
-	var blMatched_end = $('#blMatched_end').val();
-	var blMatched_begin = $('#blMatched_begin').val();
 	$("#listTable").datagrid({
 		url:root +"/bizLog/query",
 		queryParams : {
-			"blInfoSour" : blInfoSour,
-			"blUserId" : blUserId,
-			"blTimeBegin":blTime_begin,
-			"blTimeEnd":blTime_end,
-			"blMatchedBegin":blMatched_begin,
-			"blMatchedEnd":blMatched_end
+			"blInfoSour" : $('#blInfoSour').val(),
+			"blTimeBegin":$("#search_optime_begin").datetimebox('getValue'),
+			"blTimeEnd":$("#search_optime_end").datetimebox('getValue'),
+			"blMatchedBegin":$('#blMatched_begin').val(),
+			"blMatchedEnd":$('#blMatched_end').val(),
+			"blInfoSour": $("#search_domain").combobox('getValue')
 		}
 	});
 }
@@ -184,6 +134,7 @@ function searchReset() {
 	$("#blMatched_end").val('');
 	$("#search_optime_begin").datetimebox('setValue', '');
 	$("#search_optime_end").datetimebox('setValue', '');
+	$("#search_domain").combobox('setValue', '');	
 }
 
 // 刷新表格

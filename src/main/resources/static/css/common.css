@@ -167,7 +167,7 @@ fieldset {
 .formeTable {
 	border: 0px;
 	border-collapse: collapse;
-	width: 100%;
+	width: 80%;
 }
 
 .formeTable tr td:nth-child(odd){
