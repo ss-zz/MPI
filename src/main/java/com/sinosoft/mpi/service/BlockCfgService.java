@@ -1,7 +1,6 @@
 package com.sinosoft.mpi.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +44,7 @@ public class BlockCfgService {
 	 * 保存配置信息
 	 */
 	public void save(BlockCfg t) {
-		t.setCreateDate(DateUtil.getTimeNow(new Date()));
+		t.setCreateDate(DateUtil.getTimeNow());
 		t.setState("0");
 		blockCfgDao.save(t);
 		for (Integer key : t.getGroups().keySet()) {

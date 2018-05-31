@@ -5,6 +5,8 @@ import javax.jws.WebService;
 
 import org.apache.log4j.Logger;
 
+import com.sinosoft.mpi.dics.LogOpStyle;
+import com.sinosoft.mpi.dics.LogOpType;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.PersonInfoSimple;
@@ -73,7 +75,7 @@ public class PersonWS implements IPersonWS {
 		PersonInfo survivingPerson = surviving.toPersonInfo();
 		DataResult<Void> result = null;
 		try {
-			personInfoService.mergePerson(retiredPerson, survivingPerson);
+			personInfoService.mergePerson(retiredPerson, survivingPerson, LogOpType.MODIFY, LogOpStyle.AUTO_MERGE);
 			result = new DataResult<Void>();
 		} catch (ValidationException e) {// 验证异常
 			result = new DataResult<Void>(false, e.getMessage());
@@ -92,7 +94,7 @@ public class PersonWS implements IPersonWS {
 		DataResult<Void> result = null;
 		try {
 			validDatasLength(retireds.length);
-			personInfoService.mergePersonBatch(retireds, surviving);
+			personInfoService.mergePersonBatch(retireds, surviving, LogOpType.MODIFY, LogOpStyle.AUTO_MERGE);
 			result = new DataResult<Void>();
 		} catch (ValidationException e) { // 验证异常
 			result = new DataResult<Void>(false, e.getMessage());

@@ -1,5 +1,7 @@
 package com.sinosoft.block.fun;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.sinosoft.block.BlockException;
 import com.sinosoft.mpi.util.IdcardUtils;
 
@@ -10,6 +12,9 @@ public class ID15Function implements IBlockFuntion {
 
 	@Override
 	public String fun(String value) {
+		if (StringUtils.isBlank(value)) {
+			return null;
+		}
 		String result = null;
 		if (value.length() == 15) {
 			result = value;

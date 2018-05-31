@@ -289,6 +289,9 @@ public class PersonIdxLogService {
 	 */
 	private String getFieldCnName(String fieldName) {
 		PersonPropertiesDesc desc = CacheManager.get(PersonPropertiesDesc.class, fieldName);
+		if(desc == null) {
+			return null;
+		}
 		return desc.getPropertyDesc();
 	}
 
@@ -710,7 +713,7 @@ public class PersonIdxLogService {
 		PersonIdxLog result = new PersonIdxLog();
 		result.setOpType(opType);
 		result.setOpStyle(opStyle);
-		result.setOpTime(DateUtil.getTimeNow(new Date()));
+		result.setOpTime(DateUtil.getTimeNow());
 		result.setOpUserId("0");
 		result.setOpDesc(desc);
 		result.setInfoSour(domainId);

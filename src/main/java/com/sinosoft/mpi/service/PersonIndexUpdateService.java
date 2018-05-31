@@ -10,9 +10,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.dao.mpi.IdentifierDomainDao;
-import com.sinosoft.mpi.dao.mpi.IndexIdentifierRelDao;
 import com.sinosoft.mpi.dao.mpi.MpiCombineRecDao;
 import com.sinosoft.mpi.dao.mpi.PersonIndexDao;
+import com.sinosoft.mpi.dics.LogOpStyle;
+import com.sinosoft.mpi.dics.LogOpType;
 import com.sinosoft.mpi.model.IdentifierDomain;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.MpiCombineRec;
@@ -32,66 +33,53 @@ public class PersonIndexUpdateService {
 	@Resource
 	IdentifierDomainDao identifierDomainDao;
 	@Resource
-	IndexIdentifierRelDao indexIdentifierRelDao;
+	IndexIdentifierRelService indexIdentifierRelService;
 	@Resource
 	MpiCombineRecDao mpiCombineRecDao;
 	@Resource
 	MpiCombineLevelService mpiCombineLevelService;
-	// 更新策略
-	@Value("${index.update.policy}")
-	UpdateStrategy policy;
 	@Resource
 	DomainSrcLevelService domainSrcLevelService;
 	@Resource
 	JdbcTemplate jdbcTemplate;
 
+	// 更新策略
+	@Value("${index.update.policy}")
+	UpdateStrategy policy;
+
+	// 缓存数据
 	List<Map<String, Object>> orgincollevellist = null;
 
 	/**
-	 * 更新索引信息
+	 * 更新索引
 	 * 
 	 * @param person
-	 * @param indexId
+	 * @param mpiPk
 	 */
-	public void updateIndex(PersonInfo person, String indexId) {
-
-		switch (policy) {
-		case UNUPDATE:
-			// 不更新 无操作
-			break;
-		case UPDATE:
-			updateIndexDirect(person, indexId);
-			break;
-		case UNUPDATE_MAN:
-			break;
-		case UPDATE_LEVEL:
-			updateIndexByLevel(person, indexId);
-			break;
-		default:
-			break;
-		}
+	public void updateIndex(PersonInfo person, String mpiPk) {
+		// 直接更新
+		// updateIndexDirect(person, mpiPk);
+		// 根据级别更新
+		updateIndexByLevel(person, mpiPk);
 	}
 
 	/**
-	 * 直接更新 索引信息
+	 * 更新索引-直接
 	 */
-	private void updateIndexDirect(PersonInfo person, String mpiPk) {
-		PersonIndex idx = person.toPersonIndex();
-		idx.setMpiPk(mpiPk);
-		personIndexDao.save(idx);
+	private void updateIndexDirect(PersonInfo personInfo, String mpiPk) {
+		PersonIndex personIndex = personInfo.toPersonIndex();
+		personIndex.setMpiPk(mpiPk);
+		personIndexDao.save(personIndex);
 	}
 
 	/**
-	 * 根据数据源级别进行更新
-	 *
-	 * @param person
-	 * @param indexId
+	 * 更新索引-根据数据源级别
 	 */
-	private void updateIndexByLevel(PersonInfo person, String indexId) {
+	private void updateIndexByLevel(PersonInfo personInfo, String mpiPk) {
 		// 取得 索引
-		PersonIndex index = personIndexDao.findOne(indexId);
+		PersonIndex index = personIndexDao.findOne(mpiPk);
 		// 取得居民数据级别
-		IdentifierDomain domain = identifierDomainDao.getFirstByPersonId(person.getFieldPk());
+		IdentifierDomain domain = identifierDomainDao.getFirstByPersonId(personInfo.getFieldPk());
 		int srcLevel = 0;
 		if (NumberUtils.isNumber(index.getDomainLevel())) {
 			srcLevel = Integer.parseInt(index.getDomainLevel());
@@ -102,52 +90,11 @@ public class PersonIndexUpdateService {
 		}
 		// 对比级别
 		if (srcLevel <= domainLevel) {
-			index = person.toPersonIndex();
-			index.setMpiPk(indexId);
+			index = personInfo.toPersonIndex();
+			index.setMpiPk(mpiPk);
 			index.setDomainLevel(domain.getDomainLevel());
 			personIndexDao.save(index);
 		}
-	}
-
-	// 合并索引
-	private PersonIndex mergeIndex(PersonIndex index, PersonInfo personinfo) {
-		PersonIndex newIndex = new PersonIndex();
-		// 添加索引
-		if (index.getMpiPk() != null) {
-			// 获取索引字段的级别权限,与当前居民信息级别做比较,判别应替换字段信息，进行字段级别合并
-			// 合并信息入库（第一次入库也记录一次合并信息）
-			// 查询最新一次的合并记录
-			IndexIdentifierRel iirlatest = indexIdentifierRelDao
-					.findFirstByMpiPkOrderByCombineRecDesc(index.getMpiPk());
-			IndexIdentifierRel iir = new IndexIdentifierRel();
-			iir.setCombineRec(iirlatest.getCombineNo());// 指代上一条的替换记录combine_rec
-			iir.setDomainId(personinfo.getDomainId());
-			iir.setFieldPk(personinfo.getFieldPk());
-			iir.setDomainId(iirlatest.getDomainId());
-			iir.setMpiPk(index.getMpiPk());
-			if (personinfo.getType() == "0") {
-				iir.setPersonIdentifier(personinfo.getHrId());
-			} else if (personinfo.getType() == "1") {
-				iir.setPersonIdentifier(personinfo.getMedicalserviceNo());
-			} else if (personinfo.getType() == "3") {
-				iir.setPersonIdentifier(personinfo.getPatientId());
-			}
-
-			indexIdentifierRelDao.save(iir);
-			// 合并记录入库
-			long comboNO = iir.getCombineNo();// 本次合并记录号
-			// 取合并前的字段级别
-			/* updated-whn-2016-11-01 */
-			List<Map<String, Object>> orgincollevellist = getOrgincollevellist();
-			// 合并记录字段级别入库
-			newIndex = mpiCombineLevelService.compareBatchAdd(index, personinfo, comboNO, personinfo.getSrcLevel(),
-					orgincollevellist, null);
-			personIndexDao.save(newIndex);
-			MpiCombineRec mpiCombineRec = newIndex.indexToMpiCombineRec();
-			mpiCombineRec.setCombineNo(comboNO);
-			mpiCombineRecDao.save(mpiCombineRec);
-		}
-		return newIndex;
 	}
 
 	/**
@@ -163,22 +110,43 @@ public class PersonIndexUpdateService {
 	}
 
 	/**
-	 * 更新索引
+	 * 更新索引-将人员合并到目标索引上<br/>
+	 * 获取索引字段的级别权限,与当前居民信息级别做比较,判别应替换字段信息，进行字段级别合并
 	 * 
 	 * @param personindex
 	 * @param person
 	 * @return
 	 */
-	public PersonIndex updateIndex(PersonIndex personindex, PersonInfo person) {
+	public PersonIndex updateIndex(PersonIndex personIndex, PersonInfo personInfo, LogOpType opType, LogOpStyle opStyle,
+			String info) {
+		String mpiPk = personIndex.getMpiPk();
+		if (mpiPk != null) {
+			// 最新一次的合并关联关系
+			IndexIdentifierRel iirlatest = indexIdentifierRelService.findFirstByMpiPkOrderByCombineRecDesc(mpiPk);
 
-		switch (policy) {
-		case UPDATE_LEVEL_NEW:
-			personindex = mergeIndex(personindex, person);
-			break;
-		default:
-			break;
+			// 保存新的关联关系
+			IndexIdentifierRel iir = indexIdentifierRelService.add(personInfo.getFieldPk(), personIndex.getMpiPk(),
+					iirlatest.getDomainId(), personInfo.getIdentifier(), opType, opStyle, info,
+					iirlatest.getCombineNo());
+
+			// 合并记录入库
+			long comboNO = iir.getCombineNo();// 本次合并记录号
+			// 取合并前的字段级别
+			List<Map<String, Object>> orgincollevellist = getOrgincollevellist();
+			// 合并记录字段级别入库
+			mpiCombineLevelService.compareBatchAdd(personIndex, personInfo, comboNO, personInfo.getSrcLevel(),
+					orgincollevellist, null);
+
+			// 更新主索引信息
+			personIndexDao.save(personIndex);
+
+			// 保存合并记录
+			MpiCombineRec mpiCombineRec = personIndex.indexToMpiCombineRec();
+			mpiCombineRec.setCombineNo(comboNO);
+			mpiCombineRecDao.save(mpiCombineRec);
+
 		}
-		return personindex;
+		return personIndex;
 	}
 
 }

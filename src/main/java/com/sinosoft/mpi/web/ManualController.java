@@ -14,7 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
-import com.sinosoft.mpi.model.ManOpPerson;
+import com.sinosoft.mpi.dics.LogOpStyle;
+import com.sinosoft.mpi.dics.LogOpType;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.code.IBaseCode;
@@ -30,7 +31,7 @@ import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
 /**
- * 手工拆分合并
+ * 手工拆分合并-居民跟主索引合并
  */
 @Controller
 @RequestMapping("/manual/manual.ac")
@@ -51,7 +52,7 @@ public class ManualController {
 	@RequestMapping(params = "method=addNewIndex")
 	@ResponseBody
 	public void addNewIndex(String opId, String personId) {
-		personInfoService.addNewIndex(opId, personId);
+		personInfoService.addNewIndex(opId, personId, LogOpType.MODIFY, LogOpStyle.MAN_NEW);
 	}
 
 	/**
@@ -60,7 +61,7 @@ public class ManualController {
 	@RequestMapping(params = "method=addToIndex")
 	@ResponseBody
 	public void addToIndex(String opId, String personId, String indexId) {
-		personInfoService.addToIndex(opId, personId, indexId);
+		personInfoService.addToIndex(opId, personId, indexId, LogOpType.MODIFY, LogOpStyle.MAN_MERGE);
 	}
 
 	/**
@@ -68,9 +69,9 @@ public class ManualController {
 	 */
 	@RequestMapping(params = "method=query")
 	@ResponseBody
-	public Map<String, Object> list(PageInfo page, ManOpPerson t) {
+	public Map<String, Object> list(PageInfo page, Map<String, String> params) {
 		Map<String, Object> datas = new HashMap<>();
-		List<Map<String, Object>> list = manOpPersonService.queryForMapPage(t, page);
+		List<Map<String, Object>> list = manOpPersonService.queryForMapPage(params, page);
 		// 设置总共有多少条记录
 		datas.put(Constant.PAGE_TOTAL, page.getTotal());
 		// 设置当前页的数据
@@ -167,7 +168,7 @@ public class ManualController {
 	@RequestMapping(params = "method=split")
 	@ResponseBody
 	public void splitPerson(String indexId, String personId) {
-		personInfoService.splitPerson(indexId, personId);
+		personInfoService.splitPerson(indexId, personId, LogOpType.MODIFY, LogOpStyle.MAN_SPLIT);
 	}
 
 	/**
@@ -176,7 +177,7 @@ public class ManualController {
 	@RequestMapping(params = "method=splitToIndex")
 	@ResponseBody
 	public void splitPersonToIndex(String indexId, String personId, String fromIndexId) {
-		personInfoService.splitPersonToIndex(indexId, personId, fromIndexId);
+		personInfoService.splitPersonToIndex(indexId, personId, fromIndexId, LogOpType.MODIFY, LogOpStyle.MAN_SPLIT);
 	}
 
 	/**
@@ -188,12 +189,13 @@ public class ManualController {
 		PersonInfo person = personInfoService.getObject(personId);
 		List<PerInfoPropertiesDesc> fields = CacheManager.getAll(PerInfoPropertiesDesc.class);
 		int total = personIdxLogService.queryMatchIndexCount(personId);
-		JsonConfig jsonConfig = new JsonConfig(); // JsonConfig是net.sf.json.JsonConfig中的这个，为固定写法
+		JsonConfig jsonConfig = new JsonConfig();
 		jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
-		JSONObject datas = JSONObject.fromObject(person, jsonConfig);
+		JSONObject datas = JSONObject.fromObject(new HashMap<>(), jsonConfig);
 		datas.put("fields", fields);
 		datas.put("total", total);
 		datas.put("opId", opId);
+		datas.put("person", person);
 		mv.addObject("datas", datas.toString());
 		return mv;
 	}

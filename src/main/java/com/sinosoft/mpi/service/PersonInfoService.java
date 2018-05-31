@@ -10,35 +10,27 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.context.QueryConditionType;
-import com.sinosoft.mpi.dao.mpi.IndexIdentifierRelDao;
-import com.sinosoft.mpi.dao.mpi.ManOpPersonDao;
-import com.sinosoft.mpi.dao.mpi.MatchResultDao;
-import com.sinosoft.mpi.dao.mpi.PersonIdentifierDao;
-import com.sinosoft.mpi.dao.mpi.PersonIdxLogDao;
-import com.sinosoft.mpi.dao.mpi.PersonIndexDao;
 import com.sinosoft.mpi.dao.mpi.PersonInfoDao;
 import com.sinosoft.mpi.dao.mpi.PersonInfoHistoryDao;
+import com.sinosoft.mpi.dics.LogOpStyle;
+import com.sinosoft.mpi.dics.LogOpType;
+import com.sinosoft.mpi.dics.PersonType;
 import com.sinosoft.mpi.exception.BaseBussinessException;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.IdentifierDomain;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
-import com.sinosoft.mpi.model.ManOpPerson;
 import com.sinosoft.mpi.model.MatchResult;
 import com.sinosoft.mpi.model.PersonIdentifier;
-import com.sinosoft.mpi.model.PersonIdxLog;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.PersonInfoSimple;
 import com.sinosoft.mpi.util.CodeConvertUtils;
-import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.NumberUtils;
 import com.sinosoft.mpi.util.PageInfo;
 import com.sinosoft.mpi.util.SqlUtils;
@@ -52,32 +44,154 @@ public class PersonInfoService {
 	static final String PERSONTABLE = "mpi_person_info";
 	static final String PERSONTABLEHISTORY = "mpi_personinfo_history";
 
-	private Logger logger = Logger.getLogger(PersonInfoService.class);
-
 	@Resource
 	private IdentifierDomainService identifierDomainService;
 	@Resource
-	private IndexIdentifierRelDao indexIdentifierRelDao;
+	private IndexIdentifierRelService indexIdentifierRelService;
 	@Resource
-	private ManOpPersonDao manOpPersonDao;
+	private ManOpPersonService manOpPersonService;
 	@Resource
-	private MatchResultDao matchResultDao;
+	private MatchResultService matchResultService;
 	@Resource
-	private PersonIdentifierDao personIdentifierDao;
+	private PersonIdentifierService personIdentifierService;
 	@Resource
-	private PersonIdxLogDao personIdxLogDao;
+	private PersonIdxLogService personIdxLogService;
 	@Resource
-	private PersonIndexDao personIndexDao;
+	private PersonIndexService personIndexService;
 	@Resource
 	private PersonIndexUpdateService personIndexUpdateService;
-	@Resource
-	private PersonInfoDao personInfoDao;
 	@Resource
 	private PersonInfoHistoryDao personInfoHistoryService;
 	@Resource
 	private PersonInfoVerifier personInfoVerifier;
+
+	@Resource
+	private PersonInfoDao personInfoDao;
+
+	@Resource
+	UserService userService;
+
 	@Resource
 	private JdbcTemplate jdbcTemplate;
+
+	/**
+	 * 保存人员信息
+	 */
+	public void save(PersonInfo t) {
+		// 校验居民信息
+		VerifyResult flag = personInfoVerifier.verify(t);
+		if (!flag.isSuccess()) {
+			throw new ValidationException("数据校验失败:" + flag.getMsg());
+		}
+
+		// 校验系统中是否有对应注册域
+		IdentifierDomain domain = identifierDomainService.getByUniqueSign(t.getUniqueSign());
+		if (domain == null) {
+			throw new ValidationException("无法找到匹配业务系统：" + t.getUniqueSign());
+		}
+
+		// 设置一些必要的居民信息
+		t.setVersionNum("1");
+		t.setDomainId(domain.getDomainId());
+		t.setUniqueSign(domain.getUniqueSign());
+		// 设置默认状态
+		if (t.getState() == null) {
+			t.setState(new Short("0"));
+		}
+		String domainlevel = domain.getDomainLevel();
+		if ("".equals(domainlevel) || null == domainlevel) {
+			t.setSrcLevel(new Short("0"));
+		} else {
+			t.setSrcLevel(new Short(domainlevel));
+		}
+
+		// 查询关联的人员
+		PersonInfo realtionPerson = findByPersonInfo(t);
+
+		if (t.getState() == 0) {// 新增
+
+			if (realtionPerson != null) {// 人员已注册
+				throw new ValidationException(
+						"人员已注册。原始信息为：" + getPersonSummary(t) + "，已注册人员主键为:" + realtionPerson.getFieldPk());
+			}
+
+			// 保存居民信息
+			t = personInfoDao.save(t);
+			// 保存历史信息
+			addHistory(t);
+			// 保存居民标志
+			personIdentifierService.save(t);
+
+		} else if (t.getState() == 1) {// 更新
+			String relationPk = t.getRelationPk();
+			if (StringUtils.isBlank(relationPk)) {
+				throw new ValidationException("更新人员的relationPk不能为空。" + getPersonSummary(t));
+			}
+			if (realtionPerson != null) {
+				String relationpk = realtionPerson.getFieldPk();
+				String type = t.getType();
+				if (PersonType.PERSONAL.getCode().equals(type)) {// 个人
+					t.setHrId(t.getRelationPk());
+				} else if (PersonType.PATIENT.getCode().equals(type)) {// 患者
+					t.setMedicalserviceNo(t.getRelationPk());
+				} else {
+					t.setPatientId(t.getRelationPk());
+				}
+				t.setRelationPk(relationpk);
+				t.setFieldPk(relationpk);
+				// 更新居民信息
+				t = personInfoDao.save(t);
+				// 保存历史信息
+				addHistory(t);
+			} else {
+				throw new ValidationException("未找到要更新的人员信息。" + getPersonSummary(t));
+			}
+
+		} else if (t.getState() == 2) {// 拆分-删除
+
+			if (t.getRelationPk() == null || "".equals(t.getRelationPk())) {
+				throw new ValidationException("待删除人员标识relationPk不能为空。" + getPersonSummary(t));
+			}
+
+			if (realtionPerson != null) {
+				String relationpk = realtionPerson.getFieldPk();
+				t.setRelationPk(relationpk);
+				t.setFieldPk(relationpk);
+				// 备份新来数据信息
+				addHistory(t);
+				// 删除原始数据信息
+				personInfoDao.delete(relationpk);
+			} else {
+				throw new ValidationException("未找到要拆分的居民信息。" + getPersonSummary(t));
+			}
+
+		} else {
+			throw new ValidationException("人员注册类型错误。" + getPersonSummary(t));
+		}
+
+	}
+
+	/**
+	 * 获取人员摘要信息-用于提示信息
+	 * 
+	 * @param person
+	 * @return
+	 */
+	private String getPersonSummary(PersonInfo t) {
+		if (t == null) {
+			return "";
+		}
+		return "类型（state）：" + safeStr(t.getState() + "") + "；业务系统标识:" + safeStr(t.getUniqueSign()) + "；健康档案号:"
+				+ safeStr(t.getHrId()) + "；医疗服务编号:" + safeStr(t.getMedicalserviceNo()) + "；身份证号:" + safeStr(t.getIdNo())
+				+ "；唯一标识:" + safeStr(t.getPatientId());
+	}
+
+	/**
+	 * 处理用于拼接的字符串
+	 */
+	private String safeStr(String s) {
+		return StringUtils.isBlank(s) ? "" : s;
+	}
 
 	/**
 	 * 人工干预生成新索引
@@ -87,33 +201,36 @@ public class PersonInfoService {
 	 * @param personId
 	 *            居民id
 	 */
-	public void addNewIndex(String opId, String personId) {
+	@Transactional
+	public void addNewIndex(String opId, String personId, LogOpType opType, LogOpStyle opStyle) {
 		// 取得人员
 		PersonInfo person = getObject(personId);
 		// 取得人员对应域id信息
-		PersonIdentifier pi = getPersonIdentifierByPersonId(personId);
+		PersonIdentifier pi = personIdentifierService.getByPersonId(personId);
 		// 验证数据
 		if (person == null || pi == null) {
 			throw new ValidationException("无法取得相关信息:PersonInfo=" + person + ",\n PersonIdentifier=" + pi);
 		}
-		indexIdentifierRelDao.deleteByFieldPk(pi.getIdentifierId());
+
+		// 删除人员与主索引关联关系
+		indexIdentifierRelService.deleteByFieldPk(personId, opType, opStyle, person.getNameCn());
 
 		// 新生成索引
 		PersonIndex newIndex = person.toPersonIndex();
 		// 设置索引数据源级别
-		IdentifierDomain domain = identifierDomainService.getByPersonId(personId);
-		newIndex.setDomainLevel(domain.getDomainLevel());
+		IdentifierDomain domain = identifierDomainService.getFirstByPersonId(personId);
+		if (domain != null) {
+			newIndex.setDomainLevel(domain.getDomainLevel());
+		}
 		// 保存新索引
-		personIndexDao.save(newIndex);
-		// 保存居民索引关系
-		saveIndexIdentifierRel(pi.getIdentifierId(), newIndex.getMpiPk());
+		personIndexService.save(newIndex);
 
-		// 新建索引日志
-		saveIndexLog(person.getFieldPk(), newIndex.getMpiPk(), "", Constant.IDX_LOG_TYPE_MODIFY,
-				Constant.IDX_LOG_STYLE_MAN_NEW, "新建主索引[" + newIndex.getNameCn() + "]");
+		// 保存人员与主索引关联关系
+		indexIdentifierRelService.add(pi.getPersonId(), newIndex.getMpiPk(), pi.getDomainId(), pi.getIdentifierId(),
+				opType, opStyle, newIndex.getNameCn());
 
 		// 更新人工干预信息为已操作
-		modifyManOpPerson(opId);
+		manOpPersonService.updateStateDone(opId);
 	}
 
 	/**
@@ -121,6 +238,7 @@ public class PersonInfoService {
 	 * 
 	 * @param persons
 	 */
+	@Transactional
 	public void addPersonBatch(PersonInfo[] persons) {
 		for (PersonInfo p : persons) {
 			save(p);
@@ -137,11 +255,12 @@ public class PersonInfoService {
 	 * @param indexId
 	 *            索引主键
 	 */
-	public void addToIndex(String opId, String personId, String indexId) {
+	@Transactional
+	public void addToIndex(String opId, String personId, String indexId, LogOpType opType, LogOpStyle opStyle) {
 		// 取得人员
 		PersonInfo person = getObject(personId);
 		// 取得人员对应域id信息
-		PersonIdentifier pi = getPersonIdentifierByPersonId(personId);
+		PersonIdentifier pi = personIdentifierService.getByPersonId(personId);
 		// 取得索引
 		PersonIndex index = getPersonIndex(indexId);
 		// 验证数据
@@ -149,19 +268,23 @@ public class PersonInfoService {
 			throw new ValidationException(
 					"无法取得相关信息:PersonInfo=" + person + ",\n PersonIdentifier=" + pi + ",\n PersonIndex=" + index);
 		}
-		indexIdentifierRelDao.deleteByFieldPk(pi.getIdentifierId());
 
-		// 保存人员至索引
-		saveIndexIdentifierRel(pi.getIdentifierId(), index.getMpiPk());
+		// 删除人员与索引关联关系
+		indexIdentifierRelService.deleteByFieldPk(pi.getPersonId(), opType, opStyle, person.getNameCn());
+
+		// 新建人员与索引关联关系
 		// 取得匹配记录
-		MatchResult match = matchResultDao.findFirstByMpiPkAndFieldPk(index.getMpiPk(), person.getFieldPk());
-		// 新建索引日志 标识为2 手工合并
-		saveIndexLog(person.getFieldPk(), index.getMpiPk(), "", Constant.IDX_LOG_TYPE_MATCH,
-				Constant.IDX_LOG_STYLE_MAN_MERGE, "[" + person.getNameCn() + "]合并到主索引[" + index.getNameCn() + "],系统匹配度:"
+		MatchResult match = matchResultService.findByMpiPkAndFieldPk(index.getMpiPk(), person.getFieldPk());
+		indexIdentifierRelService.add(personId, index.getMpiPk(), pi.getDomainId(), pi.getIdentifierId(), opType,
+				opStyle, "[" + person.getNameCn() + "]合并到主索引[" + index.getNameCn() + "],系统匹配度:"
 						+ NumberUtils.toPercentStr(Double.parseDouble(match.getMatchDegree())));
+
+		// 更新索引信息
 		personIndexUpdateService.updateIndex(person, index.getMpiPk());
+
 		// 更新人工干预信息为已操作
-		modifyManOpPerson(opId);
+		manOpPersonService.updateStateDone(opId);
+
 	}
 
 	/**
@@ -281,24 +404,13 @@ public class PersonInfoService {
 	}
 
 	/**
-	 * 根据personId查询PersonIdentifier
-	 * 
-	 * @param personId
-	 * @return
-	 */
-	private PersonIdentifier getPersonIdentifierByPersonId(String personId) {
-		List<PersonIdentifier> datas = personIdentifierDao.findByPersonId(personId);
-		return datas.size() > 0 ? datas.get(0) : null;
-	}
-
-	/**
 	 * 根据id查询
 	 * 
 	 * @param indexId
 	 * @return
 	 */
 	private PersonIndex getPersonIndex(String id) {
-		return personIndexDao.findOne(id);
+		return personIndexService.get(id);
 	}
 
 	/**
@@ -309,29 +421,29 @@ public class PersonInfoService {
 	 * @param surviving
 	 *            要保留的居民信息
 	 */
-	public void mergePerson(PersonInfo retired, PersonInfo surviving) {
+	@Transactional
+	public void mergePerson(PersonInfo retired, PersonInfo surviving, LogOpType opType, LogOpStyle opStyle) {
 		// 验证基本信息
 		try {
 			validMergePerson(retired, surviving);
 		} catch (Exception e) {
 			throw new ValidationException("合并用户时,基本信息验证失败!", e);
 		}
-		// 暂按不删除处理
 		// 查找居民信息
-		// lpk update 2013年5月9日
 		PersonInfo rp;
-		if (retired.getType() == "0") {// 个人
-			rp = getByPersonIdentifier(retired.getUniqueSign(), retired.getHrId());
-		} else {// 患者
-			rp = getByPersonIdentifier(retired.getUniqueSign(), retired.getMedicalserviceNo());
-		}
 		PersonInfo sp;
-		if (retired.getType() == "0") {// 个人
+		String type = retired.getType();
+		if (PersonType.PERSONAL.getCode().equals(type)) {// 个人
+			rp = getByPersonIdentifier(retired.getUniqueSign(), retired.getHrId());
 			sp = getByPersonIdentifier(surviving.getUniqueSign(), surviving.getHrId());
-		} else {// 患者
+		} else if (PersonType.PATIENT.getCode().equals(type)) {// 患者
+			rp = getByPersonIdentifier(retired.getUniqueSign(), retired.getMedicalserviceNo());
 			sp = getByPersonIdentifier(surviving.getUniqueSign(), surviving.getMedicalserviceNo());
+		} else {
+			rp = getByPersonIdentifier(retired.getUniqueSign(), retired.getPatientId());
+			sp = getByPersonIdentifier(surviving.getUniqueSign(), surviving.getPatientId());
 		}
-		mergePersonFlow(rp, sp, true);
+		mergePersonFlow(rp, sp, opType, opStyle);
 	}
 
 	/**
@@ -340,9 +452,11 @@ public class PersonInfoService {
 	 * @param retireds
 	 * @param surviving
 	 */
-	public void mergePersonBatch(PersonInfoSimple[] retireds, PersonInfoSimple surviving) {
+	@Transactional
+	public void mergePersonBatch(PersonInfoSimple[] retireds, PersonInfoSimple surviving, LogOpType opType,
+			LogOpStyle opStyle) {
 		for (PersonInfoSimple rp : retireds) {
-			mergePerson(rp.toPersonInfo(), surviving.toPersonInfo());
+			mergePerson(rp.toPersonInfo(), surviving.toPersonInfo(), opType, opStyle);
 		}
 	}
 
@@ -353,19 +467,17 @@ public class PersonInfoService {
 	 *            被合并人员
 	 * @param sp
 	 *            目标人员
-	 * @param isAuto
-	 *            是否自动合并
 	 */
-	private void mergePersonFlow(PersonInfo rp, PersonInfo sp, boolean isAuto) {
+	private void mergePersonFlow(PersonInfo rp, PersonInfo sp, LogOpType opType, LogOpStyle opStyle) {
 
 		if (rp == null || sp == null) {
 			throw new ValidationException("MPI系统中未取得相关居民信息");
 		}
 		// 索引关联信息查询
 		// rp被合并居民
-		IndexIdentifierRel riir = indexIdentifierRelDao.findFirstByFieldPk(rp.getFieldPk());
+		IndexIdentifierRel riir = indexIdentifierRelService.queryByFieldPK(rp.getFieldPk());
 		// sp目标居民
-		IndexIdentifierRel siir = indexIdentifierRelDao.findFirstByFieldPk(sp.getFieldPk());
+		IndexIdentifierRel siir = indexIdentifierRelService.queryByFieldPK(sp.getFieldPk());
 
 		// 如 surviving 居民信息 无关联索引 返回处理错误
 		if (siir == null) {
@@ -375,22 +487,16 @@ public class PersonInfoService {
 		if (riir != null) {
 			// 取得索引内容
 			PersonIndex rIdx = getPersonIndex(riir.getMpiPk());
-			// 将 retired居民信息 解除索引关系 // 2018-01-09
-			indexIdentifierRelDao.deleteByFieldPk(sp.getFieldPk());
-			// 添加解除索引log
-			saveIndexLog(rp.getFieldPk(), riir.getFieldPk(), riir.getDomainId(), Constant.IDX_LOG_TYPE_MODIFY,
-					isAuto ? Constant.IDX_LOG_STYLE_AUTO_SPLIT : Constant.IDX_LOG_STYLE_MAN_SPLIT,
-					"主索引[" + rIdx.getNameCn() + "]进行拆分");
+			// 将 retired居民信息 解除索引关系
+			indexIdentifierRelService.deleteByFieldPk(sp.getFieldPk(), opType, opStyle, rIdx.getNameCn() + " 进行拆分");
 		}
 
 		// 取得索引内容
 		PersonIndex sIdx = getPersonIndex(siir.getMpiPk());
-		// 2012年11月22日 lpk 将 retired居民信息 关联到 surviving关联的索引上
-		saveIndexRelByPer(riir.getFieldPk(), siir);
-		// 索引log
-		saveIndexLog(rp.getFieldPk(), siir.getMpiPk(), riir.getDomainId(), Constant.IDX_LOG_TYPE_MODIFY,
-				isAuto ? Constant.IDX_LOG_STYLE_AUTO_MERGE : Constant.IDX_LOG_STYLE_MAN_MERGE,
+		// 将 retired居民信息 关联到 surviving关联的索引上
+		saveIndexRelByPer(riir.getFieldPk(), siir, opType, opStyle,
 				"[" + rp.getNameCn() + "]合并到主索引[" + sIdx.getNameCn() + "]");
+
 		// 更新索引信息
 		personIndexUpdateService.updateIndex(rp, siir.getMpiPk());
 	}
@@ -404,26 +510,14 @@ public class PersonInfoService {
 	 *            目标居民
 	 */
 	@Transactional
-	public void mergePersonFromPage(String retiredPersonId, String survivePersonId) {
+	public void mergePersonFromPage(String retiredPersonId, String survivePersonId, LogOpType opType,
+			LogOpStyle opStyle) {
 		PersonInfo survive = getObject(survivePersonId);
 		PersonInfo retired = getObject(retiredPersonId);
 		if (survive == null || retired == null) {
 			throw new ValidationException("找不到居民信息,无法完成合并.");
 		}
-		mergePersonFlow(retired, survive, false);
-	}
-
-	private void modifyManOpPerson(String opId) {
-		// 取得人工干预
-		ManOpPerson mop = manOpPersonDao.findOne(opId);
-		// 验证数据
-		if (mop == null) {
-			throw new ValidationException("无法取得相关信息:ManOpPerson=" + mop);
-		}
-		// 修改为已干预 保存
-		mop.setManOpStatus("1");
-		mop.setManOpTime(DateUtil.getDateTime(DateUtil.getDateTimePattern(), new Date()));
-		manOpPersonDao.save(mop);
+		mergePersonFlow(retired, survive, opType, opStyle);
 	}
 
 	/**
@@ -634,7 +728,7 @@ public class PersonInfoService {
 	}
 
 	/**
-	 * 查询患者数据-根据person_id、机构编码、人员类型
+	 * 根据条件查询已存在的患者数据-根据person_id、机构编码、人员类型
 	 * 
 	 * @param person_id
 	 *            人员唯一id（0个人：hr_id，1患者：MEDICALSERVICE_NO，其他：PATIENT_ID）
@@ -652,115 +746,19 @@ public class PersonInfoService {
 		String personId = null;
 		StringBuilder sql = new StringBuilder();
 		sql.append("select * from mpi_person_info a where a.type=? and a.REGISTER_ORG_CODE=? ");
-		if ("0".equals(type)) {// 个人-健康档案编号
+		if (PersonType.PERSONAL.getCode().equals(type)) {// 个人-健康档案编号
 			sql.append(" and a.HR_ID=? ");
 			personId = personInfo.getHrId();
-		} else if ("1".equals(type)) {// 患者-医疗服务编号
+		} else if (PersonType.PATIENT.getCode().equals(type)) {// 患者-医疗服务编号
 			sql.append(" and a.MEDICALSERVICE_NO=? ");
 			personId = personInfo.getMedicalserviceNo();
-		} else {// 其他
+		} else {// 其他-患者主键
 			sql.append(" and a.PATIENT_ID=? ");
 			personId = personInfo.getPatientId();
 		}
 		List<PersonInfo> list = jdbcTemplate.query(sql.toString(), new Object[] { type, orgCode, personId },
 				new BeanPropertyRowMapper<PersonInfo>(PersonInfo.class));
 		return list.size() > 0 ? list.get(0) : null;
-	}
-
-	/**
-	 * 保存人员信息
-	 * 
-	 * @param t
-	 */
-	public void save(PersonInfo t) {
-		// 校验居民信息
-		VerifyResult flag = personInfoVerifier.verify(t);
-		if (!flag.isSuccess()) {
-			throw new ValidationException("数据校验失败:" + flag.getMsg());
-		}
-
-		// 校验系统中是否有对应注册域
-		IdentifierDomain domain = identifierDomainService.getByUniqueSign(t.getUniqueSign());
-		if (domain == null) {
-			throw new ValidationException("无法找到域,没有找到域标识为:" + t.getUniqueSign() + "的身份域.");
-		}
-
-		// 设置一些必要的居民信息
-		t.setVersionNum("1");
-		t.setDomainId(domain.getDomainId());
-		t.setUniqueSign(domain.getUniqueSign());
-		// 设置默认状态
-		if (t.getState() == null) {
-			t.setState(new Short("0"));
-		}
-		String domainlevel = domain.getDomainLevel();
-		if ("".equals(domainlevel) || null == domainlevel) {
-			t.setSrcLevel(new Short("0"));
-		} else {
-			t.setSrcLevel(new Short(domainlevel));
-		}
-
-		// 查询关联的人员
-		PersonInfo realtionPerson = findByPersonInfo(t);
-
-		if (t.getState() == 0) {// 新增
-
-			if (realtionPerson != null) {// 人员已注册
-				throw new ValidationException("居民信息已注册,域标识为:" + t.getUniqueSign() + ",居民信息主键为:" + t.getFieldPk());
-			}
-
-			// 保存居民信息
-			t = personInfoDao.save(t);
-			// 保存历史信息
-			addHistory(t);
-
-		} else if (t.getState() == 1) {// 更新
-
-			if (t.getRelationPk() == null || "".equals(t.getRelationPk())) {
-				throw new ValidationException("居民信息RelationPk=null,域标识为:" + t.getUniqueSign() + ",居民健康档案号为:"
-						+ t.getHrId() + ",居民医疗服务编号为:" + t.getMedicalserviceNo() + ".");
-			}
-			if (realtionPerson != null) {
-				String relationpk = realtionPerson.getFieldPk();
-				if ("0".equals(t.getType())) {// 个人
-					t.setHrId(t.getRelationPk());
-				} else {// 患者
-					t.setMedicalserviceNo(t.getRelationPk());
-				}
-				t.setRelationPk(relationpk);
-				t.setFieldPk(relationpk);
-				// 更新居民信息
-				t = personInfoDao.save(t);
-				// 保存历史信息
-				addHistory(t);
-			} else {
-				throw new ValidationException("未找到要更新的居民信息,主键为" + t.getRelationPk() + " 域标识为" + t.getUniqueSign());
-			}
-
-		} else if (t.getState() == 2) {// 拆分
-
-			if (t.getRelationPk() == null || "".equals(t.getRelationPk())) {
-				throw new ValidationException("居民信息RelationPk=null ,域标识为:" + t.getUniqueSign() + ",居民健康档案号为:"
-						+ t.getHrId() + ",居民医疗服务编号为:" + t.getMedicalserviceNo() + ".");
-			}
-
-			if (realtionPerson != null) {
-				String relationpk = realtionPerson.getFieldPk();
-				t.setRelationPk(relationpk);
-				t.setFieldPk(relationpk);
-				// 备份新来数据信息
-				addHistory(t);
-				// 删除原始数据信息
-				personInfoDao.delete(t);
-			} else {
-				throw new ValidationException("未找到要拆分的居民信息,主键为" + t.getRelationPk() + " 域标识为" + t.getUniqueSign());
-			}
-
-		} else {
-			throw new ValidationException("居民信息异常: 人员注册类型错误；state=" + t.getState() + ";域标识为:" + t.getUniqueSign()
-					+ ",居民健康档案号为:" + t.getHrId() + ",居民医疗服务编号为:" + t.getMedicalserviceNo() + ".");
-		}
-
 	}
 
 	// 增加历史信息
@@ -775,62 +773,13 @@ public class PersonInfoService {
 	 * @param fieldPk
 	 *            被合并居民主键
 	 *
-	 * @param mpiPk
-	 *            目标居民主索引号
-	 */
-	private void saveIndexIdentifierRel(String fieldPk, String mpiPk) {
-		IndexIdentifierRel iir = new IndexIdentifierRel();
-		iir.setFieldPk(fieldPk);
-		iir.setMpiPk(mpiPk);
-		indexIdentifierRelDao.save(iir);
-	}
-
-	/**
-	 * 被合并居民插入MPI_INDEX_IDENTIFIER_REL表
-	 *
-	 * @param fieldPk
-	 *            被合并居民主键
-	 *
 	 * @param IndexIdentifierRel
 	 *            目标居民对象
 	 */
-	private void saveIndexRelByPer(String fieldPk, IndexIdentifierRel sp) {
-		IndexIdentifierRel iir = new IndexIdentifierRel();
-		iir.setFieldPk(fieldPk);
-		iir.setMpiPk(sp.getMpiPk());
-		iir.setCombineNo(sp.getCombineNo());
-		iir.setDomainId(sp.getDomainId());
-		iir.setPersonIdentifier(sp.getPersonIdentifier());
-		indexIdentifierRelDao.save(iir);
-	}
-
-	/**
-	 * @param person
-	 *            居民id
-	 * @param index
-	 *            索引id
-	 * @param domainId
-	 *            域id
-	 * @param opType
-	 *            操作类型
-	 * @param opStyle
-	 *            操作方式
-	 * @param desc
-	 *            操作描述
-	 */
-	private void saveIndexLog(String person, String index, String domainId, String opType, String opStyle,
-			String desc) {
-		PersonIdxLog result = new PersonIdxLog();
-		result.setOpType(opType);
-		result.setOpStyle(opStyle);
-		result.setOpTime(DateUtil.getTimeNow(new Date()));
-		result.setOpUserId("0");
-		result.setOpDesc(desc);
-		result.setInfoSour(domainId);
-		result.setMpiPk(index);
-		result.setFieldPk(person);
-		// 自动标志
-		personIdxLogDao.save(result);
+	private void saveIndexRelByPer(String fieldPk, IndexIdentifierRel sp, LogOpType opType, LogOpStyle opStyle,
+			String otherInfo) {
+		indexIdentifierRelService.add(fieldPk, sp.getMpiPk(), sp.getDomainId(), sp.getPersonIdentifier(), opType,
+				opStyle, otherInfo);
 	}
 
 	/**
@@ -841,13 +790,14 @@ public class PersonInfoService {
 	 * @param personId
 	 *            居民id
 	 */
-	public void splitPerson(String indexId, String personId) {
+	@Transactional
+	public void splitPerson(String indexId, String personId, LogOpType opType, LogOpStyle opStyle) {
 		// 取得索引信息
 		PersonIndex index = getPersonIndex(indexId);
 		// 取得居民信息
 		PersonInfo person = getObject(personId);
 		// 取得居民域主键信息
-		PersonIdentifier pi = getPersonIdentifierByPersonId(personId);
+		PersonIdentifier pi = personIdentifierService.getByPersonId(personId);
 		// 验证数据
 		if (index == null || person == null || pi == null) {
 			throw new ValidationException(
@@ -855,23 +805,19 @@ public class PersonInfoService {
 		}
 
 		// 删除旧关联信息
-		indexIdentifierRelDao.deleteByFieldPk(pi.getIdentifierId());
-		// 记录索引日志 操作为3-拆分
-		saveIndexLog(person.getFieldPk(), index.getMpiPk(), "", Constant.IDX_LOG_TYPE_MODIFY,
-				Constant.IDX_LOG_STYLE_MAN_SPLIT, "主索引[" + index.getNameCn() + "]进行拆分");
+		indexIdentifierRelService.deleteByFieldPk(pi.getPersonId(), opType, opStyle, index.getNameCn());
+
 		// 生成新索引信息
-		// 新生成索引
 		PersonIndex newIndex = person.toPersonIndex();
 		// 设置索引源数据级别
-		IdentifierDomain domain = identifierDomainService.getByPersonId(personId);
+		IdentifierDomain domain = identifierDomainService.getFirstByPersonId(personId);
 		newIndex.setDomainLevel(domain.getDomainLevel());
 		// 保存新索引
-		personIndexDao.save(newIndex);
+		personIndexService.save(newIndex);
+
 		// 保存居民索引关系
-		saveIndexIdentifierRel(pi.getIdentifierId(), newIndex.getMpiPk());
-		// 保存索引操作日志 新增
-		saveIndexLog(person.getFieldPk(), newIndex.getMpiPk(), "", Constant.IDX_LOG_TYPE_MODIFY,
-				Constant.IDX_LOG_STYLE_MAN_NEW, "新建主索引[" + newIndex.getNameCn() + "]");
+		indexIdentifierRelService.add(personId, newIndex.getMpiPk(), domain.getDomainId(), pi.getIdentifierId(), opType,
+				opStyle, newIndex.getNameCn());
 	}
 
 	/**
@@ -884,32 +830,35 @@ public class PersonInfoService {
 	 * @param fromIndexId
 	 *            原索引id
 	 */
-	public void splitPersonToIndex(String indexId, String personId, String fromIndexId) {
+	@Transactional
+	public void splitPersonToIndex(String indexId, String personId, String fromIndexId, LogOpType opType,
+			LogOpStyle opStyle) {
 		// 取得索引信息
 		PersonIndex index = getPersonIndex(indexId);
 		PersonIndex fromIndex = getPersonIndex(fromIndexId);
 		// 取得居民信息
 		PersonInfo person = getObject(personId);
 		// 取得居民域主键信息
-		PersonIdentifier pi = getPersonIdentifierByPersonId(personId);
+		PersonIdentifier pi = personIdentifierService.getByPersonId(personId);
 		// 验证数据
 		if (index == null || fromIndex == null || person == null || pi == null) {
 			throw new ValidationException("拆分居民信息时数据验证失败:PersonIndex=[to:" + index + ",\nfrom:" + fromIndex
 					+ "],\n PersonInfo=" + person + ",\n PersonIdentifier=" + pi);
 		}
 		// 删除旧关联信息
-		indexIdentifierRelDao.deleteByFieldPk(pi.getIdentifierId());
-		// 记录索引日志 操作为3-拆分
-		saveIndexLog(personId, fromIndexId, "", Constant.IDX_LOG_TYPE_MODIFY, Constant.IDX_LOG_STYLE_MAN_SPLIT,
-				"主索引[" + fromIndex.getNameCn() + "]进行拆分");
+		indexIdentifierRelService.deleteByFieldPk(pi.getPersonId(), opType, opStyle, fromIndex.getNameCn());
 
-		// 保存居民索引关系
-		saveIndexIdentifierRel(pi.getIdentifierId(), indexId);
-		// 保存索引操作日志 新增
-		saveIndexLog(person.getFieldPk(), indexId, "", Constant.IDX_LOG_TYPE_MODIFY, Constant.IDX_LOG_STYLE_MAN_MERGE,
+		// 新建新关联关系
+		indexIdentifierRelService.add(personId, indexId, pi.getDomainId(), pi.getIdentifierId(), opType, opStyle,
 				"[" + person.getNameCn() + "]合并到主索引[" + index.getNameCn() + "]");
 	}
 
+	/**
+	 * 更新居民信息
+	 * 
+	 * @param t
+	 */
+	@Transactional
 	public void update(PersonInfo t) {
 		// 校验居民信息
 		VerifyResult flag = personInfoVerifier.verify(t);
@@ -935,41 +884,41 @@ public class PersonInfoService {
 	 * 
 	 * @param persons
 	 */
+	@Transactional
 	public void updatePersonBatch(PersonInfo[] persons) {
 		for (PersonInfo p : persons) {
 			update(p);
 		}
 	}
 
-	private void validMergePerson(PersonInfo retired, PersonInfo surviving) throws Exception {
+	/**
+	 * 验证待合并的两个人
+	 * 
+	 * @param retired
+	 * @param surviving
+	 * @throws Exception
+	 */
+	private void validMergePerson(PersonInfo retired, PersonInfo surviving) {
 		// 验证基本信息
 		if (StringUtils.isBlank(retired.getUniqueSign())
 				|| (StringUtils.isBlank(retired.getHrId()) || StringUtils.isBlank(retired.getMedicalserviceNo()))
 				|| StringUtils.isBlank(surviving.getUniqueSign())
 				|| (StringUtils.isBlank(surviving.getHrId()) || StringUtils.isBlank(surviving.getMedicalserviceNo()))) {
-			logger.debug("基本参数验证失败:\n" + "retired[domainUniqueSign=" + retired.getDomainId() + ",identifier="
-					+ retired.getFieldPk() + "],\n" + "surviving[domainUniqueSign=" + surviving.getDomainId()
-					+ ",identifier=" + surviving.getFieldPk() + "]");
-			throw new Exception("基本参数验证失败:\n" + "retired[domainUniqueSign=" + retired.getDomainId() + ",identifier="
-					+ retired.getFieldPk() + "],\n" + "surviving[domainUniqueSign=" + surviving.getDomainId()
-					+ ",identifier=" + surviving.getFieldPk() + "]");
+			throw new ValidationException("基本参数验证失败:\n" + "retired[domainUniqueSign=" + retired.getDomainId()
+					+ ",identifier=" + retired.getFieldPk() + "],\n" + "surviving[domainUniqueSign="
+					+ surviving.getDomainId() + ",identifier=" + surviving.getFieldPk() + "]");
 		}
 
 		// 验证 要 merge的居民信息身份域是否一致
 		if (!retired.getUniqueSign().equals(surviving.getUniqueSign())) {
-			logger.debug("要合并的两居民信息身份域不同:\n" + "retired[domainUniqueSign=" + retired.getDomainId() + "],\n"
-					+ "surviving[domainUniqueSign=" + surviving.getDomainId() + "]");
-			throw new Exception("要合并的两居民信息身份域不同:\n" + "retired[domainUniqueSign=" + retired.getDomainId() + "],\n"
-					+ "surviving[domainUniqueSign=" + surviving.getDomainId() + "]");
+			throw new ValidationException("要合并的两居民信息身份域不同:\n" + "retired[domainUniqueSign=" + retired.getDomainId()
+					+ "],\n" + "surviving[domainUniqueSign=" + surviving.getDomainId() + "]");
 		}
 
 		if (retired.getType() == surviving.getType()) {
-			if (retired.getHrId().equals(surviving.getHrId())) {
-				throw new Exception("不能合并同一个人:\n" + "retired[identifier=" + retired.getFieldPk() + "],\n"
-						+ "surviving[identifier=" + surviving.getFieldPk() + "]");
-			}
-			if (retired.getMedicalserviceNo().equals(surviving.getMedicalserviceNo())) {
-				throw new Exception("不能合并同一个人:\n" + "retired[identifier=" + retired.getFieldPk() + "],\n"
+			if (retired.getHrId().equals(surviving.getHrId())
+					|| retired.getMedicalserviceNo().equals(surviving.getMedicalserviceNo())) {
+				throw new ValidationException("不能合并同一个人:\n" + "retired[identifier=" + retired.getFieldPk() + "],\n"
 						+ "surviving[identifier=" + surviving.getFieldPk() + "]");
 			}
 		}

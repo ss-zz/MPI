@@ -6,7 +6,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.context.Constant;
+import com.sinosoft.mpi.dics.LogOpStyle;
+import com.sinosoft.mpi.dics.LogOpType;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.MpiCombineRec;
 import com.sinosoft.mpi.model.PersonIndex;
@@ -37,7 +38,7 @@ public class UpdatePersonHandler {
 	CommonHandlerService commonHanlderService;
 
 	/**
-	 * 更新主索引
+	 * 更新主索引-根据关联的人员id
 	 * 
 	 * @param personinfo
 	 *            人员信息
@@ -69,31 +70,35 @@ public class UpdatePersonHandler {
 						.queryByCombineNo(iirs.get(lastMerg - 1).getCombineNo());
 				PersonIndex mergindex = mpiCombineRec.mpiCombineRecToPersonIndex();
 				mergindex.setMpiPk(iir.getMpiPk());
-				mergindex = personIndexUpdateService.updateIndex(mergindex, personinfo);
+				mergindex = personIndexUpdateService.updateIndex(mergindex, personinfo, LogOpType.MODIFY,
+						LogOpStyle.AUTO_MERGE, null);
 				// 级联清理当前合并记录后的合并关系，合并记录及字段合并级别记录
-				indexIdentifierRelService.deleteRecurByCombinNo(iirs.get(lastMerg).getCombineNo());
+				indexIdentifierRelService.deleteRecurByCombinNo(iirs.get(lastMerg).getCombineNo(), LogOpType.MODIFY,
+						LogOpStyle.AUTO_REMOVE);
 				for (int i = lastMerg + 1; i < iirs.size(); i++) {
 					PersonInfo mergInfo = personInfoService.getObject(iirs.get(i).getFieldPk());
 					mergInfo.setDomainId(iirs.get(i).getDomainId());
 					// 更新索引信息
-					mergindex = personIndexUpdateService.updateIndex(mergindex, mergInfo);
+					mergindex = personIndexUpdateService.updateIndex(mergindex, mergInfo, LogOpType.MODIFY,
+							LogOpStyle.AUTO_MERGE, null);
 					// 添加索引操作日志
-					commonHanlderService.addIPersonIdxLogService(mergInfo.getFieldPk(), mergindex.getMpiPk(),
-							mergInfo.getDomainId(), Constant.IDX_LOG_TYPE_MODIFY, Constant.IDX_LOG_STYLE_AUTO_MERGE,
+					indexIdentifierRelService.saveIndexLog(mergInfo.getFieldPk(), mergindex.getMpiPk(),
+							mergInfo.getDomainId(), LogOpType.MODIFY, LogOpStyle.AUTO_MERGE,
 							"[" + mergInfo.getNameCn() + "]重新合并到主索引[" + mergindex.getNameCn());
 				}
 				mpiPk = commonHanlderService.savePersonIndex(personinfo);
 			} else {
 				// 删除主索引及相关记录
-				// 级联清理当前合并记录后的合并关系，合并记录及字段合并级别记录
-				indexIdentifierRelService.deleteRecurByCombinNo(iirs.get(lastMerg).getCombineNo());
-				for (IndexIdentifierRel temp : iirs) {
-					indexIdentifierRelService.delete(temp);
-				}
-				PersonIndex personindex = new PersonIndex();
-				personindex.setMpiPk(iir.getMpiPk());
-				personIndexService.delete(personindex);
+				// 级联清理主索引与人员关系
+				indexIdentifierRelService.deleteRecurByCombinNo(iirs.get(lastMerg).getCombineNo(), LogOpType.MODIFY,
+						LogOpStyle.AUTO_REMOVE);
+
+				// 删除主索引
+				personIndexService.deleteById(iir.getMpiPk());
+
+				// 生成新主索引
 				commonHanlderService.savePersonIndex(personinfo);
+
 				for (int i = lastMerg + 1; i < iirs.size(); i++) {
 					PersonInfo p = personInfoService.queryPersonsByFieldPK(iirs.get(i).getFieldPk());
 					p.setDomainId(iirs.get(i).getDomainId());

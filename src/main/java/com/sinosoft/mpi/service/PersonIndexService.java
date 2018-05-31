@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +20,6 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -29,12 +27,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.context.Constant;
 import com.sinosoft.mpi.context.QueryConditionType;
 import com.sinosoft.mpi.dao.mpi.IndexIdentifierRelDao;
 import com.sinosoft.mpi.dao.mpi.IndexOperateDao;
 import com.sinosoft.mpi.dao.mpi.PersonIndexDao;
 import com.sinosoft.mpi.dao.mpi.PersonInfoDao;
+import com.sinosoft.mpi.dics.LogOpStyle;
+import com.sinosoft.mpi.dics.LogOpType;
 import com.sinosoft.mpi.exception.ValidationException;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.IndexOperate;
@@ -54,24 +53,24 @@ import com.sinosoft.mpi.ws.domain.MpiIndexSearchParams;
 @CacheDefaults(cacheName = "peopleCache")
 public class PersonIndexService {
 
-	private Logger logger = Logger.getLogger(PersonIndexService.class);
-
 	@Resource
-	private PersonIndexDao personIndexDao;
+	PersonIndexDao personIndexDao;
 	@Resource
-	private IndexIdentifierRelDao indexIdentifierRelDao;
+	IndexIdentifierRelDao indexIdentifierRelDao;
 	@Resource
-	private PersonInfoDao personInfoDao;
+	PersonInfoDao personInfoDao;
 	@Resource
-	private PersonIndexUpdateService personIndexUpdateService;
+	PersonIndexUpdateService personIndexUpdateService;
 	@Resource
-	private MpiCombineLevelService mpiCombineLevelService;
+	MpiCombineLevelService mpiCombineLevelService;
 	@Resource
-	private PersonIdxLogService personIdxLogService;
+	PersonIdxLogService personIdxLogService;
 	@Resource
-	private IndexOperateDao indexOperateDao;
+	IndexOperateDao indexOperateDao;
 	@Resource
-	private JdbcTemplate jdbcTemplate;
+	UserService userService;
+	@Resource
+	JdbcTemplate jdbcTemplate;
 
 	/**
 	 * 构建查询条件
@@ -105,12 +104,12 @@ public class PersonIndexService {
 	}
 
 	/**
-	 * 删除
+	 * 根据主键删除
 	 * 
-	 * @param t
+	 * @param mpiPk
 	 */
-	public void delete(PersonIndex t) {
-		personIndexDao.delete(t);
+	public void deleteById(String mpiPk) {
+		personIndexDao.delete(mpiPk);
 	}
 
 	/**
@@ -119,7 +118,7 @@ public class PersonIndexService {
 	 * @param id
 	 * @return
 	 */
-	public PersonIndex getObject(String id) {
+	public PersonIndex get(String id) {
 		return personIndexDao.findOne(id);
 	}
 
@@ -269,7 +268,7 @@ public class PersonIndexService {
 
 						// 新增主索引操作关系
 						savaIndexOperate(personInfo.getFieldPk(), retired.getMpiPk(), riir.getDomainId(),
-								Constant.IDX_LOG_TYPE_MODIFY, Constant.IDX_LOG_STYLE_MAN_SPLIT,
+								LogOpType.MODIFY.getCode(), LogOpStyle.MAN_SPLIT.getCode(),
 								"主索引[" + retired.getNameCn() + "]进行拆分", null);
 
 						// 1.合并相关主索引信息,更新主索引
@@ -282,30 +281,23 @@ public class PersonIndexService {
 							// 查询最新一次的合并记录
 							IndexIdentifierRel iirlatest = indexIdentifierRelDao
 									.findFirstByMpiPkOrderByCombineRecDesc(surviving.getMpiPk());
-							logger.debug("合并的combine_no: " + iirlatest.getCombineNo());
 							IndexIdentifierRel iir = new IndexIdentifierRel();
 							iir.setCombineRec(iirlatest.getCombineNo());// 指代上一条的替换记录combine_rec
 							iir.setDomainId(personInfo.getDomainId());
 							iir.setFieldPk(personInfo.getFieldPk());
 							iir.setDomainId(iirlatest.getDomainId());
 							iir.setMpiPk(surviving.getMpiPk());
-							if (personInfo.getType() == "0") {
-								iir.setPersonIdentifier(personInfo.getHrId());
-							} else if (personInfo.getType() == "1") {
-								iir.setPersonIdentifier(personInfo.getMedicalserviceNo());
-							} else if (personInfo.getType() == "3") {
-								iir.setPersonIdentifier(personInfo.getPatientId());
-							}
+							iir.setPersonIdentifier(personInfo.getIdentifier());
 							indexIdentifierRelDao.save(iir);
 						}
 						// 添加新关联索引log
 						personIdxLogService.save(personInfo.getFieldPk(), surviving.getMpiPk(), riir.getDomainId(),
-								Constant.IDX_LOG_TYPE_MODIFY, Constant.IDX_LOG_STYLE_MAN_MERGE,
+								LogOpType.MODIFY.getCode(), LogOpStyle.MAN_MERGE.getCode(),
 								"[" + personInfo.getNameCn() + "]合并到主索引[" + surviving.getNameCn() + "]",
 								retired.getMpiPk());
 						// 新增主索引操作关系
 						savaIndexOperate(personInfo.getFieldPk(), surviving.getMpiPk(), riir.getDomainId(),
-								Constant.IDX_LOG_TYPE_MODIFY, Constant.IDX_LOG_STYLE_MAN_MERGE,
+								LogOpType.MODIFY.getCode(), LogOpStyle.MAN_MERGE.getCode(),
 								"[" + personInfo.getNameCn() + "]合并到主索引[" + surviving.getNameCn() + "]",
 								retired.getMpiPk());
 
@@ -336,14 +328,13 @@ public class PersonIndexService {
 		IndexOperate result = new IndexOperate();
 		result.setOpType(opType);
 		result.setOpStyle(opStyle);
-		result.setOpTime(DateUtil.getTimeNow(new Date()));
-		result.setOpUserId("0");
+		result.setOpTime(DateUtil.getTimeNow());
+		result.setOpUserId(userService.getLoginUserName());
 		result.setOpDesc(desc);
 		result.setInfoSour(domainId);
 		result.setMpiPk(index);
 		result.setFieldPk(person);
 		result.setFormerMpiPk(formermpipk);
-		// 自动标志
 		indexOperateDao.save(result);
 	}
 
@@ -443,7 +434,7 @@ public class PersonIndexService {
 				IndexIdentifierRel riir = indexIdentifierRelDao.findFirstByFieldPk(mergeLogs.get(i).getFieldPk());
 				// 添加解除索引log
 				personIdxLogService.save(mergeLogs.get(i).getFieldPk(), formerPK, riir.getDomainId(),
-						Constant.IDX_LOG_TYPE_MODIFY, Constant.IDX_LOG_STYLE_MAN_SPLIT,
+						LogOpType.MODIFY.getCode(), LogOpStyle.MAN_SPLIT.getCode(),
 						"主索引[" + formerIndex.getNameCn() + "]进行人工拆分", null);
 
 				indexIdentifierRelDao.deleteByMpiPkAndFieldPk(formerPK, mergeLogs.get(i).getFieldPk());

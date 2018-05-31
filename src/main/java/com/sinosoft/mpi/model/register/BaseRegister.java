@@ -3,9 +3,9 @@ package com.sinosoft.mpi.model.register;
 public class BaseRegister {
 
 	/**
-	 * 数据注册类型:0-新增，1-更新，2-拆分
+	 * 数据注册状态:0-新增，1-更新，9-删除
 	 */
-	private Short type;
+	private Short state;
 
 	/**
 	 * 业务系统唯一标识
@@ -20,12 +20,12 @@ public class BaseRegister {
 		this.systemKey = systemKey;
 	}
 
-	public Short getType() {
-		return type;
+	public Short getState() {
+		return state;
 	}
 
-	public void setType(Short type) {
-		this.type = type;
+	public void setState(Short state) {
+		this.state = state;
 	}
 
 }

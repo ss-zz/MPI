@@ -6,7 +6,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.sinosoft.mpi.context.Constant;
+import com.sinosoft.mpi.dics.LogOpStyle;
+import com.sinosoft.mpi.dics.LogOpType;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.MpiCombineRec;
 import com.sinosoft.mpi.model.PersonIndex;
@@ -65,29 +66,25 @@ public class SplitPersonHandler {
 				PersonIndex mergindex = mpiCombineRec.mpiCombineRecToPersonIndex();
 				mergindex.setMpiPk(iir.getMpiPk());
 				// 删除对应合并的记录之后的记录 级联清理合并关系，合并记录及字段合并级别记录
-				indexIdentifierRelService.deleteRecurByCombinNo(iirs.get(lastMerg).getCombineNo());
+				indexIdentifierRelService.deleteRecurByCombinNo(iirs.get(lastMerg).getCombineNo(), LogOpType.MODIFY,
+						LogOpStyle.AUTO_REMOVE);
 				// 重新合并相关居民信息
 				for (int i = lastMerg + 1; i < iirs.size(); i++) {
 					PersonInfo mergInfo = personInfoService.getObject(iirs.get(i).getFieldPk());
 					mergInfo.setDomainId(iirs.get(i).getDomainId());
 					// 更新索引信息
-					mergindex = personIndexUpdateService.updateIndex(mergindex, mergInfo);
-
-					// 添加索引操作日志
-					commonHanlderService.addIPersonIdxLogService(mergInfo.getFieldPk(), mergindex.getMpiPk(),
-							mergInfo.getDomainId(), Constant.IDX_LOG_TYPE_MODIFY, Constant.IDX_LOG_STYLE_AUTO_SPLIT,
-							"[" + mergInfo.getNameCn() + "]重新合并到主索引[" + mergindex.getNameCn());
+					mergindex = personIndexUpdateService.updateIndex(mergindex, mergInfo, LogOpType.MODIFY,
+							LogOpStyle.AUTO_MERGE, null);
 				}
 			} else {
 				// 删除主索引及相关记录
 				// 级联清理当前合并记录后的合并关系，合并记录及字段合并级别记录
-				indexIdentifierRelService.deleteRecurByCombinNo(iirs.get(lastMerg).getCombineNo());
-				for (IndexIdentifierRel temp : iirs) {
-					indexIdentifierRelService.delete(temp);
-				}
-				PersonIndex personindex = new PersonIndex();
-				personindex.setMpiPk(iir.getMpiPk());
-				personIndexService.delete(personindex);
+				indexIdentifierRelService.deleteRecurByCombinNo(iirs.get(lastMerg).getCombineNo(), LogOpType.MODIFY,
+						LogOpStyle.AUTO_REMOVE);
+
+				// 删除主索引
+				personIndexService.deleteById(iir.getMpiPk());
+
 				for (int i = lastMerg + 1; i < iirs.size(); i++) {
 					PersonInfo p = personInfoService.queryPersonsByFieldPK(iirs.get(i).getFieldPk());
 					p.setDomainId(iirs.get(i).getDomainId());

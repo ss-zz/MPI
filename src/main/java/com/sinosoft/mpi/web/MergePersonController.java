@@ -14,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sinosoft.mpi.cache.CacheManager;
 import com.sinosoft.mpi.context.Constant;
+import com.sinosoft.mpi.dics.LogOpStyle;
+import com.sinosoft.mpi.dics.LogOpType;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.code.PerInfoPropertiesDesc;
 import com.sinosoft.mpi.service.PersonInfoService;
@@ -24,7 +26,7 @@ import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
 /**
- * 居民信息合并
+ * 居民信息合并-合并原始居民
  */
 @Controller
 @RequestMapping("/merge/merge.ac")
@@ -55,7 +57,7 @@ public class MergePersonController {
 	public ModelAndView toComparePersonPage(String survivePersonId, String retiredPersonId) {
 		Map<String, Object> map = personInfoService.queryComparePersonData(survivePersonId, retiredPersonId);
 		List<PerInfoPropertiesDesc> fields = CacheManager.getAll(PerInfoPropertiesDesc.class);
-		JsonConfig jsonConfig = new JsonConfig(); // JsonConfig是net.sf.json.JsonConfig中的这个，为固定写法
+		JsonConfig jsonConfig = new JsonConfig();
 		jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
 		JSONObject datas = JSONObject.fromObject(map, jsonConfig);
 		datas.put("fields", fields);
@@ -70,7 +72,7 @@ public class MergePersonController {
 	@RequestMapping(params = "method=merge")
 	@ResponseBody
 	public void mergePerson(String survivePersonId, String retiredPersonId) {
-		personInfoService.mergePersonFromPage(retiredPersonId, survivePersonId);
+		personInfoService.mergePersonFromPage(retiredPersonId, survivePersonId, LogOpType.MODIFY, LogOpStyle.MAN_MERGE);
 	}
 
 }

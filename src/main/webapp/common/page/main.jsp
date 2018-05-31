@@ -108,11 +108,16 @@ $(document).ready(function(){
 						onclick="addTab('tabId_qi','主索引记录查询','${pageContext.request.contextPath}/query/page/query.jsp');"
 						href="#">主索引查询</a></li>
 					<li><a
-						title="将一个居民合并到已关联主索引的居民身上" class="easyui-tooltip"
+						onclick="addTab('tabId_ma','主索引人工处理','${pageContext.request.contextPath}/manual/page/add.jsp');"
+						href="#">主索引人工处理</a></li>
+					<!-- 
+					<li><a
+						class="easyui-tooltip"
 						onclick="addTab('tabId_me','主索引记录合并','${pageContext.request.contextPath}/merge/page/merge.jsp');"
 						href="#">主索引人工合并</a>
-						<a href="#"  data-options="plain:true,iconCls:'icon-help'"></a>
+						<a href="#" data-options="plain:true,iconCls:'icon-help'"></a>
 					</li>
+					-->
 					<li><a
 						onclick="addTab('tabId_bc','主索引初筛规则管理','${pageContext.request.contextPath}/cfg/page/block.jsp');"
 						href="#">主索引初筛规则管理</a></li>
@@ -138,9 +143,6 @@ $(document).ready(function(){
 			
 			<div title="日志管理" data-options="collapsed:false,collapsible:false" class="myMenu">
 				<ul>
-					<%-- <li><a
-						onclick="addTab('tabId_ma','人工审核记录','${pageContext.request.contextPath}/manual/page/add.jsp');"
-						href="#">人工审核记录</a></li> --%>
 					<li><a
 						onclick="addTab('tabId_il','主索引处理日志','${pageContext.request.contextPath}/indexlog/page/il.jsp');"
 						href="#">主索引处理日志</a></li>

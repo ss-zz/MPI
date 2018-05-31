@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.config.MqConfig;
+import com.sinosoft.mpi.dics.IndexRegisterType;
 import com.sinosoft.mpi.model.MpiPersonInfoRegister;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.model.biz.MpiBizInfoRegister;
@@ -45,12 +46,12 @@ public class BizRegisterHandler {
 			BizRegister bizRegister = bizRegisterMq.getBizRegister();
 
 			// 注册类型
-			Short type = bizRegister.getType();
+			Short state = bizRegister.getState();
 
 			// 人员信息
 			MpiPersonInfoRegister personInfoRegister = bizRegister.getMpiPersonInfoRegister();
 			PersonInfo personInfo = personInfoRegister.toPersonInfo(bizRegisterMq.getBizRegister());
-			
+
 			// 新生成人员id
 			String newPersonId = bizRegisterMq.getPersonFieldPk();
 			personInfo.setFieldPk(newPersonId);
@@ -61,16 +62,16 @@ public class BizRegisterHandler {
 			handlerResult.setSrcPersonId(srcPersonId);
 
 			// 数据默认状态
-			if (type == null) {
-				type = 0;
+			if (state == null) {
+				state = IndexRegisterType.ADD.getCode();
 			}
 
 			// 处理类型
-			handlerResult.setType(String.valueOf(type));
+			handlerResult.setType(String.valueOf(state));
 
 			// 主索引id
 			String mpiPk = null;
-			if (type == 0) {// 新增
+			if (IndexRegisterType.ADD.getCode() == state) {// 新增
 				// 处理人员
 				mpiPk = addPersonHandler.handleMessage(personInfo);
 
@@ -87,13 +88,13 @@ public class BizRegisterHandler {
 					handlerResult.setSrcBizId(bizHandlerResult.getSrcBizId());
 				}
 
-			} else if (type == 1) {// 更新
+			} else if (IndexRegisterType.UPDATE.getCode() == state) {// 更新
 				// 处理人员
 				mpiPk = updatePersonHandler.handleMessage(personInfo);
 
 				// 业务不需要更新
 
-			} else if (type == 2) {// 拆分
+			} else if (IndexRegisterType.DEL.getCode() == state) {// 删除
 				// 处理人员
 				mpiPk = splitPersonandler.handleMessage(personInfo);
 
@@ -101,7 +102,7 @@ public class BizRegisterHandler {
 
 			} else {
 				result.setSuccess(false);
-				result.setMsg("数据注册类型错误，应为[0|1|2]，实际为-" + type);
+				result.setMsg("数据注册类型错误，应为[0|1|9]，实际为-" + state);
 			}
 			handlerResult.setPersonIdxId(mpiPk);
 

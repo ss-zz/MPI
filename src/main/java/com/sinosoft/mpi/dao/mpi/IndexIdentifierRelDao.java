@@ -13,7 +13,7 @@ import com.sinosoft.mpi.model.IndexIdentifierRel;
  * 合并信息标示关系dao
  */
 public interface IndexIdentifierRelDao
-		extends JpaRepository<IndexIdentifierRel, String>, JpaSpecificationExecutor<IndexIdentifierRel> {
+		extends JpaRepository<IndexIdentifierRel, Long>, JpaSpecificationExecutor<IndexIdentifierRel> {
 
 	/**
 	 * 根据mpiPk查询
@@ -33,6 +33,16 @@ public interface IndexIdentifierRelDao
 			+ "select combine_no from MPI_INDEX_IDENTIFIER_REL t start with combine_no = ?1 "
 			+ "connect by combine_rec = prior combine_no) ", nativeQuery = true)
 	void deleteRecurByCombinNo(Long combineNo);
+
+	/**
+	 * 根据合并号级联获取子级合并号
+	 * 
+	 * @param combineNo
+	 * @return
+	 */
+	@Query(value = "select * from MPI_INDEX_IDENTIFIER_REL t start with combine_no = ?1 "
+			+ "connect by combine_rec = prior combine_no ", nativeQuery = true)
+	List<IndexIdentifierRel> findByRecur(Long combineNo);
 
 	/**
 	 * 根据fieldPk查询匹配的第一条记录
@@ -74,5 +84,13 @@ public interface IndexIdentifierRelDao
 	 * @return
 	 */
 	long deleteByMpiPkAndFieldPk(String mpiPk, String fieldpk);
+
+	/**
+	 * 统计主索引关联居民人数
+	 * 
+	 * @param mpiPk
+	 * @return
+	 */
+	int countByMpiPk(String mpiPk);
 
 }

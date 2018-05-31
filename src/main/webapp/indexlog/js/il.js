@@ -10,8 +10,8 @@ $(function() {
 		month = sysdate.getMonth()+1,
 		day = sysdate.getDate();
 	
-	$('#search_optime_begin').datetimebox('setValue',year+"-01-01 00:00:00");
-	$('#search_optime_end').datetimebox('setValue',year+"-"+month+"-"+day + " 23:59:59");
+	$('#search_optime_begin').datetimebox('setValue',year + "-" + month +  "-01 00:00:00");
+	$('#search_optime_end').datetimebox('setValue',year + "-" + month + "-" + day + " 23:59:59");
 });
 
 /**
@@ -78,13 +78,19 @@ function buildStyleStr(val, row) {
 		return "自动拆分";
 		break;
 	case "4":
+		return "自动删除";
+		break;
+	case "11":
 		return "人工合并";
 		break;
-	case "5":
+	case "12":
 		return "人工新建";
 		break;
-	case "6":
+	case "13":
 		return "人工拆分";
+		break;
+	case "14":
+		return "人工删除";
 		break;
 	default:
 		return "";
@@ -111,8 +117,8 @@ function searchListTable() {
 // 搜索条件重置
 function searchReset() {
 	$("#search_optype").combobox('setValue', '');
-	$("#search_opstyle").combobox('setValue', '');	
-	$("#search_domain").combobox('setValue', '');	
+	$("#search_opstyle").combobox('setValue', '');
+	$("#search_domain").combobox('setValue', '');
 	$("#search_optime_begin").datetimebox('setValue', '');
 	$("#search_optime_end").datetimebox('setValue', '');
 }
@@ -120,19 +126,4 @@ function searchReset() {
 // 刷新表格
 function reloadTable() {
 	$('#listTable').datagrid('reload');
-}
-
-// 将匹配度转化为百分数
-function matchDegreeToPercent(degree) {
-	if (isNumeric(degree)) {
-		var degreeNum = parseFloat(degree);
-		return (Math.round(degreeNum * 100 * 10000) / 10000) + "%";
-	} else {
-		return degree;
-	}
-}
-
-// 判断字符串是否是数字
-function isNumeric(str) {
-	return (str.search(/^[\+\-]?\d+\.?\d*$/) == 0);
 }

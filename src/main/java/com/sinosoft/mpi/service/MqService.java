@@ -41,7 +41,7 @@ public class MqService {
 		BizRegister reg = new BizRegister();
 		reg.setMpiPersonInfoRegister(personRegister.getMpiPersonInfoRegister());
 		reg.setSystemKey(personRegister.getSystemKey());
-		reg.setType(personRegister.getType());
+		reg.setState(personRegister.getState());
 		regMq.setBizRegister(reg);
 		regMq.setPersonFieldPk(personFieldPk);
 		sendBizRegisterMq(regMq);

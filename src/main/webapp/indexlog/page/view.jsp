@@ -61,7 +61,7 @@
 	<!-- 对比情况 所有均显示 -->
 	<table class="myTable">
 		<caption>
-			主索引信息对比情况(匹配结果:<span id="show_log_opStyle_1"></span>) 
+			主索引信息对比情况(处理方式:<span id="show_log_opStyle_1"></span>)
 			<span style="float: right;">
 				<c:if test="${log.opType == 1 }">
 				最终形成的主索引:
@@ -80,7 +80,7 @@
 		<tbody>
 			<!-- loop -->
 			<c:forEach items="${fullField }" var="field" varStatus="s">
-				<tr>
+				<tr style="${field.indexValue != field.personValue ? 'color:red;' : ''}">
 					<td>${s.count}</td>
 					<td>${field.fieldCnName}</td>
 					<td>${field.indexValue}</td>

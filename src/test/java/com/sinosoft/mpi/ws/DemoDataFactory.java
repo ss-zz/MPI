@@ -23,7 +23,7 @@ public class DemoDataFactory {
 	 */
 	public static BizRegister getBizRegister() {
 		BizRegister bizRegister = new BizRegister();
-		bizRegister.setType(DATA_STATE);
+		bizRegister.setState(DATA_STATE);
 		bizRegister.setSystemKey(SYSTEM_ID);
 		bizRegister.setMpiPersonInfoRegister(getPerson());
 		bizRegister.setBizInfo(getBiz());
@@ -37,7 +37,7 @@ public class DemoDataFactory {
 	 */
 	public static PersonRegister getPersonRegister() {
 		PersonRegister personRegister = new PersonRegister();
-		personRegister.setType(DATA_STATE);
+		personRegister.setState(DATA_STATE);
 		personRegister.setSystemKey(SYSTEM_ID);
 		personRegister.setMpiPersonInfoRegister(getPerson());
 		return personRegister;
@@ -59,6 +59,7 @@ public class DemoDataFactory {
 		// 人员基本信息
 		person.setNameCn("测试姓名" + getRandomStr());
 		person.setGenderCd("01");// 性别
+		person.setGenderDn("男");
 		person.setBirthDate(now);// 出生日期
 		person.setArCd("410000");// 地区编码
 		// person.setIdNo("410182451452145412");// 身份证号
@@ -66,6 +67,12 @@ public class DemoDataFactory {
 		person.setHrId(getRandomStr());// 居民健康档案号
 		person.setNhCard(getRandomStr());// 新农合卡号
 		person.setSscid(getRandomStr());// 社保卡号
+		
+		person.setLivingAddr("居住地址");
+		person.setProvinceName("省");
+		person.setCityName("城市");
+		person.setAreaName("区域");
+		person.setVillageName(getRandomStr());
 
 		return person;
 	}

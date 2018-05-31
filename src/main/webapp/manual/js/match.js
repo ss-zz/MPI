@@ -11,6 +11,8 @@ $(function() {
 	init_fun();
 	// 初始化摘要窗口
 	setWindow_view();
+	// 打开摘要窗口
+	openSummaryWin();
 });
 
 /**
@@ -56,6 +58,9 @@ function buildTr(tbId,rowid,cellNum,thFirst){
 function addCellData(rowid,startCell,datas){
 	var tr = $("#"+rowid);
 	$.each(datas,function(index,val){
+		if(val === null || val === undefined){
+			val = '';
+		}
 		tr.children().get(startCell+index).innerHTML=val;
 	});
 }
@@ -136,13 +141,13 @@ function renderIndexInfo(){
 	$.each(PAGE_INFO.data,function(idx,val){
 		// 匹配度情况
 		var mr = val.result;
-		var index = val.index;		
+		var index = val.index;
 		// 渲染表头
 		var html = '综合匹配度:'+matchDegreeToPercent(mr.matchDegree)+'<br />';
 		if(idx > 0){
 			html+= '<a href="#" title="左移" onclick="moveLeftFun('+idx+');">&lt;&lt;</a>&nbsp;&nbsp;';
 		}
-		html+='<input type="button" value="合并" id="add_to_index_btn_'+index.indexId+'" onclick="addToIndex(\''+index.indexId+'\',\''+index.name+'\')" />';
+		html+='<div class="my-btn my-btn-danger my-btn-small" id="add_to_index_btn_'+index.mpiPk+'" onclick="addToIndex(\''+index.mpiPk+'\',\''+index.nameCn+'\')">合并</div>';
 		if(idx < (PAGE_INFO.data.length-1)){
 			html+= '&nbsp;&nbsp;<a href="#" title="右移" onclick="moveRightFun('+idx+');">&gt;&gt;</a>';
 		}
@@ -173,6 +178,7 @@ function renderIndexInfo(){
  * @returns {Object} like {idCardNum:1.0,nongheCardNum:0.0,...}
  */
 function parseFieldMatchResult(matchStr){
+	if(!matchStr) return {};
 	var result = {};
 	var group = matchStr.split(',');
 	for(var i = 0 ; i<group.length;i++){
@@ -252,10 +258,10 @@ function Backward(){
  */
 function queryData(start,end,handler,headInsert){
 	$.ajax({
-		url : root + '/manual/manual.ac?method=matchList',// 请求的action路径
+		url : root + '/manual/manual.ac?method=matchList',
 		type : 'POST',
 		data : {
-			"personId":BASE_DATAS.person.FIELD_PK,
+			"personId":BASE_DATAS.person.fieldPk,
 			"start":start,
 			"end":end
 		},
@@ -283,8 +289,8 @@ function queryDataByIndexId(handler){
 		type : 'POST',
 		traditional: true,
 		data : {
-			"personid":BASE_DATAS.person.FIELD_PK,
-			"idxIds":PAGE_INFO.selectedIndexIds
+			personid: BASE_DATAS.person.fieldPk,
+			idxIds: PAGE_INFO.selectedIndexIds
 		},
 		success : function(data) {
 			handler(data);
@@ -298,18 +304,18 @@ function queryDataByIndexId(handler){
  * @param {String} indexName 索引姓名
  */
 function addToIndex(indexId,indexName){
-	confirm("确认将居民["+BASE_DATAS.person.name+"]合并到索引["+indexName+"]下么?", function(){
+	confirm("确认将居民["+BASE_DATAS.person.nameCn+"]合并到索引["+indexName+"]下么?", function(){
 		$.ajax({
 			url : root + '/manual/manual.ac?method=addToIndex',
 			type : 'POST',
 			data : {
 				"opId":BASE_DATAS.opId,
-				"personId":BASE_DATAS.person.personId,
+				"personId":BASE_DATAS.person.fieldPk,
 				"indexId":indexId
 			},
 			success : function(data) {
 				showMessage("操作成功!");
-				goBackClose();
+				goBackClose(true);
 			}
 		});
 	})
@@ -326,11 +332,11 @@ function addNewIndex(){
 			type : 'POST',
 			data : {
 				"opId":BASE_DATAS.opId,
-				"personId":BASE_DATAS.person.personId
+				"personId":BASE_DATAS.person.fieldPk
 			},
 			success : function(data) {
 				showMessage("操作成功");
-				goBackClose();
+				goBackClose(true);
 			}
 		});
 	})
@@ -340,11 +346,13 @@ function addNewIndex(){
 /**
  * 关闭页面并返回
  */
-function goBackClose(){
-	backTab('tabId_ma', '人工审核记录', root+'/manual/page/add.jsp', function(){
-		parent.tabCallPass("iframe_tabId_ma", "reloadTable");
+function goBackClose(isReload){
+	backTab('tabId_ma', '主索引人工处理', root+'/manual/page/add.jsp', function(){
+		if(isReload){
+			parent.tabCallPass("iframe_tabId_ma", "reloadTable");
+		}
 	});
-	parent.$('#centerTab').tabs('close','查看匹配结果');
+	parent.$('#centerTab').tabs('close','人工匹配');
 }
 
 /**
@@ -379,7 +387,8 @@ function isNumeric(str){
 function setWindow_view(){
 	$('#window_view').window({
 		width:800,
-		height:500
+		height:500,
+		closed: true
 	});
 }
 
@@ -398,53 +407,33 @@ function reloadDetailTable() {
 }
 
 // 打开摘要窗口
+var isSummaryLoad = false;
 function openSummaryWin(){
-	// 加载表格
-	$('#detailTable').datagrid({
-		toolbar :"#detailTable_toolbar",
-		singleSelect: false,
-		pagination: false,
-		queryParams : {
-			"personId":BASE_DATAS.person.personId
-		},
-		onSelect : rowSelectEvent,
-		onUnselect : rowSelectEvent,
-		onLoadSuccess : function(data) {
-			var value = $('#detailTable').datagrid('getData')['errorMsg'];
-			if (value != null) {
-				alert("错误消息:" + value);
-			}
-			// 去掉全选
-			$('#detailTable').parent().find("div .datagrid-header-check").children("input[type='checkbox']").eq(0).attr("disabled", true);
-		}
-	}).datagrid('acceptChanges');
-
 	$("#window_view").window('open');
-}
-
-/**
- * 行选事件
- * @param rowIndex
- * @param rowData
- */
-function rowSelectEvent(rowIndex, rowData){
-	var rows = $('#detailTable').datagrid("getSelections");
-	if(rows.length>4){
-		alert("最多只能选择4条索引数据进行对比!");
-		$('#detailTable').datagrid("unselectRow",rowIndex);
-		return;
+	if(!isSummaryLoad){
+		isSummaryLoad = true;
+		// 加载表格
+		$('#detailTable').datagrid({
+			toolbar :"#detailTable_toolbar",
+			singleSelect: false,
+			pagination: false,
+			queryParams : {
+				"personId": BASE_DATAS.person.fieldPk
+			}
+		}).datagrid('acceptChanges');
 	}
-	delete PAGE_INFO.selectedIndexIds;
-	PAGE_INFO.selectedIndexIds = [];
-	$.each(rows,function(idx,val){
-		PAGE_INFO.selectedIndexIds[idx] = val.INDEX_ID;
-	});
 }
 
 function closeAndRerender(){
-	if(PAGE_INFO.selectedIndexIds.length == 0 && !confirm("未选择任何对比索引,确认关闭窗口么?")){
+	var rows = $('#detailTable').datagrid("getChecked");
+	if(rows.length>4){
+		alert("最多只能选择4条索引数据进行对比，请重新选择!");
 		return;
 	}
+	PAGE_INFO.selectedIndexIds = [];
+	$.each(rows,function(idx,val){
+		PAGE_INFO.selectedIndexIds[idx] = val.MPI_PK;
+	});
 	queryDataByIndexId(processDataClean);
 	closeWindow_view();
 }

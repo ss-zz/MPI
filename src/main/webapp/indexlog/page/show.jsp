@@ -8,7 +8,13 @@
 <body>
 	<!-- 对比情况 所有均显示 -->
 	<table class="myTable">
-		<caption>主索引详情【${data.nameCn }】</caption>
+		<caption>
+			<c:if test="${type == 'person' }">
+				居民[${data.nameCn }]信息详情&nbsp;&nbsp;
+				(数据来源:[${data.domainDesc }])
+			</c:if>
+			<c:if test="${type == 'index' }">索引[${data.nameCn }]信息详情</c:if>
+		</caption>
 		<thead>
 			<tr>
 				<th></th>

@@ -12,6 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.beans.BeanUtils;
 
 import com.sinosoft.mpi.annotation.PropertyDesc;
+import com.sinosoft.mpi.dics.PersonType;
 
 /**
  * 主索引人员
@@ -2259,6 +2260,21 @@ public class PersonInfo implements Serializable {
 
 	public void setDomainDesc(String domainDesc) {
 		this.domainDesc = domainDesc;
+	}
+
+	/**
+	 * 获取唯一标识信息
+	 * 
+	 * @return
+	 */
+	public String getIdentifier() {
+		if (PersonType.PERSONAL.getCode().equals(this.type)) {// 个人
+			return this.hrId;
+		} else if (PersonType.PATIENT.getCode().equals(this.type)) {// 患者
+			return this.medicalserviceNo;
+		} else {// 其他
+			return this.patientId;
+		}
 	}
 
 	public PersonIndex toPersonIndex() {

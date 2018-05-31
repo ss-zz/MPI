@@ -46,7 +46,7 @@ public class MatchService {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * 两个对象的匹配情况
 	 * 
@@ -118,16 +118,36 @@ public class MatchService {
 	 * @return
 	 */
 	public RecordPair matchedPair(List<RecordPair> pairs) {
+		// 可能匹配阈值
+		float matchWeightThreshold = MatchConfig.getInstanse().getMatchWeightThreshold();
 		for (RecordPair pair : pairs) {
-			if (MatchConfig.getInstanse().getAgreementWeightThreshold() <= pair.getWeight()) {
+			Double weight = pair.getWeight();
+			if (weight >= matchWeightThreshold) {
 				return pair;
-			} else {
-				if (pair.getWeight() >= MatchConfig.getInstanse().getMatchWeightThreshold()) {
-					return pair;
-				}
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * 找到所有可能匹配的匹配对（不包含完全匹配）
+	 * 
+	 * @param pairs
+	 * @return
+	 */
+	public List<RecordPair> possibleMatchedPairs(List<RecordPair> pairs) {
+		List<RecordPair> ret = new ArrayList<>();
+		// 完全匹配阈值
+		float agreementWeightThreshold = MatchConfig.getInstanse().getAgreementWeightThreshold();
+		// 可能匹配阈值
+		float matchWeightThreshold = MatchConfig.getInstanse().getMatchWeightThreshold();
+		for (RecordPair pair : pairs) {
+			Double weight = pair.getWeight();
+			if (weight >= matchWeightThreshold && weight < agreementWeightThreshold) {
+				ret.add(pair);
+			}
+		}
+		return ret;
 	}
 
 }

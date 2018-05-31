@@ -1,6 +1,5 @@
 package com.sinosoft.mpi.service;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -35,7 +34,7 @@ public class MatchCfgService {
 	 */
 	public void save(MatchCfg t) {
 		// 设置必要信息
-		t.setCreateDate(DateUtil.getTimeNow(new Date()));
+		t.setCreateDate(DateUtil.getTimeNow());
 		// 默认无效
 		t.setState("0");
 		// 保存

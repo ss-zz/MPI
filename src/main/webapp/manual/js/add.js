@@ -1,7 +1,7 @@
 $(function() {
 	// 搜索框初始化
 	$('#search_opstatus').combobox({
-		width:100
+		width:120
 	});
 	// 加载表格数据
 	ajaxTable();
@@ -18,19 +18,17 @@ function ajaxTable() {
 }
 
 // 查询匹配详情
-function searchListTable() {   
+function searchListTable() {
 	// 查询的时候重置回第一页
 	$("#listTable").datagrid("options").pageNumber = 1; 
 	
 	var type = $("#search_opstatus").combobox('getValue');
 	var personName = $("#search_personName").val();
-	var personSex = $("#search_personSex").combobox('getValue');
 	
 	$("#listTable").datagrid({
 		queryParams : {
-			"MAN_OP_STATUS":type,
-			"FIELD_PK":personName,
-			"MAN_OP_ID":personSex
+			manOpStatus: type,
+			personName: personName
 		}
 	});
 }
@@ -39,7 +37,6 @@ function searchListTable() {
 function searchReset(){
 	$("#search_opstatus").combobox('setValue','');
 	$("#search_personName").val('');
-	$("#search_personSex").combobox('setValue','');
 }
 
 /**
@@ -55,7 +52,7 @@ function buildMatchUrl(val,row){
 	var opStatus = row.MAN_OP_STATUS;
 	var opId = row.MAN_OP_ID;
 	if(opStatus == "0"){
-		return '<a href="#" onclick="viewMatch(\''+val+'\',\''+opId+'\');">查看匹配</a>';
+		return '<a href="#" onclick="viewMatch(\''+val+'\',\''+opId+'\');">人工匹配</a>';
 	}else{
 		return '';
 	}
@@ -83,21 +80,5 @@ function reloadTable() {
 
 // 查看页面
 function viewMatch(personId, opId){
-	openTab('tabId_manualMatch', '查看匹配结果', root+'/manual/manual.ac?method=toMatch&personId='+personId+'&opId='+opId);
-}
-
-// 将匹配度转化为百分数
-function matchDegreeToPercent(degree){
-	if(isNumeric(degree)){
-		var degreeNum = parseFloat(degree);
-		
-		return (Math.round(degreeNum*100*100)/100)+"%";
-	}else{
-		return degree;
-	}
-}
-
-// 判断字符串是否是数字
-function isNumeric(str){ 
-	return (str.search(/^[\+\-]?\d+\.?\d*$/)==0);
+	openTab('tabId_manualMatch', '人工匹配', root+'/manual/manual.ac?method=toMatch&personId='+personId+'&opId='+opId);
 }

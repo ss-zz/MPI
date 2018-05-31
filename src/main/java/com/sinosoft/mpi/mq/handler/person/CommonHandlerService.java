@@ -1,6 +1,6 @@
 package com.sinosoft.mpi.mq.handler.person;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -12,17 +12,20 @@ import com.sinosoft.match.config.MatchConfig;
 import com.sinosoft.match.model.Record;
 import com.sinosoft.match.model.RecordPair;
 import com.sinosoft.match.service.MatchService;
-import com.sinosoft.mpi.context.Constant;
+import com.sinosoft.mpi.dics.IndexRegisterType;
+import com.sinosoft.mpi.dics.LogOpStyle;
+import com.sinosoft.mpi.dics.LogOpType;
 import com.sinosoft.mpi.model.DomainSrcLevel;
 import com.sinosoft.mpi.model.IndexIdentifierRel;
 import com.sinosoft.mpi.model.ManOpPerson;
+import com.sinosoft.mpi.model.MatchResult;
 import com.sinosoft.mpi.model.MpiCombineRec;
-import com.sinosoft.mpi.model.PersonIdxLog;
 import com.sinosoft.mpi.model.PersonIndex;
 import com.sinosoft.mpi.model.PersonInfo;
 import com.sinosoft.mpi.service.DomainSrcLevelService;
 import com.sinosoft.mpi.service.IndexIdentifierRelService;
 import com.sinosoft.mpi.service.ManOpPersonService;
+import com.sinosoft.mpi.service.MatchResultService;
 import com.sinosoft.mpi.service.MpiCombineLevelService;
 import com.sinosoft.mpi.service.MpiCombineRecService;
 import com.sinosoft.mpi.service.PersonIdxLogService;
@@ -56,6 +59,8 @@ public class CommonHandlerService {
 	@Resource
 	MatchService matchServcie;
 	@Resource
+	MatchResultService matchResultService;
+	@Resource
 	PersonIndexUpdateService personIndexUpdateService;
 
 	/**
@@ -73,139 +78,116 @@ public class CommonHandlerService {
 		// 找出匹配情况。
 		List<RecordPair> pairs = matchServcie.match(personRecord, records);
 
+		// 最符合的匹配对象
 		RecordPair pair = null;
-		// 没有初步匹配者，直接添加索引。
-		if (records.size() == 0 || pairs.size() == 0) {
+		// 没有初步匹配者或者匹配度太低，则直接添加索引。
+		if (records.size() == 0 || pairs.size() == 0 || (pair = matchServcie.matchedPair(pairs)) == null) {
 			// 主索引信息入库
 			PersonIndex index = addPersonIndex(personinfo);
 			return index.getMpiPk();
 		} else {
 			// 如果信息匹配结果，则合并相关主索引信息,更新关联表
-			pair = matchServcie.matchedPair(pairs);
-			if (pair != null) {
-				PersonIndex personindex = pair.getRightRecord().getObject();
-				// 添加索引操作日志
-				addIPersonIdxLogService(personinfo.getFieldPk(), personindex.getMpiPk(), personinfo.getDomainId(),
-						Constant.IDX_LOG_TYPE_MATCH, Constant.IDX_LOG_STYLE_AUTO_MERGE,
-						"[" + personinfo.getNameCn() + "]合并到主索引[" + pair.getRightRecord().getObject().getNameCn()
-								+ "],系统匹配度:" + NumberUtils.toPercentStr(pair.getWeight()));
-				// 更新索引信息
-				personindex = personIndexUpdateService.updateIndex(personindex, personinfo);
-				// 可能匹配值<整体匹配阀值<完全匹配值 同时人工干预表中添加一条记录进行标识
-				if (pair.getWeight() >= MatchConfig.getInstanse().getMatchWeightThreshold()
-						&& pair.getWeight() < MatchConfig.getInstanse().getAgreementWeightThreshold()) {
-					addMenOpPerson(personinfo, personindex.getMpiPk());
+			PersonIndex personIndexPair = pair.getRightRecord().getObject();
+			// 完全匹配的数据才更新索引，否则需要人工干预
+			if (pair.getWeight() >= MatchConfig.getInstanse().getMatchWeightThreshold()
+					&& pair.getWeight() < MatchConfig.getInstanse().getAgreementWeightThreshold()) {// 不完全匹配
+				addMenOpPerson(personinfo, personIndexPair.getMpiPk());
+
+				// 可能匹配的对（不包含完全匹配）
+				List<RecordPair> possiblePairs = matchServcie.possibleMatchedPairs(pairs);
+				// 将匹配结果保存到匹配结果表中
+				List<MatchResult> matchResults = new ArrayList<>();
+				for (RecordPair possiblePair : possiblePairs) {
+					MatchResult matchResult = new MatchResult();
+					matchResult.setFieldMatDegrees(possiblePair.getComparisonVector().getScoresAsString());
+					matchResult.setMatchDegree("" + possiblePair.getWeight());
+					matchResult.setMpiPk(possiblePair.getRightRecord().getObject().getMpiPk());
+					matchResult.setFieldPk(personinfo.getFieldPk());
+					matchResults.add(matchResult);
 				}
-				return personindex.getMpiPk();
-			} else {
-				// 主索引信息入库
-				PersonIndex index = addPersonIndex(personinfo);
-				return index.getMpiPk();
+				matchResultService.batchSave(matchResults);
+
 			}
+			// 更新索引信息
+			personIndexPair = personIndexUpdateService.updateIndex(personIndexPair, personinfo, LogOpType.MODIFY,
+					LogOpStyle.AUTO_MERGE,
+					"[" + personinfo.getNameCn() + "]合并到主索引[" + pair.getRightRecord().getObject().getNameCn()
+							+ "],系统匹配度:" + NumberUtils.toPercentStr(pair.getWeight()));
+			return personIndexPair.getMpiPk();
 		}
 	}
 
 	/**
 	 * 新增人员信息并生成主索引
 	 *
-	 * @param personinfo
+	 * @param personInfo
 	 *            人员信息
 	 * @return 主索引信息
 	 */
-	private PersonIndex addPersonIndex(PersonInfo personinfo) {
-		PersonIndex personindex = personinfo.toPersonIndex();
-		if (personinfo.getState() == 0) {// 新增
+	private PersonIndex addPersonIndex(PersonInfo personInfo) {
+		PersonIndex personIndex = personInfo.toPersonIndex();
+		Short state = personInfo.getState();
+		if (IndexRegisterType.ADD.getCode() == state) {// 新增
 
-			personIndexService.save(personindex);
+			// 主索引新增
+			personIndexService.save(personIndex);
 
 			// 合并信息入库（第一次入库也记录一次合并信息）
-			long comboNO = addIndexIdentifierRelService(personinfo.getDomainId(), personindex.getMpiPk(),
-					personinfo.getFieldPk(), null);// 居民唯一标志暂为空
+			IndexIdentifierRel newIir = indexIdentifierRelService.add(personInfo.getFieldPk(), personIndex.getMpiPk(),
+					personInfo.getDomainId(), personInfo.getIdentifier(), LogOpType.MATCH, LogOpStyle.AUTO_NEW,
+					"新建主索引:[" + personIndex.getNameCn() + "]");
+
+			// 新合并号
+			long comboNO = newIir.getCombineNo();
+
 			// 主索引合并级别记录入库
-			MpiCombineRec mpiCombineRec = personindex.indexToMpiCombineRec();
+			MpiCombineRec mpiCombineRec = personIndex.indexToMpiCombineRec();
 			mpiCombineRec.setCombineNo(comboNO);
 			mpiCombineRecService.save(mpiCombineRec);
-			// 域数据源字段级别
-			List<DomainSrcLevel> srcLevelcolmap = domainSrcLevelService.queryByDomainID(personinfo.getDomainId());
-			// 合并记录字段级别入库
-			mpiCombineLevelService.batchAddLevel(personindex, comboNO, personinfo.getSrcLevel(), srcLevelcolmap);
-			// 添加索引操作日志
-			addIPersonIdxLogService(personinfo.getFieldPk(), personindex.getMpiPk(), personinfo.getDomainId(),
-					Constant.IDX_LOG_TYPE_MATCH, Constant.IDX_LOG_STYLE_AUTO_NEW,
-					"新建主索引:[" + personindex.getNameCn() + "]");
 
-		} else if (personinfo.getState() == 1) {// 编辑
+			// 域数据源字段级别
+			List<DomainSrcLevel> srcLevelcolmap = domainSrcLevelService.queryByDomainID(personInfo.getDomainId());
+			// 合并记录字段级别入库
+			mpiCombineLevelService.batchAddLevel(personIndex, comboNO, personInfo.getSrcLevel(), srcLevelcolmap);
+
+		} else if (IndexRegisterType.UPDATE.getCode() == state) {// 编辑
+
 			// 获取人员信息主键
-			String infoPk = personinfo.getFieldPk();
+			String infoPk = personInfo.getFieldPk();
+
 			// 获取原始主索引信息主键
 			String indexPk = indexIdentifierRelService.queryByFieldPK(infoPk).getMpiPk();
-			personindex.setMpiPk(indexPk);
+			personIndex.setMpiPk(indexPk);
+
 			// 按照修改主索引信息
-			personIndexService.update(personindex);
+			personIndexService.update(personIndex);
 
 			// 添加索引操作日志
-			addIPersonIdxLogService(personinfo.getFieldPk(), indexPk, personinfo.getDomainId(),
-					Constant.IDX_LOG_TYPE_MATCH, Constant.IDX_LOG_STYLE_AUTO_NEW,
-					"修改主索引:[" + personindex.getNameCn() + "]");
+			indexIdentifierRelService.saveIndexLog(personInfo.getFieldPk(), indexPk, personInfo.getDomainId(),
+					LogOpType.MATCH, LogOpStyle.AUTO_NEW, "修改主索引:[" + personIndex.getNameCn() + "]");
 
-		} else if (personinfo.getState() == 2) {// 删除
+		} else if (IndexRegisterType.DEL.getCode() == state) {// 删除
 			// 获取人员信息主键
-			String infoPk = personinfo.getFieldPk();
+			String infoPk = personInfo.getFieldPk();
 			// 获取原始主索引信息主键
 			String indexPk = indexIdentifierRelService.queryByFieldPK(infoPk).getMpiPk();
 			int indexPkSize = indexIdentifierRelService.queryByMpiPK(indexPk).size();
 			if (indexPkSize == 1) {
 				// 删除关联关系记录
-				indexIdentifierRelService.deleteByFieldPk(infoPk);
-				personindex.setMpiPk(indexPk);
+				indexIdentifierRelService.deleteByFieldPk(infoPk, LogOpType.MATCH, LogOpStyle.AUTO_REMOVE,
+						"删除主索引:[" + personIndex.getNameCn() + "]");
 				// 删除主索引信息记录
-				personIndexService.delete(personindex);
-
-				// 添加索引操作日志
-				addIPersonIdxLogService(personinfo.getFieldPk(), indexPk, personinfo.getDomainId(),
-						Constant.IDX_LOG_TYPE_MATCH, Constant.IDX_LOG_STYLE_AUTO_NEW,
-						"删除主索引:[" + personindex.getNameCn() + "]");
+				personIndexService.deleteById(indexPk);
 
 			} else if (indexPkSize > 1) {
 				// 删除关联关系记录
-				indexIdentifierRelService.deleteByFieldPk(infoPk);
+				indexIdentifierRelService.deleteByFieldPk(infoPk, LogOpType.MATCH, LogOpStyle.AUTO_REMOVE, null);
 			}
 
 		}
 
-		return personindex;
+		return personIndex;
 
-	}
-
-	/**
-	 * 主索引操作日志插入服务
-	 */
-	public void addIPersonIdxLogService(String person, String index, String domainId, String opType, String opStyle,
-			String desc) {
-		PersonIdxLog result = new PersonIdxLog();
-		result.setOpType(opType);
-		result.setOpStyle(opStyle);
-		result.setOpTime(DateUtil.getTimeNow(new Date()));
-		result.setOpUserId("0");
-		result.setOpDesc(desc);
-		result.setInfoSour(domainId);
-		result.setMpiPk(index);
-		result.setFieldPk(person);
-		personIdxLogService.save(result);
-	}
-
-	/**
-	 * 合并信息操作插入服务
-	 */
-	public Long addIndexIdentifierRelService(String domainId, String mpiPk, String fieldPk, String personid) {
-		IndexIdentifierRel iir = new IndexIdentifierRel();
-		iir.setCombineRec(-1L);
-		iir.setDomainId(domainId);
-		iir.setFieldPk(fieldPk);
-		iir.setMpiPk(mpiPk);
-		iir.setPersonIdentifier(personid);
-		indexIdentifierRelService.save(iir);
-		return iir.getCombineNo();
 	}
 
 	/**
@@ -214,7 +196,7 @@ public class CommonHandlerService {
 	public void addMenOpPerson(PersonInfo person, String mpiPk) {
 		ManOpPerson manOpPerson = new ManOpPerson();
 		manOpPerson.setManOpStatus("0");
-		manOpPerson.setManOpTime(DateUtil.getTimeNow(new Date()));
+		manOpPerson.setManOpTime(DateUtil.getTimeNow());
 		manOpPerson.setFieldPk(person.getFieldPk());
 		manOpPerson.setMpiPk(mpiPk);
 		manOpPersonService.save(manOpPerson);

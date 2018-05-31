@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
 
+import com.sinosoft.mpi.dics.IndexRegisterType;
 import com.sinosoft.mpi.model.register.PersonRegister;
 
 /**
@@ -15,7 +16,7 @@ public class MpiPersonInfoRegister implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 人员id
+	 * 人员唯一标识
 	 */
 	private String patientId;
 	private String medicalserviceNo;
@@ -1719,8 +1720,8 @@ public class MpiPersonInfoRegister implements Serializable {
 
 		info.setCreatetime(new Date());
 
-		Short state = personRegister.getType();
-		info.setState(state == null ? Short.valueOf("0") : state);
+		Short state = personRegister.getState();
+		info.setState(state == null ? IndexRegisterType.ADD.getCode() : state);
 
 		String domainId = personRegister.getSystemKey();
 		info.setUniqueSign(domainId);

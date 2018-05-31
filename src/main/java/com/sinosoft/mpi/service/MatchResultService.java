@@ -29,6 +29,15 @@ public class MatchResultService {
 	}
 
 	/**
+	 * 批量保存
+	 * 
+	 * @param items
+	 */
+	public void batchSave(List<MatchResult> items) {
+		matchResultDao.save(items);
+	}
+
+	/**
 	 * 更新
 	 * 
 	 * @param t
@@ -74,6 +83,17 @@ public class MatchResultService {
 	 */
 	public void deleteByPersonID(String personID) {
 		matchResultDao.deleteByFieldPk(personID);
+	}
+
+	/**
+	 * 根据mpiPk和fieldPk查询第一条数据
+	 * 
+	 * @param mpiPk
+	 * @param fieldPk
+	 * @return
+	 */
+	public MatchResult findByMpiPkAndFieldPk(String mpiPk, String fieldPk) {
+		return matchResultDao.findFirstByMpiPkAndFieldPk(mpiPk, fieldPk);
 	}
 
 }

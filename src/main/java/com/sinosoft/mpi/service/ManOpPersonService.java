@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.sinosoft.mpi.dao.mpi.ManOpPersonDao;
 import com.sinosoft.mpi.model.ManOpPerson;
+import com.sinosoft.mpi.util.DateUtil;
 import com.sinosoft.mpi.util.PageInfo;
 
 /**
@@ -52,8 +53,36 @@ public class ManOpPersonService {
 	 * @param id
 	 * @return
 	 */
-	public ManOpPerson getObject(String id) {
+	public ManOpPerson get(String id) {
 		return manOpPersonDao.findOne(id);
+	}
+
+	/**
+	 * 更新数据状态
+	 * 
+	 * @param manOpId
+	 * @param state
+	 */
+	public int updateState(String manOpId, String state) {
+		return manOpPersonDao.updateState(manOpId, state, DateUtil.getTimeNow());
+	}
+
+	/**
+	 * 更新数据状态-已操作
+	 * 
+	 * @param manOpId
+	 */
+	public int updateStateDone(String manOpId) {
+		return updateState(manOpId, "1");
+	}
+
+	/**
+	 * 更新数据状态-未操作
+	 * 
+	 * @param manOpId
+	 */
+	public int updateStateUnDone(String manOpId) {
+		return updateState(manOpId, "0");
 	}
 
 	/**
@@ -74,28 +103,28 @@ public class ManOpPersonService {
 	 * @param page
 	 * @return
 	 */
-	public List<Map<String, Object>> queryForMapPage(ManOpPerson t, PageInfo page) {
+	public List<Map<String, Object>> queryForMapPage(Map<String, String> params, PageInfo page) {
 		StringBuilder sql = new StringBuilder();
-		sql.append(" select a.man_op_id,a.field_pk,a.man_op_status,a.man_op_time,b.name_CN,b.gender_cd ")
-				.append(" ,b.id_no,b.birth_date,b.person_tel_no,d.domain_desc from mpi_man_op_person a ")
+		sql.append(" select a.man_op_id,a.field_pk,a.man_op_status,a.man_op_time,b.name_cn,b.gender_cd,b.gender_dn ")
+				.append(" ,b.id_no,to_char(b.birth_date, 'yyyy-MM-dd') birth_date,b.person_tel_no,d.domain_desc from mpi_man_op_person a ")
 				.append(" left join mpi_person_info b on a.field_pk = b.field_pk ")
 				.append(" left join mpi_index_identifier_rel c on b.field_pk = c.field_pk ")
 				.append(" left join mpi_identifier_domain d on c.domain_id = d.domain_id where 1=1 ");
 		List<Object> args = new ArrayList<Object>();
 		// 设置查询条件
-		if (StringUtils.isNotBlank(t.getManOpStatus())) {
+		if (StringUtils.isNotBlank(params.get("manOpStatus"))) {
 			sql.append(" and a.man_op_status = ? ");
-			args.add(t.getManOpStatus());
+			args.add(params.get("manOpStatus"));
 		}
 
-		if (StringUtils.isNotBlank(t.getFieldPk())) {
+		if (StringUtils.isNotBlank(params.get("personName"))) {
 			sql.append(" and b.name like ? ");
-			args.add(buildLikeStr(t.getFieldPk()));
+			args.add(buildLikeStr(params.get("personName")));
 		}
 
-		if (StringUtils.isNotBlank(t.getManOpId())) {
+		if (StringUtils.isNotBlank(params.get("genderCd"))) {
 			sql.append(" and b.gender_cd = ? ");
-			args.add(t.getManOpId());
+			args.add(params.get("genderCd"));
 		}
 
 		// 取得总数查询sql
@@ -105,7 +134,7 @@ public class ManOpPersonService {
 		// 取得分页查询语句
 		sql.append(" order by a.man_op_status asc, a.man_op_time desc ");
 		String querySql = page.buildPageSql(sql);
-		return jdbcTemplate.queryForList(querySql.toString(), args);
+		return jdbcTemplate.queryForList(querySql.toString(), args.toArray());
 	}
 
 	private String buildLikeStr(String arg) {

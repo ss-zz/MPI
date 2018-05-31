@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
@@ -176,74 +174,6 @@ public class BlockService {
 	}
 
 	/**
-	 * 验证身份证号
-	 *
-	 * @param value
-	 *            身份证号
-	 * @return
-	 */
-	private boolean verifyIdNo(String value) {
-		boolean result = true;
-		Pattern reg = Pattern.compile("^(\\d{15}|\\d{18}|\\d{17}[A-Za-z])$");
-		Matcher m = reg.matcher(value);
-		if (!m.matches()) {
-			return false;
-		}
-		return result;
-	}
-
-	/**
-	 * 验证新农合卡号
-	 *
-	 * @param value
-	 *            新农合卡号
-	 * @return
-	 */
-	private boolean verifyNhCard(String value) {
-		boolean result = true;
-		Pattern reg = Pattern.compile("^\\d{16}$");
-		Matcher m = reg.matcher(value);
-		if (!m.matches()) {
-			return false;
-		}
-		return result;
-	}
-
-	/**
-	 * 验证居民健康档案号
-	 *
-	 * @param value
-	 *            居民健康档案号
-	 * @return
-	 */
-	private boolean verifyHRID(String value) {
-		boolean result = true;
-		Pattern reg = Pattern.compile("^\\d{17}$");
-		Matcher m = reg.matcher(value);
-		if (!m.matches()) {
-			result = false;
-		}
-		return result;
-	}
-
-	/**
-	 * 验证社会保障卡号
-	 *
-	 * @param value
-	 *            社会保障卡号
-	 * @return
-	 */
-	private boolean verifySSCID(String value) {
-		boolean result = true;
-		Pattern reg = Pattern.compile("^(\\d{15}|\\d{18}|\\d{17}[A-Za-z])$");
-		Matcher m = reg.matcher(value);
-		if (!m.matches()) {
-			result = false;
-		}
-		return result;
-	}
-
-	/**
 	 * 验证人员字段值是否合法
 	 *
 	 * @param field
@@ -255,21 +185,8 @@ public class BlockService {
 	private boolean verifyPerson(String field, String fieldvalue) {
 		boolean result = true;
 		if (StringUtils.isBlank(fieldvalue)) {// 为空
-			return false;
+			return true;
 		}
-		
-		//TODO 不验证特殊号码，正式使用需放开
-		/*
-		if ("ID_NO".equals(field)) {// 身份证号
-			result = verifyIdNo(fieldvalue);
-		} else if ("NH_CARD".equals(field)) {
-			result = verifyNhCard(fieldvalue);
-		} else if ("HR_ID".equals(field)) {
-			result = verifyHRID(fieldvalue);
-		} else if ("SSCID".equals(field)) {
-			result = verifySSCID(fieldvalue);
-		}
-		*/
 		return result;
 	}
 

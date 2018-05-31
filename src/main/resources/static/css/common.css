@@ -1,5 +1,6 @@
 /* 通用样式 */
 body {
+	margin: 0px;
 	padding: 10px;
 	font-size: 14px;
 }
@@ -14,7 +15,7 @@ fieldset {
 /* 覆盖easyui默认样式 */
 
 /* 表格链接 */
-.datagrid-cell a{
+.datagrid-cell a {
 	text-decoration: none;
 	color: #1890ff;
 }
@@ -43,6 +44,11 @@ fieldset {
 
 .my-btn-danger {
 	background-color: #ea6969;
+	color: #fff;
+}
+
+.my-btn-main {
+	background-color: #6494bc;
 	color: #fff;
 }
 
@@ -95,7 +101,7 @@ fieldset {
 	padding: 0px 11px;
 }
 
-.my-form .my-form-btns{
+.my-form .my-form-btns {
 	text-align: center;
 	border-top: 1px solid #dfdfdf;
 	padding: 10px;
@@ -155,7 +161,7 @@ fieldset {
 	font-size: 0.8em;
 }
 
-.myTable th{
+.myTable th {
 	background-color: #eee;
 }
 
@@ -170,21 +176,29 @@ fieldset {
 	width: 80%;
 }
 
-.formeTable tr td:nth-child(odd){
-	width:10%;
+.formeTable tr td:nth-child(odd) {
+	width: 10%;
 	text-align: right;
 }
 
-.formeTable tr td:nth-child(even){
-	width:40%;
+.formeTable tr td:nth-child(even) {
+	width: 40%;
 	text-align: left;
 }
 
-.formeTable td{
+.formeTable td {
 	padding: 5px;
 }
 
-.formeTable-btn{
+.formeTable-btn {
 	text-align: center;
 	margin: 10px;
+}
+
+/* 帮助信息 */
+.help-info {
+	padding: 10px;
+	background-color: #e68738;
+	color: #fff;
+	margin: 5px 0px;
 }

@@ -11,7 +11,7 @@ import com.sinosoft.bizblock.service.BizBlockService;
 import com.sinosoft.bizmatch.service.BizMatchService;
 import com.sinosoft.match.model.Record;
 import com.sinosoft.match.model.RecordPairBiz;
-import com.sinosoft.mpi.context.Constant;
+import com.sinosoft.mpi.dics.LogOpType;
 import com.sinosoft.mpi.model.biz.MpiBizIdxLog;
 import com.sinosoft.mpi.model.biz.MpiBizIndex;
 import com.sinosoft.mpi.model.biz.MpiBizInfoRegister;
@@ -106,7 +106,7 @@ public class CommonBizHandlerService {
 		bizIndexLog.setBlMatched(weightPair);
 		bizIndexLog.setBlSerialId(serialId);
 		bizIndexLog.setBlInfoSour(bizIndex.getBizSystemId());
-		bizIndexLog.setBlType(Constant.IDX_LOG_TYPE_MATCH);
+		bizIndexLog.setBlType(LogOpType.MATCH.getCode());
 		bizIdxLogService.save(bizIndexLog);
 
 		// 整理返回的信息

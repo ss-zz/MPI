@@ -11,12 +11,13 @@
 	var BASE_DATAS = ${datas};
 </script>
 </head>
-<body>	
-<div>
-	&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="建立新索引" id="add_new_index_btn" onclick="addNewIndex();" />&nbsp;&nbsp;&nbsp;&nbsp;
-	<input type="button" value="返回" onclick="goBackClose();" />
+<body>
+
+<div class="easyui-panel" style="padding:5px; margin-bottom: 10px;">
+	<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-back'" id="gobackBtn" onclick="goBackClose(false)">返回</a>
+	<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-edit'" id="add_new_index_btn" onclick="addNewIndex()">建立新索引</a>
 </div>
-<br/>
+
 <table class="myTable">
 	<thead>
 	<tr>
@@ -31,7 +32,7 @@
 				<span title="后一条" id="page_next_btn"><a href="#" onclick="next(1);">&gt;&gt;</a></span>			
 			</div>
 			<div>
-				<a href="#" onclick="openSummaryWin();">选择对比数据</a>
+				<div class="my-btn my-btn-main" onclick="openSummaryWin();">选择对比数据</div>
 			</div>
 
 		</th>
@@ -42,7 +43,7 @@
 		<th colspan="2"></th>
 		<th colspan="2"></th>
 	</tr>
-	<tr>		
+	<tr>
 		<th>匹配度</th>
 		<th>字段值</th>
 		<th>匹配度</th>
@@ -58,14 +59,12 @@
 </table>
 
 <!-- 索引匹配列表 --> 
-<div id="window_view" title="匹配索引摘要" iconCls="icon-detail">
+<div id="window_view" title="待匹配索引列表" iconCls="icon-detail">
 	<div class="easyui-layout" fit="true">
-		<div id="match_detail_view" region="center" border="false" style="padding: 10px; background: #fff; border: 1px solid #ccc;">	
+		<div id="match_detail_view" region="center" border="false" style="padding: 10px; background: #fff; border: 1px solid #ccc;">
 			<table 	id="detailTable"
-					title="匹配索引摘要"
-					iconCls="icon-edit"
-					idField="INDEX_ID"
-					url="${pageContext.request.contextPath}/manual/manual.ac?method=listMatchIndex" >
+					url="${pageContext.request.contextPath}/manual/manual.ac?method=listMatchIndex"
+					>
 				<thead>
 					<tr align="center">
 						<th field="ck" width="20" checkbox="true" width="20"></th>
@@ -76,9 +75,9 @@
 				</thead>
 			</table>	
 			<!-- 定义toobar -->
-			<div id="detailTable_toolbar">  
-				<a href="#" class="easyui-linkbutton" id="toobar_show_compare" iconCls="icon-remove" plain="true" onclick="closeAndRerender();">开始对比</a>  
-			</div>  		
+			<div id="detailTable_toolbar">
+				<a href="#" class="easyui-linkbutton" id="toobar_show_compare" iconCls="icon-edit" plain="true" onclick="closeAndRerender();">开始对比</a>
+			</div>
 		</div>
 	</div>
 </div>

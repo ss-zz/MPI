@@ -64,7 +64,7 @@ public class MpiCombineLevelService {
 	}
 
 	/**
-	 * 合并字段级别信息
+	 * 合并字段级别信息-直接合并更新personIndex中信息
 	 * 
 	 * @param personindex
 	 * @param personinfo
@@ -74,32 +74,31 @@ public class MpiCombineLevelService {
 	 * @param srcLevelcollist
 	 * @return
 	 */
-	public PersonIndex compareBatchAdd(PersonIndex personindex, PersonInfo personinfo, Long combono, Short domainLevel,
+	public void compareBatchAdd(PersonIndex personIndex, PersonInfo personinfo, Long combono, Short domainLevel,
 			List<Map<String, Object>> orgincolLevellist, List<Map<String, Object>> srcLevelcollist) {
 		Iterator<Map<String, Object>> it = orgincolLevellist.iterator();
 		while (it.hasNext()) {
 			Map<String, Object> map = it.next();
 			Short level = ((BigDecimal) map.get("SRC_LEVEL")).shortValue();
 			String combofield = (String) map.get("COMBINE_FIELD");
-			
+
 			// 数据库中combofield为大写，转为驼峰小写
 			if (combofield != null && Pattern.matches("[A-Z_]+", combofield)) {
 				combofield = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, combofield.toLowerCase());
 			}
-			
-			// 2016年11月1日16:47:45 WHN update 所有字段进行合并，非空字段不进行替换
+
+			// 所有字段进行合并，非空字段不进行替换
 			if (srcLevelcollist == null) {
 				// 如果索引字段优先级小于当前信息字段优先级，信息合并
 				try {
 					Object replaceval = PropertyUtils.getProperty(personinfo, combofield);
 					if (replaceval != null && !"".equals(replaceval)) {
-						PropertyUtils.setProperty(personindex, combofield, replaceval);
+						PropertyUtils.setProperty(personIndex, combofield, replaceval);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			} else {
-				// lpk update 2013年4月27日15:38:46
 				// 遍历域数据源级别字段配置
 				Iterator<Map<String, Object>> srcit = srcLevelcollist.iterator();
 				while (srcit.hasNext()) {
@@ -112,7 +111,7 @@ public class MpiCombineLevelService {
 							try {
 								Object replaceval = PropertyUtils.getProperty(personinfo, combofield);
 								if (replaceval != null && !"".equals(replaceval)) {
-									PropertyUtils.setProperty(personindex, combofield, replaceval);
+									PropertyUtils.setProperty(personIndex, combofield, replaceval);
 								}
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -122,7 +121,6 @@ public class MpiCombineLevelService {
 				}
 			}
 		}
-		return personindex;
 	}
 
 	/**

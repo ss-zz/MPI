@@ -40,9 +40,11 @@
 				<option value="1">自动合并</option>
 				<option value="2">自动新建</option>
 				<option value="3">自动拆分</option>
-				<option value="4">人工合并</option>
-				<option value="5">人工新建</option>
-				<option value="6">人工拆分</option>
+				<option value="4">自动删除</option>
+				<option value="11">人工合并</option>
+				<option value="12">人工新建</option>
+				<option value="13">人工拆分</option>
+				<option value="14">人工删除</option>
 			</select></td>
 		</tr>
 		<tr>

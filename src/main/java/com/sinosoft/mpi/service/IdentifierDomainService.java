@@ -141,9 +141,8 @@ public class IdentifierDomainService {
 	 * @param personId
 	 * @return
 	 */
-	public IdentifierDomain getByPersonId(String personId) {
-		List<IdentifierDomain> items = identifierDomainDao.getByPersonId(personId);
-		return items.size() > 0 ? items.get(0) : null;
+	public IdentifierDomain getFirstByPersonId(String personId) {
+		return identifierDomainDao.getFirstByPersonId(personId);
 	}
 
 	/**

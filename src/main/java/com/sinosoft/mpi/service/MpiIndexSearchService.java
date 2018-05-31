@@ -32,7 +32,7 @@ public class MpiIndexSearchService {
 	 * @return
 	 */
 	public DataResult<PersonIndex> getPersonIndexByMpiId(String mpiId) {
-		return new DataResult<PersonIndex>(true, "成功", personIndexService.getObject(mpiId));
+		return new DataResult<PersonIndex>(true, "成功", personIndexService.get(mpiId));
 	}
 
 	/**

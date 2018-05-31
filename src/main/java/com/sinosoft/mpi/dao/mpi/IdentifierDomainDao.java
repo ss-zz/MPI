@@ -47,17 +47,7 @@ public interface IdentifierDomainDao
 	 * @return
 	 */
 	@Query(value = " select * from mpi_identifier_domain a where exists( select 1 from mpi_index_identifier_rel b "
-			+ " where b.domain_id = a.domain_id and b.field_pk = ? ) ", nativeQuery = true)
-	List<IdentifierDomain> getByPersonId(String personId);
-
-	/**
-	 * 根据personId查询数据
-	 * 
-	 * @param personId
-	 * @return
-	 */
-	@Query(value = " select * from mpi_identifier_domain a where exists( select 1 from mpi_index_identifier_rel b "
-			+ " where b.domain_id = a.domain_id and b.field_pk = ? ) ", nativeQuery = true)
+			+ " where b.domain_id = a.domain_id and b.field_pk = ?1 ) ", nativeQuery = true)
 	IdentifierDomain getFirstByPersonId(String personId);
 
 	/**
